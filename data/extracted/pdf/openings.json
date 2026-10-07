@@ -1,0 +1,122 @@
+[
+ {
+  "wall_axis": "V",
+  "from": 8.389,
+  "to": 9.221,
+  "band": [
+   1.205,
+   1.376
+  ],
+  "width_m": 0.832,
+  "band_center": 1.29,
+  "kind": "door_or_open"
+ },
+ {
+  "wall_axis": "H",
+  "from": 3.728,
+  "to": 4.471,
+  "band": [
+   3.253,
+   3.423
+  ],
+  "width_m": 0.744,
+  "band_center": 3.338,
+  "kind": "window"
+ },
+ {
+  "wall_axis": "H",
+  "from": 5.568,
+  "to": 6.318,
+  "band": [
+   3.253,
+   3.423
+  ],
+  "width_m": 0.75,
+  "band_center": 3.338,
+  "kind": "window"
+ },
+ {
+  "wall_axis": "H",
+  "from": 6.738,
+  "to": 7.74,
+  "band": [
+   3.253,
+   3.423
+  ],
+  "width_m": 1.002,
+  "band_center": 3.338,
+  "kind": "door_or_open"
+ },
+ {
+  "wall_axis": "V",
+  "from": 1.019,
+  "to": 2.054,
+  "band": [
+   8.389,
+   8.559
+  ],
+  "width_m": 1.035,
+  "band_center": 8.474,
+  "kind": "door_or_open"
+ },
+ {
+  "wall_axis": "H",
+  "from": 6.171,
+  "to": 7.15,
+  "band": [
+   0.0,
+   0.2
+  ],
+  "width_m": 0.979,
+  "band_center": 0.1,
+  "kind": "door_or_open"
+ },
+ {
+  "wall_axis": "H",
+  "from": 1.874,
+  "to": 2.804,
+  "band": [
+   6.702,
+   6.872
+  ],
+  "width_m": 0.93,
+  "band_center": 6.787,
+  "kind": "window"
+ },
+ {
+  "wall_axis": "H",
+  "from": 2.398,
+  "to": 3.898,
+  "band": [
+   16.764,
+   16.934
+  ],
+  "width_m": 1.5,
+  "band_center": 16.849,
+  "kind": "window"
+ },
+ {
+  "wall_axis": "H",
+  "from": 8.565,
+  "to": 9.316,
+  "band": [
+   16.043,
+   16.211
+  ],
+  "width_m": 0.75,
+  "band_center": 16.127,
+  "kind": "window"
+ },
+ {
+  "wall_axis": "H",
+  "from": 7.082,
+  "to": 7.815,
+  "band": [
+   16.043,
+   16.211
+  ],
+  "width_m": 0.734,
+  "band_center": 16.127,
+  "kind": "window"
+ }
+]
