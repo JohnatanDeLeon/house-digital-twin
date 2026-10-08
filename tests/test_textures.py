@@ -109,3 +109,14 @@ def test_mosaic_subgrid_sets_channel_roughness(tmp_path, monkeypatch):
     assert r[50, 0] == pytest.approx(0.9, abs=0.02)    # junta entre losetas (borde; el mapa va a media resolución)
     assert r[50, 25] == pytest.approx(0.25, abs=0.02)  # canal entre cuadritos (1/4 de la loseta)
     assert r[60, 60] == pytest.approx(0.75, abs=0.02)  # cuadrito
+
+
+def test_make_seamless_matches_opposite_edges():
+    rng = np.random.default_rng(0)
+    noisy = Image.fromarray((rng.random((64, 80, 3)) * 255).astype(np.uint8))
+    out = np.asarray(textures.make_seamless(noisy)).astype(float)
+    # al repetir, el último y el primer renglón (y columna) son vecinos: deben parecerse como vecinos interiores
+    edge_jump = np.abs(out[-1] - out[0]).mean() + np.abs(out[:, -1] - out[:, 0]).mean()
+    raw = np.asarray(noisy).astype(float)
+    raw_jump = np.abs(raw[-1] - raw[0]).mean() + np.abs(raw[:, -1] - raw[:, 0]).mean()
+    assert edge_jump < raw_jump / 2

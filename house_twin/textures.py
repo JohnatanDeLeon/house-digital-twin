@@ -91,6 +91,22 @@ def flatten_lighting(image: Image.Image, exclude_darkest: float = 0.2) -> Image.
     return _to_image(lin * np.exp(fit.mean() - fit)[..., None])
 
 
+def make_seamless(image: Image.Image) -> Image.Image:
+    """Hace repetible un recorte sin juntas (concreto, yeso): lo mezcla con una copia desplazada media textura.
+
+    Cada píxel pesa según su distancia al borde: en los bordes manda la copia desplazada, que ahí es continua
+    al repetir, y en el centro manda el original. Baja un poco el contraste en las zonas de mezcla.
+    """
+    a = np.asarray(image).astype(float)
+    h, w = a.shape[:2]
+    ramp = lambda n: np.minimum(np.arange(n) + 0.5, n - np.arange(n) - 0.5) / (n / 2)
+    weight = np.outer(ramp(h), ramp(w))
+    shifted = np.roll(a, (h // 2, w // 2), axis=(0, 1))
+    w_shifted = np.roll(weight, (h // 2, w // 2), axis=(0, 1))
+    out = (a * weight[..., None] + shifted * w_shifted[..., None]) / (weight + w_shifted)[..., None]
+    return Image.fromarray(out.round().astype(np.uint8))
+
+
 def _frac_box(frac, size_px):
     """[x, y, ancho, alto] en fracciones de la textura → píxeles."""
     W, H = size_px
@@ -238,13 +254,17 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
         base = flatten_lighting(base, spec['flatten_lighting'].get('exclude_darkest', 0.2))
     base, gain = color_correct(photo, base, spec['color'])
     base = apply_patches(base, spec.get('patches', []))
+    if spec.get('seamless'):
+        base = make_seamless(base)
 
     relief = spec['relief']
     W, H = size_px
     grain = _grain(base)
     rough = spec['roughness']
     roughness = rough['base'] - grain * rough['grain']
-    if relief['type'] == 'features':
+    if relief['type'] == 'flat':
+        shape_height = np.zeros(grain.shape)
+    elif relief['type'] == 'features':
         shape_height = _features_height(grain.shape, relief['features'])
     elif relief['type'] == 'panels':
         panels_px = [[round(x0 * W), round(y0 * H), round(x1 * W), round(y1 * H)]
@@ -276,7 +296,7 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
         maps['opacity'] = 'opacity.png (0 = vidrio)'
     material = {
         'name': spec['name'], 'applies_to': spec['applies_to'],
-        'size_m': spec['size_m'], 'px_per_m': px_per_m, 'size_px': list(size_px), 'tileable': relief['type'] == 'grid',
+        'size_m': spec['size_m'], 'px_per_m': px_per_m, 'size_px': list(size_px), 'tileable': relief['type'] == 'grid' or bool(spec.get('seamless')),
         'grid': spec.get('grid'),
         'maps': maps, 'glass_material': spec.get('opacity', {}).get('glass_material'),
         'source': {'photo': spec['photo'], 'photo_meta': spec.get('photo_meta', {}),
