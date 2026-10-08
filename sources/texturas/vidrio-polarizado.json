@@ -1,0 +1,11 @@
+{
+  "_doc": "Vidrio polarizado de la puerta de entrada (D03). Material transparente entintado: de noche no se puede medir su tono ni su transmisión.",
+  "name": "vidrio-polarizado",
+  "kind": "constant",
+  "applies_to": {"openings": ["D03"], "part": "vidrio", "source": "dueño (2026-10-08): parte de la puerta es un ventanal polarizado"},
+  "photo": "sources/fotos/puerta-entrada.jpg",
+  "pbr": {"basecolor_srgb": [70, 72, 76], "metallic": 0.0, "roughness": 0.03, "transmission": 1.0, "ior": 1.52, "thickness_mm": 6,
+          "note": "película polarizada gris oscura: color de transmisión supuesto para dejar pasar alrededor del 25 % de la luz"},
+  "observed": {"glass": "un solo vidrio grande, oscuro y muy reflejante de noche (refleja la sala y al fotógrafo con nitidez)", "condition": "salpicaduras de pintura blanca"},
+  "assumptions": ["tono gris y transmisión ≈ 25 % (polarizado común)", "vidrio de 6 mm"]
+}

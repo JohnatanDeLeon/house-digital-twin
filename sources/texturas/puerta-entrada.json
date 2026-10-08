@@ -1,0 +1,186 @@
+{
+  "_doc": "Puerta de entrada al interior (D03, pórtico → sala): conjunto de marco y hoja de metal pintado de negro, con un vidrio polarizado grande arriba y un tablero hundido abajo. Posiciones en fracciones de la cara (0–1, origen arriba a la izquierda). Regenerar con: python -m house_twin.cli texture sources/texturas/puerta-entrada.json",
+  "name": "puerta-entrada",
+  "applies_to": {
+    "openings": [
+      "D03"
+    ],
+    "source": "dueño (2026-10-08): entrada principal al interior; puerta de metal duro en tonos negros, con textura un poco rugosa y un ventanal polarizado"
+  },
+  "photo": "sources/fotos/puerta-entrada.jpg",
+  "photo_meta": {
+    "taken": "2026-10-07T23:22:08",
+    "camera": "Samsung Galaxy S25 Ultra",
+    "focal_35mm": 23,
+    "iso": 1250,
+    "flash": false,
+    "light": "artificial cálida, de noche; el vidrio refleja la sala y al fotógrafo"
+  },
+  "corners_px": {
+    "top_left": [
+      517,
+      177
+    ],
+    "top_right": [
+      2427,
+      193
+    ],
+    "bottom_right": [
+      2262,
+      3802
+    ],
+    "bottom_left": [
+      702,
+      3826
+    ]
+  },
+  "size_m": {
+    "width": 1.0,
+    "height": 2.1,
+    "source": "vano D03 del plano (1.00 m) y altura de vano del dueño (U04, 2.10 m); supuesto: el conjunto (marco + hoja) ocupa todo el vano"
+  },
+  "px_per_m": 1600,
+  "color": {
+    "white_reference": {
+      "box_px": [
+        120,
+        600,
+        440,
+        3000
+      ],
+      "albedo_srgb": [
+        235,
+        235,
+        235
+      ],
+      "note": "muro de yeso a la izquierda de la puerta (blanco, dato del dueño); albedo supuesto"
+    }
+  },
+  "patches": [
+    {
+      "note": "aldaba de palanca, cerrojo y manija: se tapan con el mismo larguero más arriba; irán como objetos 3D",
+      "from_frac": [
+        0.775,
+        0.22,
+        0.19,
+        0.16
+      ],
+      "to_frac": [
+        0.775,
+        0.395
+      ]
+    },
+    {
+      "note": "pasador con llave: se tapa con el mismo travesaño, más a la izquierda (el cerradero queda en el marco)",
+      "from_frac": [
+        0.4,
+        0.728,
+        0.13,
+        0.05
+      ],
+      "to_frac": [
+        0.84,
+        0.728
+      ]
+    },
+    {
+      "note": "cordón amarillo atado arriba a la izquierda (provisional, no es acabado)",
+      "from_frac": [
+        0.22,
+        0.012,
+        0.06,
+        0.05
+      ],
+      "to_frac": [
+        0.13,
+        0.012
+      ]
+    },
+    {
+      "note": "cordón amarillo atado arriba a la derecha, parte alta (provisional)",
+      "from_frac": [
+        0.7,
+        0.012,
+        0.06,
+        0.04
+      ],
+      "to_frac": [
+        0.845,
+        0.012
+      ]
+    },
+    {
+      "note": "cordón amarillo, parte que cuelga junto a la moldura: se tapa con el mismo larguero más abajo",
+      "from_frac": [
+        0.845,
+        0.15,
+        0.06,
+        0.06
+      ],
+      "to_frac": [
+        0.845,
+        0.045
+      ]
+    }
+  ],
+  "relief": {
+    "type": "features",
+    "features": [
+      {
+        "kind": "recess",
+        "rect_frac": [
+          0.135,
+          0.763,
+          0.86,
+          0.956
+        ],
+        "depth_mm": 4
+      },
+      {
+        "kind": "recess",
+        "rect_frac": [
+          0.195,
+          0.089,
+          0.805,
+          0.7
+        ],
+        "depth_mm": 6
+      }
+    ],
+    "grain_mm": 0.35,
+    "note": "tablero inferior hundido y vidrio asentado detrás de su moldura, medidos en la foto rectificada; profundidades supuestas. La veta gruesa reproduce la superficie rugosa (pintura sobre metal picado)"
+  },
+  "opacity": {
+    "holes": [
+      [
+        0.195,
+        0.089,
+        0.805,
+        0.7
+      ]
+    ],
+    "glass_material": "vidrio-polarizado",
+    "note": "un solo vidrio grande con moldura a inglete alrededor"
+  },
+  "roughness": {
+    "base": 0.72,
+    "grain": 0.12,
+    "note": "pintura negra mate envejecida sobre metal rugoso; sin reflejos de la lámpara en la lámina"
+  },
+  "observed": {
+    "type": "puerta metálica de una hoja: mitad superior con un vidrio grande enmarcado por una moldura a inglete, mitad inferior con tablero hundido",
+    "finish": "pintura negra mate muy envejecida, con textura rugosa y moteado claro; debajo se asoman restos de pintura verde agua (color anterior) y salpicaduras blancas",
+    "corrosion": "óxido en todo el contorno del marco (cabezal y jambas), en el travesaño inferior y en manchas del tablero",
+    "hardware": "3 bisagras de munición soldadas del lado izquierdo; del lado derecho, de arriba abajo: aldaba de palanca, cerrojo de seguridad y manija de palanca con seguro (ambos de latón envejecido), y un pasador de sobreponer cromado con llave",
+    "hinges_position": "las bisagras quedan a unos 14 cm del borde izquierdo del conjunto: probable marco fijo ancho a la izquierda y hoja más angosta que el vano",
+    "threshold": "umbral de aluminio atornillado al piso",
+    "temporary": "dos cordones amarillos atados en la parte superior (se omiten en la textura)",
+    "surroundings": "vano con mochetas de yeso blanco; a la derecha, una repisa portallaves; piso de loseta igual al del interior"
+  },
+  "assumptions": [
+    "el conjunto ocupa todo el vano de 1.00 × 2.10 m",
+    "muro izquierdo blanco como referencia de color",
+    "profundidad del tablero (4 mm) y del asiento del vidrio (6 mm)",
+    "pintura metálica tratada como dieléctrico mate (rugosidad 0.72)"
+  ]
+}

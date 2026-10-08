@@ -1,6 +1,6 @@
 # Fase 4: acabados y texturas a partir de fotos
 
-Fuente: 5 fotos del dueño del 2026-10-07, entre las 23:18 y las 23:20. Todas son de noche, con luz artificial cálida, sin flash, tomadas con un Samsung Galaxy S25 Ultra en gran angular (23 mm equivalente). Las originales están en `sources/fotos/`, fuera de git. Cada material se describe en `sources/texturas/<nombre>.json` y se genera en `assets/textures/<nombre>/` con:
+Fuente: 6 fotos del dueño del 2026-10-07, entre las 23:18 y las 23:22. Todas son de noche, con luz artificial cálida, sin flash, tomadas con un Samsung Galaxy S25 Ultra en gran angular (23 mm equivalente). Las originales están en `sources/fotos/`, fuera de git. Cada material se describe en `sources/texturas/<nombre>.json` y se genera en `assets/textures/<nombre>/` con:
 
 ```bash
 python -m house_twin.cli texture sources/texturas/<nombre>.json
@@ -15,8 +15,10 @@ python -m house_twin.cli texture sources/texturas/<nombre>.json
 | `puerta-recamaras` | Mapas: color, rugosidad, relieve | Puertas D02, D05, D06, D07 y D08 | Foto; el dueño dice que las 5 son iguales |
 | `piso-interior` | Mapas repetibles (2 × 3 losetas) | Piso de S01–S05 y S07 | Foto; el dueño dice que es el piso de todo el interior |
 | `puerta-cocina` | Mapas + opacidad para los vidrios | Puerta D04 | Foto y dueño |
+| `puerta-entrada` | Mapas + opacidad para el vidrio | Puerta D03 (entrada a la sala) | Foto y dueño |
 | `aluminio-negro` | Constante (color medido) | Marcos y hojas de V01–V10 | Foto; el dueño dice que todas las ventanas son de aluminio negro |
 | `vidrio-claro` | Constante (supuesto) | Vidrios de las ventanas y de D04 | Supuesto |
+| `vidrio-polarizado` | Constante (supuesto) | Vidrio de D03 | Dueño: «ventanal polarizado»; tono y transmisión supuestos |
 | `muro-interior` | Constante | Muros interiores | Dueño: yeso blanco con pintura blanca |
 
 **Sin piso** (dato del dueño): pórtico, bodega, cochera, pasillo de servicio, lavandería y patio. Todavía no sabemos qué superficie tienen.
@@ -82,11 +84,26 @@ Los defectos reales (salpicaduras de pintura, marcas) se conservan.
 - **Contexto:** a la derecha hay azulejo blanco brillante con una cenefa de frutas y platos de talavera. Es un acabado de la cocina que todavía no tiene textura.
 - **Medidas:** la textura usa el vano D04 (0.83 m del plano y 2.10 m de U04), suponiendo que el marco negro ocupa todo el vano.
 
+### 6. Puerta de entrada, D03 (23:22:08)
+
+- **Puerta:** metálica, de una hoja. Arriba tiene un vidrio polarizado grande con moldura a inglete; abajo, un tablero hundido.
+- **Acabado:** pintura negra mate muy envejecida sobre una superficie rugosa, con moteado claro. Debajo se asoman restos de **pintura verde agua**, el color anterior.
+- **Óxido:** en todo el contorno del marco, en el travesaño inferior y en manchas del tablero.
+- **Herrajes:** 3 bisagras de munición soldadas a la izquierda. A la derecha, de arriba abajo: aldaba de palanca, cerrojo de seguridad y manija de palanca con seguro (las dos de latón envejecido), y un pasador cromado con llave.
+- **Bisagras:** quedan a unos 14 cm del borde izquierdo del conjunto. Probablemente hay un marco fijo ancho a la izquierda y la hoja es más angosta que el vano de 1.00 m.
+- **Umbral:** de aluminio, atornillado al piso.
+- **Cordones amarillos:** dos, atados arriba. Son provisionales y no entran en la textura.
+- **Textura:**
+  - Usa el vano D03 (1.00 × 2.10 m) y su relieve tiene más grano, para reproducir la superficie rugosa.
+  - Los herrajes se taparon con el mismo larguero; ese parche repite una mancha verde agua de más arriba.
+  - El cerradero del pasador queda, porque va en el marco.
+
 ## Pendientes del dueño
 
 1. **Medidas:** ancho y alto de la hoja de una puerta de recámara y de una de baño, y tamaño de la loseta del piso.
 2. **Superficie de los espacios sin piso:** pórtico, bodega, cochera, pasillo de servicio, lavandería y patio (concreto, tierra, grava…), y del tragaluz.
 3. **Puerta D04:** ¿aluminio o acero? ¿Su vidrio es claro?
-4. **Ventanas:** ¿todas tienen persiana enrollable? ¿La hoja fija tiene vidrio entintado o película?
-5. **Calibración de color:** una foto de día del piso con una hoja blanca tamaño carta encima.
-6. **Fotos nuevas:** el azulejo y la cenefa de la cocina de frente, la cara exterior de las puertas y los acabados exteriores (pendientes para mañana).
+4. **Puerta D03:** ancho de la hoja (¿hay un marco fijo a la izquierda?) y qué tan oscuro es el polarizado (¿se ve hacia adentro de día?).
+5. **Ventanas:** ¿todas tienen persiana enrollable? ¿La hoja fija tiene vidrio entintado o película?
+6. **Calibración de color:** una foto de día del piso con una hoja blanca tamaño carta encima.
+7. **Fotos nuevas:** el azulejo y la cenefa de la cocina de frente, la cara exterior de las puertas y los acabados exteriores (pendientes para mañana).

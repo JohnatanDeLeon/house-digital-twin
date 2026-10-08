@@ -1,0 +1,76 @@
+{
+ "name": "puerta-entrada",
+ "applies_to": {
+  "openings": [
+   "D03"
+  ],
+  "source": "dueño (2026-10-08): entrada principal al interior; puerta de metal duro en tonos negros, con textura un poco rugosa y un ventanal polarizado"
+ },
+ "size_m": {
+  "width": 1.0,
+  "height": 2.1,
+  "source": "vano D03 del plano (1.00 m) y altura de vano del dueño (U04, 2.10 m); supuesto: el conjunto (marco + hoja) ocupa todo el vano"
+ },
+ "px_per_m": 1600,
+ "size_px": [
+  1600,
+  3360
+ ],
+ "tileable": false,
+ "grid": null,
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)",
+  "opacity": "opacity.png (0 = vidrio)"
+ },
+ "glass_material": "vidrio-polarizado",
+ "source": {
+  "photo": "sources/fotos/puerta-entrada.jpg",
+  "photo_meta": {
+   "taken": "2026-10-07T23:22:08",
+   "camera": "Samsung Galaxy S25 Ultra",
+   "focal_35mm": 23,
+   "iso": 1250,
+   "flash": false,
+   "light": "artificial cálida, de noche; el vidrio refleja la sala y al fotógrafo"
+  },
+  "color": {
+   "white_reference": {
+    "box_px": [
+     120,
+     600,
+     440,
+     3000
+    ],
+    "albedo_srgb": [
+     235,
+     235,
+     235
+    ],
+    "note": "muro de yeso a la izquierda de la puerta (blanco, dato del dueño); albedo supuesto"
+   }
+  },
+  "white_balance_gain": [
+   1.3911,
+   1.4066,
+   1.4711
+  ]
+ },
+ "observed": {
+  "type": "puerta metálica de una hoja: mitad superior con un vidrio grande enmarcado por una moldura a inglete, mitad inferior con tablero hundido",
+  "finish": "pintura negra mate muy envejecida, con textura rugosa y moteado claro; debajo se asoman restos de pintura verde agua (color anterior) y salpicaduras blancas",
+  "corrosion": "óxido en todo el contorno del marco (cabezal y jambas), en el travesaño inferior y en manchas del tablero",
+  "hardware": "3 bisagras de munición soldadas del lado izquierdo; del lado derecho, de arriba abajo: aldaba de palanca, cerrojo de seguridad y manija de palanca con seguro (ambos de latón envejecido), y un pasador de sobreponer cromado con llave",
+  "hinges_position": "las bisagras quedan a unos 14 cm del borde izquierdo del conjunto: probable marco fijo ancho a la izquierda y hoja más angosta que el vano",
+  "threshold": "umbral de aluminio atornillado al piso",
+  "temporary": "dos cordones amarillos atados en la parte superior (se omiten en la textura)",
+  "surroundings": "vano con mochetas de yeso blanco; a la derecha, una repisa portallaves; piso de loseta igual al del interior"
+ },
+ "assumptions": [
+  "el conjunto ocupa todo el vano de 1.00 × 2.10 m",
+  "muro izquierdo blanco como referencia de color",
+  "profundidad del tablero (4 mm) y del asiento del vidrio (6 mm)",
+  "pintura metálica tratada como dieléctrico mate (rugosidad 0.72)"
+ ]
+}
