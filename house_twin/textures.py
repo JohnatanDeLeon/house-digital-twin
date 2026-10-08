@@ -271,10 +271,68 @@ def build_material(spec: dict, out: Path, photos_root: Path) -> Path:
     return out
 
 
+def _periodic_noise(shape, feature_px: float, rng) -> np.ndarray:
+    """Ruido suave y repetible (periódico) con detalle de ≈ `feature_px`, normalizado a media 0 y desviación 1."""
+    h, w = shape
+    fy, fx = np.fft.fftfreq(h)[:, None], np.fft.fftfreq(w)[None, :]
+    spectrum = np.exp(-(fx ** 2 + fy ** 2) * (np.pi * feature_px) ** 2 / 2)
+    field = np.real(np.fft.ifft2(np.fft.fft2(rng.standard_normal(shape)) * spectrum))
+    return (field - field.mean()) / (field.std() + 1e-12)
+
+
+def procedural_stucco(spec: dict, size_px: tuple[int, int]) -> tuple[Image.Image, np.ndarray, np.ndarray]:
+    """Estuco sintético: placas aplanadas con borde marcado (tipo «lace trowel») sobre grano fino («pebbled dash»).
+
+    Solo para acabados sin foto usable: el resultado es una aproximación guiada por la descripción del dueño, no
+    una observación. Devuelve color base, altura (m) y rugosidad; todo periódico, así que se repite sin costura.
+    """
+    rng = np.random.default_rng(spec['seed'])
+    shape = (size_px[1], size_px[0])
+    px_per_m = spec['px_per_m']
+    plates, grain = spec['plates'], spec['grain']
+    field = _periodic_noise(shape, plates['size_m'] * px_per_m / 1.5, rng) + 0.35 * _periodic_noise(shape, plates['size_m'] * px_per_m / 6, rng)
+    threshold = np.quantile(field, 1 - plates['coverage'])
+    # placas: meseta plana arriba del umbral, con rampa corta (borde marcado) y algo de inclinación de la llana
+    plate = np.clip((field - threshold) / plates['edge_softness'], 0, 1) ** 0.5
+    plate *= 1 + 0.3 * _periodic_noise(shape, plates['size_m'] * px_per_m / 2, rng)
+    fine = _periodic_noise(shape, grain['size_m'] * px_per_m, rng)
+    height = plate * plates['height_mm'] / 1000 + fine * grain['height_mm'] / 1000
+    # color: blanco de pintura, algo más oscuro (polvo, sombra fina) en lo hundido entre placas
+    lowness = 1 - np.clip(plate, 0, 1)
+    shade = 1 - spec['color']['crevice_darkening'] * lowness - 0.03 * np.clip(-fine, 0, None)
+    base = np.array(spec['color']['albedo_srgb'], float) / 255
+    lin = _srgb_to_linear(base)[None, None, :] * shade[..., None]
+    roughness = np.clip(spec['roughness']['base'] + 0.04 * fine, 0, 1)
+    return _to_image(lin), height, roughness
+
+
+def build_procedural(spec: dict, out: Path) -> Path:
+    px_per_m = spec['px_per_m']
+    size_px = (round(spec['size_m']['width'] * px_per_m), round(spec['size_m']['height'] * px_per_m))
+    base, height, roughness = procedural_stucco(spec, size_px)
+    out.mkdir(parents=True, exist_ok=True)
+    detail_px = (round(size_px[0] * DETAIL_MAP_SCALE), round(size_px[1] * DETAIL_MAP_SCALE))
+    base.save(out / 'basecolor.jpg', quality=92)
+    Image.fromarray((roughness * 255).round().astype(np.uint8)).resize(detail_px, Image.LANCZOS).save(out / 'roughness.png', optimize=True)
+    _normal_map(height, px_per_m).resize(detail_px, Image.LANCZOS).save(out / 'normal.png', optimize=True)
+    material = {
+        'name': spec['name'], 'applies_to': spec['applies_to'], 'kind': 'procedural', 'tileable': True,
+        'size_m': spec['size_m'], 'px_per_m': px_per_m, 'size_px': list(size_px),
+        'maps': {'basecolor': 'basecolor.jpg', 'roughness': 'roughness.png', 'normal': 'normal.png (OpenGL)'},
+        'source': {'method': 'procedural', 'seed': spec['seed'], 'references': spec.get('references', [])},
+        'parameters': {k: spec[k] for k in ('plates', 'grain', 'color', 'roughness')},
+        'observed': spec.get('observed', {}), 'assumptions': spec.get('assumptions', []),
+    }
+    (out / 'material.json').write_text(json.dumps(material, ensure_ascii=False, indent=1) + '\n')
+    return out
+
+
 def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     spec = json.loads(spec_path.read_text())
     if spec.get('kind') == 'constant':
         return build_material(spec, TEXTURES_DIR / spec['name'], photos_root)
+    if spec.get('kind') == 'procedural':
+        return build_procedural(spec, TEXTURES_DIR / spec['name'])
     px_per_m = spec['px_per_m']
     size_m = (spec['size_m']['width'], spec['size_m']['height'])
     size_px = (round(size_m[0] * px_per_m), round(size_m[1] * px_per_m))

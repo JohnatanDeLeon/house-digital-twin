@@ -132,3 +132,17 @@ def test_opacity_rings_and_dark_refinement():
     bar = {'holes': [[0, 0, 1, 1]], 'opaque': [[0.44, 0, 0.56, 1]], 'refine_dark': {'dilate_px': 2, 'max_luminance': 80}}
     refined = textures._opacity(shape, bar, Image.fromarray(photo))
     assert refined[100, 50] == 1 and refined[100, 45] == 0 and refined[100, 20] == 0
+
+
+def test_procedural_stucco_is_tileable_and_reproducible():
+    spec = {'seed': 1, 'px_per_m': 1000,
+            'plates': {'size_m': 0.03, 'coverage': 0.45, 'edge_softness': 0.12, 'height_mm': 3.0},
+            'grain': {'size_m': 0.0015, 'height_mm': 0.25},
+            'color': {'albedo_srgb': [222, 222, 220], 'crevice_darkening': 0.12}, 'roughness': {'base': 0.9}}
+    base, height, rough = textures.procedural_stucco(spec, (200, 160))
+    assert height.shape == (160, 200) and base.size == (200, 160)
+    # periódico: el salto al repetir es como un paso interior
+    assert np.abs(height[:, -1] - height[:, 0]).mean() < 3 * np.abs(np.diff(height, axis=1)).mean()
+    again, _, _ = textures.procedural_stucco(spec, (200, 160))
+    assert np.array_equal(np.asarray(base), np.asarray(again))  # misma semilla, mismo resultado
+    assert 0 < (height > 0.0015).mean() < 0.8                    # hay placas, pero no cubren todo

@@ -25,6 +25,7 @@ python -m house_twin.cli texture sources/texturas/<nombre>.json
 | `vidrio-claro` | Constante (supuesto) | Vidrios de las ventanas y de D04 | Supuesto |
 | `vidrio-polarizado` | Constante (supuesto) | Vidrio de D03 | Dueño: «ventanal polarizado»; tono y transmisión supuestos |
 | `aplanado-exterior` | Mapas repetibles (≈ 0.5 × 0.5 m) con relieve alto | Muros exteriores del pasillo de servicio, el patio y la cochera | Foto y dueño; el pórtico es más rugoso (pastas de estuco, textura pendiente) |
+| `estuco-fachada` | **Sintética** (procedural, repetible) | Fachada a la calle y pórtico | Dueño: punto medio entre dos referencias de catálogo («Lace Trowel» y «Pebbled Dash»); sin foto de la casa |
 | `muro-interior` | Constante | Muros interiores | Dueño: yeso blanco con pintura blanca |
 
 **Exteriores y bodega** (dato del dueño): pórtico, bodega, cochera, pasillo de servicio, lavandería y patio no tienen loseta. Su piso es un firme de concreto gris (foto 9); el dueño confirma que es el mismo en todos. El tragaluz tiene la loseta del interior.
@@ -174,6 +175,14 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 - **Escala:** supuesta. La foto se tomó a ≈ 0.5 m, así que el recorte mide ≈ 0.5 × 0.5 m.
 - **Color:** con luz de día difusa sale neutro. La luminosidad del blanco exterior es supuesta (albedo ≈ 0.73).
 
+### 13. Estuco de la fachada y el pórtico (sintético)
+
+- **Por qué es sintético:** el dueño describe el acabado como más rugoso que los demás exteriores, con «pastas de estuco», y da como guía un **punto medio entre dos referencias de catálogo**: «Lace Trowel» (placas grandes aplanadas por la llana, con bordes marcados) y «Pebbled Dash» (grano fino de piedrita). No hay foto de cerca de este acabado.
+- **Cómo se genera:** por código (`kind: procedural`), con ruido periódico, así que se repite sin costura. Lleva placas de ≈ 3 cm que cubren ≈ 45 % de la superficie, con 3 mm de relieve y bordes marcados, sobre grano fino de 0.25 mm. Es más oscuro entre placas por polvo y sombra fina, y la semilla es fija.
+- **Es una aproximación, no una observación:** forma, tamaño y relieve son interpretación. Hay que reemplazarlo por una textura de foto cuando la haya.
+- **Las referencias** son imágenes de catálogo: no se guardan en el repo.
+- **Foto de las 07:49:34 (`20261008_074934.jpg`, sin usar):** muestra una puerta de lámina negra acanalada junto a una ventana con herrería. Los muros de alrededor no tienen placas: uno es de grano rugoso y el otro casi liso con poros. Falta que el dueño diga dónde es.
+
 ## Fachada y orientación (2026-10-08, 08:12–09:29)
 
 Fotos: `fachada-1.jpg` y `fachada-2.jpg` (gran angular de 13 mm, desde la calle) y `brujula.jpg` (captura de una app de brújula tomada en el pórtico, frente al muro de V01, V02 y D03).
@@ -222,7 +231,7 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 
 ## Pendientes del dueño
 
-1. **Aplanados exteriores:** foto de cerca del estuco del pórtico. ¿La fachada que da a la calle tiene el estuco del pórtico o el zarpeo de los demás exteriores?
+1. **Aplanados exteriores:** foto de cerca del estuco de la fachada y el pórtico, con luz rasante y algo de tamaño conocido, para reemplazar la textura sintética. ¿Dónde se tomaron las fotos 07:47:26 (aplanado de grano fino con estrías) y 07:49:34 (puerta de lámina acanalada)?
 2. **Medidas:** ancho y alto de la hoja de una puerta de recámara y de una de baño, y tamaño de la loseta del piso.
 3. **Puerta D04:** ¿aluminio o acero? ¿Su vidrio es claro?
 4. **Closets:** ¿de qué recámara es cada foto? Medidas de un módulo (ancho de hoja y alto total). Una foto del techo de tirol de cerca.
