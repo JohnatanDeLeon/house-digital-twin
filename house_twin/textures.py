@@ -138,6 +138,39 @@ def _grid_height(shape, grid, relief):
     return -depth * np.clip((half + edge - dist) / edge, 0, 1) ** 2, dist <= half
 
 
+def _rect_px(frac, shape):
+    h, w = shape
+    x0, y0, x1, y1 = frac
+    return round(x0 * w), round(y0 * h), round(x1 * w), round(y1 * h)
+
+
+def _features_height(shape, features):
+    """Altura (m) armada por elementos: tableros hundidos (`recess`) y acanalados verticales (`grooves`)."""
+    height = np.zeros(shape)
+    for f in features:
+        x0, y0, x1, y1 = _rect_px(f['rect_frac'], shape)
+        if f['kind'] == 'recess':
+            height[y0:y1, x0:x1] -= f['depth_mm'] / 1000
+        elif f['kind'] == 'grooves':
+            half = max(1, round(f['width_frac'] * shape[1] / 2))
+            for x in f['x_frac']:
+                cx = round(x * shape[1])
+                height[y0:y1, cx - half:cx + half] -= f['depth_mm'] / 1000
+    return height
+
+
+def _opacity(shape, opacity):
+    """Máscara de opacidad: 0 en los vidrios, 1 en perfiles y en la retícula que cruza los vidrios."""
+    mask = np.ones(shape)
+    for r in opacity['holes']:
+        x0, y0, x1, y1 = _rect_px(r, shape)
+        mask[y0:y1, x0:x1] = 0
+    for r in opacity.get('opaque', []):
+        x0, y0, x1, y1 = _rect_px(r, shape)
+        mask[y0:y1, x0:x1] = 1
+    return mask
+
+
 def _normal_map(height_m, px_per_m):
     """Normal map en convención OpenGL (la de Blender): verde = +V, hacia arriba de la textura."""
     dy, dx = np.gradient(height_m, 1 / px_per_m)
@@ -154,8 +187,43 @@ def _grain(base: Image.Image) -> np.ndarray:
     return np.clip(detail / (3 * detail.std() + 1e-6), -1, 1)
 
 
+def sample_color(photo: Image.Image, color: dict, sample: dict) -> tuple[list[int], list[float]]:
+    """Color medio de una zona de la foto, corregido con la misma referencia que las texturas.
+
+    `darkest_fraction` < 1 promedia solo la parte más oscura de la zona: así el color de un perfil negro
+    no se mezcla con salpicaduras de pintura ni con el muro del borde.
+    """
+    x0, y0, x1, y1 = sample['box_px']
+    region = photo.crop((x0, y0, x1, y1))
+    corrected, gain = color_correct(photo, region, color)
+    pixels = np.asarray(corrected).reshape(-1, 3).astype(float)
+    lum = pixels.mean(axis=1)
+    keep = pixels[lum <= np.quantile(lum, sample.get('darkest_fraction', 1.0))]
+    return [int(v) for v in np.median(keep, axis=0).round()], gain
+
+
+def build_material(spec: dict, out: Path, photos_root: Path) -> Path:
+    """Material sin mapas (perfil liso, vidrio): color medido en la foto y parámetros PBR declarados."""
+    photo = ImageOps.exif_transpose(Image.open(photos_root / spec['photo'])).convert('RGB')
+    pbr = dict(spec['pbr'])
+    gain = None
+    if 'sample' in pbr:
+        pbr['basecolor_srgb'], gain = sample_color(photo, spec['color'], pbr.pop('sample'))
+    material = {
+        'name': spec['name'], 'applies_to': spec['applies_to'], 'kind': 'constant', 'pbr': pbr,
+        'source': {'photo': spec['photo'], 'photo_meta': spec.get('photo_meta', {}), 'color': spec.get('color'),
+                   'white_balance_gain': gain, 'sample': spec['pbr'].get('sample')},
+        'observed': spec.get('observed', {}), 'assumptions': spec.get('assumptions', []),
+    }
+    out.mkdir(parents=True, exist_ok=True)
+    (out / 'material.json').write_text(json.dumps(material, ensure_ascii=False, indent=1) + '\n')
+    return out
+
+
 def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     spec = json.loads(spec_path.read_text())
+    if spec.get('kind') == 'constant':
+        return build_material(spec, TEXTURES_DIR / spec['name'], photos_root)
     px_per_m = spec['px_per_m']
     size_m = (spec['size_m']['width'], spec['size_m']['height'])
     size_px = (round(size_m[0] * px_per_m), round(size_m[1] * px_per_m))
@@ -172,7 +240,9 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     grain = _grain(base)
     rough = spec['roughness']
     roughness = rough['base'] - grain * rough['grain']
-    if relief['type'] == 'panels':
+    if relief['type'] == 'features':
+        shape_height = _features_height(grain.shape, relief['features'])
+    elif relief['type'] == 'panels':
         panels_px = [[round(x0 * W), round(y0 * H), round(x1 * W), round(y1 * H)]
                      for x0, y0, x1, y1 in (p['rect_frac'] for p in relief['panels'])]
         shape_height = _panel_height(grain.shape, panels_px, relief)
@@ -188,11 +258,15 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     base.save(out / 'basecolor.jpg', quality=92)
     Image.fromarray((roughness * 255).round().astype(np.uint8)).resize(detail_px, Image.LANCZOS).save(out / 'roughness.png', optimize=True)
     _normal_map(height, px_per_m).resize(detail_px, Image.LANCZOS).save(out / 'normal.png', optimize=True)
+    maps = {'basecolor': 'basecolor.jpg', 'roughness': 'roughness.png', 'normal': 'normal.png (OpenGL)'}
+    if 'opacity' in spec:
+        Image.fromarray((_opacity(grain.shape, spec['opacity']) * 255).astype(np.uint8)).save(out / 'opacity.png', optimize=True)
+        maps['opacity'] = 'opacity.png (0 = vidrio)'
     material = {
         'name': spec['name'], 'applies_to': spec['applies_to'],
         'size_m': spec['size_m'], 'px_per_m': px_per_m, 'size_px': list(size_px), 'tileable': relief['type'] == 'grid',
         'grid': spec.get('grid'),
-        'maps': {'basecolor': 'basecolor.jpg', 'roughness': 'roughness.png', 'normal': 'normal.png (OpenGL)'},
+        'maps': maps, 'glass_material': spec.get('opacity', {}).get('glass_material'),
         'source': {'photo': spec['photo'], 'photo_meta': spec.get('photo_meta', {}),
                    'color': spec['color'], 'white_balance_gain': gain},
         'observed': spec.get('observed', {}), 'assumptions': spec.get('assumptions', []),

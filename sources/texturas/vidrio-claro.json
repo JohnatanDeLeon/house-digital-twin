@@ -1,0 +1,43 @@
+{
+  "_doc": "Vidrio de las ventanas. Material transparente: no hay color que medir en la foto (de noche solo refleja el cuarto).",
+  "name": "vidrio-claro",
+  "kind": "constant",
+  "applies_to": {
+    "openings": [
+      "V01",
+      "V02",
+      "V03",
+      "V04",
+      "V05",
+      "V06",
+      "V07",
+      "V08",
+      "V09",
+      "V10"
+    ],
+    "part": "vidrio",
+    "source": "foto de una ventana; supuesto para las demás"
+  },
+  "photo": "sources/fotos/ventana.jpg",
+  "pbr": {
+    "basecolor_srgb": [
+      245,
+      250,
+      247
+    ],
+    "metallic": 0.0,
+    "roughness": 0.02,
+    "transmission": 1.0,
+    "ior": 1.52,
+    "thickness_mm": 4,
+    "note": "vidrio flotado claro (tinte verdoso muy leve en el canto); espesor típico de ventana corrediza"
+  },
+  "observed": {
+    "glass": "transparente, sin esmerilado; la hoja fija se ve con un reflejo verdoso más claro que la corrediza",
+    "condition": "salpicaduras de pintura blanca en la hoja corrediza"
+  },
+  "assumptions": [
+    "vidrio flotado claro de 4 mm, IOR 1.52",
+    "que la hoja fija sea del mismo vidrio (su reflejo verdoso puede ser película o vidrio entintado)"
+  ]
+}

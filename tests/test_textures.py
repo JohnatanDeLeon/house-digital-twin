@@ -66,3 +66,28 @@ def test_flatten_lighting_removes_gradient():
     ramp = np.linspace(80, 200, 120)[:, None, None] * np.ones((120, 90, 3))
     flat = np.asarray(textures.flatten_lighting(Image.fromarray(ramp.astype(np.uint8)), exclude_darkest=0)).astype(float)
     assert flat[:10].mean() == pytest.approx(flat[-10:].mean(), abs=3)
+
+
+def test_features_relief_and_opacity():
+    shape = (200, 100)
+    h = textures._features_height(shape, [
+        {'kind': 'recess', 'rect_frac': [0.1, 0.5, 0.9, 0.9], 'depth_mm': 3},
+        {'kind': 'grooves', 'rect_frac': [0.1, 0.5, 0.9, 0.9], 'x_frac': [0.5], 'width_frac': 0.04, 'depth_mm': 1.5}])
+    assert h[20, 50] == 0 and h[150, 30] == pytest.approx(-0.003) and h[150, 50] == pytest.approx(-0.0045)
+    mask = textures._opacity(shape, {'holes': [[0.1, 0.1, 0.9, 0.4]], 'opaque': [[0.48, 0.1, 0.52, 0.4]]})
+    assert mask[50, 20] == 0 and mask[50, 50] == 1 and mask[150, 50] == 1
+
+
+def test_constant_material_samples_darkest_part(tmp_path, monkeypatch):
+    monkeypatch.setattr(textures, 'TEXTURES_DIR', tmp_path / 'out')
+    photo = Image.new('RGB', (100, 100), (200, 200, 200))  # muro blanco de referencia
+    photo.paste((20, 20, 20), (50, 0, 100, 100))            # perfil negro
+    photo.paste((230, 230, 230), (90, 0, 100, 100))         # salpicadura de pintura sobre el perfil
+    photo.save(tmp_path / 'foto.png')
+    spec = {'name': 'perfil', 'kind': 'constant', 'applies_to': {}, 'photo': 'foto.png',
+            'color': {'white_reference': {'box_px': [0, 0, 40, 100], 'albedo_srgb': [200, 200, 200]}},
+            'pbr': {'sample': {'box_px': [50, 0, 100, 100], 'darkest_fraction': 0.5}, 'roughness': 0.35}}
+    (tmp_path / 'spec.json').write_text(json.dumps(spec))
+    out = textures.build_texture(tmp_path / 'spec.json', photos_root=tmp_path)
+    material = json.loads((out / 'material.json').read_text())
+    assert material['pbr']['basecolor_srgb'] == [20, 20, 20] and material['pbr']['roughness'] == 0.35

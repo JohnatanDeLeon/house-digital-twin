@@ -8,7 +8,7 @@ Digital twin of a residential property, combining BIM/IFC, 3D modeling, spatial 
 | 1. Extracción de la planta desde el levantamiento (PDF vectorial) | ✅ [informe](docs/analysis/01-extraccion-pdf.md) |
 | 2. Modelo de hechos → IFC → House MCP (solo lectura) | ✅ [informe](docs/analysis/02-modelo-de-hechos.md) |
 | 3. Validación contra el DXF original; el DXF pasa a ser la fuente | ✅ [informe](docs/analysis/03-validacion-dxf.md) |
-| 4. Fidelidad visual: Blender + Bonsai, materiales, texturas e iluminación | siguiente |
+| 4. Fidelidad visual: Blender + Bonsai, materiales, texturas e iluminación | en curso: [acabados](docs/analysis/04-acabados.md) |
 | Variantes y propuestas de remodelación (`create_variant`) | sin fecha |
 
 ## Cómo funciona
