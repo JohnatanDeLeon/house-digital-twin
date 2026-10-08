@@ -218,6 +218,16 @@ Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-rega
 - **Cortina negra entre la cocina y el comedor:** cuelga sobre el muro, junto al refrigerador. Por su tamaño parece tapar un **vano o una puerta**, que en el plano no aparece ahí. Falta preguntar.
 - **Pasillo de las recámaras:** angosto, con 3 puertas de madera y foco al centro. Coincide con el «pasillo a las recámaras» incluido en S01.
 
+### Recámara con closet y una ventana (fotos `recamara-a-1` a `recamara-a-4`)
+
+- **Cuál es, por deducción (falta confirmarlo):** con closet con puertas y una sola ventana, es R2 o R3. Por la ventana se ve un muro azul claro muy cercano y, al fondo, otro vano con marco: encaja con el **tragaluz**, donde está la ventana V10 hacia la sala. Por eso sería la **Recámara 3** y la ventana, la **V05**.
+- **La ventana confirma el plano:** medida por proporción contra la altura de 2.60 m, el antepecho queda en ≈ 0.8 m y la parte alta en ≈ 2.05 m. El plano da 0.86 m y 2.12 m, dentro del error de la foto.
+- **Detalles de la ventana:** corrediza de 2 hojas, aluminio negro y vidrio claro. Por dentro no tiene herrería. Arriba lleva una **persiana enrollable con caja de aluminio, por dentro**: la «persiana plata» de la foto de la ventana era esta, no una exterior.
+- **Acabados:** loseta del interior con zoclo, yeso blanco y techo de tirol. La puerta es la de pino de la foto 1. El closet es de melamina wengué, con 2 módulos completos a la vista y maleteros.
+- **Instalaciones:** foco en portalámparas al centro. Hay apagador de placa negra junto a la puerta y un contacto alto sobre la TV.
+- **Daño en el muro de la ventana:** en la parte baja, sobre el zoclo, hay manchas rojizas, pintura descascarada y aplanado dañado a lo largo de todo el muro. Es típico de **humedad por capilaridad (salitre)** en un muro que da al tragaluz. Conviene revisarlo.
+- **Uso actual:** oficina, con escritorio de pie, monitores y caminadora. Es mobiliario, no acabado.
+
 ### Muebles vistos (para una capa de mobiliario, no son acabados)
 
 - **Sala:** sala en L gris reclinable y mesa de centro redonda de vidrio.
