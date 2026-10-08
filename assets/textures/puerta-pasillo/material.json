@@ -2,13 +2,28 @@
  "name": "puerta-pasillo",
  "applies_to": {
   "openings": [],
-  "boundary": "S10–S12 (cochera ↔ pasillo de servicio)",
-  "source": "dueño (2026-10-08): puerta de metal negra que conecta la cochera con el pasillo de servicio; no existe en el plano ni en el modelo (la adyacencia S10–S12 figura como abierta)"
+  "boundaries": [
+   {
+    "between": [
+     "S10",
+     "S12"
+    ],
+    "where": "cochera ↔ pasillo de servicio, límite en y = 6.705 m entre x = 0.20 y 1.205 m"
+   },
+   {
+    "between": [
+     "S12",
+     "S09"
+    ],
+    "where": "pasillo de servicio ↔ patio, límite en y = 12.625 m entre x = 0.20 y 1.205 m"
+   }
+  ],
+  "source": "dueño (2026-10-08): puerta de metal negra entre la cochera y el pasillo de servicio, y otra igual entre el pasillo y el patio; ninguna está en el plano ni en el modelo (las adyacencias S10–S12 y S09–S12 figuran como abiertas)"
  },
  "size_m": {
   "width": 1.0,
   "height": 2.0,
-  "source": "ancho: hueco entre el muro colindante (x = 0.20 m) y el muro de la cocina (x = 1.205 m) en el plano, 1.005 m; alto: supuesto provisional, pendiente de medir"
+  "source": "ancho: los dos límites del pasillo miden 1.005 m en el plano (entre el muro colindante, x = 0.20 m, y la cara del muro de la cocina, x = 1.205 m); alto: supuesto provisional, pendiente de medir"
  },
  "px_per_m": 1000,
  "size_px": [
@@ -55,6 +70,7 @@
  "assumptions": [
   "alto de 2.00 m (pendiente de medir)",
   "ancho igual al hueco del plano (1.005 m)",
+  "que cada puerta esté sobre el límite del espacio en el modelo (posición pendiente de confirmar)",
   "color tal como lo registró la cámara con luz de día"
  ]
 }
