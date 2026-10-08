@@ -64,6 +64,8 @@ En Blender:
 Abre `models/existing.ifc` en Blender con el add-on [Bonsai](https://bonsaibim.org)
 (*File → Open IFC Project*). Los espacios (`IfcSpace`) se pueden ocultar para ver muros y vanos.
 Probado con Blender 5.2.2 LTS y Bonsai 0.9.0 (Bonsai 0.9 exige Blender 5.1 o más nuevo).
+Después de un `build`, *File → Revert IFC Project* recarga el modelo. Los GlobalId son deterministas, así que
+el mismo elemento conserva su GUID entre `build`s.
 
 ## Estructura
 

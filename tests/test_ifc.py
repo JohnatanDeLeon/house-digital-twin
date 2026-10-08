@@ -33,3 +33,12 @@ def test_ifc_length_unit_is_metre(facts):
     import ifcopenshell.util.unit as uu
     model = build_ifc(facts)
     assert uu.calculate_unit_scale(model) == 1.0
+
+
+def test_ifc_guids_are_stable_and_unique(facts):
+    first, second = build_ifc(facts), build_ifc(facts)
+    guids = lambda m: {e.GlobalId: (e.is_a(), e.Name) for e in m.by_type('IfcRoot')}
+    assert guids(first) == guids(second)
+    assert len(guids(first)) == len(first.by_type('IfcRoot'))
+    wall = lambda m: next(w for w in m.by_type('IfcWall') if w.Name == 'W01')
+    assert wall(first).GlobalId == wall(second).GlobalId

@@ -5,6 +5,7 @@ y cada elemento lleva en el Pset `HDT_Provenance` qué dato es hecho y cuál es 
 para que nadie confunda un supuesto con una medida.
 """
 import math
+import uuid
 
 import ifcopenshell
 import ifcopenshell.api.aggregate
@@ -16,11 +17,13 @@ import ifcopenshell.api.pset
 import ifcopenshell.api.root
 import ifcopenshell.api.spatial
 import ifcopenshell.api.unit
+import ifcopenshell.guid
 from ifcopenshell.util.shape_builder import ShapeBuilder
 
 ASSUMED_DEFAULTS = {'storey_height': 2.40, 'door_height': 2.10, 'window_sill': 0.90, 'window_height': 1.20}
 PANEL_THICKNESS = 0.05
 OPENING_OVERCUT = 0.01  # el vano sobresale del muro para que el corte booleano sea limpio
+GUID_NAMESPACE = uuid.UUID('6f2b8c1e-3d4a-5b6c-8d7e-9f0a1b2c3d4e')  # fijo: cambiarlo cambia todos los GlobalId
 
 
 class _IfcContext:
@@ -138,6 +141,39 @@ def _add_spaces(ctx: _IfcContext, facts, storey, height):
     ifcopenshell.api.aggregate.assign_object(ctx.model, products=spaces, relating_object=storey)
 
 
+def _identity(entity) -> str:
+    """Identidad de una entidad por lo que es, no por el orden en que se creó.
+
+    Los productos se reconocen por su nombre (el id del hecho: W01, D03-vano, S05…); las relaciones y los
+    Psets, por su nombre y los productos a los que se refieren.
+    """
+    refs = [v for v in entity if isinstance(v, ifcopenshell.entity_instance) or isinstance(v, tuple)]
+    related = []
+    for v in refs:
+        for item in (v if isinstance(v, tuple) else (v,)):
+            if isinstance(item, ifcopenshell.entity_instance) and item.is_a('IfcRoot'):
+                related.append(f"{item.is_a()}:{item.Name or ''}")
+    if entity.is_a('IfcPropertySetDefinition'):
+        related += [f"{o.is_a()}:{o.Name or ''}" for rel in entity.DefinesOccurrence for o in rel.RelatedObjects]
+    return f"{entity.is_a()}|{entity.Name or ''}|{','.join(sorted(related))}"
+
+
+def _stabilize_guids(model: ifcopenshell.file):
+    """GlobalId deterministas: el mismo hecho tiene el mismo GUID en cada `build`.
+
+    Así Bonsai puede recargar el IFC por cambios (los compara por GlobalId) y cualquier referencia externa
+    a un elemento sigue valiendo. El GUID sigue al id del hecho: si un cambio del plano renumera los muros,
+    el GUID se va con el id.
+    """
+    seen: dict[str, int] = {}
+    for entity in model.by_type('IfcRoot'):
+        key = _identity(entity)
+        seen[key] = seen.get(key, 0) + 1
+        if seen[key] > 1:
+            key = f"{key}#{seen[key]}"
+        entity.GlobalId = ifcopenshell.guid.compress(uuid.uuid5(GUID_NAMESPACE, key).hex)
+
+
 def build_ifc(facts: dict) -> ifcopenshell.file:
     ctx = _IfcContext(facts['name'])
     site = ctx.element('IfcSite', 'Terreno')
@@ -152,4 +188,5 @@ def build_ifc(facts: dict) -> ifcopenshell.file:
     for o in facts['openings']:
         _add_opening(ctx, o, walls, storey)
     _add_spaces(ctx, facts, storey, height)
+    _stabilize_guids(ctx.model)
     return ctx.model
