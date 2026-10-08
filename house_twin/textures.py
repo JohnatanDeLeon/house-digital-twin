@@ -226,10 +226,14 @@ def _normal_map(height_m, px_per_m):
     return Image.fromarray(((n + 1) / 2 * 255).round().astype(np.uint8))
 
 
-def _grain(base: Image.Image) -> np.ndarray:
-    """Detalle fino de la veta en [-1, 1]: luminancia menos su versión difuminada."""
+def _grain(base: Image.Image, blur_px: float = GRAIN_BLUR_PX) -> np.ndarray:
+    """Detalle de la superficie en [-1, 1]: luminancia menos su versión difuminada.
+
+    `blur_px` fija la escala más grande que cuenta como relieve: pocos píxeles para una veta fina, más para un
+    aplanado rugoso con crestas de varios milímetros.
+    """
     lum = np.asarray(base.convert('L')).astype(float)
-    blur = np.asarray(base.convert('L').filter(ImageFilter.GaussianBlur(GRAIN_BLUR_PX))).astype(float)
+    blur = np.asarray(base.convert('L').filter(ImageFilter.GaussianBlur(blur_px))).astype(float)
     detail = lum - blur
     return np.clip(detail / (3 * detail.std() + 1e-6), -1, 1)
 
@@ -286,7 +290,7 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
 
     relief = spec['relief']
     W, H = size_px
-    grain = _grain(base)
+    grain = _grain(base, relief.get('grain_blur_px', GRAIN_BLUR_PX))
     rough = spec['roughness']
     roughness = rough['base'] - grain * rough['grain']
     if relief['type'] == 'flat':

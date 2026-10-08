@@ -1,0 +1,69 @@
+{
+ "name": "aplanado-exterior",
+ "applies_to": {
+  "surface": "muros exteriores",
+  "zones": [
+   "fachada",
+   "pórtico (S11)"
+  ],
+  "source": "dueño (2026-10-08): es la textura de la fachada y el pórtico; no es lisa, tiene un grado de rugosidad alto"
+ },
+ "size_m": {
+  "width": 0.5,
+  "height": 0.5,
+  "source": "supuesto: foto de cerca, a ≈ 0.5 m del muro; con la cámara principal (23 mm) el ancho de una foto vertical cubre ≈ 1.04 × la distancia; no hay nada de tamaño conocido"
+ },
+ "px_per_m": 3000,
+ "size_px": [
+  1500,
+  1500
+ ],
+ "tileable": true,
+ "grid": null,
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)"
+ },
+ "glass_material": null,
+ "source": {
+  "photo": "sources/fotos/aplanado-exterior.jpg",
+  "photo_meta": {
+   "taken": "2026-10-08T07:49:12",
+   "camera": "Samsung Galaxy S25 Ultra",
+   "focal_35mm": 23,
+   "iso": 160,
+   "flash": false,
+   "light": "luz de día difusa (nublado)"
+  },
+  "color": {
+   "gain": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "mean_srgb": [
+    222,
+    222,
+    220
+   ],
+   "note": "luz de día difusa con el balance de la cámara (sale neutro, #aeaead); la luminosidad del blanco exterior es supuesta (pintura blanca a la intemperie, albedo ≈ 0.73)"
+  },
+  "white_balance_gain": [
+   1.699,
+   1.699,
+   1.699
+  ]
+ },
+ "observed": {
+  "type": "aplanado de mortero lanzado (zarpeo / tirol rústico) con pintura blanca: crestas irregulares, cráteres y poros de 1–10 mm, con algunos filos marcados",
+  "finish": "pintura blanca mate, con polvo gris acumulado en las cavidades",
+  "condition": "algunas manchas grises y una zona con pintura desgastada a la derecha",
+  "distinct_from": "el interior es yeso liso (muro-interior)"
+ },
+ "assumptions": [
+  "escala: el recorte mide ≈ 0.5 × 0.5 m (foto a ≈ 0.5 m)",
+  "luminosidad del blanco exterior (albedo ≈ 0.73)",
+  "amplitud del relieve (3 mm) y que el sombreado de la foto represente la altura (luz difusa desde arriba)"
+ ]
+}

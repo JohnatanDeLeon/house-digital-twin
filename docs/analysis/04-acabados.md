@@ -1,6 +1,6 @@
 # Fase 4: acabados y texturas a partir de fotos
 
-Fuente: 13 fotos del dueño, del 2026-10-07 (23:18–23:33) y del 2026-10-08 (07:45–07:56). Todas son de noche, con luz artificial cálida, sin flash, tomadas con un Samsung Galaxy S25 Ultra en gran angular (23 mm equivalente). Las originales están en `sources/fotos/`, fuera de git. Cada material se describe en `sources/texturas/<nombre>.json` y se genera en `assets/textures/<nombre>/` con:
+Fuente: 14 fotos del dueño, del 2026-10-07 (23:18–23:33) y del 2026-10-08 (07:45–07:56). Todas son de noche, con luz artificial cálida, sin flash, tomadas con un Samsung Galaxy S25 Ultra en gran angular (23 mm equivalente). Las originales están en `sources/fotos/`, fuera de git. Cada material se describe en `sources/texturas/<nombre>.json` y se genera en `assets/textures/<nombre>/` con:
 
 ```bash
 python -m house_twin.cli texture sources/texturas/<nombre>.json
@@ -24,6 +24,7 @@ python -m house_twin.cli texture sources/texturas/<nombre>.json
 | `aluminio-negro` | Constante (color medido) | Marcos y hojas de V01–V10 | Foto; el dueño dice que todas las ventanas son de aluminio negro |
 | `vidrio-claro` | Constante (supuesto) | Vidrios de las ventanas y de D04 | Supuesto |
 | `vidrio-polarizado` | Constante (supuesto) | Vidrio de D03 | Dueño: «ventanal polarizado»; tono y transmisión supuestos |
+| `aplanado-exterior` | Mapas repetibles (≈ 0.5 × 0.5 m) con relieve alto | Muros de la fachada y el pórtico | Foto; el dueño dice que es la textura de la fachada y el pórtico |
 | `muro-interior` | Constante | Muros interiores | Dueño: yeso blanco con pintura blanca |
 
 **Exteriores y bodega** (dato del dueño): pórtico, bodega, cochera, pasillo de servicio, lavandería y patio no tienen loseta. Su piso es un firme de concreto gris (foto 9); el dueño confirma que es el mismo en todos. El tragaluz tiene la loseta del interior.
@@ -163,6 +164,14 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
   - **Techo con textura de tirol** (rugoso). Es un acabado distinto al muro liso y todavía no tiene textura.
   - **Zoclo de loseta** en el muro.
 - **Por la regla del dueño:** R1 (16.15 m², la más grande) tiene closet sin puertas, y R2 y R3 sí tienen.
+
+### 12. Aplanado exterior de la fachada y el pórtico (07:49:12)
+
+- **Acabado:** aplanado de mortero lanzado (**zarpeo / tirol rústico**) con pintura blanca mate. Tiene crestas irregulares, cráteres y poros de 1 a 10 mm, y algunos filos marcados. Coincide con lo que dice el dueño: rugosidad alta, «casi como bordes».
+- **Estado:** hay polvo gris acumulado en las cavidades, manchas grises y una zona con la pintura desgastada.
+- **Relieve:** tiene varias escalas, de detalle fino a crestas de ≈ 1 cm. El generador ahora acepta `grain_blur_px` para fijar la escala más grande que cuenta como relieve; aquí, 24 px. La amplitud de 3 mm es supuesta.
+- **Escala:** supuesta. La foto se tomó a ≈ 0.5 m, así que el recorte mide ≈ 0.5 × 0.5 m.
+- **Color:** con luz de día difusa sale neutro. La luminosidad del blanco exterior es supuesta (albedo ≈ 0.73).
 
 ## Fachada y orientación (2026-10-08, 08:12–09:29)
 
