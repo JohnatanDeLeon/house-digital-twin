@@ -42,6 +42,7 @@ python -m venv .venv
 .venv/bin/python -m house_twin.cli build --source sources/casa-jonhy-levantamiento.pdf  # desde el PDF
 .venv/bin/python -m house_twin.cli inspect-dxf data/raw/plano.dxf     # capas, entidades, bloques, unidades
 .venv/bin/python -m house_twin.cli compare sources/casa-jonhy-levantamiento.pdf data/raw/plano.dxf
+.venv/bin/python -m house_twin.cli texture sources/texturas/puerta-recamaras.json  # foto → texturas PBR
 .venv/bin/python -m pytest
 ```
 

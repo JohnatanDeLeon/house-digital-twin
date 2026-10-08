@@ -24,12 +24,22 @@ Gemelo digital de una casa (Casa Jonhy). Código en inglés, comentarios y docum
 - El DXF declara milímetros pero está en metros: `sources/dxf.py` valida unidades por plausibilidad.
 - La cota del frente del DXF está forzada a "10.00" sobre 10.03 m reales del dibujo: no confiar en textos de cota.
 
+## Texturas
+
+- Fotos del dueño en `sources/fotos/` (fuera de git: privadas y pesadas). Cada textura se describe en
+  `sources/texturas/<nombre>.json` (esquinas, tamaño, blanco de referencia, parches, relieve) con posiciones
+  en fracciones de la superficie, y se genera en `assets/textures/<nombre>/` con
+  `python -m house_twin.cli texture sources/texturas/<nombre>.json`. No editar los mapas a mano.
+- Tamaños y blancos de referencia que no estén medidos van en `assumptions` y en `size_m.source`.
+- Normal maps en convención OpenGL (la de Blender).
+
 ## Comandos
 
 ```bash
 .venv/bin/python -m house_twin.cli build [--source sources/casa-jonhy-levantamiento.pdf]
 .venv/bin/python -m house_twin.cli compare A B
 .venv/bin/python -m house_twin.cli inspect-dxf data/raw/plano.dxf
+.venv/bin/python -m house_twin.cli texture sources/texturas/puerta-recamaras.json
 .venv/bin/python -m pytest
 ```
 

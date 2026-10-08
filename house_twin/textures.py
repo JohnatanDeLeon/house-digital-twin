@@ -1,0 +1,145 @@
+"""Texturas PBR a partir de fotos de la casa: color base, rugosidad y relieve (normal map).
+
+Cada textura se describe en un JSON de `sources/texturas/` (esquinas en la foto, tamaño real,
+referencia de blanco, parches y relieve) y se regenera con `python -m house_twin.cli texture <spec>`.
+La foto original vive solo en la PC del dueño (`sources/fotos/`, fuera de git); al repo entran el
+JSON y las texturas de `assets/textures/<nombre>/`.
+
+Lo que sale de la foto es observación; el tamaño real y el blanco de referencia son datos o supuestos
+que el JSON declara con su fuente y se copian a `material.json`.
+"""
+import json
+from pathlib import Path
+
+import numpy as np
+from PIL import Image, ImageFilter, ImageOps
+
+ROOT = Path(__file__).resolve().parent.parent
+TEXTURES_DIR = ROOT / 'assets' / 'textures'
+PATCH_FEATHER_PX = 12
+GRAIN_BLUR_PX = 6  # separa la veta (detalle fino) de la iluminación y el tinte (variación amplia)
+DETAIL_MAP_SCALE = 0.5  # rugosidad y normal a media resolución: pesan menos en git y el render no lo nota
+
+
+def _srgb_to_linear(c):
+    return np.where(c <= 0.04045, c / 12.92, ((c + 0.055) / 1.055) ** 2.4)
+
+
+def _linear_to_srgb(c):
+    c = np.clip(c, 0.0, 1.0)
+    return np.where(c <= 0.0031308, c * 12.92, 1.055 * c ** (1 / 2.4) - 0.055)
+
+
+def _perspective_coeffs(dst, src):
+    """Coeficientes de PIL.Image.PERSPECTIVE: llevan cada punto de salida a su punto en la foto."""
+    rows, rhs = [], []
+    for (x, y), (u, v) in zip(dst, src):
+        rows += [[x, y, 1, 0, 0, 0, -u * x, -u * y], [0, 0, 0, x, y, 1, -v * x, -v * y]]
+        rhs += [u, v]
+    return np.linalg.solve(np.array(rows, float), np.array(rhs, float))
+
+
+def rectify(photo: Image.Image, corners: dict, size_px: tuple[int, int]) -> Image.Image:
+    w, h = size_px
+    src = [corners[k] for k in ('top_left', 'top_right', 'bottom_right', 'bottom_left')]
+    return photo.transform(size_px, Image.PERSPECTIVE, _perspective_coeffs([(0, 0), (w, 0), (w, h), (0, h)], src),
+                           Image.BICUBIC)
+
+
+def white_balance(photo: Image.Image, image: Image.Image, reference: dict) -> tuple[Image.Image, list[float]]:
+    """Corrige color y exposición en lineal con una superficie que se sabe blanca, en el mismo plano que la textura."""
+    x0, y0, x1, y1 = reference['box_px']
+    ref = _srgb_to_linear(np.median(np.asarray(photo.crop((x0, y0, x1, y1))).reshape(-1, 3), axis=0) / 255)
+    target = _srgb_to_linear(np.array(reference['albedo_srgb'], float) / 255)
+    gain = target / ref
+    lin = _srgb_to_linear(np.asarray(image).astype(float) / 255) * gain
+    return Image.fromarray((_linear_to_srgb(lin) * 255).round().astype(np.uint8)), [round(float(g), 4) for g in gain]
+
+
+def _frac_box(frac, size_px):
+    """[x, y, ancho, alto] en fracciones de la textura → píxeles."""
+    W, H = size_px
+    return round(frac[0] * W), round(frac[1] * H), round(frac[2] * W), round(frac[3] * H)
+
+
+def apply_patches(image: Image.Image, patches: list[dict]) -> Image.Image:
+    """Tapa objetos que no son la superficie (p. ej. la perilla) con un trozo de la misma pieza, con borde difuminado."""
+    out = image.copy()
+    for p in patches:
+        x, y, w, h = _frac_box(p['from_frac'], image.size)
+        to = (round(p['to_frac'][0] * image.width), round(p['to_frac'][1] * image.height))
+        piece = image.crop((x, y, x + w, y + h))
+        mask = Image.new('L', (w, h), 0)
+        f = PATCH_FEATHER_PX
+        mask.paste(255, (f, f, w - f, h - f))
+        out.paste(piece, to, mask.filter(ImageFilter.GaussianBlur(f / 2)))
+    return out
+
+
+def _panel_height(shape, panels_px, relief):
+    """Altura (m) de una puerta de tableros realzados: cara del bastidor en 0, ranura en el contorno y bisel que sube al campo."""
+    h, w = shape
+    height = np.zeros(shape)
+    groove = -relief['groove_depth_mm'] / 1000
+    rise = relief['bevel_rise_mm'] / 1000
+    bevel = relief['bevel_px']
+    yy, xx = np.mgrid[0:h, 0:w]
+    for x0, y0, x1, y1 in panels_px:
+        inside = (xx >= x0) & (xx < x1) & (yy >= y0) & (yy < y1)
+        edge = np.minimum.reduce([xx - x0, x1 - 1 - xx, yy - y0, y1 - 1 - yy]).astype(float)
+        profile = groove + rise * np.clip(edge / bevel, 0, 1)
+        height = np.where(inside, profile, height)
+    return height
+
+
+def _normal_map(height_m, px_per_m):
+    """Normal map en convención OpenGL (la de Blender): verde = +V, hacia arriba de la textura."""
+    dy, dx = np.gradient(height_m, 1 / px_per_m)
+    n = np.dstack([-dx, dy, np.ones_like(height_m)])  # las filas crecen hacia abajo: +V = -fila
+    n /= np.linalg.norm(n, axis=2, keepdims=True)
+    return Image.fromarray(((n + 1) / 2 * 255).round().astype(np.uint8))
+
+
+def _grain(base: Image.Image) -> np.ndarray:
+    """Detalle fino de la veta en [-1, 1]: luminancia menos su versión difuminada."""
+    lum = np.asarray(base.convert('L')).astype(float)
+    blur = np.asarray(base.convert('L').filter(ImageFilter.GaussianBlur(GRAIN_BLUR_PX))).astype(float)
+    detail = lum - blur
+    return np.clip(detail / (3 * detail.std() + 1e-6), -1, 1)
+
+
+def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
+    spec = json.loads(spec_path.read_text())
+    px_per_m = spec['px_per_m']
+    size_m = (spec['size_m']['width'], spec['size_m']['height'])
+    size_px = (round(size_m[0] * px_per_m), round(size_m[1] * px_per_m))
+    photo = ImageOps.exif_transpose(Image.open(photos_root / spec['photo'])).convert('RGB')
+
+    base = rectify(photo, spec['corners_px'], size_px)
+    base, gain = white_balance(photo, base, spec['white_reference'])
+    base = apply_patches(base, spec.get('patches', []))
+
+    relief = spec['relief']
+    W, H = size_px
+    panels_px = [[round(x0 * W), round(y0 * H), round(x1 * W), round(y1 * H)] for x0, y0, x1, y1 in (p['rect_frac'] for p in relief['panels'])]
+    grain = _grain(base)
+    height = _panel_height(grain.shape, panels_px, relief) + grain * relief['grain_mm'] / 1000
+    rough = spec['roughness']
+    roughness = np.clip(rough['base'] - grain * rough['grain'], 0, 1)
+
+    out = TEXTURES_DIR / spec['name']
+    out.mkdir(parents=True, exist_ok=True)
+    detail_px = (round(size_px[0] * DETAIL_MAP_SCALE), round(size_px[1] * DETAIL_MAP_SCALE))
+    base.save(out / 'basecolor.jpg', quality=92)
+    Image.fromarray((roughness * 255).round().astype(np.uint8)).resize(detail_px, Image.LANCZOS).save(out / 'roughness.png', optimize=True)
+    _normal_map(height, px_per_m).resize(detail_px, Image.LANCZOS).save(out / 'normal.png', optimize=True)
+    material = {
+        'name': spec['name'], 'applies_to': spec['applies_to'],
+        'size_m': spec['size_m'], 'px_per_m': px_per_m, 'size_px': list(size_px),
+        'maps': {'basecolor': 'basecolor.jpg', 'roughness': 'roughness.png', 'normal': 'normal.png (OpenGL)'},
+        'source': {'photo': spec['photo'], 'photo_meta': spec.get('photo_meta', {}),
+                   'white_reference': spec['white_reference'], 'white_balance_gain': gain},
+        'observed': spec.get('observed', {}), 'assumptions': spec.get('assumptions', []),
+    }
+    (out / 'material.json').write_text(json.dumps(material, ensure_ascii=False, indent=1) + '\n')
+    return out

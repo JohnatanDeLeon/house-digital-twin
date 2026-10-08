@@ -3,3 +3,6 @@ __pycache__/
 *.pyc
 .venv/
 .pytest_cache/
+
+# Fotos de la casa: privadas y pesadas, solo en la PC del dueño. Al repo entran las texturas derivadas.
+sources/fotos/

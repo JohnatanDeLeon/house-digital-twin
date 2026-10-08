@@ -57,6 +57,13 @@ def inspect_dxf(source: Path):
     print(json.dumps(inventory(str(source)), ensure_ascii=False, indent=1))
 
 
+def texture(spec: Path):
+    from house_twin.textures import build_texture
+    out = build_texture(spec.resolve())
+    for f in sorted(out.iterdir()):
+        print(f'→ {f.relative_to(ROOT)}')
+
+
 def main():
     parser = argparse.ArgumentParser(prog='house_twin')
     sub = parser.add_subparsers(dest='command', required=True)
@@ -67,6 +74,8 @@ def main():
     c.add_argument('source_b', type=Path)
     i = sub.add_parser('inspect-dxf', help='capas, entidades, bloques y unidades de un DXF')
     i.add_argument('source', type=Path)
+    t = sub.add_parser('texture', help='foto → texturas PBR según un JSON de sources/texturas/')
+    t.add_argument('spec', type=Path)
     args = parser.parse_args()
     if args.command == 'build':
         build(args.source)
@@ -74,6 +83,8 @@ def main():
         compare(args.source_a, args.source_b)
     elif args.command == 'inspect-dxf':
         inspect_dxf(args.source)
+    elif args.command == 'texture':
+        texture(args.spec)
 
 
 if __name__ == '__main__':
