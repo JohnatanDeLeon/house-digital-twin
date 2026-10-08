@@ -46,14 +46,45 @@ def rectify(photo: Image.Image, corners: dict, size_px: tuple[int, int]) -> Imag
                            Image.BICUBIC)
 
 
-def white_balance(photo: Image.Image, image: Image.Image, reference: dict) -> tuple[Image.Image, list[float]]:
-    """Corrige color y exposición en lineal con una superficie que se sabe blanca, en el mismo plano que la textura."""
-    x0, y0, x1, y1 = reference['box_px']
-    ref = _srgb_to_linear(np.median(np.asarray(photo.crop((x0, y0, x1, y1))).reshape(-1, 3), axis=0) / 255)
-    target = _srgb_to_linear(np.array(reference['albedo_srgb'], float) / 255)
-    gain = target / ref
-    lin = _srgb_to_linear(np.asarray(image).astype(float) / 255) * gain
-    return Image.fromarray((_linear_to_srgb(lin) * 255).round().astype(np.uint8)), [round(float(g), 4) for g in gain]
+def _to_image(lin):
+    return Image.fromarray((_linear_to_srgb(lin) * 255).round().astype(np.uint8))
+
+
+def color_correct(photo: Image.Image, image: Image.Image, color: dict) -> tuple[Image.Image, list[float]]:
+    """Corrige color y exposición en lineal.
+
+    - `white_reference`: una superficie que se sabe blanca, en el mismo plano que la textura (lo más fiable).
+    - `gain` + `mean_srgb`: sin blanco en la foto; balance de otra foto con la misma luz y una luminosidad media declarada.
+    """
+    lin = _srgb_to_linear(np.asarray(image).astype(float) / 255)
+    if 'white_reference' in color:
+        ref = color['white_reference']
+        x0, y0, x1, y1 = ref['box_px']
+        measured = _srgb_to_linear(np.median(np.asarray(photo.crop((x0, y0, x1, y1))).reshape(-1, 3), axis=0) / 255)
+        gain = _srgb_to_linear(np.array(ref['albedo_srgb'], float) / 255) / measured
+    else:
+        balanced = lin * np.array(color['gain'], float)
+        target = _srgb_to_linear(np.array(color['mean_srgb'], float) / 255).mean()
+        gain = np.array(color['gain'], float) * target / balanced.mean()
+    return _to_image(lin * gain), [round(float(g), 4) for g in gain]
+
+
+def flatten_lighting(image: Image.Image, exclude_darkest: float = 0.2) -> Image.Image:
+    """Quita la caída de luz de la foto (más clara cerca de la lámpara) sin tocar el detalle ni el color medio.
+
+    Ajusta una superficie cuadrática a la luminancia (en log, sin el `exclude_darkest` más oscuro: juntas y
+    sombras) y la divide. Un difuminado no basta: deja escalones de brillo entre filas de losetas.
+    """
+    lin = _srgb_to_linear(np.asarray(image).astype(float) / 255)
+    lum = np.maximum(lin.mean(axis=2), 1e-4)
+    h, w = lum.shape
+    yy, xx = np.mgrid[0:h, 0:w]
+    x, y = xx / w - 0.5, yy / h - 0.5
+    terms = np.stack([np.ones_like(x), x, y, x * x, x * y, y * y], axis=-1)
+    mask = lum > np.quantile(lum, exclude_darkest)
+    coef, *_ = np.linalg.lstsq(terms[mask], np.log(lum[mask]), rcond=None)
+    fit = terms @ coef
+    return _to_image(lin * np.exp(fit.mean() - fit)[..., None])
 
 
 def _frac_box(frac, size_px):
@@ -92,6 +123,21 @@ def _panel_height(shape, panels_px, relief):
     return height
 
 
+def _grid_height(shape, grid, relief):
+    """Altura (m) de un piso de losetas: superficie en 0, junta hundida y canto redondeado.
+
+    La textura empieza y termina en el eje de una junta, así que se repite sin costura.
+    """
+    h, w = shape
+    tile_w, tile_h = w / grid['cols'], h / grid['rows']
+    yy, xx = np.mgrid[0:h, 0:w].astype(float)
+    dist = np.minimum(np.abs(((xx + tile_w / 2) % tile_w) - tile_w / 2), np.abs(((yy + tile_h / 2) % tile_h) - tile_h / 2))
+    half = grid['grout_frac'] * tile_w / 2
+    depth = relief['grout_depth_mm'] / 1000
+    edge = relief['edge_round_px']
+    return -depth * np.clip((half + edge - dist) / edge, 0, 1) ** 2, dist <= half
+
+
 def _normal_map(height_m, px_per_m):
     """Normal map en convención OpenGL (la de Blender): verde = +V, hacia arriba de la textura."""
     dy, dx = np.gradient(height_m, 1 / px_per_m)
@@ -116,16 +162,25 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     photo = ImageOps.exif_transpose(Image.open(photos_root / spec['photo'])).convert('RGB')
 
     base = rectify(photo, spec['corners_px'], size_px)
-    base, gain = white_balance(photo, base, spec['white_reference'])
+    if 'flatten_lighting' in spec:
+        base = flatten_lighting(base, spec['flatten_lighting'].get('exclude_darkest', 0.2))
+    base, gain = color_correct(photo, base, spec['color'])
     base = apply_patches(base, spec.get('patches', []))
 
     relief = spec['relief']
     W, H = size_px
-    panels_px = [[round(x0 * W), round(y0 * H), round(x1 * W), round(y1 * H)] for x0, y0, x1, y1 in (p['rect_frac'] for p in relief['panels'])]
     grain = _grain(base)
-    height = _panel_height(grain.shape, panels_px, relief) + grain * relief['grain_mm'] / 1000
     rough = spec['roughness']
-    roughness = np.clip(rough['base'] - grain * rough['grain'], 0, 1)
+    roughness = rough['base'] - grain * rough['grain']
+    if relief['type'] == 'panels':
+        panels_px = [[round(x0 * W), round(y0 * H), round(x1 * W), round(y1 * H)]
+                     for x0, y0, x1, y1 in (p['rect_frac'] for p in relief['panels'])]
+        shape_height = _panel_height(grain.shape, panels_px, relief)
+    else:
+        shape_height, grout = _grid_height(grain.shape, spec['grid'], relief)
+        roughness = np.where(grout, rough['grout'], roughness)
+    height = shape_height + grain * relief['grain_mm'] / 1000
+    roughness = np.clip(roughness, 0, 1)
 
     out = TEXTURES_DIR / spec['name']
     out.mkdir(parents=True, exist_ok=True)
@@ -135,10 +190,11 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     _normal_map(height, px_per_m).resize(detail_px, Image.LANCZOS).save(out / 'normal.png', optimize=True)
     material = {
         'name': spec['name'], 'applies_to': spec['applies_to'],
-        'size_m': spec['size_m'], 'px_per_m': px_per_m, 'size_px': list(size_px),
+        'size_m': spec['size_m'], 'px_per_m': px_per_m, 'size_px': list(size_px), 'tileable': relief['type'] == 'grid',
+        'grid': spec.get('grid'),
         'maps': {'basecolor': 'basecolor.jpg', 'roughness': 'roughness.png', 'normal': 'normal.png (OpenGL)'},
         'source': {'photo': spec['photo'], 'photo_meta': spec.get('photo_meta', {}),
-                   'white_reference': spec['white_reference'], 'white_balance_gain': gain},
+                   'color': spec['color'], 'white_balance_gain': gain},
         'observed': spec.get('observed', {}), 'assumptions': spec.get('assumptions', []),
     }
     (out / 'material.json').write_text(json.dumps(material, ensure_ascii=False, indent=1) + '\n')

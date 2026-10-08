@@ -20,6 +20,8 @@
   1440,
   3672
  ],
+ "tileable": false,
+ "grid": null,
  "maps": {
   "basecolor": "basecolor.jpg",
   "roughness": "roughness.png",
@@ -35,19 +37,21 @@
    "flash": false,
    "light": "artificial cálida, de noche"
   },
-  "white_reference": {
-   "box_px": [
-    1000,
-    30,
-    2000,
-    120
-   ],
-   "albedo_srgb": [
-    235,
-    235,
-    235
-   ],
-   "note": "muro sobre la puerta, en el mismo plano que la hoja; supuesto: pintura blanca (albedo ≈ 0.83)"
+  "color": {
+   "white_reference": {
+    "box_px": [
+     1000,
+     30,
+     2000,
+     120
+    ],
+    "albedo_srgb": [
+     235,
+     235,
+     235
+    ],
+    "note": "muro sobre la puerta, en el mismo plano que la hoja; supuesto: pintura blanca (albedo ≈ 0.83)"
+   }
   },
   "white_balance_gain": [
    1.6134,

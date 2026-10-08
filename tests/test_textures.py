@@ -43,8 +43,8 @@ def test_build_texture_writes_maps_and_provenance(tmp_path, monkeypatch):
         'name': 'prueba', 'applies_to': {'openings': ['D01'], 'source': 'test'},
         'photo': 'foto.jpg', 'corners_px': {'top_left': [10, 10], 'top_right': [290, 10], 'bottom_right': [290, 390], 'bottom_left': [10, 390]},
         'size_m': {'width': 0.1, 'height': 0.2, 'source': 'test'}, 'px_per_m': 500,
-        'white_reference': {'box_px': [0, 0, 5, 5], 'albedo_srgb': [235, 235, 235]},
-        'relief': {'panels': [{'rect_frac': [0.2, 0.2, 0.8, 0.8]}], 'groove_depth_mm': 4, 'bevel_rise_mm': 3, 'bevel_px': 5, 'grain_mm': 0.1},
+        'color': {'white_reference': {'box_px': [0, 0, 5, 5], 'albedo_srgb': [235, 235, 235]}},
+        'relief': {'type': 'panels', 'panels': [{'rect_frac': [0.2, 0.2, 0.8, 0.8]}], 'groove_depth_mm': 4, 'bevel_rise_mm': 3, 'bevel_px': 5, 'grain_mm': 0.1},
         'roughness': {'base': 0.45, 'grain': 0.08}, 'assumptions': ['tamaño de prueba'],
     }
     (tmp_path / 'spec.json').write_text(json.dumps(spec))
@@ -53,3 +53,16 @@ def test_build_texture_writes_maps_and_provenance(tmp_path, monkeypatch):
     assert Image.open(out / 'normal.png').size == (25, 50)
     material = json.loads((out / 'material.json').read_text())
     assert material['assumptions'] == ['tamaño de prueba'] and material['applies_to']['openings'] == ['D01']
+
+
+def test_tile_grid_relief_is_seamless():
+    h, grout = textures._grid_height((300, 200), {'cols': 2, 'rows': 3, 'grout_frac': 0.04}, {'grout_depth_mm': 1.5, 'edge_round_px': 3})
+    assert grout[0, 50] and grout[50, 0] and grout[100, 50] and grout[50, 100]  # bordes y ejes de junta
+    assert h[50, 50] == 0 and h[0, 50] == pytest.approx(-0.0015)
+    assert np.allclose(h[:, 0], h[:, -1], atol=1e-4) and np.allclose(h[0], h[-1], atol=1e-4)  # se repite sin costura
+
+
+def test_flatten_lighting_removes_gradient():
+    ramp = np.linspace(80, 200, 120)[:, None, None] * np.ones((120, 90, 3))
+    flat = np.asarray(textures.flatten_lighting(Image.fromarray(ramp.astype(np.uint8)), exclude_darkest=0)).astype(float)
+    assert flat[:10].mean() == pytest.approx(flat[-10:].mean(), abs=3)

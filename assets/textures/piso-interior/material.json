@@ -1,0 +1,80 @@
+{
+ "name": "piso-interior",
+ "applies_to": {
+  "spaces": [
+   "S01",
+   "S02",
+   "S03",
+   "S04",
+   "S05",
+   "S07"
+  ],
+  "surface": "piso",
+  "source": "dueño (2026-10-07): es el piso de todo el interior; pórtico, bodega, cochera, pasillo de servicio, lavandería y patio no tienen piso"
+ },
+ "size_m": {
+  "width": 0.6,
+  "height": 0.9,
+  "source": "supuesto: loseta de 30 × 30 cm estimada por la escala de la puerta; pendiente de medir"
+ },
+ "px_per_m": 2560,
+ "size_px": [
+  1536,
+  2304
+ ],
+ "tileable": true,
+ "grid": {
+  "cols": 2,
+  "rows": 3,
+  "grout_frac": 0.0175,
+  "tile_m": 0.3,
+  "note": "esquinas = cruces de junta; junta medida en la foto rectificada (1.7–1.8 % de la loseta)"
+ },
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)"
+ },
+ "source": {
+  "photo": "sources/fotos/piso-interior.jpg",
+  "photo_meta": {
+   "taken": "2026-10-07T23:19:01",
+   "camera": "Samsung Galaxy S25 Ultra",
+   "focal_35mm": 23,
+   "iso": 1250,
+   "flash": false,
+   "light": "artificial cálida, de noche (la misma de la foto de la puerta, 16 s antes)"
+  },
+  "color": {
+   "gain": [
+    0.8922,
+    0.9942,
+    1.1136
+   ],
+   "mean_srgb": [
+    196,
+    186,
+    172
+   ],
+   "note": "sin blanco en la foto: balance de la foto de la puerta (misma luz, 16 s antes) y luminosidad media supuesta de beige claro; pendiente de calibrar con una hoja blanca"
+  },
+  "white_balance_gain": [
+   1.7136,
+   1.9095,
+   2.1388
+  ]
+ },
+ "observed": {
+  "type": "loseta cerámica esmaltada, cuadrada, colocada a junta corrida (cuadrícula alineada)",
+  "design": "beige claro con veteado tipo mármol en tono arena y gris tenue, de baja intensidad",
+  "glaze": "brillante, con micro relieve tipo piel de naranja: el reflejo de la lámpara se ve moteado",
+  "grout": "gris oscuro, de 5–6 mm, con suciedad acumulada en algunos tramos",
+  "condition": "buen estado; manchas puntuales de suciedad sobre la junta; sin fisuras visibles"
+ },
+ "assumptions": [
+  "loseta de 30 × 30 cm (pendiente de medir)",
+  "luminosidad media del beige (sin blanco de referencia en la foto)",
+  "balance de color tomado de la foto de la puerta",
+  "junta hundida 1.5 mm y canto redondeado"
+ ]
+}
