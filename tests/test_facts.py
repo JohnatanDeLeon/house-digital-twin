@@ -13,7 +13,7 @@ def test_counts(facts):
     kinds = [o['kind'] for o in facts['openings'] if o['footprint']]
     assert kinds.count('door') == 9 and kinds.count('window') == 9
     assert sum(not s['is_exterior'] for s in facts['spaces']) == 8
-    assert sorted(s['name'] or '' for s in facts['spaces'] if s['is_exterior']) == ['', 'Cochera', 'Lavandería', 'Patio']
+    assert sorted(s['name'] for s in facts['spaces'] if s['is_exterior']) == ['Cochera', 'Lavandería', 'Patio', 'Pórtico']
 
 
 def test_plan_alone_splits_bathroom_and_keeps_one_exterior(plan_only_facts):
@@ -47,6 +47,19 @@ def test_exterior_zones_are_where_the_owner_said(facts):
     assert space_named(facts, 'Cochera')['bbox'][2] == pytest.approx(3.115, abs=0.01)
     assert 'LAVANDERIA' in space_named(facts, 'Lavandería')['labels']
     assert 'COCHERA' in space_named(facts, 'Cochera')['labels']
+
+
+def test_portico_is_roofed_and_garage_is_not(facts):
+    portico = space_named(facts, 'Pórtico')
+    assert portico['roofed']['value'] is True and space_named(facts, 'Cochera')['roofed']['value'] is False
+    main_door = _opening_at(facts, 7.2, 3.33)
+    assert portico['id'] in main_door['connects']
+
+
+def test_owner_answers_close_unknowns(facts, plan_only_facts):
+    assert {'U06', 'U09'} <= {u['id'] for u in plan_only_facts['unknowns']}
+    assert not {'U06', 'U09'} & {u['id'] for u in facts['unknowns']}
+    assert {a['id'] for a in facts['answered']} == {'U06', 'U09'}
 
 
 def test_site_matches_lot(facts):

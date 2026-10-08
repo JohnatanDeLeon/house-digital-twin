@@ -31,8 +31,8 @@ La imagen se dibuja **solo desde el JSON de hechos**, no desde el PDF. Si coinci
 | S07 | 1/2 Baño | 1.46 | 4.84 | 0.00 | rótulo |
 | S08 | Tragaluz (ilumina y ventila la Recámara 3) | 1.14 | 4.31 | — | **dueño** |
 | S09 | Patio (exterior, detrás de las recámaras) | 47.18 | 37.59 | — | **dueño** |
-| S10 | Cochera (exterior, a la izquierda de la cocina y la sala) | 23.07 | 26.27 | 0.00 | **dueño** |
-| S11 | sin nombre (exterior frente a la sala) | 16.12 | 17.05 | — | — (U09) |
+| S10 | Cochera (exterior, **sin techo**) | 23.07 | 26.27 | 0.00 | **dueño** |
+| S11 | Pórtico (**techado**, frente a la sala) | 16.12 | 17.05 | — | **dueño** |
 | S12 | Lavandería (exterior, sin techo ni cerramiento) | 6.28 | 10.03 | — | **dueño** |
 
 - Interior: 95.55 m² sin el tragaluz y 96.69 m² con él. Contarlo o no depende de si está abierto al cielo (U10).
@@ -50,7 +50,8 @@ Viven en [`sources/owner-annotations.json`](../../sources/owner-annotations.json
 - **Baño:** las dos piezas que separa el murete de 5 cm son un solo baño.
 - **Lavandería:** fuera de la casa, detrás del baño. La ventana del baño (V09) da hacia ella. No está techada ni cerrada.
 - **Patio:** la parte exterior detrás de los cuartos.
-- **Cochera:** la parte exterior fuera de la cocina, del lado izquierdo.
+- **Cochera:** la parte exterior fuera de la cocina, del lado izquierdo. **No tiene techo.**
+- **Pórtico:** la franja frente a la sala es un pórtico techado.
 - **Tragaluz:** el recinto triangular ilumina y ventila la Recámara 3.
   - Tiene ventana hacia la sala, pero solo en el muro central (W35, diagonal).
   - Los muros laterales (W38, W42) son macizos.
@@ -63,17 +64,17 @@ Sin el archivo de anotaciones, el plano solo da 9 recintos interiores y un únic
 
 | Id | Tipo | Ancho (m) | Antepecho / altura (m) | Muro | Conecta |
 |---|---|---|---|---|---|
-| D01 | puerta | 0.979 | — / ? | W03 | Frente (S11) ↔ calle (puerta peatonal en barda) |
+| D01 | puerta | 0.979 | — / ? | W03 | Pórtico ↔ calle (puerta peatonal en barda) |
 | D02 | puerta | 0.780 | — / ? | W06 | Zona social ↔ 1/2 Baño |
-| D03 | puerta | 1.002 | — / ? | W07 | Zona social ↔ Frente (S11) (acceso principal) |
+| D03 | puerta | 1.002 | — / ? | W07 | Zona social ↔ Pórtico (acceso principal) |
 | D04 | puerta | 0.832 | — / ? | W13 | Cocina ↔ Cochera (pasillo lateral) |
 | D05 | puerta | 0.799 | — / ? | W19 | Zona social ↔ Baño |
 | D06 | puerta | 0.878 | — / ? | W26 | Zona social ↔ Recámara 2 |
 | D07 | puerta | 0.858 | — / ? | W08 | Zona social ↔ Recámara 3 |
 | D08 | puerta | 0.894 | — / ? | W08 | Zona social ↔ Recámara 1 |
-| D09 | puerta | 0.835 | — / ? | W24 | Bodega ↔ Frente (S11) |
-| V01 | ventana | 0.744 | 0.865 / 1.27 | W07 | Sala ↔ Frente (S11) |
-| V02 | ventana | 0.750 | 0.85 / 1.26 | W07 | Sala ↔ Frente (S11) |
+| D09 | puerta | 0.835 | — / ? | W24 | Bodega ↔ Pórtico |
+| V01 | ventana | 0.744 | 0.865 / 1.27 | W07 | Sala ↔ Pórtico |
+| V02 | ventana | 0.750 | 0.85 / 1.26 | W07 | Sala ↔ Pórtico |
 | V03 | ventana | 0.498 | 0.86 / 1.27 | W13 | Cocina ↔ Cochera |
 | V04 | ventana | 0.511 | 0.87 / 1.27 | W23 | Cocina ↔ Cochera |
 | V05 | ventana | 1.238 | 0.86 / 1.26 | W04 | Recámara 3 ↔ Tragaluz |
@@ -124,10 +125,10 @@ Los nombres se buscan sin importar acentos ni mayúsculas: "recamara 1" funciona
 
 ## Incógnitas que bloquean la segunda planta
 
-Están en `unknowns` del JSON (U01–U11).
+Están en `unknowns` del JSON. El dueño ya respondió U06 (cochera sin techo) y U09 (pórtico): pasaron a `answered` con su respuesta y fecha.
 
-- **Bloquean la segunda planta:** entrepiso, losa, estructura y muros de carga, techo de la cochera.
-- **Además:** altura de puertas, materiales, la discrepancia de las cotas generales (10.023 contra 10.00), la lectura de `a=`/`h=`, qué es el frente S11, si el tragaluz está abierto al cielo (U10) y las medidas de su ventana hacia la sala (U11).
+- **Bloquean la segunda planta:** entrepiso, losa, estructura y muros de carga.
+- **Además:** altura de puertas, materiales, la discrepancia de las cotas generales (10.023 contra 10.00), la lectura de `a=`/`h=`, si el tragaluz está abierto al cielo (U10) y las medidas de su ventana hacia la sala (U11).
 
 ## Pendiente para la fase 3
 

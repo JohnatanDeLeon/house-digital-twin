@@ -127,5 +127,5 @@ class HouseModel:
         doors = sum(step['through'] != 'abierto' for step in steps)
         return {'reachable': True, 'doors_crossed': doors, 'steps': steps[::-1]}
 
-    def unknowns(self) -> list[dict]:
-        return self.facts['unknowns']
+    def unknowns(self) -> dict:
+        return {'pending': self.facts['unknowns'], 'answered': self.facts.get('answered', [])}

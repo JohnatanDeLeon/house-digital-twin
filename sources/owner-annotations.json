@@ -85,7 +85,31 @@
           10.22
         ]
       ],
-      "note": "Área exterior a la izquierda de la cocina y la sala."
+      "note": "Área exterior a la izquierda de la cocina y la sala. No tiene techo.",
+      "roofed": false
+    },
+    {
+      "name": "Pórtico",
+      "region": [
+        [
+          3.115,
+          -0.1
+        ],
+        [
+          8.6,
+          -0.1
+        ],
+        [
+          8.6,
+          3.3
+        ],
+        [
+          3.115,
+          3.3
+        ]
+      ],
+      "roofed": true,
+      "note": "Pórtico techado frente a la sala: acceso principal, puerta peatonal y puerta de la bodega."
     }
   ],
   "rename_spaces": [
@@ -116,6 +140,16 @@
         ]
       ],
       "note": "Ventana del tragaluz hacia la sala, en el muro central (diagonal). Los muros laterales no tienen ventana. El plano no la dibuja: medidas desconocidas."
+    }
+  ],
+  "answered_unknowns": [
+    {
+      "id": "U06",
+      "answer": "La cochera no tiene techo."
+    },
+    {
+      "id": "U09",
+      "answer": "La franja frente a la sala es un pórtico techado."
     }
   ]
 }

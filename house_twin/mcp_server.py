@@ -73,8 +73,8 @@ def create_server(facts_path: Path = DEFAULT_FACTS) -> MCPServer:
         return house.walk_path(start, end)
 
     @tool
-    def list_unknowns() -> list[dict]:
-        """Datos que el plano no contiene y que bloquean ciertos análisis (alturas, estructura, losa…)."""
+    def list_unknowns() -> dict:
+        """Datos pendientes que bloquean análisis (alturas, estructura, losa…) y los ya respondidos por el dueño."""
         return house.unknowns()
 
     return server

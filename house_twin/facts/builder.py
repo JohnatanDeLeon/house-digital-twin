@@ -201,5 +201,15 @@ def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
         'levels': [{'id': 'L0', 'name': 'Planta baja', 'elevation': 0.0, 'storey_height': dict(UNKNOWN)}],
         'spaces': spaces, 'walls': walls, 'openings': openings,
         'adjacency': _adjacency(walls, spaces, openings),
-        'unknowns': UNKNOWNS,
+        **_unknowns(annotations),
+    }
+
+
+def _unknowns(annotations: dict) -> dict:
+    """Las incógnitas que el dueño ya respondió salen de `unknowns` y quedan registradas con su respuesta."""
+    answers = {a['id']: a['answer'] for a in annotations.get('answered_unknowns', [])}
+    source = f"{annotations.get('source', 'dueño')} ({annotations.get('confirmed_on', 's/f')})"
+    return {
+        'unknowns': [u for u in UNKNOWNS if u['id'] not in answers],
+        'answered': [{**u, 'answer': answers[u['id']], 'source': source} for u in UNKNOWNS if u['id'] in answers],
     }

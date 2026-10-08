@@ -857,8 +857,8 @@
     "source": "rótulo \"NPT+0.00\""
    },
    "roofed": {
-    "value": null,
-    "source": "no está en el plano"
+    "value": false,
+    "source": "dueño (2026-10-08)"
    },
    "enclosed": {
     "value": null,
@@ -866,20 +866,16 @@
    },
    "source": "plano: caras de MUROS + vanos",
    "name_source": "dueño (2026-10-08)",
-   "owner_note": "Área exterior a la izquierda de la cocina y la sala."
+   "owner_note": "Área exterior a la izquierda de la cocina y la sala. No tiene techo."
   },
   {
    "id": "S11",
-   "name": null,
+   "name": "Pórtico",
    "labels": [],
    "contains": [],
    "drawn_contents": [],
    "is_exterior": true,
    "polygon": [
-    [
-     3.728,
-     3.253
-    ],
     [
      4.471,
      3.253
@@ -943,6 +939,10 @@
     [
      3.115,
      3.253
+    ],
+    [
+     3.728,
+     3.253
     ]
    ],
    "area": 16.12,
@@ -958,14 +958,16 @@
     "source": "no está en el plano"
    },
    "roofed": {
-    "value": null,
-    "source": "no está en el plano"
+    "value": true,
+    "source": "dueño (2026-10-08)"
    },
    "enclosed": {
     "value": null,
     "source": "no está en el plano"
    },
-   "source": "plano: caras de MUROS + vanos"
+   "source": "plano: caras de MUROS + vanos",
+   "name_source": "dueño (2026-10-08)",
+   "owner_note": "Pórtico techado frente a la sala: acceso principal, puerta peatonal y puerta de la bodega."
   },
   {
    "id": "S12",
@@ -4504,14 +4506,6 @@
    ]
   },
   {
-   "id": "U06",
-   "topic": "cochera",
-   "question": "¿La cochera está techada? ¿Con qué?",
-   "blocks": [
-    "segunda planta"
-   ]
-  },
-  {
    "id": "U07",
    "topic": "cotas generales",
    "question": "El plano rotula 10.00 × 21.25 pero la geometría mide 10.023 × 21.235. ¿Cuál es la medida real del terreno?",
@@ -4521,12 +4515,6 @@
    "id": "U08",
    "topic": "ventanas",
    "question": "Confirmar que en los rótulos de ventana \"a=\" es antepecho y \"h=\" altura de ventana.",
-   "blocks": []
-  },
-  {
-   "id": "U09",
-   "topic": "frente",
-   "question": "La franja exterior frente a la sala (entre la cochera y la bodega, con la puerta principal y la peatonal), ¿es parte de la cochera, un acceso/jardín, u otra cosa?",
    "blocks": []
   },
   {
@@ -4544,6 +4532,26 @@
    "blocks": [
     "3D"
    ]
+  }
+ ],
+ "answered": [
+  {
+   "id": "U06",
+   "topic": "cochera",
+   "question": "¿La cochera está techada? ¿Con qué?",
+   "blocks": [
+    "segunda planta"
+   ],
+   "answer": "La cochera no tiene techo.",
+   "source": "dueño (2026-10-08)"
+  },
+  {
+   "id": "U09",
+   "topic": "frente",
+   "question": "La franja exterior frente a la sala (entre la cochera y la bodega, con la puerta principal y la peatonal), ¿es parte de la cochera, un acceso/jardín, u otra cosa?",
+   "blocks": [],
+   "answer": "La franja frente a la sala es un pórtico techado.",
+   "source": "dueño (2026-10-08)"
   }
  ]
 }
