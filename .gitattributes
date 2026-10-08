@@ -1,0 +1,2 @@
+# Planos CAD: preservar bytes exactos (CRLF) y no generar diffs de texto
+*.dxf binary
