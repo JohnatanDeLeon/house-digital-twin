@@ -24,7 +24,7 @@ python -m house_twin.cli texture sources/texturas/<nombre>.json
 | `aluminio-negro` | Constante (color medido) | Marcos y hojas de V01–V10 | Foto; el dueño dice que todas las ventanas son de aluminio negro |
 | `vidrio-claro` | Constante (supuesto) | Vidrios de las ventanas y de D04 | Supuesto |
 | `vidrio-polarizado` | Constante (supuesto) | Vidrio de D03 | Dueño: «ventanal polarizado»; tono y transmisión supuestos |
-| `aplanado-exterior` | Mapas repetibles (≈ 0.5 × 0.5 m) con relieve alto | Muros de la fachada y el pórtico | Foto; el dueño dice que es la textura de la fachada y el pórtico |
+| `aplanado-exterior` | Mapas repetibles (≈ 0.5 × 0.5 m) con relieve alto | Muros exteriores del pasillo de servicio, el patio y la cochera | Foto y dueño; el pórtico es más rugoso (pastas de estuco, textura pendiente) |
 | `muro-interior` | Constante | Muros interiores | Dueño: yeso blanco con pintura blanca |
 
 **Exteriores y bodega** (dato del dueño): pórtico, bodega, cochera, pasillo de servicio, lavandería y patio no tienen loseta. Su piso es un firme de concreto gris (foto 9); el dueño confirma que es el mismo en todos. El tragaluz tiene la loseta del interior.
@@ -165,9 +165,10 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
   - **Zoclo de loseta** en el muro.
 - **Por la regla del dueño:** R1 (16.15 m², la más grande) tiene closet sin puertas, y R2 y R3 sí tienen.
 
-### 12. Aplanado exterior de la fachada y el pórtico (07:49:12)
+### 12. Aplanado exterior de pasillo, patio y cochera (07:49:12)
 
 - **Acabado:** aplanado de mortero lanzado (**zarpeo / tirol rústico**) con pintura blanca mate. Tiene crestas irregulares, cráteres y poros de 1 a 10 mm, y algunos filos marcados. Coincide con lo que dice el dueño: rugosidad alta, «casi como bordes».
+- **Dónde va (corrección del dueño):** muros exteriores del pasillo de servicio, el patio y la cochera. El **pórtico es aún más rugoso, con pastas de estuco**: necesita su propia textura.
 - **Estado:** hay polvo gris acumulado en las cavidades, manchas grises y una zona con la pintura desgastada.
 - **Relieve:** tiene varias escalas, de detalle fino a crestas de ≈ 1 cm. El generador ahora acepta `grain_blur_px` para fijar la escala más grande que cuenta como relieve; aquí, 24 px. La amplitud de 3 mm es supuesta.
 - **Escala:** supuesta. La foto se tomó a ≈ 0.5 m, así que el recorte mide ≈ 0.5 × 0.5 m.
@@ -221,12 +222,13 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 
 ## Pendientes del dueño
 
-1. **Medidas:** ancho y alto de la hoja de una puerta de recámara y de una de baño, y tamaño de la loseta del piso.
-2. **Puerta D04:** ¿aluminio o acero? ¿Su vidrio es claro?
-3. **Closets:** ¿de qué recámara es cada foto? Medidas de un módulo (ancho de hoja y alto total). Una foto del techo de tirol de cerca.
-4. **Puertas de herrería del pasillo:** alto, y dónde está cada una: la de la cochera, ¿al ras de la fachada de la cocina o más adentro? La del patio, ¿en la esquina del muro de la recámara 2 / lavandería o en otro punto?
-5. **Baño:** medida del azulejo y hasta qué altura llega (¿al techo o a media altura?), y en qué muros está (¿todo el baño o solo la regadera?). Medida de la loseta antiderrapante y del área de la regadera. ¿El muro de la regadera tiene otro azulejo?
-6. **Puerta D03:** ancho de la hoja (¿hay un marco fijo a la izquierda?) y qué tan oscuro es el polarizado (¿se ve hacia adentro de día?).
-7. **Ventanas:** ¿todas tienen persiana enrollable? ¿La hoja fija tiene vidrio entintado o película?
-8. **Calibración de color:** una foto de día del piso con una hoja blanca tamaño carta encima.
-9. **Fotos nuevas:** el azulejo y la cenefa de la cocina de frente, la cara exterior de las puertas y los acabados exteriores (pendientes para mañana).
+1. **Aplanados exteriores:** foto de cerca del estuco del pórtico. ¿La fachada que da a la calle tiene el estuco del pórtico o el zarpeo de los demás exteriores?
+2. **Medidas:** ancho y alto de la hoja de una puerta de recámara y de una de baño, y tamaño de la loseta del piso.
+3. **Puerta D04:** ¿aluminio o acero? ¿Su vidrio es claro?
+4. **Closets:** ¿de qué recámara es cada foto? Medidas de un módulo (ancho de hoja y alto total). Una foto del techo de tirol de cerca.
+5. **Puertas de herrería del pasillo:** alto, y dónde está cada una: la de la cochera, ¿al ras de la fachada de la cocina o más adentro? La del patio, ¿en la esquina del muro de la recámara 2 / lavandería o en otro punto?
+6. **Baño:** medida del azulejo y hasta qué altura llega (¿al techo o a media altura?), y en qué muros está (¿todo el baño o solo la regadera?). Medida de la loseta antiderrapante y del área de la regadera. ¿El muro de la regadera tiene otro azulejo?
+7. **Puerta D03:** ancho de la hoja (¿hay un marco fijo a la izquierda?) y qué tan oscuro es el polarizado (¿se ve hacia adentro de día?).
+8. **Ventanas:** ¿todas tienen persiana enrollable? ¿La hoja fija tiene vidrio entintado o película?
+9. **Calibración de color:** una foto de día del piso con una hoja blanca tamaño carta encima.
+10. **Fotos nuevas:** el azulejo y la cenefa de la cocina de frente, la cara exterior de las puertas y los acabados exteriores (pendientes para mañana).
