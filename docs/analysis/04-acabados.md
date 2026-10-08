@@ -164,6 +164,52 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
   - **Zoclo de loseta** en el muro.
 - **Por la regla del dueño:** R1 (16.15 m², la más grande) tiene closet sin puertas, y R2 y R3 sí tienen.
 
+## Fachada y orientación (2026-10-08, 08:12–09:29)
+
+Fotos: `fachada-1.jpg` y `fachada-2.jpg` (gran angular de 13 mm, desde la calle) y `brujula.jpg` (captura de una app de brújula tomada en el pórtico, frente al muro de V01, V02 y D03).
+
+### Orientación (medida del dueño)
+
+- **Lectura de la brújula:** rumbo **207° (SSO)**, con la cámara apuntando de frente al muro W07, es decir, de la calle hacia el fondo del lote (+Y del modelo).
+- **Hacia dónde mira la fachada:** hacia la calle, **27° (NNE)**.
+- **Coordenadas que reporta la app:** 25°22'47" N, 101°00'36" O (Saltillo).
+- **Consecuencias para la luz del sol:** la fachada casi no recibe sol directo (solo de mañana en verano). El patio del fondo mira al SSO y recibe el sol de la tarde.
+- **Cautelas:**
+  - No sabemos si la app da el norte magnético o el verdadero. En Saltillo la diferencia es de unos pocos grados al este.
+  - La intensidad que muestra (39 µT) parece algo baja para el campo de la zona. La herrería de la ventana pudo desviar la lectura.
+  - Conviene repetir la medición lejos de metal, con el celular paralelo a la banqueta.
+
+### Composición observada
+
+- **Volumen:** una planta con losa plana. Arriba lleva un **pretil con cornisa moldurada** y el número **134** pintado en la cornisa y en el poste izquierdo.
+- **Cochera (izquierda):**
+  - **Portón de herrería de dos hojas** del mismo estilo que las puertas del pasillo: barrotes torcidos y lisos con adornos, arillos arriba y lámina abajo.
+  - Detrás se ven las ventanas de la cocina (V03, V04) con **protecciones de herrería** y, al fondo, la puerta del pasillo de servicio.
+  - **Medidor de luz y un registro** en el poste izquierdo.
+- **Frente del pórtico (centro):** **no es un muro ciego**, como lo da el plano (W03 solo con la puerta D01). Tiene un murete de antepecho, pilastras, **dos aberturas grandes cerradas con herrería** (barrotes, arillos y adornos) y la **reja peatonal** al centro (D01). Encima hay una trabe.
+- **Bodega (derecha):** muro ciego.
+- **Protecciones:** todas las ventanas que se ven tienen protecciones de herrería por fuera.
+- **Remate:** gárgolas o tubos de desagüe en el pretil, una luminaria de muro junto al número, una antena en la azotea y cables de la calle.
+- **Acabado exterior:** pintura blanca sobre **aplanado rugoso tipo zarpeo o tirol rústico** (grano grueso, visible de cerca en la base y en la foto de la brújula). Es distinto del yeso liso del interior y le falta textura.
+- **Exterior inmediato:** la banqueta es del mismo concreto escobillado en ondas, la guarnición tiene restos de pintura amarilla y hay plantas creciendo en la junta con el muro.
+
+### Estimaciones (no son medidas)
+
+Si se supone que la reja peatonal mide 2.10 m de alto, la foto 2, casi frontal, da:
+
+| Elemento | Altura estimada |
+|---|---|
+| Antepecho de las aberturas del pórtico | ≈ 0.98 m |
+| Parte alta de las aberturas | ≈ 2.15 m |
+| Remate de la cornisa | ≈ 2.8–2.9 m |
+
+Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
+
+### A revisar con el dueño
+
+- **Posición de la reja peatonal:** en la foto parece ≈ 0.5 m más a la izquierda de donde el plano pone D01 (x = 6.17–7.15 m). Con gran angular y sin vista frontal limpia no es concluyente.
+- **Detrás de la abertura derecha del pórtico** se ven una ventana pequeña con protección y un vano oscuro. El plano no tiene ninguna ventana entre D03 y la bodega: podría ser una ventana del medio baño que el plano no dibuja.
+
 ## Pendientes del dueño
 
 1. **Medidas:** ancho y alto de la hoja de una puerta de recámara y de una de baño, y tamaño de la loseta del piso.
