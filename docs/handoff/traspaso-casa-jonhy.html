@@ -71,7 +71,7 @@ hr { border: 0; border-top: 1px solid var(--rule); margin: 0; }
       <span class="pill">Actualizado: 2026-10-07</span>
       <span class="pill">Repo: JohnatanDeLeon/house-digital-twin</span>
       <span class="pill">Fase 4: fidelidad visual</span>
-      <span class="pill ok">47 tests en verde</span>
+      <span class="pill ok">53 tests en verde</span>
     </div>
   </header>
 
@@ -86,7 +86,7 @@ hr { border: 0; border-top: 1px solid var(--rule); margin: 0; }
 2. Lee CLAUDE.md, README.md y docs/analysis/03-validacion-dxf.md del repo en main.
 3. Prepara el entorno: python -m venv .venv &amp;&amp; .venv/bin/pip install -r requirements.txt,
    luego .venv/bin/python -m pytest y .venv/bin/python -m house_twin.cli build. Confirma que todo pasa.
-4. Pregúntame los datos pendientes (U01–U11) que tenga a la mano y regístralos en sources/owner-annotations.json.
+4. Pregúntame los datos pendientes (U02–U11) que tenga a la mano y regístralos en sources/owner-annotations.json.
 5. Siguiente tarea: fase 4 (fidelidad visual con Blender + Bonsai), empezando por el primer pendiente de «Próximo trabajo».
 Trabaja en una rama nueva desde main; no modifiques existing.* para propuestas.</pre>
   </section>
@@ -119,7 +119,7 @@ Trabaja en una rama nueva desde main; no modifiques existing.* para propuestas.<
     <ol>
       <li>Clonar y entrar a <code>main</code>, ya con el PR #2 fusionado. Crear una rama nueva para el trabajo.</li>
       <li>Entorno: <code>python -m venv .venv &amp;&amp; .venv/bin/pip install -r requirements.txt</code>. Probado con Python 3.12 y 3.13. El contenedor de la nube es efímero, así que hay que reinstalar en cada sesión nueva (no hay hook de arranque todavía).</li>
-      <li>Verificar: <code>.venv/bin/python -m pytest</code> debe dar 47 pasados, y <code>.venv/bin/python -m house_twin.cli build</code> debe imprimir «13 espacios, 40 muros, 19 vanos».</li>
+      <li>Verificar: <code>.venv/bin/python -m pytest</code> debe dar 53 pasados, y <code>.venv/bin/python -m house_twin.cli build</code> debe imprimir «13 espacios, 40 muros, 19 vanos».</li>
       <li>Artefactos generados (no editar a mano): <code>data/facts/existing.facts.json</code>, <code>models/existing.ifc</code>, <code>docs/analysis/02-hechos-planta-existente.png</code>, <code>docs/viewer/casa-jonhy-3d.html</code>.</li>
       <li>El visor está publicado como artefacto. Para actualizarlo desde otra sesión, se publica el HTML regenerado pasando su URL como <code>url</code>, tras leerlo con <code>action: "read"</code>.</li>
       <li>Blender (solo en la PC del dueño, no en la nube): Blender 5.2.2 LTS en <code>~/.local/opt/blender</code>, con el binario en <code>~/.local/bin/blender</code>, y Bonsai 0.9.0 estable como extensión. Bonsai 0.9 exige Blender 5.1 o más nuevo. Se instala con <code>blender --background --command extension install-file -r user_default -e add-on-bonsai-v0.9.0-linux-x64.zip</code>. La GPU es una Intel Iris Xe: EEVEE la usa, Cycles renderiza solo con CPU.</li>
@@ -201,6 +201,10 @@ data/facts/existing.facts.json  (espacios, muros, vanos, adjacency, unknowns, an
       <li><strong>mcp 2.x:</strong> <code>FastMCP</code> ahora es <code>mcp.server.mcpserver.MCPServer</code>. Los errores para el modelo se lanzan como <code>ToolError</code> y el resultado del cliente usa <code>is_error</code>.</li>
       <li><strong>IfcOpenShell 0.9:</strong> la API es <code>ifcopenshell.api.&lt;módulo&gt;.&lt;función&gt;(model, …)</code>, sin <code>api.run</code>. IFC no admite Psets vacíos.</li>
       <li><strong>ezdxf:</strong> <code>ezdxf.new()</code> declara metros por omisión. Para probar «sin unidades» hay que poner <code>$INSUNITS = 0</code>.</li>
+      <li><strong>Unidades del IFC:</strong> <code>ifcopenshell.api.unit.assign_unit()</code> sin argumentos asigna milímetros. Hay que pasarle unidades en metros, o en Bonsai la casa mide 10 × 21 mm.</li>
+      <li><strong>Vanos y muros:</strong> un vano pertenece al muro cuya banda atraviesa (comparte su espesor), no al que solo toca de costado. Si no, el muro se parte en la jamba (pasó con la ventana V03 de la cocina). D06 queda en W24 porque no hay muro alineado con ella.</li>
+      <li><strong>Tests sobre el DXF real:</strong> la fixture <code>facts</code> sale del PDF. Para el plano del que sale el modelo, usar <code>dxf_facts</code>.</li>
+      <li><strong>Recarga en Bonsai:</strong> <em>Incrementally Reload Changes</em> compara por GlobalId y solo redibuja la geometría cuando no cambió ningún atributo. Si cambia, por ejemplo, el <code>OverallHeight</code> de una puerta, no la redibuja: usar <em>File → Revert IFC Project</em>.</li>
       <li><strong>Geometría:</strong> las uniones con shapely necesitan cierre/apertura morfológica (<code>SNAP = 1 mm</code>) para evitar astillas y espigas de ancho cero.</li>
     </ul>
   </section>
@@ -208,15 +212,13 @@ data/facts/existing.facts.json  (espacios, muros, vanos, adjacency, unknowns, an
   <section>
     <h2>Datos pendientes del dueño</h2>
     <div class="callout">
-      <p><strong>Lo que más bloquea la fidelidad:</strong> U01 y U04. Sin ellas, el 3D usa los supuestos de 2.40 m y 2.10 m, y ninguna textura compensa proporciones equivocadas. El DXF no trae ninguna capa de estructura.</p>
+      <p><strong>Lo que más bloquea la fidelidad:</strong> los acabados (con fotos) y la orientación del norte. Las alturas principales ya están confirmadas. El DXF no trae ninguna capa de estructura.</p>
     </div>
     <div class="table-wrap"><table>
       <thead><tr><th>Id</th><th>Pregunta</th><th>Bloquea</th></tr></thead>
       <tbody>
-        <tr><td>U01</td><td>Altura de piso terminado a lecho bajo de losa</td><td>3D, fidelidad</td></tr>
         <tr><td>U02</td><td>Tipo y espesor de losa</td><td>3D (volumen exterior)</td></tr>
         <tr><td>U03</td><td>Castillos, columnas, trabes y muros de carga</td><td>Remodelaciones</td></tr>
-        <tr><td>U04</td><td>Altura de las puertas</td><td>3D, fidelidad</td></tr>
         <tr><td>U05</td><td>Material de los muros</td><td>Estructura, materiales</td></tr>
         <tr><td>U07</td><td>Frente real del terreno: 10.00 m (cota) o 10.03 m (dibujo)</td><td>—</td></tr>
         <tr><td>U08</td><td>Confirmar que «a=» es el antepecho y «h=» la altura de ventana</td><td>—</td></tr>
@@ -225,16 +227,16 @@ data/facts/existing.facts.json  (espacios, muros, vanos, adjacency, unknowns, an
       </tbody>
     </table></div>
     <p>Por pedir en la fase 4 (todavía no están en <code>unknowns</code>): orientación del norte respecto al terreno, para la luz del sol; acabados de cada espacio (piso, muros, plafón, carpintería, cancelería), mejor con fotos; tipo y temperatura de color de las luminarias.</p>
-    <p>Ya respondidas: U06 (la cochera no tiene techo) y U09 (el frente de la sala es un pórtico techado).</p>
+    <p>Ya respondidas: U01 (2.60 m de piso a techo), U04 (puertas de 2.10 m del piso al vano), U06 (la cochera no tiene techo) y U09 (el frente de la sala es un pórtico techado). Las respuestas con <code>value</code> pasan a los hechos.</p>
   </section>
 
   <section>
     <h2>Próximo trabajo</h2>
     <p>Fase 4: que el modelo se vea y se mida como la casa real. Todo dato visual sigue la misma regla: viene de una medición, una foto o una confirmación del dueño, o queda marcado como supuesto.</p>
     <ol>
-      <li><strong>GUIDs estables en el IFC.</strong> Cada <code>build</code> genera GUIDs nuevos, así que todo lo que se asigne en Bonsai (materiales, estilos) se pierde al regenerar. Hay que derivarlos de los ids de los hechos (W01, D01, …) para que sean reproducibles. Esto va primero.</li>
-      <li><strong>Revisión en Bonsai.</strong> Ya se comprobó que Bonsai abre <code>existing.ifc</code> sin interfaz (40 muros, 9 puertas, 9 ventanas, 13 espacios, 1 nivel). Falta que el dueño lo revise con la interfaz abierta y corregir lo que se vea mal.</li>
-      <li><strong>Medidas pendientes.</strong> Registrar U01, U02, U04 y U11 en <code>sources/owner-annotations.json</code> y llevarlas al IFC y al visor en lugar de los supuestos.</li>
+      <li><strong>GUIDs estables en el IFC.</strong> <em>Hecho.</em> Cada GlobalId es un UUID5 de la identidad del elemento (clase, id del hecho y productos relacionados), así que dos <code>build</code> iguales dan el mismo IFC. El GUID sigue al id del hecho: los muros se numeran por largo, y un cambio del plano que los renumere mueve sus GUIDs.</li>
+      <li><strong>Revisión en Bonsai.</strong> Ya se comprobó que Bonsai abre <code>existing.ifc</code> sin interfaz (40 muros, 9 puertas, 9 ventanas, 13 espacios, 1 nivel). El dueño ya lo revisó con la interfaz abierta, y de ahí salieron la corrección de unidades y la de vanos. La ventana V03 empieza pegada a la esquina interior de la cocina: es correcto, lo confirmó el dueño.</li>
+      <li><strong>Medidas pendientes.</strong> U01 y U04 ya están. Faltan U02 y U11, a registrar en <code>sources/owner-annotations.json</code> y llevarlas al IFC y al visor en lugar de los supuestos.</li>
       <li><strong>Materiales y acabados.</strong> Agregar acabados por espacio y por elemento a los hechos (con <code>source</code>, o desconocido), exportarlos como <code>IfcMaterial</code> y estilos de superficie, y montar texturas PBR a partir de las fotos del dueño.</li>
       <li><strong>Iluminación.</strong>
         <ul>
