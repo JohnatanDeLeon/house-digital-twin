@@ -56,6 +56,8 @@ def color_correct(photo: Image.Image, image: Image.Image, color: dict) -> tuple[
     - `white_reference`: una superficie que se sabe blanca, en el mismo plano que la textura (lo más fiable).
     - `gain` + `mean_srgb`: sin blanco en la foto; balance de otra foto con la misma luz y una luminosidad media declarada.
     """
+    if color.get('as_shot'):  # luz de día y balance de la cámara: se respeta tal cual
+        return image, [1.0, 1.0, 1.0]
     lin = _srgb_to_linear(np.asarray(image).astype(float) / 255)
     if 'white_reference' in color:
         ref = color['white_reference']
@@ -183,16 +185,37 @@ def _features_height(shape, features):
     return height
 
 
-def _opacity(shape, opacity):
-    """Máscara de opacidad: 0 en los vidrios, 1 en perfiles y en la retícula que cruza los vidrios."""
-    mask = np.ones(shape)
-    for r in opacity['holes']:
-        x0, y0, x1, y1 = _rect_px(r, shape)
-        mask[y0:y1, x0:x1] = 0
+def _opacity(shape, opacity, image: Image.Image | None = None):
+    """Máscara de opacidad: 0 en los huecos (vidrios, entre barrotes) y 1 en perfiles, barras, arillos y adornos.
+
+    `opaque` son rectángulos, `rings` arillos y `blobs` adornos (elipses), todo en fracciones de la textura.
+    Con `refine_dark`, dentro de una franja de `dilate_px` alrededor de esas piezas solo queda opaco lo que en la
+    foto es oscuro: el borde sigue la silueta real de la herrería y no deja ver el fondo claro de la foto.
+    """
+    h, w = shape
+    yy, xx = np.mgrid[0:h, 0:w].astype(float)
+    pieces = np.zeros(shape, bool)
     for r in opacity.get('opaque', []):
         x0, y0, x1, y1 = _rect_px(r, shape)
-        mask[y0:y1, x0:x1] = 1
-    return mask
+        pieces[y0:y1, x0:x1] = True
+    for ring in opacity.get('rings', []):
+        cx, cy = ring['center_frac'][0] * w, ring['center_frac'][1] * h
+        dist = np.hypot(xx - cx, yy - cy)
+        pieces |= np.abs(dist - ring['radius_frac_w'] * w) <= ring['thickness_frac_w'] * w / 2
+    for blob in opacity.get('blobs', []):
+        cx, cy = blob['center_frac'][0] * w, blob['center_frac'][1] * h
+        pieces |= ((xx - cx) / (blob['size_frac_w'][0] * w / 2)) ** 2 + ((yy - cy) / (blob['size_frac_w'][1] * w / 2)) ** 2 <= 1
+    holes = np.zeros(shape, bool)
+    for r in opacity['holes']:
+        x0, y0, x1, y1 = _rect_px(r, shape)
+        holes[y0:y1, x0:x1] = True
+    refine = opacity.get('refine_dark')
+    if refine and image is not None:
+        k = 2 * refine['dilate_px'] + 1
+        near = np.asarray(Image.fromarray((pieces * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(k))) > 0
+        dark = np.asarray(image.convert('L')) <= refine['max_luminance']
+        pieces = near & dark
+    return np.where(holes, pieces, True).astype(float)
 
 
 def _normal_map(height_m, px_per_m):
@@ -296,7 +319,15 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     _normal_map(height, px_per_m).resize(detail_px, Image.LANCZOS).save(out / 'normal.png', optimize=True)
     maps = {'basecolor': 'basecolor.jpg', 'roughness': 'roughness.png', 'normal': 'normal.png (OpenGL)'}
     if 'opacity' in spec:
-        Image.fromarray((_opacity(grain.shape, spec['opacity']) * 255).astype(np.uint8)).save(out / 'opacity.png', optimize=True)
+        alpha = _opacity(grain.shape, spec['opacity'], base)
+        fill = spec['opacity'].get('fill_pieces_srgb')
+        if fill:  # en los huecos, las piezas finas toman el color de la pintura: su borde en la foto es cielo o fondo
+            holes = _opacity(grain.shape, {'holes': spec['opacity']['holes']}) == 0
+            px = np.asarray(base).copy()
+            px[holes & (alpha > 0)] = fill
+            base = Image.fromarray(px)
+            base.save(out / 'basecolor.jpg', quality=92)
+        Image.fromarray((alpha * 255).astype(np.uint8)).save(out / 'opacity.png', optimize=True)
         maps['opacity'] = 'opacity.png (0 = vidrio)'
     material = {
         'name': spec['name'], 'applies_to': spec['applies_to'],

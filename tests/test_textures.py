@@ -119,3 +119,16 @@ def test_make_seamless_matches_opposite_edges():
     wrap_jump = np.abs(out[:, -1] - out[:, 0]).max()
     interior_jump = np.abs(np.diff(out, axis=1)).max()
     assert wrap_jump <= 2 and interior_jump <= 6  # ni costura al repetir ni costura nueva en el centro
+
+
+def test_opacity_rings_and_dark_refinement():
+    shape = (200, 100)
+    ring = {'holes': [[0, 0, 1, 1]], 'rings': [{'center_frac': [0.5, 0.25], 'radius_frac_w': 0.3, 'thickness_frac_w': 0.04}]}
+    mask = textures._opacity(shape, ring)
+    assert mask[50, 80] == 1 and mask[50, 50] == 0 and mask[150, 80] == 0  # en el arillo, en su centro y fuera
+    # la barra modelada es más ancha que la real: solo queda lo oscuro de la foto (la barra real mide 4 px)
+    photo = np.full((200, 100, 3), 220, np.uint8)
+    photo[:, 48:52] = 15
+    bar = {'holes': [[0, 0, 1, 1]], 'opaque': [[0.44, 0, 0.56, 1]], 'refine_dark': {'dilate_px': 2, 'max_luminance': 80}}
+    refined = textures._opacity(shape, bar, Image.fromarray(photo))
+    assert refined[100, 50] == 1 and refined[100, 45] == 0 and refined[100, 20] == 0
