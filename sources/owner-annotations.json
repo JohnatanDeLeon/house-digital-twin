@@ -23,7 +23,7 @@
       "name": "Lavandería",
       "region": [
         [
-          0.0,
+          1.205,
           10.22
         ],
         [
@@ -35,13 +35,13 @@
           12.617
         ],
         [
-          0.0,
+          1.205,
           12.617
         ]
       ],
       "roofed": false,
       "enclosed": false,
-      "note": "Fuera de la casa, detrás del baño; la ventana del baño da hacia ella. No está techada ni cerrada."
+      "note": "Fuera de la casa, detrás del baño; la ventana del baño da hacia ella. No está techada ni cerrada. Ocupa el recuadro entre el pasillo de servicio y el baño."
     },
     {
       "name": "Patio",
@@ -78,15 +78,37 @@
         ],
         [
           3.115,
-          10.22
+          6.702
         ],
         [
           0.0,
-          10.22
+          6.702
         ]
       ],
-      "note": "Área exterior a la izquierda de la cocina y la sala. No tiene techo.",
+      "note": "Área exterior frente a la cocina, hasta donde empieza el muro lateral de la cocina. No tiene techo.",
       "roofed": false
+    },
+    {
+      "name": "Pasillo de servicio",
+      "region": [
+        [
+          0.0,
+          6.702
+        ],
+        [
+          1.205,
+          6.702
+        ],
+        [
+          1.205,
+          12.617
+        ],
+        [
+          0.0,
+          12.617
+        ]
+      ],
+      "note": "Pasillo lateral junto a la barda que conecta la cochera con el patio, pasando por la puerta de la cocina y la lavandería. Su borde sigue la cara exterior del muro de la cocina (x = 1.205 m); límites trazados por Claude a partir de la descripción del dueño."
     },
     {
       "name": "Pórtico",

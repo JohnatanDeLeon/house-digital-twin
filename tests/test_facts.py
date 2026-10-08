@@ -13,7 +13,7 @@ def test_counts(facts):
     kinds = [o['kind'] for o in facts['openings'] if o['footprint']]
     assert kinds.count('door') == 9 and kinds.count('window') == 9
     assert sum(not s['is_exterior'] for s in facts['spaces']) == 8
-    assert sorted(s['name'] for s in facts['spaces'] if s['is_exterior']) == ['Cochera', 'Lavandería', 'Patio', 'Pórtico']
+    assert sorted(s['name'] for s in facts['spaces'] if s['is_exterior']) == ['Cochera', 'Lavandería', 'Pasillo de servicio', 'Patio', 'Pórtico']
 
 
 def test_plan_alone_splits_bathroom_and_keeps_one_exterior(plan_only_facts):
@@ -44,9 +44,17 @@ def test_bathroom_window_faces_open_laundry(facts):
 
 def test_exterior_zones_are_where_the_owner_said(facts):
     assert space_named(facts, 'Patio')['bbox'][1] == pytest.approx(12.617, abs=0.01)
-    assert space_named(facts, 'Cochera')['bbox'][2] == pytest.approx(3.115, abs=0.01)
-    assert 'LAVANDERIA' in space_named(facts, 'Lavandería')['labels']
+    assert space_named(facts, 'Cochera')['bbox'][2:] == pytest.approx([3.115, 6.702], abs=0.01)
     assert 'COCHERA' in space_named(facts, 'Cochera')['labels']
+
+
+def test_laundry_does_not_cut_the_service_passage(facts):
+    passage = space_named(facts, 'Pasillo de servicio')
+    laundry = space_named(facts, 'Lavandería')
+    assert passage['bbox'][1] == pytest.approx(6.702, abs=0.01) and passage['bbox'][3] == pytest.approx(12.617, abs=0.01)
+    assert laundry['bbox'][0] == pytest.approx(passage['bbox'][2], abs=0.01)  # empieza donde termina el pasillo
+    kitchen_door = _opening_at(facts, 1.29, 8.8)
+    assert passage['id'] in kitchen_door['connects']
 
 
 def test_portico_is_roofed_and_garage_is_not(facts):

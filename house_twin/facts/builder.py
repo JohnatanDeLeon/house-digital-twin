@@ -117,31 +117,43 @@ def _relate_openings(openings, walls, spaces):
 
 
 def _facing_zone(a: Polygon, b: Polygon):
-    """Franja de muro entre dos espacios que se enfrentan; vacía si solo se tocan de lejos."""
+    """Franja de muro entre dos espacios que se enfrentan; vacía si solo se tocan de lejos.
+
+    El buffer es redondeado: con esquinas en inglete, dos espacios que solo se miran en diagonal
+    por una esquina parecerían compartir muro.
+    """
     reach = MAX_WALL_THICKNESS + TOUCH
-    return a.buffer(reach, cap_style='flat', join_style='mitre').intersection(b.buffer(reach, cap_style='flat', join_style='mitre')) \
-        .difference(a).difference(b)
+    return a.buffer(reach, join_style='round').intersection(b.buffer(reach, join_style='round')).difference(a).difference(b)
+
+
+def _shares_open_edge(a: Polygon, b: Polygon) -> bool:
+    """Dos exteriores contiguos sin muro: comparten al menos MIN_FACING de borde."""
+    return a.boundary.intersection(b.buffer(TOUCH)).length >= MIN_FACING
+
+
+def _walls_between(a: Polygon, b: Polygon, wall_geoms: dict) -> list[str]:
+    zone = _facing_zone(a, b)
+    if zone.area < MIN_FACING * MAX_WALL_THICKNESS:
+        return []
+    return [wid for wid, g in wall_geoms.items() if g.intersection(zone).area >= MIN_FACING * MIN_WALL_SHARE]
 
 
 def _adjacency(walls, spaces, openings):
-    """Pares de espacios que comparten muro (enfrentados ≥ MIN_FACING) y lo que los conecta."""
+    """Pares de espacios vecinos: separados por muro, contiguos sin muro (exteriores) o unidos por un vano."""
     space_geoms = {s['id']: Polygon(s['polygon']) for s in spaces}
     wall_geoms = {w['id']: Polygon(w['footprint']) for w in walls}
+    exterior = {s['id'] for s in spaces if s['is_exterior']}
     pairs = {}
     ids = sorted(space_geoms)
     for i, a in enumerate(ids):
         for b in ids[i+1:]:
-            zone = _facing_zone(space_geoms[a], space_geoms[b])
-            if zone.area < MIN_FACING * MAX_WALL_THICKNESS:
+            ga, gb = space_geoms[a], space_geoms[b]
+            if a in exterior and b in exterior and _shares_open_edge(ga, gb):
+                pairs[(a, b)] = {'spaces': [a, b], 'walls': [], 'doors': [], 'windows': [], 'open': True}
                 continue
-            walls_between = [wid for wid, g in wall_geoms.items() if g.intersection(zone).area >= MIN_FACING * MIN_WALL_SHARE]
-            pairs[(a, b)] = {'spaces': [a, b], 'walls': walls_between, 'doors': [], 'windows': []}
-    exterior_ids = [s['id'] for s in spaces if s['is_exterior']]
-    for i, a in enumerate(exterior_ids):
-        for b in exterior_ids[i+1:]:
-            shared = space_geoms[a].buffer(TOUCH).intersection(space_geoms[b].buffer(TOUCH))
-            if shared.length / 2 >= MIN_FACING or shared.area >= MIN_FACING * TOUCH:
-                pairs.setdefault((a, b), {'spaces': [a, b], 'walls': [], 'doors': [], 'windows': []})['open'] = True
+            between = _walls_between(ga, gb, wall_geoms)
+            if between:
+                pairs[(a, b)] = {'spaces': [a, b], 'walls': between, 'doors': [], 'windows': []}
     for o in openings:
         if len(o['connects']) == 2:
             entry = pairs.setdefault(tuple(sorted(o['connects'])), {'spaces': sorted(o['connects']), 'walls': [], 'doors': [], 'windows': []})

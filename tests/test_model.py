@@ -41,5 +41,11 @@ def test_walk_path_from_garage_to_bedroom(house):
 def test_exterior_zones_connect_without_doors(house):
     path = house.walk_path('patio', 'cochera')
     assert path['reachable'] and path['doors_crossed'] == 0
+    assert [step['to'] for step in path['steps']] == ['Pasillo de servicio', 'Cochera']
     neighbors = {n['name']: n['connection'] for n in house.adjacent_rooms('Lavandería')}
-    assert neighbors['Patio'] == 'abierto' and neighbors['Baño'] == 'ventana'
+    assert neighbors == {'Pasillo de servicio': 'abierto', 'Baño': 'ventana', 'Cocina + Sala + Comedor': 'solo muro',
+                         'Recámara 2': 'solo muro'}
+
+
+def test_corner_contact_is_not_adjacency(house):
+    assert 'Pasillo de servicio' not in {n['name'] for n in house.adjacent_rooms('Recámara 2')}

@@ -31,16 +31,18 @@ La imagen se dibuja **solo desde el JSON de hechos**, no desde el PDF. Si coinci
 | S07 | 1/2 Baño | 1.46 | 4.84 | 0.00 | rótulo |
 | S08 | Tragaluz (ilumina y ventila la Recámara 3) | 1.14 | 4.31 | — | **dueño** |
 | S09 | Patio (exterior, detrás de las recámaras) | 47.18 | 37.59 | — | **dueño** |
-| S10 | Cochera (exterior, **sin techo**) | 23.07 | 26.27 | 0.00 | **dueño** |
+| S10 | Cochera (exterior, **sin techo**) | 19.54 | 19.23 | 0.00 | **dueño** |
 | S11 | Pórtico (**techado**, frente a la sala) | 16.12 | 17.05 | — | **dueño** |
-| S12 | Lavandería (exterior, sin techo ni cerramiento) | 6.28 | 10.03 | — | **dueño** |
+| S12 | Pasillo de servicio (exterior, de la cochera al patio) | 5.94 | 13.84 | — | **dueño** |
+| S13 | Lavandería (exterior, sin techo ni cerramiento) | 3.87 | 8.02 | — | **dueño** |
 
 - Interior: 95.55 m² sin el tragaluz y 96.69 m² con él. Contarlo o no depende de si está abierto al cielo (U10).
 - El área del baño descuenta el murete interior (W29).
 - Los exteriores no tienen muros entre sí. Sus límites son los que indicó el dueño:
   - Patio: detrás de la línea del muro sur de la Recámara 2 (y = 12.62 m).
-  - Lavandería: entre esa línea, el muro norte de la cocina (y = 10.22 m) y el muro oeste del baño.
-  - Cochera: a la izquierda de la línea del muro oeste de la sala (x = 3.115 m).
+  - Cochera: a la izquierda de la línea del muro oeste de la sala (x = 3.115 m), hasta la esquina de la cocina (y = 6.70 m).
+  - Pasillo de servicio: franja de 1 m junto a la barda, de la cochera al patio. Su borde sigue la cara exterior del muro de la cocina (x = 1.205 m).
+  - Lavandería: recuadro entre el pasillo, el muro norte de la cocina (y = 10.22 m) y el muro oeste del baño. No corta el pasillo.
 - El modelo los marca como conectados "abiertos": `walk_path` los cruza sin puerta.
 
 ## Aportes del dueño
@@ -51,6 +53,9 @@ Viven en [`sources/owner-annotations.json`](../../sources/owner-annotations.json
 - **Lavandería:** fuera de la casa, detrás del baño. La ventana del baño (V09) da hacia ella. No está techada ni cerrada.
 - **Patio:** la parte exterior detrás de los cuartos.
 - **Cochera:** la parte exterior fuera de la cocina, del lado izquierdo. **No tiene techo.**
+- **Pasillo de servicio:** conecta con el patio y la lavandería no lo corta.
+  - Los límites exactos los trazó Claude siguiendo la línea del muro de la cocina.
+  - El rótulo LAVANDERIA del plano está escrito sobre el pasillo, no sobre el recuadro.
 - **Pórtico:** la franja frente a la sala es un pórtico techado.
 - **Tragaluz:** el recinto triangular ilumina y ventila la Recámara 3.
   - Tiene ventana hacia la sala, pero solo en el muro central (W35, diagonal).
@@ -67,7 +72,7 @@ Sin el archivo de anotaciones, el plano solo da 9 recintos interiores y un únic
 | D01 | puerta | 0.979 | — / ? | W03 | Pórtico ↔ calle (puerta peatonal en barda) |
 | D02 | puerta | 0.780 | — / ? | W06 | Zona social ↔ 1/2 Baño |
 | D03 | puerta | 1.002 | — / ? | W07 | Zona social ↔ Pórtico (acceso principal) |
-| D04 | puerta | 0.832 | — / ? | W13 | Cocina ↔ Cochera (pasillo lateral) |
+| D04 | puerta | 0.832 | — / ? | W13 | Cocina ↔ Pasillo de servicio |
 | D05 | puerta | 0.799 | — / ? | W19 | Zona social ↔ Baño |
 | D06 | puerta | 0.878 | — / ? | W26 | Zona social ↔ Recámara 2 |
 | D07 | puerta | 0.858 | — / ? | W08 | Zona social ↔ Recámara 3 |
@@ -79,9 +84,9 @@ Sin el archivo de anotaciones, el plano solo da 9 recintos interiores y un únic
 | V04 | ventana | 0.511 | 0.87 / 1.27 | W23 | Cocina ↔ Cochera |
 | V05 | ventana | 1.238 | 0.86 / 1.26 | W04 | Recámara 3 ↔ Tragaluz |
 | V10 | ventana | ? | ? / ? | W35 (muro diagonal, 1.11 m) | Tragaluz ↔ Sala — **declarada por el dueño**; el plano no la dibuja |
-| V06 | ventana | 0.734 | 0.85 / 1.22 | W10 | Recámara 1 ↔ Patio trasero |
-| V07 | ventana | 0.750 | 0.855 / 1.23 | W10 | Recámara 1 ↔ Patio trasero |
-| V08 | ventana | 1.500 | 0.86 / 1.22 | W09 | Recámara 2 ↔ Patio trasero |
+| V06 | ventana | 0.734 | 0.85 / 1.22 | W10 | Recámara 1 ↔ Patio |
+| V07 | ventana | 0.750 | 0.855 / 1.23 | W10 | Recámara 1 ↔ Patio |
+| V08 | ventana | 1.500 | 0.86 / 1.22 | W09 | Recámara 2 ↔ Patio |
 | V09 | ventana | 0.780 | 1.28 / 0.60 | W15 | Baño ↔ Lavandería (ventana alta) |
 
 ## Muros

@@ -747,6 +747,10 @@
      12.617
     ],
     [
+     1.205,
+     12.617
+    ],
+    [
      0.2,
      12.617
     ],
@@ -792,18 +796,6 @@
    "is_exterior": true,
    "polygon": [
     [
-     1.205,
-     9.221
-    ],
-    [
-     1.205,
-     8.389
-    ],
-    [
-     1.205,
-     6.702
-    ],
-    [
      1.376,
      6.702
     ],
@@ -837,20 +829,20 @@
     ],
     [
      0.2,
-     10.22
+     6.702
     ],
     [
      1.205,
-     10.22
+     6.702
     ]
    ],
-   "area": 23.07,
-   "perimeter": 26.27,
+   "area": 19.54,
+   "perimeter": 19.23,
    "bbox": [
     0.2,
     0.0,
     3.115,
-    10.22
+    6.702
    ],
    "floor_level": {
     "value": 0.0,
@@ -866,7 +858,7 @@
    },
    "source": "plano: caras de MUROS + vanos",
    "name_source": "dueño (2026-10-08)",
-   "owner_note": "Área exterior a la izquierda de la cocina y la sala. No tiene techo."
+   "owner_note": "Área exterior frente a la cocina, hasta donde empieza el muro lateral de la cocina. No tiene techo."
   },
   {
    "id": "S11",
@@ -876,10 +868,6 @@
    "drawn_contents": [],
    "is_exterior": true,
    "polygon": [
-    [
-     4.471,
-     3.253
-    ],
     [
      5.568,
      3.253
@@ -943,6 +931,10 @@
     [
      3.728,
      3.253
+    ],
+    [
+     4.471,
+     3.253
     ]
    ],
    "area": 16.12,
@@ -971,24 +963,77 @@
   },
   {
    "id": "S12",
-   "name": "Lavandería",
+   "name": "Pasillo de servicio",
    "labels": [
     "LAVANDERIA"
    ],
+   "contains": [],
+   "drawn_contents": [],
+   "is_exterior": true,
+   "polygon": [
+    [
+     1.205,
+     8.389
+    ],
+    [
+     1.205,
+     6.702
+    ],
+    [
+     0.2,
+     6.702
+    ],
+    [
+     0.2,
+     12.617
+    ],
+    [
+     1.205,
+     12.617
+    ],
+    [
+     1.205,
+     10.22
+    ],
+    [
+     1.205,
+     9.221
+    ]
+   ],
+   "area": 5.94,
+   "perimeter": 13.84,
+   "bbox": [
+    0.2,
+    6.702,
+    1.205,
+    12.617
+   ],
+   "floor_level": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "roofed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: caras de MUROS + vanos",
+   "name_source": "dueño (2026-10-08)",
+   "owner_note": "Pasillo lateral junto a la barda que conecta la cochera con el patio, pasando por la puerta de la cocina y la lavandería. Su borde sigue la cara exterior del muro de la cocina (x = 1.205 m); límites trazados por Claude a partir de la descripción del dueño."
+  },
+  {
+   "id": "S13",
+   "name": "Lavandería",
+   "labels": [],
    "contains": [],
    "drawn_contents": [
     "muebles"
    ],
    "is_exterior": true,
    "polygon": [
-    [
-     0.2,
-     12.617
-    ],
-    [
-     1.281,
-     12.617
-    ],
     [
      2.82,
      12.617
@@ -1006,14 +1051,18 @@
      10.22
     ],
     [
-     0.2,
-     10.22
+     1.205,
+     12.617
+    ],
+    [
+     1.281,
+     12.617
     ]
    ],
-   "area": 6.28,
-   "perimeter": 10.03,
+   "area": 3.87,
+   "perimeter": 8.02,
    "bbox": [
-    0.2,
+    1.205,
     10.22,
     2.82,
     12.617
@@ -1032,7 +1081,7 @@
    },
    "source": "plano: caras de MUROS + vanos",
    "name_source": "dueño (2026-10-08)",
-   "owner_note": "Fuera de la casa, detrás del baño; la ventana del baño da hacia ella. No está techada ni cerrada."
+   "owner_note": "Fuera de la casa, detrás del baño; la ventana del baño da hacia ella. No está techada ni cerrada. Ocupa el recuadro entre el pasillo de servicio y el baño."
   }
  ],
  "walls": [
@@ -3582,7 +3631,7 @@
    "host_wall": "W13",
    "connects": [
     "S01",
-    "S10"
+    "S12"
    ]
   },
   {
@@ -4114,7 +4163,7 @@
    "host_wall": "W15",
    "connects": [
     "S05",
-    "S12"
+    "S13"
    ]
   },
   {
@@ -4242,12 +4291,9 @@
     "W07",
     "W13",
     "W14",
-    "W15",
     "W23"
    ],
-   "doors": [
-    "D04"
-   ],
+   "doors": [],
    "windows": [
     "V03",
     "V04"
@@ -4274,6 +4320,20 @@
    "spaces": [
     "S01",
     "S12"
+   ],
+   "walls": [
+    "W13",
+    "W15"
+   ],
+   "doors": [
+    "D04"
+   ],
+   "windows": []
+  },
+  {
+   "spaces": [
+    "S01",
+    "S13"
    ],
    "walls": [
     "W15"
@@ -4349,7 +4409,7 @@
   {
    "spaces": [
     "S03",
-    "S12"
+    "S13"
    ],
    "walls": [
     "W26",
@@ -4374,7 +4434,7 @@
   {
    "spaces": [
     "S05",
-    "S12"
+    "S13"
    ],
    "walls": [
     "W15",
@@ -4429,9 +4489,7 @@
     "S09",
     "S12"
    ],
-   "walls": [
-    "W01"
-   ],
+   "walls": [],
    "doors": [],
    "windows": [],
    "open": true
@@ -4441,9 +4499,7 @@
     "S10",
     "S11"
    ],
-   "walls": [
-    "W07"
-   ],
+   "walls": [],
    "doors": [],
    "windows": [],
    "open": true
@@ -4453,10 +4509,17 @@
     "S10",
     "S12"
    ],
-   "walls": [
-    "W01",
-    "W15"
+   "walls": [],
+   "doors": [],
+   "windows": [],
+   "open": true
+  },
+  {
+   "spaces": [
+    "S12",
+    "S13"
    ],
+   "walls": [],
    "doors": [],
    "windows": [],
    "open": true
