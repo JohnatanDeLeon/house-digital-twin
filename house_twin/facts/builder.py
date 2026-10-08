@@ -9,7 +9,7 @@ from datetime import date
 from shapely.geometry import Point, Polygon
 
 from house_twin.drawing import Drawing
-from house_twin.facts.annotations import SpacePiece, merge_spaces, split_exterior
+from house_twin.facts.annotations import SpacePiece, merge_spaces, owner_openings, rename_spaces, split_exterior
 from house_twin.facts.faces import partition
 from house_twin.facts.naming import labels_inside, space_name
 from house_twin.facts.openings import detect_openings
@@ -35,7 +35,8 @@ UNKNOWNS = [
     {'id': 'U07', 'topic': 'cotas generales', 'question': 'El plano rotula 10.00 × 21.25 pero la geometría mide 10.023 × 21.235. ¿Cuál es la medida real del terreno?', 'blocks': []},
     {'id': 'U08', 'topic': 'ventanas', 'question': 'Confirmar que en los rótulos de ventana "a=" es antepecho y "h=" altura de ventana.', 'blocks': []},
     {'id': 'U09', 'topic': 'frente', 'question': 'La franja exterior frente a la sala (entre la cochera y la bodega, con la puerta principal y la peatonal), ¿es parte de la cochera, un acceso/jardín, u otra cosa?', 'blocks': []},
-    {'id': 'U10', 'topic': 'jardinera', 'question': 'El recinto triangular junto a la sala (donde el plano dibuja un árbol), ¿es jardinera a cielo abierto?', 'blocks': []},
+    {'id': 'U10', 'topic': 'tragaluz', 'question': '¿El tragaluz está abierto al cielo o cubierto (domo, vidrio)? Define si cuenta como área interior.', 'blocks': ['segunda planta']},
+    {'id': 'U11', 'topic': 'ventana del tragaluz', 'question': '¿Ancho, altura de antepecho y altura de la ventana del tragaluz hacia la sala (muro diagonal de 1.11 m)?', 'blocks': ['3D']},
 ]
 
 
@@ -166,6 +167,7 @@ def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
 
     walls = [_wall_fact(f'W{i+1:02d}', w, faces.lot, faces.exterior) for i, w in enumerate(walls_raw)]
     interior = merge_spaces([SpacePiece(p, False) for p in faces.spaces], [w['polygon'] for w in walls_raw], annotations)
+    interior = rename_spaces(interior, annotations)
     exterior = split_exterior(faces.exterior, annotations)
     pieces = sorted(interior, key=lambda p: -p.polygon.area) + sorted(exterior, key=lambda p: -p.polygon.area)
     spaces = [_space_fact(f'S{i+1:02d}', piece, drawing, walls) for i, piece in enumerate(pieces)]
@@ -174,8 +176,11 @@ def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
     for prefix, group in (('D', doors), ('V', windows)):
         for i, o in enumerate(group):
             o['id'] = f'{prefix}{i+1:02d}'
+    _relate_openings(doors + windows, walls, spaces)
+    for o in owner_openings(walls, spaces, annotations):
+        o['id'] = f"V{len(windows)+1:02d}" if o['kind'] == 'window' else f"D{len(doors)+1:02d}"
+        (windows if o['kind'] == 'window' else doors).append(o)
     openings = doors + windows
-    _relate_openings(openings, walls, spaces)
 
     cal = drawing.metadata.get('calibration', {})
     lot_w = faces.lot.bounds[2] - faces.lot.bounds[0]

@@ -29,13 +29,13 @@ La imagen se dibuja **solo desde el JSON de hechos**, no desde el PDF. Si coinci
 | S05 | Baño (incluye la regadera tras el murete de 5 cm) | 2.94 | 7.30 | 0.15 | **dueño** |
 | S06 | Bodega | 1.98 | 5.71 | 0.00 | rótulo |
 | S07 | 1/2 Baño | 1.46 | 4.84 | 0.00 | rótulo |
-| S08 | sin nombre (recinto triangular con un árbol dibujado) | 1.14 | 4.31 | — | — |
+| S08 | Tragaluz (ilumina y ventila la Recámara 3) | 1.14 | 4.31 | — | **dueño** |
 | S09 | Patio (exterior, detrás de las recámaras) | 47.18 | 37.59 | — | **dueño** |
 | S10 | Cochera (exterior, a la izquierda de la cocina y la sala) | 23.07 | 26.27 | 0.00 | **dueño** |
 | S11 | sin nombre (exterior frente a la sala) | 16.12 | 17.05 | — | — (U09) |
 | S12 | Lavandería (exterior, sin techo ni cerramiento) | 6.28 | 10.03 | — | **dueño** |
 
-- Interior con nombre: 95.55 m². Con S08: 96.69 m².
+- Interior: 95.55 m² sin el tragaluz y 96.69 m² con él. Contarlo o no depende de si está abierto al cielo (U10).
 - El área del baño descuenta el murete interior (W29).
 - Los exteriores no tienen muros entre sí. Sus límites son los que indicó el dueño:
   - Patio: detrás de la línea del muro sur de la Recámara 2 (y = 12.62 m).
@@ -51,6 +51,11 @@ Viven en [`sources/owner-annotations.json`](../../sources/owner-annotations.json
 - **Lavandería:** fuera de la casa, detrás del baño. La ventana del baño (V09) da hacia ella. No está techada ni cerrada.
 - **Patio:** la parte exterior detrás de los cuartos.
 - **Cochera:** la parte exterior fuera de la cocina, del lado izquierdo.
+- **Tragaluz:** el recinto triangular ilumina y ventila la Recámara 3.
+  - Tiene ventana hacia la sala, pero solo en el muro central (W35, diagonal).
+  - Los muros laterales (W38, W42) son macizos.
+  - El plano no dibuja esa ventana, así que en el modelo existe como `V10` con `footprint: null` y medidas en `null`.
+  - En el IFC queda anotada en el muro (`HDT_DeclaredOpenings`), sin geometría inventada.
 
 Sin el archivo de anotaciones, el plano solo da 9 recintos interiores y un único exterior. Un test lo verifica.
 
@@ -71,7 +76,8 @@ Sin el archivo de anotaciones, el plano solo da 9 recintos interiores y un únic
 | V02 | ventana | 0.750 | 0.85 / 1.26 | W07 | Sala ↔ Frente (S11) |
 | V03 | ventana | 0.498 | 0.86 / 1.27 | W13 | Cocina ↔ Cochera |
 | V04 | ventana | 0.511 | 0.87 / 1.27 | W23 | Cocina ↔ Cochera |
-| V05 | ventana | 1.238 | 0.86 / 1.26 | W04 | Recámara 3 ↔ S08 (recinto triangular) |
+| V05 | ventana | 1.238 | 0.86 / 1.26 | W04 | Recámara 3 ↔ Tragaluz |
+| V10 | ventana | ? | ? / ? | W35 (muro diagonal, 1.11 m) | Tragaluz ↔ Sala — **declarada por el dueño**; el plano no la dibuja |
 | V06 | ventana | 0.734 | 0.85 / 1.22 | W10 | Recámara 1 ↔ Patio trasero |
 | V07 | ventana | 0.750 | 0.855 / 1.23 | W10 | Recámara 1 ↔ Patio trasero |
 | V08 | ventana | 1.500 | 0.86 / 1.22 | W09 | Recámara 2 ↔ Patio trasero |
@@ -118,10 +124,10 @@ Los nombres se buscan sin importar acentos ni mayúsculas: "recamara 1" funciona
 
 ## Incógnitas que bloquean la segunda planta
 
-Están en `unknowns` del JSON (U01–U10).
+Están en `unknowns` del JSON (U01–U11).
 
 - **Bloquean la segunda planta:** entrepiso, losa, estructura y muros de carga, techo de la cochera.
-- **Además:** altura de puertas, materiales, la discrepancia de las cotas generales (10.023 contra 10.00), la lectura de `a=`/`h=`, qué es el frente S11 y si S08 es jardinera a cielo abierto.
+- **Además:** altura de puertas, materiales, la discrepancia de las cotas generales (10.023 contra 10.00), la lectura de `a=`/`h=`, qué es el frente S11, si el tragaluz está abierto al cielo (U10) y las medidas de su ventana hacia la sala (U11).
 
 ## Pendiente para la fase 3
 

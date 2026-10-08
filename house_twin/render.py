@@ -14,6 +14,7 @@ UNNAMED_EXTERIOR = (246, 246, 246)
 WALL_COLOR = (40, 40, 40)
 DOOR_COLOR = (230, 120, 20)
 WINDOW_COLOR = (30, 120, 230)
+DECLARED_COLOR = (140, 190, 240)
 FONT_CANDIDATES = ('DejaVuSans.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 'Arial.ttf')
 FONT_SIZE = 11
 
@@ -63,7 +64,12 @@ def render_facts(facts: dict, out_path: Path):
         canvas.polygon(s['polygon'], fill=color, outline=(170, 170, 170) if s['is_exterior'] else None)
     for w in facts['walls']:
         canvas.polygon(w['footprint'], fill=WALL_COLOR)
+    walls = {w['id']: w for w in facts['walls']}
     for o in facts['openings']:
+        if o['footprint'] is None:  # declarado por el dueño, sin medidas: se marca sobre su muro
+            canvas.polygon(walls[o['host_wall']]['footprint'], fill=DECLARED_COLOR)
+            canvas.text(_centroid(walls[o['host_wall']]['footprint']), f"{o['id']}?", dy=-10)
+            continue
         canvas.polygon(o['footprint'], fill=DOOR_COLOR if o['kind'] == 'door' else WINDOW_COLOR)
         canvas.text(_centroid(o['footprint']), o['id'], dy=-10)
     for s in facts['spaces']:

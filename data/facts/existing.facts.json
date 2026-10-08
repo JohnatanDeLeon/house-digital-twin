@@ -637,7 +637,7 @@
   },
   {
    "id": "S08",
-   "name": null,
+   "name": "Tragaluz",
    "labels": [],
    "contains": [],
    "drawn_contents": [
@@ -686,7 +686,9 @@
     "value": null,
     "source": "no está en el plano"
    },
-   "source": "plano: caras de MUROS + vanos"
+   "source": "plano: caras de MUROS + vanos",
+   "name_source": "dueño (2026-10-08)",
+   "owner_note": "Tragaluz que ilumina y ventila la Recámara 3. Lo forman el muro central (diagonal, hacia la sala) y dos muros laterales."
   },
   {
    "id": "S09",
@@ -4112,6 +4114,28 @@
     "S05",
     "S12"
    ]
+  },
+  {
+   "kind": "window",
+   "footprint": null,
+   "width": null,
+   "wall_thickness": null,
+   "detected_by": "dueño (2026-10-08)",
+   "sill_height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "host_wall": "W35",
+   "connects": [
+    "S08",
+    "S01"
+   ],
+   "owner_note": "Ventana del tragaluz hacia la sala, en el muro central (diagonal). Los muros laterales no tienen ventana. El plano no la dibuja: medidas desconocidas.",
+   "id": "V10"
   }
  ],
  "adjacency": [
@@ -4203,7 +4227,9 @@
     "W42"
    ],
    "doors": [],
-   "windows": []
+   "windows": [
+    "V10"
+   ]
   },
   {
    "spaces": [
@@ -4505,9 +4531,19 @@
   },
   {
    "id": "U10",
-   "topic": "jardinera",
-   "question": "El recinto triangular junto a la sala (donde el plano dibuja un árbol), ¿es jardinera a cielo abierto?",
-   "blocks": []
+   "topic": "tragaluz",
+   "question": "¿El tragaluz está abierto al cielo o cubierto (domo, vidrio)? Define si cuenta como área interior.",
+   "blocks": [
+    "segunda planta"
+   ]
+  },
+  {
+   "id": "U11",
+   "topic": "ventana del tragaluz",
+   "question": "¿Ancho, altura de antepecho y altura de la ventana del tragaluz hacia la sala (muro diagonal de 1.11 m)?",
+   "blocks": [
+    "3D"
+   ]
   }
  ]
 }

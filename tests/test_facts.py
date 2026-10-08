@@ -6,11 +6,11 @@ from tests.conftest import space_named
 
 
 def _opening_at(facts, x, y):
-    return next(o for o in facts['openings'] if Polygon(o['footprint']).buffer(0.05).contains(Polygon([(x, y), (x+1e-3, y), (x, y+1e-3)])))
+    return next(o for o in facts['openings'] if o['footprint'] and Polygon(o['footprint']).buffer(0.05).contains(Polygon([(x, y), (x+1e-3, y), (x, y+1e-3)])))
 
 
 def test_counts(facts):
-    kinds = [o['kind'] for o in facts['openings']]
+    kinds = [o['kind'] for o in facts['openings'] if o['footprint']]
     assert kinds.count('door') == 9 and kinds.count('window') == 9
     assert sum(not s['is_exterior'] for s in facts['spaces']) == 8
     assert sorted(s['name'] or '' for s in facts['spaces'] if s['is_exterior']) == ['', 'Cochera', 'Lavandería', 'Patio']
@@ -69,6 +69,18 @@ def test_window_labels_attach_to_nearest_window(facts):
     assert bath_window['sill_height']['value'] == 1.28 and bath_window['height']['value'] == 0.60
 
 
+def test_light_well_has_owner_declared_window_without_invented_size(facts):
+    well = space_named(facts, 'Tragaluz')
+    living = space_named(facts, 'Cocina + Sala + Comedor')
+    declared = [o for o in facts['openings'] if o['footprint'] is None]
+    assert len(declared) == 1
+    window = declared[0]
+    assert window['kind'] == 'window' and sorted(window['connects']) == sorted([well['id'], living['id']])
+    assert window['width'] is None and window['height']['value'] is None
+    host = next(w for w in facts['walls'] if w['id'] == window['host_wall'])
+    assert host['length'] == pytest.approx(1.11, abs=0.02)  # el muro diagonal, no los laterales
+
+
 def test_unknown_heights_are_null_not_guessed(facts):
     assert all(w['height']['value'] is None for w in facts['walls'])
     assert all(o['height']['value'] is None for o in facts['openings'] if o['kind'] == 'door')
@@ -82,7 +94,7 @@ def test_walls_do_not_overlap_and_are_valid(facts):
 
 
 def test_every_opening_has_a_host_wall_and_connects_spaces(facts):
-    for o in facts['openings']:
+    for o in facts['openings']:  # incluye la ventana declarada por el dueño
         assert o['host_wall'] is not None
         assert 1 <= len(o['connects']) <= 2
 

@@ -19,9 +19,13 @@ def _match_spaces(a: dict, b: dict):
     return rows
 
 
+def _drawn(openings):
+    return [o for o in openings if o['footprint'] is not None]
+
+
 def _match_openings(a: dict, b: dict):
-    rows, unmatched_b = [], list(b['openings'])
-    for oa in a['openings']:
+    rows, unmatched_b = [], _drawn(b['openings'])
+    for oa in _drawn(a['openings']):
         ca = _centre(oa['footprint'])
         near = [o for o in unmatched_b if _centre(o['footprint']).distance(ca) <= OPENING_MATCH_RADIUS]
         ob = min(near, key=lambda o: _centre(o['footprint']).distance(ca)) if near else None

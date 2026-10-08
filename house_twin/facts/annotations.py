@@ -1,7 +1,9 @@
 """Hechos aportados por el dueño (`sources/owner-annotations.json`) sobre la partición del plano.
 
 - merge_spaces: une caras que el plano separa pero son un solo espacio (p. ej. baño + regadera).
+- rename_spaces: da nombre a un recinto que el plano no rotula (p. ej. el tragaluz).
 - exterior_zones: nombra zonas del exterior abierto (cochera, patio…), que no tienen muros que las separen.
+- add_openings: vanos que existen pero el plano no dibuja; sin medidas inventadas.
 
 Todo lo que sale de aquí lleva `source` del dueño; lo que no se nombra queda sin nombre.
 """
@@ -50,6 +52,29 @@ def merge_spaces(pieces: list[SpacePiece], wall_polys: list[Polygon], annotation
         merged = SpacePiece(closed, chosen[0].is_exterior, _owner_fields(annotation, entry), partitions)
         pieces = [p for p in pieces if p not in chosen] + [merged]
     return pieces
+
+
+def rename_spaces(pieces: list[SpacePiece], annotation: dict) -> list[SpacePiece]:
+    for entry in annotation.get('rename_spaces', []):
+        anchor = Point(entry['anchor'])
+        for piece in pieces:
+            if piece.polygon.contains(anchor):
+                piece.owner = {**_owner_fields(annotation, entry), **{k: v for k, v in piece.owner.items() if k != 'name'}}
+    return pieces
+
+
+def owner_openings(walls: list[dict], spaces: list[dict], annotation: dict) -> list[dict]:
+    """Vanos declarados por el dueño: se ubican por muro y espacios; medidas en null si el plano no las tiene."""
+    source = f"{annotation.get('source', 'dueño')} ({annotation.get('confirmed_on', 's/f')})"
+    unknown = {'value': None, 'source': 'no está en el plano'}
+    result = []
+    for entry in annotation.get('add_openings', []):
+        host = next((w['id'] for w in walls if Polygon(w['footprint']).buffer(0.01).contains(Point(entry['host_wall_anchor']))), None)
+        connects = [s['id'] for a in entry['connects_anchors'] for s in spaces if Polygon(s['polygon']).contains(Point(a))]
+        result.append({'kind': entry['kind'], 'footprint': None, 'width': entry.get('width'),
+                       'wall_thickness': None, 'detected_by': source, 'sill_height': dict(unknown),
+                       'height': dict(unknown), 'host_wall': host, 'connects': connects, 'owner_note': entry.get('note')})
+    return result
 
 
 def split_exterior(exterior: list[Polygon], annotation: dict) -> list[SpacePiece]:

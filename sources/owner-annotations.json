@@ -5,27 +5,117 @@
   "merge_spaces": [
     {
       "name": "Baño",
-      "anchors": [[3.6, 11.9], [3.6, 10.7]],
+      "anchors": [
+        [
+          3.6,
+          11.9
+        ],
+        [
+          3.6,
+          10.7
+        ]
+      ],
       "note": "El baño es un solo espacio; el murete de 5 cm divide la regadera dentro del baño."
     }
   ],
   "exterior_zones": [
     {
       "name": "Lavandería",
-      "region": [[0.0, 10.22], [2.82, 10.22], [2.82, 12.617], [0.0, 12.617]],
+      "region": [
+        [
+          0.0,
+          10.22
+        ],
+        [
+          2.82,
+          10.22
+        ],
+        [
+          2.82,
+          12.617
+        ],
+        [
+          0.0,
+          12.617
+        ]
+      ],
       "roofed": false,
       "enclosed": false,
       "note": "Fuera de la casa, detrás del baño; la ventana del baño da hacia ella. No está techada ni cerrada."
     },
     {
       "name": "Patio",
-      "region": [[0.0, 12.617], [10.1, 12.617], [10.1, 21.3], [0.0, 21.3]],
+      "region": [
+        [
+          0.0,
+          12.617
+        ],
+        [
+          10.1,
+          12.617
+        ],
+        [
+          10.1,
+          21.3
+        ],
+        [
+          0.0,
+          21.3
+        ]
+      ],
       "note": "Área exterior detrás de las recámaras."
     },
     {
       "name": "Cochera",
-      "region": [[0.0, -0.1], [3.115, -0.1], [3.115, 10.22], [0.0, 10.22]],
+      "region": [
+        [
+          0.0,
+          -0.1
+        ],
+        [
+          3.115,
+          -0.1
+        ],
+        [
+          3.115,
+          10.22
+        ],
+        [
+          0.0,
+          10.22
+        ]
+      ],
       "note": "Área exterior a la izquierda de la cocina y la sala."
+    }
+  ],
+  "rename_spaces": [
+    {
+      "name": "Tragaluz",
+      "anchor": [
+        9.4,
+        7.5
+      ],
+      "note": "Tragaluz que ilumina y ventila la Recámara 3. Lo forman el muro central (diagonal, hacia la sala) y dos muros laterales."
+    }
+  ],
+  "add_openings": [
+    {
+      "kind": "window",
+      "host_wall_anchor": [
+        8.957,
+        7.044
+      ],
+      "connects_anchors": [
+        [
+          9.4,
+          7.5
+        ],
+        [
+          7.0,
+          6.0
+        ]
+      ],
+      "note": "Ventana del tragaluz hacia la sala, en el muro central (diagonal). Los muros laterales no tienen ventana. El plano no la dibuja: medidas desconocidas."
     }
   ]
 }

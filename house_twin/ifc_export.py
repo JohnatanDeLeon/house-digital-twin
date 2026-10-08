@@ -94,7 +94,17 @@ def _add_walls(ctx: _IfcContext, facts, storey, height):
     return walls
 
 
+def _add_declared_opening(ctx: _IfcContext, o, walls):
+    """Vano que el dueño declaró pero el plano no dibuja: queda como dato del muro, sin geometría inventada."""
+    host = walls.get(o['host_wall'])
+    if host:
+        ctx.pset(host, 'HDT_DeclaredOpenings', {o['id']: f"{o['kind']} sin medidas; conecta {','.join(o['connects'])}"})
+
+
 def _add_opening(ctx: _IfcContext, o, walls, storey):
+    if o['footprint'] is None:
+        _add_declared_opening(ctx, o, walls)
+        return
     is_door = o['kind'] == 'door'
     sill, sill_assumed = (0.0, False) if is_door else _value_or_assumed(o['sill_height'], 'window_sill')
     height, height_assumed = _value_or_assumed(o['height'], 'door_height' if is_door else 'window_height')
