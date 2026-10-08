@@ -67,7 +67,7 @@ def test_portico_is_roofed_and_garage_is_not(facts):
 def test_owner_answers_close_unknowns(facts, plan_only_facts):
     assert {'U06', 'U09'} <= {u['id'] for u in plan_only_facts['unknowns']}
     assert not {'U06', 'U09'} & {u['id'] for u in facts['unknowns']}
-    assert {a['id'] for a in facts['answered']} == {'U06', 'U09'}
+    assert {a['id'] for a in facts['answered']} == {'U01', 'U04', 'U06', 'U09'}
 
 
 def test_site_matches_lot(facts):
@@ -102,10 +102,18 @@ def test_light_well_has_owner_declared_window_without_invented_size(facts):
     assert host['length'] == pytest.approx(1.11, abs=0.02)  # el muro diagonal, no los laterales
 
 
-def test_unknown_heights_are_null_not_guessed(facts):
-    assert all(w['height']['value'] is None for w in facts['walls'])
-    assert all(o['height']['value'] is None for o in facts['openings'] if o['kind'] == 'door')
-    assert facts['levels'][0]['storey_height']['value'] is None
+def test_unknown_heights_are_null_not_guessed(plan_only_facts):
+    assert all(w['height']['value'] is None for w in plan_only_facts['walls'])
+    assert all(o['height']['value'] is None for o in plan_only_facts['openings'] if o['kind'] == 'door')
+    assert plan_only_facts['levels'][0]['storey_height']['value'] is None
+
+
+def test_owner_heights_reach_the_facts(facts):
+    storey = facts['levels'][0]['storey_height']
+    assert storey['value'] == 2.60 and storey['source'].endswith('U01')
+    doors = [o for o in facts['openings'] if o['kind'] == 'door']
+    assert len(doors) == 9 and all(o['height']['value'] == 2.10 for o in doors)
+    assert all(w['height']['value'] is None for w in facts['walls'])  # no todos los muros llegan a la losa
 
 
 def test_walls_do_not_overlap_and_are_valid(facts):

@@ -27,7 +27,10 @@ class _IfcContext:
     def __init__(self, name: str):
         self.model = ifcopenshell.api.project.create_file(version='IFC4')
         self.project = self._create('IfcProject', name)
-        ifcopenshell.api.unit.assign_unit(self.model)
+        # Sin argumentos IfcOpenShell asigna milímetros; los hechos están en metros.
+        ifcopenshell.api.unit.assign_unit(self.model, units=[
+            ifcopenshell.api.unit.add_si_unit(self.model, unit_type=kind)
+            for kind in ('LENGTHUNIT', 'AREAUNIT', 'VOLUMEUNIT')])
         model_ctx = ifcopenshell.api.context.add_context(self.model, context_type='Model')
         self.body = ifcopenshell.api.context.add_context(self.model, context_type='Model', context_identifier='Body',
                                                          target_view='MODEL_VIEW', parent=model_ctx)

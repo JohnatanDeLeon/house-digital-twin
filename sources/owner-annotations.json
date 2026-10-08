@@ -172,6 +172,18 @@
     {
       "id": "U09",
       "answer": "La franja frente a la sala es un pórtico techado."
+    },
+    {
+      "id": "U01",
+      "answer": "Del piso al techo hay 2.60 m.",
+      "value": 2.6,
+      "answered_on": "2026-10-07"
+    },
+    {
+      "id": "U04",
+      "answer": "Las puertas miden 2.10 m del piso al vano (al cerramiento de concreto).",
+      "value": 2.1,
+      "answered_on": "2026-10-07"
     }
   ]
 }

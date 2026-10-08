@@ -304,11 +304,22 @@ function summaryHtml() {
     <p class="note">Toca un espacio para ver su área, sus puertas y ventanas, y con qué se conecta.</p>
     <details>
     <summary>Alturas y datos pendientes</summary>
-    <p class="note"><strong>Alturas supuestas:</strong> el plano no da alturas. Los muros se muestran a ${fmt(SCENE.storey_height)} m
-      y las puertas a ${fmt(SCENE.assumed.door_height)} m hasta que se confirmen. Las ventanas usan la altura del plano.</p>
+    <p class="note">${heightsNote()}</p>
     ${declared ? `<p class="note">${declared}</p>` : ''}
     <p class="note">Generado el ${esc(SCENE.built_on)} · ${SCENE.pending} datos pendientes de confirmar.</p>
     </details>`;
+}
+
+function heightsNote() {
+  const storey = SCENE.storey_height_assumed
+    ? `<strong>Supuesto:</strong> muros a ${fmt(SCENE.storey_height)} m hasta que se confirme la altura de piso a losa.`
+    : `Muros a ${fmt(SCENE.storey_height)} m, la altura de piso a losa que confirmó el dueño.`;
+  const doors = SCENE.door_height_assumed
+    ? `<strong>Supuesto:</strong> puertas sin altura confirmada a ${fmt(SCENE.assumed.door_height)} m.`
+    : SCENE.door_height !== null
+      ? `Puertas a ${fmt(SCENE.door_height)} m del piso al vano, dato del dueño.`
+      : 'Puertas con la altura confirmada de cada una.';
+  return `${storey} ${doors} Las ventanas usan la altura del plano.`;
 }
 
 function roofText(v) { return v === true ? 'Techado' : v === false ? 'Sin techo' : null; }

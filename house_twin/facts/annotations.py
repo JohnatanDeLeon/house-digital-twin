@@ -5,6 +5,7 @@
 - exterior_zones: nombra zonas del exterior abierto (cochera, patio…), que no tienen muros que las separen.
 - add_openings: vanos que existen pero el plano no dibuja; sin medidas inventadas.
 - answered_unknowns: respuestas del dueño a las incógnitas del modelo (las resuelve el builder).
+  Con `value` (m) el builder además lleva la medida al hecho que contesta (U01, U04).
 
 Todo lo que sale de aquí lleva `source` del dueño; lo que no se nombra queda sin nombre.
 """
