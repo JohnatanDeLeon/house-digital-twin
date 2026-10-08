@@ -183,6 +183,48 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 - **Las referencias** son imágenes de catálogo: no se guardan en el repo.
 - **Foto de las 07:49:34 (`20261008_074934.jpg`, sin usar):** muestra una puerta de lámina negra acanalada junto a una ventana con herrería. Los muros de alrededor no tienen placas: uno es de grano rugoso y el otro casi liso con poros. Falta que el dueño diga dónde es.
 
+## Recorrido del interior (2026-10-08, fotos de conjunto)
+
+Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.
+
+### Confirma lo que ya está en el modelo
+
+- **Piso:** loseta beige del interior en sala, comedor, cocina, pasillo, recámaras y baño, con **zoclo de loseta** en todos los muros.
+- **Muros:** yeso liso y blanco, salvo los azulejos de baño y cocina.
+- **Baño:**
+  - **Regadera y muros:** la regadera tiene el **mismo azulejo** beige marmoleado que el resto del baño, del piso al techo y en todos los muros. Las piezas «grises» de la foto del piso eran el mismo azulejo en sombra, así que la textura `azulejo-bano` aplica a todo el baño.
+  - **Piso de la regadera:** el mosaico antiderrapante ocupa todo el rectángulo de la regadera. La separan una cortina y una barra; no se ve canceles ni escalón alto.
+  - **Ventana alta (V09):** está sobre la regadera, con **vidrio texturizado traslúcido** (no claro) y marco negro. Coincide con el antepecho alto del plano (1.28 m).
+- **Puertas de madera:** las de las recámaras y el medio baño se ven iguales a la de la foto 1.
+- **Puerta de la cocina (D04):** se ve en la cocina a la izquierda, con su retícula y herrería.
+
+### Nuevo o distinto del plano
+
+- **Techo:** todo el interior tiene **tirol** (rugoso).
+  - En la sala y el comedor se ven **líneas rectas paralelas y fisuras** que cruzan el plafón. Pueden ser las juntas de una losa de **vigueta y bovedilla** (pista para U02) o fisuras del aplanado.
+  - Hay manchas en el comedor, cerca del muro de la cocina. Posible humedad: conviene revisarlas.
+- **Luminarias:** son **portalámparas de porcelana con foco desnudo** al centro de cada zona, no spots empotrados.
+  - Se ven 2 en la sala y el comedor, 1 en la cocina, 1 en el pasillo y 1 en la zona de la mesa.
+  - El DXF trae 9 «spots» en `23- ILUMINACION`: probablemente marcan la **posición**, pero el tipo de luminaria es este.
+- **Cocina:**
+  - **Gabinetes:** altos y bajos de **melamina gris oscuro con veta**, distinta del wengué de los closets, con jaladeras de barra.
+  - **Cubierta y equipo:** cubierta negra brillante (tipo granito), tarja negra, estufa Mabe de 6 quemadores negra y refrigerador negro.
+  - **Azulejo:** blanco brillante hasta ≈ 2 m (pintura blanca arriba), con **cenefa de frutas** a la altura de la cubierta y **2 paneles de talavera** con frutas sobre ella.
+  - **Centro de carga:** en el muro derecho de la cocina. Hay que compararlo con la capa `GAS` del DXF.
+- **Sala:**
+  - **Ventana negra con retícula** de 3 × 5 vidrios, en un **entrante en ángulo**. Por la posición, junto al sofá y cerca del pasillo, es muy probablemente **V10**, la ventana del tragaluz en el muro diagonal W32 (1.12 m), que el plano no dibuja.
+  - Medidas estimadas por proporción, a confirmar: **ancho ≈ 0.8 m y alto ≈ 1.1 m, con antepecho ≈ 0.9 m**.
+  - En la sala también se ven la puerta de entrada D03 por dentro y dos cortinas grises a sus lados, que tapan las ventanas V01 y V02.
+- **Cortina negra entre la cocina y el comedor:** cuelga sobre el muro, junto al refrigerador. Por su tamaño parece tapar un **vano o una puerta**, que en el plano no aparece ahí. Falta preguntar.
+- **Pasillo de las recámaras:** angosto, con 3 puertas de madera y foco al centro. Coincide con el «pasillo a las recámaras» incluido en S01.
+
+### Muebles vistos (para una capa de mobiliario, no son acabados)
+
+- **Sala:** sala en L gris reclinable y mesa de centro redonda de vidrio.
+- **Comedor:** mesa de comedor oscura con 6 sillas talladas.
+- **Muro de la sala:** TV de pared.
+- **Ventanas de la sala:** cortinas grises.
+
 ## Fachada y orientación (2026-10-08, 08:12–09:29)
 
 Fotos: `fachada-1.jpg` y `fachada-2.jpg` (gran angular de 13 mm, desde la calle) y `brujula.jpg` (captura de una app de brújula tomada en el pórtico, frente al muro de V01, V02 y D03).
