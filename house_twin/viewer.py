@@ -89,10 +89,13 @@ def build_scene(facts: dict) -> dict:
     house = HouseModel(facts)
     storey = facts['levels'][0]['storey_height']['value'] or ASSUMED_DEFAULTS['storey_height']
     declared = [o for o in facts['openings'] if not o['footprint']]
+    door_heights = {o['height']['value'] for o in facts['openings'] if o['kind'] == 'door'}
     return {
         'name': facts['name'], 'site': facts['site'], 'storey_height': storey,
         'storey_height_assumed': facts['levels'][0]['storey_height']['value'] is None,
         'assumed': ASSUMED_DEFAULTS,
+        'door_height_assumed': None in door_heights,
+        'door_height': door_heights.pop() if len(door_heights) == 1 and None not in door_heights else None,
         'walls': _wall_prisms(facts, storey), 'glass': _glass(facts, storey),
         'doors': [{'id': o['id'], 'rings': [o['footprint']]} for o in facts['openings'] if o['kind'] == 'door' and o['footprint']],
         'declared_openings': [{'id': o['id'], 'kind': o['kind'], 'wall': o['host_wall'], 'note': o.get('owner_note')} for o in declared],

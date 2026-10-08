@@ -197,7 +197,7 @@ def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
     cal = drawing.metadata.get('calibration', {})
     lot_w = faces.lot.bounds[2] - faces.lot.bounds[0]
     lot_d = faces.lot.bounds[3] - faces.lot.bounds[1]
-    return {
+    facts = {
         'schema_version': SCHEMA_VERSION,
         'name': 'Casa Jonhy — planta existente',
         'units': 'm',
@@ -216,13 +216,37 @@ def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
         'adjacency': _adjacency(walls, spaces, openings),
         **_unknowns(annotations),
     }
+    _apply_answered_values(facts, annotations)
+    return facts
+
+
+def _owner_source(annotations: dict, answer: dict) -> str:
+    return f"{annotations.get('source', 'dueño')} ({answer.get('answered_on') or annotations.get('confirmed_on', 's/f')})"
+
+
+def _apply_answered_values(facts: dict, annotations: dict):
+    """Las respuestas con `value` numérico pasan a los hechos que contestan; sin `value` solo cierran la incógnita.
+
+    U01 → altura de piso terminado a lecho bajo de losa del nivel; U04 → altura de vano de las puertas
+    que el plano deja sin altura.
+    """
+    for answer in annotations.get('answered_unknowns', []):
+        if answer.get('value') is None:
+            continue
+        fact = {'value': answer['value'], 'source': f"{_owner_source(annotations, answer)}: {answer['id']}"}
+        if answer['id'] == 'U01':
+            facts['levels'][0]['storey_height'] = fact
+        elif answer['id'] == 'U04':
+            for o in facts['openings']:
+                if o['kind'] == 'door' and o['height']['value'] is None:
+                    o['height'] = dict(fact)
 
 
 def _unknowns(annotations: dict) -> dict:
     """Las incógnitas que el dueño ya respondió salen de `unknowns` y quedan registradas con su respuesta."""
-    answers = {a['id']: a['answer'] for a in annotations.get('answered_unknowns', [])}
-    source = f"{annotations.get('source', 'dueño')} ({annotations.get('confirmed_on', 's/f')})"
+    answers = {a['id']: a for a in annotations.get('answered_unknowns', [])}
     return {
         'unknowns': [u for u in UNKNOWNS if u['id'] not in answers],
-        'answered': [{**u, 'answer': answers[u['id']], 'source': source} for u in UNKNOWNS if u['id'] in answers],
+        'answered': [{**u, 'answer': answers[u['id']]['answer'], 'source': _owner_source(annotations, answers[u['id']])}
+                     for u in UNKNOWNS if u['id'] in answers],
     }
