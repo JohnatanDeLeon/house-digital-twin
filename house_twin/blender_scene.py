@@ -337,11 +337,21 @@ def render_all(folder: Path, samples=64):
         bpy.ops.render.render(write_still=True)
 
 
+def show_materials():
+    """La vista 3D abre en modo Material Preview: en modo sólido (el de fábrica) no se ven las texturas."""
+    for screen in bpy.data.screens:
+        for area in screen.areas:
+            for space in area.spaces:
+                if space.type == 'VIEW_3D':
+                    space.shading.type = 'MATERIAL'
+
+
 def main():
     ifc_path, blend_path = Path(ARGS[1]), Path(ARGS[2])
     scene = apply_finishes(ifc_path)
     light_scene()
     add_cameras()
+    show_materials()
     blend_path.parent.mkdir(parents=True, exist_ok=True)
     bpy.ops.wm.save_as_mainfile(filepath=str(blend_path), relative_remap=True)
     print(f'materiales: {sorted(scene.materials)}')
