@@ -116,6 +116,6 @@ def test_make_seamless_matches_opposite_edges():
     ramp = np.tile(np.linspace(0, 240, 80), (64, 1))
     image = Image.fromarray(np.dstack([ramp] * 3).astype(np.uint8))
     out = np.asarray(textures.make_seamless(image)).astype(float)[..., 0]
-    wrap_jump = np.abs(out[:, -1] - out[:, 0]).mean()
-    interior_jump = np.abs(np.diff(out, axis=1)).mean()
-    assert wrap_jump < 4 * interior_jump  # el borde empata como un paso interior más (antes: 240 contra 3)
+    wrap_jump = np.abs(out[:, -1] - out[:, 0]).max()
+    interior_jump = np.abs(np.diff(out, axis=1)).max()
+    assert wrap_jump <= 2 and interior_jump <= 6  # ni costura al repetir ni costura nueva en el centro

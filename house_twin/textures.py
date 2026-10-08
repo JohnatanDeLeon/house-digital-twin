@@ -94,16 +94,20 @@ def flatten_lighting(image: Image.Image, exclude_darkest: float = 0.2) -> Image.
 def make_seamless(image: Image.Image) -> Image.Image:
     """Hace repetible un recorte sin juntas (concreto, yeso): lo mezcla con una copia desplazada media textura.
 
-    Cada píxel pesa según su distancia al borde: en los bordes manda la copia desplazada, que ahí es continua
-    al repetir, y en el centro manda el original. Baja un poco el contraste en las zonas de mezcla.
+    Un eje a la vez: en cada borde manda la copia desplazada, que ahí es continua al repetir, y hacia el centro
+    manda el original. Con pesos de ambos ejes multiplicados, la costura de la copia (en el centro) aparecería
+    a lo largo de los bordes. Baja un poco el contraste en las zonas de mezcla.
     """
-    a = np.asarray(image).astype(float)
-    h, w = a.shape[:2]
-    ramp = lambda n: np.minimum(np.arange(n) + 0.5, n - np.arange(n) - 0.5) / (n / 2)
-    weight = np.outer(ramp(h), ramp(w))
-    shifted = np.roll(a, (h // 2, w // 2), axis=(0, 1))
-    w_shifted = np.roll(weight, (h // 2, w // 2), axis=(0, 1))
-    out = (a * weight[..., None] + shifted * w_shifted[..., None]) / (weight + w_shifted)[..., None]
+    out = np.asarray(image).astype(float)
+    for axis in (0, 1):
+        n = out.shape[axis]
+        ramp = np.minimum(np.arange(n) + 0.5, n - np.arange(n) - 0.5) / (n / 2)
+        shape = [1, 1, 1]
+        shape[axis] = n
+        weight = ramp.reshape(shape)
+        shifted = np.roll(out, n // 2, axis=axis)
+        w_shifted = np.roll(weight, n // 2, axis=axis)
+        out = (out * weight + shifted * w_shifted) / (weight + w_shifted)
     return Image.fromarray(out.round().astype(np.uint8))
 
 
