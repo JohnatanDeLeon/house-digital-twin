@@ -159,3 +159,11 @@ def test_openings_belong_to_the_wall_they_run_along(source, request):
         assert not aligned or o['host_wall'] in aligned, (o['id'], o['host_wall'], aligned)
     kitchen = [_opening_at(facts, 1.6, 6.79), _opening_at(facts, 2.5, 6.79)]
     assert kitchen[0]['host_wall'] == kitchen[1]['host_wall']
+
+
+def test_owner_measurement_is_compared_with_the_plan(dxf_facts):
+    hallway = next(m for m in dxf_facts['measurements'] if m['id'] == 'M01')
+    assert hallway['walls'] == ['W18', 'W16']
+    assert hallway['value'] == 1.10 and hallway['plan_value'] == pytest.approx(1.21, abs=0.005)
+    assert hallway['matches_plan'] is False
+    assert any(w.startswith('M01:') for w in dxf_facts['source_warnings'])

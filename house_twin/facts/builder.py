@@ -9,7 +9,8 @@ from datetime import date
 from shapely.geometry import Point, Polygon
 
 from house_twin.drawing import Drawing
-from house_twin.facts.annotations import SpacePiece, merge_spaces, owner_openings, rename_spaces, split_exterior
+from house_twin.facts.annotations import (SpacePiece, merge_spaces, owner_measurements, owner_openings, rename_spaces,
+                                         split_exterior)
 from house_twin.facts.faces import partition
 from house_twin.facts.naming import labels_inside, space_name
 from house_twin.facts.openings import detect_openings
@@ -214,9 +215,14 @@ def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
         'levels': [{'id': 'L0', 'name': 'Planta baja', 'elevation': 0.0, 'storey_height': dict(UNKNOWN)}],
         'spaces': spaces, 'walls': walls, 'openings': openings,
         'adjacency': _adjacency(walls, spaces, openings),
+        'measurements': owner_measurements(walls, annotations),
         **_unknowns(annotations),
     }
     _apply_answered_values(facts, annotations)
+    for m in facts['measurements']:
+        if m['matches_plan'] is False:
+            facts['source_warnings'].append(f"{m['id']}: el dueño mide {m['value']} m ({m['what']}) y el plano da "
+                                            f"{m['plan_value']} m entre {' y '.join(m['walls'])}")
     return facts
 
 

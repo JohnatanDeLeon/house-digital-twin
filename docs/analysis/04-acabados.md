@@ -295,6 +295,10 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 |---|---|---|---|
 | ![](05-renders/aerea.jpg) | ![](05-renders/sala-cocina.jpg) | ![](05-renders/pasillo.jpg) | ![](05-renders/bano.jpg) |
 
+**Pasillo de recámaras (dato del dueño, 2026-10-08):**
+- **Medida:** mide **1.10 m** de muro a muro; el plano da 1.21 m entre W18 y W16. Queda registrado como medida M01, con aviso en `source_warnings`. La geometría todavía no se movió, porque falta saber qué muro está corrido.
+- **Loseta:** caben 3 enteras de 30 × 30 cm, una medida que el dueño confirma. Según la foto `pasillo-recamaras`, las juntas arrancan en el muro del baño y el corte de ≈ 20 cm queda junto a la recámara 3. La textura del piso se alinea a ese muro (`grid.origin_m`).
+
 **Sin acabado todavía** (salen en gris violáceo para que se noten):
 - **Muros de la lavandería S13:** ninguna textura la incluye. ¿Llevan el mismo aplanado que el pasillo y el patio?
 - **D01** (reja peatonal del pórtico) y **D09** (puerta de la bodega): falta su foto. La de lámina acanalada (07:49:34) podría ser D09.
@@ -313,7 +317,7 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 ## Pendientes del dueño
 
 1. **Aplanados exteriores:** foto de cerca del estuco de la fachada y el pórtico, con luz rasante y algo de tamaño conocido, para reemplazar la textura sintética. ¿Dónde se tomaron las fotos 07:47:26 (aplanado de grano fino con estrías) y 07:49:34 (puerta de lámina acanalada)?
-2. **Medidas:** ancho y alto de la hoja de una puerta de recámara y de una de baño, y tamaño de la loseta del piso.
+2. **Medidas:** ancho y alto de la hoja de una puerta de recámara y de una de baño. Para saber qué muro del pasillo está corrido: ancho interior del baño (el plano da 1.25 m) y de la recámara 3 de este a oeste (el plano da 4.07 m).
 3. **Puerta D04:** ¿aluminio o acero? ¿Su vidrio es claro?
 4. **Closets:** ¿de qué recámara es cada foto? Medidas de un módulo (ancho de hoja y alto total). Una foto del techo de tirol de cerca.
 5. **Puertas de herrería del pasillo:** alto, y dónde está cada una: la de la cochera, ¿al ras de la fachada de la cocina o más adentro? La del patio, ¿en la esquina del muro de la recámara 2 / lavandería o en otro punto?

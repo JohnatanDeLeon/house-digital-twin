@@ -46,7 +46,12 @@
     "rows": 3,
     "grout_frac": 0.0175,
     "tile_m": 0.3,
-    "note": "esquinas = cruces de junta; junta medida en la foto rectificada (1.7–1.8 % de la loseta)"
+    "note": "esquinas = cruces de junta; junta medida en la foto rectificada (1.7–1.8 % de la loseta)",
+    "origin_m": {
+      "x": 4.41,
+      "y": null,
+      "source": "foto pasillo-recamaras: las losetas enteras arrancan en el muro del baño (W18, cara en x = 4.41 m) y el corte queda junto a la recámara 3; Y sin dato"
+    }
   },
   "size_m": {
     "width": 0.6,

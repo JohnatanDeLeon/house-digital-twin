@@ -6,6 +6,8 @@
 - add_openings: vanos que existen pero el plano no dibuja; sin medidas inventadas.
 - answered_unknowns: respuestas del dueño a las incógnitas del modelo (las resuelve el builder).
   Con `value` (m) el builder además lleva la medida al hecho que contesta (U01, U04).
+- measurements: medidas del dueño entre dos muros (anclados por un punto dentro de cada uno). No mueven la
+  geometría: se comparan con el plano y la diferencia queda a la vista para decidir qué muro corregir.
 
 Todo lo que sale de aquí lleva `source` del dueño; lo que no se nombra queda sin nombre.
 """
@@ -92,3 +94,22 @@ def split_exterior(exterior: list[Polygon], annotation: dict) -> list[SpacePiece
             pieces.append(SpacePiece(max(polys, key=lambda g: g.area), True, _owner_fields(annotation, entry)))
     pieces += [SpacePiece(g, True) for g in getattr(rest, 'geoms', [rest]) if g.geom_type == 'Polygon' and g.area >= MIN_PIECE_AREA]
     return pieces
+
+
+MEASUREMENT_TOLERANCE_M = 0.03  # aplanado y error de cinta: por debajo de esto el plano y la medida coinciden
+
+
+def owner_measurements(walls: list[dict], annotation: dict) -> list[dict]:
+    """Medidas del dueño junto a lo que da el plano entre los mismos muros."""
+    result = []
+    for entry in annotation.get('measurements', []):
+        found = [next((w for w in walls if Polygon(w['footprint']).buffer(0.01).contains(Point(a))), None)
+                 for a in entry['wall_anchors']]
+        plan = round(Polygon(found[0]['footprint']).distance(Polygon(found[1]['footprint'])), 3) if all(found) else None
+        source = f"{annotation.get('source', 'dueño')} ({entry.get('answered_on') or annotation.get('confirmed_on', 's/f')})"
+        result.append({'id': entry['id'], 'what': entry['what'], 'walls': [w['id'] if w else None for w in found],
+                       'value': entry['value'], 'source': source, 'plan_value': plan,
+                       'difference': None if plan is None else round(entry['value'] - plan, 3),
+                       'matches_plan': None if plan is None else abs(entry['value'] - plan) <= MEASUREMENT_TOLERANCE_M,
+                       'note': entry.get('note')})
+    return result

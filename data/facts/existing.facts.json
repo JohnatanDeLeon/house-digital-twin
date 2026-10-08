@@ -38,7 +38,8 @@
   ]
  },
  "source_warnings": [
-  "$INSUNITS=4 no cuadra con la geometría (21.25 unidades de lado); se usó 6"
+  "$INSUNITS=4 no cuadra con la geometría (21.25 unidades de lado); se usó 6",
+  "M01: el dueño mide 1.1 m (ancho libre del pasillo de recámaras, de muro a muro) y el plano da 1.21 m entre W18 y W16"
  ],
  "levels": [
   {
@@ -4089,6 +4090,22 @@
    "doors": [],
    "windows": [],
    "open": true
+  }
+ ],
+ "measurements": [
+  {
+   "id": "M01",
+   "what": "ancho libre del pasillo de recámaras, de muro a muro",
+   "walls": [
+    "W18",
+    "W16"
+   ],
+   "value": 1.1,
+   "source": "dueño (2026-10-08)",
+   "plan_value": 1.21,
+   "difference": -0.11,
+   "matches_plan": false,
+   "note": "en el pasillo caben 3 losetas enteras de 30 cm; en la foto, el corte queda del lado de la recámara 3"
   }
  ],
  "unknowns": [

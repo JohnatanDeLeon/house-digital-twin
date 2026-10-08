@@ -79,7 +79,11 @@ def texture_material(name, spec, specs):
     coords = nt.nodes.new('ShaderNodeTexCoord')
     mapping = nt.nodes.new('ShaderNodeMapping')
     if spec.get('tileable'):  # UV en metros → una repetición cada `size_m`
-        mapping.inputs['Scale'].default_value = (1 / spec['size_m']['width'], 1 / spec['size_m']['height'], 1)
+        scale = (1 / spec['size_m']['width'], 1 / spec['size_m']['height'])
+        mapping.inputs['Scale'].default_value = (*scale, 1)
+        # la textura empieza en una junta: se corre para que una junta caiga donde dice `grid.origin_m`
+        origin = (spec.get('grid') or {}).get('origin_m') or {}
+        mapping.inputs['Location'].default_value = (-(origin.get('x') or 0) * scale[0], -(origin.get('y') or 0) * scale[1], 0)
     nt.links.new(coords.outputs['UV'], mapping.inputs['Vector'])
 
     def image(file, colorspace):
