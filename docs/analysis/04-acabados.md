@@ -212,7 +212,7 @@ Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-rega
   - **Azulejo:** blanco brillante hasta ≈ 2 m (pintura blanca arriba), con **cenefa de frutas** a la altura de la cubierta y **2 paneles de talavera** con frutas sobre ella.
   - **Centro de carga:** en el muro derecho de la cocina. Hay que compararlo con la capa `GAS` del DXF.
 - **Sala:**
-  - **Ventana negra con retícula** de 3 × 5 vidrios, en un **entrante en ángulo**. Por la posición, junto al sofá y cerca del pasillo, es muy probablemente **V10**, la ventana del tragaluz en el muro diagonal W32 (1.12 m), que el plano no dibuja.
+  - **Ventana negra con retícula** de 3 × 5 vidrios, en un **entrante en ángulo**. El dueño confirmó que es la ventana del tragaluz hacia la sala: **V10**, en el muro diagonal W32 (1.12 m), que el plano no dibuja.
   - Medidas estimadas por proporción, a confirmar: **ancho ≈ 0.8 m y alto ≈ 1.1 m, con antepecho ≈ 0.9 m**.
   - En la sala también se ven la puerta de entrada D03 por dentro y dos cortinas grises a sus lados, que tapan las ventanas V01 y V02.
 - **Cortina negra entre la cocina y el comedor:** cuelga sobre el muro, junto al refrigerador. Por su tamaño parece tapar un **vano o una puerta**, que en el plano no aparece ahí. Falta preguntar.
