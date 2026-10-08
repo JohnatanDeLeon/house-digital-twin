@@ -1,0 +1,436 @@
+<title>Casa Jonhy 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Maqueta de arquitecto: lienzo 3D a pantalla completa, barra de controles arriba y ficha del espacio
+   (hoja inferior en el celular, panel lateral en pantallas anchas). */
+:root {
+  --paper: #eef1f4;        /* fondo de la escena, papel de dibujo con tinte azul */
+  --ink: #1d2733;
+  --ink-soft: #5a6878;
+  --rule: #cfd6de;
+  --surface: #ffffff;
+  --accent: #2f62c9;        /* azul de plano, selección */
+  --door: #e07a1f;
+  --glass: #3d8be0;
+  --wall: #f7f6f2;
+  --wall-edge: #6f7c8a;
+  --ground: #d9dfd3;
+  --room-1: #f3d2a8; --room-2: #c9eec2; --room-3: #b9e4f0; --room-4: #cfc6f5;
+  --room-5: #f6c9ee; --room-6: #f7f0ad; --room-7: #bdd3f7; --room-8: #f5b9b4;
+  --ext-1: #d6dccf; --ext-2: #e3e3df; --ext-3: #cfd8e2; --ext-4: #e3dacb; --ext-5: #d3e0cc;
+  --font-display: 'Archivo Narrow', 'Arial Narrow', 'Roboto Condensed', sans-serif;
+  --font-body: 'Public Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-data: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #151b22; --ink: #e6ebf1; --ink-soft: #9aa7b6; --rule: #2c3540; --surface: #1d252e;
+    --accent: #6f9bf2; --door: #f0954a; --glass: #6aa9f0; --wall: #d9d8d2; --wall-edge: #2a323b; --ground: #222a24;
+    --room-1: #8a6a45; --room-2: #4f7a4b; --room-3: #3f6f7d; --room-4: #5d5389; --room-5: #84507a;
+    --room-6: #7f7840; --room-7: #48618c; --room-8: #8a4e4a;
+    --ext-1: #39423a; --ext-2: #3a3c3f; --ext-3: #364250; --ext-4: #463f35; --ext-5: #374536;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #151b22; --ink: #e6ebf1; --ink-soft: #9aa7b6; --rule: #2c3540; --surface: #1d252e;
+  --accent: #6f9bf2; --door: #f0954a; --glass: #6aa9f0; --wall: #d9d8d2; --wall-edge: #2a323b; --ground: #222a24;
+  --room-1: #8a6a45; --room-2: #4f7a4b; --room-3: #3f6f7d; --room-4: #5d5389; --room-5: #84507a;
+  --room-6: #7f7840; --room-7: #48618c; --room-8: #8a4e4a;
+  --ext-1: #39423a; --ext-2: #3a3c3f; --ext-3: #364250; --ext-4: #463f35; --ext-5: #374536;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+[hidden] { display: none !important; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-body); overflow: hidden; }
+.app { height: 100%; display: grid; grid-template-rows: auto 1fr; }
+header {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px;
+  padding-block: 10px; padding-inline: 16px;
+  border-bottom: 1px solid var(--rule); background: var(--surface);
+}
+.brand { display: grid; gap: 1px; margin-right: auto; min-width: 0; }
+.brand h1 { margin: 0; font: 700 1.25rem/1.1 var(--font-display); letter-spacing: 0.01em; text-wrap: balance; }
+.brand p { margin: 0; font-size: 0.75rem; color: var(--ink-soft); }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+.seg button, .chip {
+  font: 600 0.8rem/1 var(--font-display); letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 8px 12px; border: 0; background: transparent; color: var(--ink-soft); cursor: pointer;
+}
+.seg button + button { border-left: 1px solid var(--rule); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.chip { border: 1px solid var(--rule); border-radius: 8px; }
+.chip[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+#stage { position: relative; min-height: 0; touch-action: none; }
+#stage canvas { display: block; width: 100%; height: 100%; }
+#labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.tag {
+  position: absolute; transform: translate(-50%, -50%); white-space: nowrap;
+  font: 600 0.72rem/1.15 var(--font-display); letter-spacing: 0.03em; text-align: center;
+  color: var(--ink); text-shadow: 0 0 3px var(--paper), 0 0 3px var(--paper), 0 0 2px var(--paper);
+}
+.tag small { display: block; font: 400 0.66rem/1.2 var(--font-data); color: var(--ink-soft); }
+.tag.ext { color: var(--ink-soft); font-weight: 500; }
+.tag.sel { color: var(--accent); }
+.tag.street { font-size: 0.7rem; letter-spacing: 0.18em; color: var(--ink-soft); }
+.sheet {
+  position: absolute; left: 12px; right: 12px; bottom: 12px; max-height: 38%; overflow: auto;
+  background: var(--surface); border: 1px solid var(--rule); border-radius: 12px;
+  padding-block: 14px; padding-inline: 16px; box-shadow: 0 6px 24px rgb(0 0 0 / 0.12);
+  display: grid; gap: 10px; align-content: start;
+}
+@media (min-width: 900px) {
+  .sheet { left: auto; width: 340px; top: 12px; bottom: 12px; max-height: none; }
+}
+.sheet h2 { margin: 0; font: 700 1.35rem/1.1 var(--font-display); text-wrap: balance; }
+.eyebrow { font: 600 0.68rem/1 var(--font-display); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+.badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.badge { font: 500 0.7rem/1 var(--font-data); padding: 5px 7px; border-radius: 6px; border: 1px solid var(--rule); color: var(--ink-soft); }
+.badge.owner { border-color: var(--accent); color: var(--accent); }
+.figures { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.fig { display: grid; gap: 3px; min-width: 0; }
+.fig b { font: 500 1.15rem/1 var(--font-data); font-variant-numeric: tabular-nums; }
+.fig span { font-size: 0.7rem; color: var(--ink-soft); }
+.list { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.list li { display: flex; justify-content: space-between; gap: 12px; font-size: 0.82rem; border-top: 1px solid var(--rule); padding-top: 4px; min-width: 0; }
+.list li span:last-child { color: var(--ink-soft); text-align: right; font-family: var(--font-data); font-size: 0.75rem; }
+.kind-door { color: var(--door); } .kind-window { color: var(--glass); }
+.note { margin: 0; font-size: 0.8rem; line-height: 1.45; color: var(--ink-soft); }
+.note strong { color: var(--ink); font-weight: 600; }
+details { display: grid; gap: 8px; }
+summary { cursor: pointer; font: 600 0.78rem/1.2 var(--font-display); letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); }
+details[open] summary { margin-bottom: 6px; }
+.link { justify-self: start; font: 600 0.78rem/1 var(--font-display); letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--accent); background: none; border: 0; padding: 4px 0; cursor: pointer; }
+#loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ink-soft); font-size: 0.85rem; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="app">
+  <header>
+    <div class="brand">
+      <h1>Casa Jonhy</h1>
+      <p>Planta baja · modelo del levantamiento</p>
+    </div>
+    <div class="controls" role="toolbar" aria-label="Vista">
+      <div class="seg" role="group" aria-label="Cámara">
+        <button id="view-3d" aria-pressed="true">3D</button>
+        <button id="view-plan" aria-pressed="false">Planta</button>
+      </div>
+      <div class="seg" role="group" aria-label="Altura de muros">
+        <button id="walls-full" aria-pressed="true">Muros</button>
+        <button id="walls-cut" aria-pressed="false">Corte 1 m</button>
+      </div>
+      <button class="chip" id="toggle-ext" aria-pressed="true">Exteriores</button>
+    </div>
+  </header>
+  <div id="stage">
+    <div id="loading">Cargando el modelo…</div>
+    <div id="labels" aria-hidden="true"></div>
+    <aside class="sheet" id="sheet" aria-live="polite"></aside>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const SCENE = {"name":"Casa Jonhy — planta existente","site":{"polygon":[[0.0,0.0],[0.0,21.25],[10.03,21.25],[10.03,0.0]],"width":10.03,"depth":21.25,"area":213.14,"labeled_dimensions":[10.0,21.25]},"storey_height":2.4,"storey_height_assumed":true,"assumed":{"storey_height":2.4,"door_height":2.1,"window_sill":0.9,"window_height":1.2},"walls":[{"rings":[[[0.0,0.0],[0.0,21.25],[0.2,21.25],[0.2,0.0]]],"z0":0.0,"z1":2.4,"wall":"W01"},{"rings":[[[0.2,21.25],[10.03,21.25],[10.03,21.05],[0.2,21.05]]],"z0":0.0,"z1":2.4,"wall":"W02"},{"rings":[[[6.173,0.2],[6.173,0.0],[3.24,0.0],[3.24,0.2]]],"z0":0.0,"z1":2.4,"wall":"W03"},{"rings":[[[8.563,0.2],[8.563,0.0],[7.153,0.0],[7.153,0.2]]],"z0":0.0,"z1":2.4,"wall":"W03"},{"rings":[[[8.45,8.14],[8.62,8.14],[8.62,7.93],[8.45,7.93]]],"z0":0.0,"z1":2.4,"wall":"W04"},{"rings":[[[9.86,11.86],[10.03,11.86],[10.03,6.805],[9.86,6.805],[9.86,7.93],[9.86,8.14]]],"z0":0.0,"z1":2.4,"wall":"W04"},{"rings":[[[10.03,21.05],[10.03,16.055],[9.86,16.055],[9.86,21.05]]],"z0":0.0,"z1":2.4,"wall":"W05"},{"rings":[[[9.763,3.245],[9.763,3.425],[9.763,6.805],[10.03,6.805],[10.03,1.855],[9.763,1.855]]],"z0":0.0,"z1":2.4,"wall":"W06"},{"rings":[[[3.728,3.425],[3.728,3.255],[3.115,3.255],[3.115,3.425]]],"z0":0.0,"z1":2.4,"wall":"W07"},{"rings":[[[5.573,3.425],[5.573,3.255],[4.473,3.255],[4.473,3.425]]],"z0":0.0,"z1":2.4,"wall":"W07"},{"rings":[[[6.743,3.425],[6.743,3.255],[6.323,3.255],[6.323,3.425]]],"z0":0.0,"z1":2.4,"wall":"W07"},{"rings":[[[10.03,11.86],[5.79,11.86],[5.62,11.86],[5.62,12.04],[5.79,12.04],[10.03,12.04]]],"z0":0.0,"z1":2.4,"wall":"W08"},{"rings":[[[1.28,16.945],[2.4,16.945],[2.4,16.775],[1.28,16.775]]],"z0":0.0,"z1":2.4,"wall":"W09"},{"rings":[[[5.62,16.945],[5.62,16.775],[3.9,16.775],[3.9,16.945]]],"z0":0.0,"z1":2.4,"wall":"W09"},{"rings":[[[5.82,16.22],[7.085,16.22],[7.085,16.055],[5.82,16.055]]],"z0":0.0,"z1":2.4,"wall":"W10"},{"rings":[[[8.57,16.22],[8.57,16.055],[7.82,16.055],[7.82,16.22]]],"z0":0.0,"z1":2.4,"wall":"W10"},{"rings":[[[9.86,16.22],[9.86,16.055],[9.32,16.055],[9.32,16.22]]],"z0":0.0,"z1":2.4,"wall":"W10"},{"rings":[[[9.86,16.055],[10.03,16.055],[10.03,12.04],[9.86,12.04]]],"z0":0.0,"z1":2.4,"wall":"W11"},{"rings":[[[1.45,16.775],[1.45,12.815],[1.28,12.815],[1.28,16.775]]],"z0":0.0,"z1":2.4,"wall":"W12"},{"rings":[[[1.375,10.225],[1.375,9.225],[1.205,9.225],[1.205,10.225]]],"z0":0.0,"z1":2.4,"wall":"W13"},{"rings":[[[1.375,6.875],[1.375,6.705],[1.205,6.705],[1.205,8.395],[1.375,8.395]]],"z0":0.0,"z1":2.4,"wall":"W13"},{"rings":[[[3.115,3.425],[3.115,6.875],[3.285,6.875],[3.285,3.425]]],"z0":0.0,"z1":2.4,"wall":"W14"},{"rings":[[[4.225,10.225],[4.225,10.055],[1.375,10.055],[1.375,10.225],[2.82,10.225],[2.99,10.225]]],"z0":0.0,"z1":2.4,"wall":"W15"},{"rings":[[[5.79,10.82],[5.79,8.14],[5.62,8.14],[5.62,10.82]]],"z0":0.0,"z1":2.4,"wall":"W16"},{"rings":[[[8.45,7.93],[5.62,7.93],[5.62,8.14],[8.45,8.14]]],"z0":0.0,"z1":2.4,"wall":"W17"},{"rings":[[[4.24,10.225],[4.24,11.825],[4.41,11.825],[4.41,10.225]]],"z0":0.0,"z1":2.4,"wall":"W18"},{"rings":[[[2.82,11.005],[2.82,12.625],[2.99,12.625],[2.99,11.005]]],"z0":0.0,"z1":2.4,"wall":"W19"},{"rings":[[[5.82,16.22],[5.82,13.695],[5.62,13.695],[5.62,16.22]]],"z0":0.0,"z1":2.4,"wall":"W20"},{"rings":[[[1.875,6.875],[2.295,6.875],[2.295,6.705],[1.875,6.705]]],"z0":0.0,"z1":2.4,"wall":"W21"},{"rings":[[[3.115,6.875],[3.115,6.705],[2.805,6.705],[2.805,6.875]]],"z0":0.0,"z1":2.4,"wall":"W21"},{"rings":[[[10.03,1.855],[10.03,0.0],[9.763,0.0],[9.763,1.855]]],"z0":0.0,"z1":2.4,"wall":"W22"},{"rings":[[[8.393,1.02],[8.563,1.02],[8.563,0.2],[8.393,0.2]]],"z0":0.0,"z1":2.4,"wall":"W23"},{"rings":[[[2.82,12.815],[4.43,12.815],[4.6,12.815],[4.6,12.625],[4.41,12.625],[4.24,12.625],[2.82,12.625]]],"z0":0.0,"z1":2.4,"wall":"W24"},{"rings":[[[2.82,12.815],[2.82,12.625],[1.28,12.625],[1.28,12.815]]],"z0":0.0,"z1":2.4,"wall":"W25"},{"rings":[[[4.24,11.155],[2.99,11.155],[2.99,11.205],[4.24,11.205]]],"z0":0.0,"z1":2.4,"wall":"W26"},{"rings":[[[8.393,2.025],[8.393,3.245],[8.563,3.245],[8.563,2.025]]],"z0":0.0,"z1":2.4,"wall":"W27"},{"rings":[[[7.743,3.255],[7.743,3.425],[8.983,3.425],[8.983,3.245],[8.393,3.245],[8.393,3.247]]],"z0":0.0,"z1":2.4,"wall":"W28"},{"rings":[[[9.763,1.855],[8.563,1.855],[8.563,2.025],[9.763,2.025]]],"z0":0.0,"z1":2.4,"wall":"W29"},{"rings":[[[9.763,0.2],[9.763,0.0],[8.563,0.0],[8.563,0.2]]],"z0":0.0,"z1":2.4,"wall":"W30"},{"rings":[[[4.6,13.695],[4.43,13.695],[4.43,13.865],[5.62,13.865],[5.62,13.695]]],"z0":0.0,"z1":2.4,"wall":"W31"},{"rings":[[[9.337,6.805],[9.219,6.683],[8.45,7.425],[8.45,7.497],[8.62,7.497]]],"z0":0.0,"z1":2.4,"wall":"W32"},{"rings":[[[4.225,9.225],[4.225,10.225],[4.41,10.225],[4.41,9.225]]],"z0":0.0,"z1":2.4,"wall":"W33"},{"rings":[[[5.62,11.0],[5.79,11.0],[6.41,11.0],[6.41,10.82],[5.62,10.82]]],"z0":0.0,"z1":2.4,"wall":"W34"},{"rings":[[[6.42,12.935],[5.82,12.935],[5.82,13.105],[6.42,13.105]]],"z0":0.0,"z1":2.4,"wall":"W35"},{"rings":[[[5.82,13.695],[5.82,12.935],[5.79,12.935],[5.62,12.935],[5.62,13.695]]],"z0":0.0,"z1":2.4,"wall":"W36"},{"rings":[[[5.82,16.945],[5.82,16.22],[5.62,16.22],[5.62,16.945]]],"z0":0.0,"z1":2.4,"wall":"W37"},{"rings":[[[8.45,7.497],[8.45,7.93],[8.62,7.93],[8.62,7.497]]],"z0":0.0,"z1":2.4,"wall":"W38"},{"rings":[[[9.763,6.805],[9.763,6.635],[9.268,6.635],[9.219,6.683],[9.337,6.805]]],"z0":0.0,"z1":2.4,"wall":"W39"},{"rings":[[[8.393,1.855],[8.393,2.025],[8.563,2.025],[8.563,1.855]]],"z0":0.0,"z1":2.4,"wall":"W40"},{"rings":[[[6.173,0.0],[7.153,0.0],[7.153,0.2],[6.173,0.2]]],"z0":2.1,"z1":2.4,"wall":"W03"},{"rings":[[[8.983,3.245],[9.763,3.245],[9.763,3.425],[8.983,3.425]]],"z0":2.1,"z1":2.4,"wall":"W06"},{"rings":[[[6.743,3.255],[7.743,3.255],[7.743,3.425],[6.743,3.425]]],"z0":2.1,"z1":2.4,"wall":"W07"},{"rings":[[[1.205,8.395],[1.205,9.225],[1.375,9.225],[1.375,8.395]]],"z0":2.1,"z1":2.4,"wall":"W13"},{"rings":[[[4.24,11.825],[4.24,12.625],[4.41,12.625],[4.41,11.825]]],"z0":2.1,"z1":2.4,"wall":"W18"},{"rings":[[[4.43,12.815],[4.43,13.695],[4.6,13.695],[4.6,12.815]]],"z0":2.1,"z1":2.4,"wall":"W24"},{"rings":[[[5.62,11.0],[5.62,11.86],[5.79,11.86],[5.79,11.0]]],"z0":2.1,"z1":2.4,"wall":"W08"},{"rings":[[[5.62,12.04],[5.62,12.935],[5.79,12.935],[5.79,12.04]]],"z0":2.1,"z1":2.4,"wall":"W08"},{"rings":[[[8.393,1.02],[8.393,1.855],[8.563,1.855],[8.563,1.02]]],"z0":2.1,"z1":2.4,"wall":"W23"},{"rings":[[[3.728,3.255],[4.473,3.255],[4.473,3.425],[3.728,3.425]]],"z0":0.0,"z1":0.865,"wall":"W07"},{"rings":[[[3.728,3.255],[4.473,3.255],[4.473,3.425],[3.728,3.425]]],"z0":2.135,"z1":2.4,"wall":"W07"},{"rings":[[[5.573,3.255],[6.323,3.255],[6.323,3.425],[5.573,3.425]]],"z0":0.0,"z1":0.85,"wall":"W07"},{"rings":[[[5.573,3.255],[6.323,3.255],[6.323,3.425],[5.573,3.425]]],"z0":2.11,"z1":2.4,"wall":"W07"},{"rings":[[[1.375,6.705],[1.875,6.705],[1.875,6.875],[1.375,6.875]]],"z0":0.0,"z1":0.86,"wall":"W13"},{"rings":[[[1.375,6.705],[1.875,6.705],[1.875,6.875],[1.375,6.875]]],"z0":2.13,"z1":2.4,"wall":"W13"},{"rings":[[[2.295,6.705],[2.805,6.705],[2.805,6.875],[2.295,6.875]]],"z0":0.0,"z1":0.87,"wall":"W21"},{"rings":[[[2.295,6.705],[2.805,6.705],[2.805,6.875],[2.295,6.875]]],"z0":2.14,"z1":2.4,"wall":"W21"},{"rings":[[[8.62,7.93],[9.86,7.93],[9.86,8.14],[8.62,8.14]]],"z0":0.0,"z1":0.86,"wall":"W04"},{"rings":[[[8.62,7.93],[9.86,7.93],[9.86,8.14],[8.62,8.14]]],"z0":2.12,"z1":2.4,"wall":"W04"},{"rings":[[[7.085,16.055],[7.82,16.055],[7.82,16.22],[7.085,16.22]]],"z0":0.0,"z1":0.85,"wall":"W10"},{"rings":[[[7.085,16.055],[7.82,16.055],[7.82,16.22],[7.085,16.22]]],"z0":2.07,"z1":2.4,"wall":"W10"},{"rings":[[[8.57,16.055],[9.32,16.055],[9.32,16.22],[8.57,16.22]]],"z0":0.0,"z1":0.855,"wall":"W10"},{"rings":[[[8.57,16.055],[9.32,16.055],[9.32,16.22],[8.57,16.22]]],"z0":2.085,"z1":2.4,"wall":"W10"},{"rings":[[[2.4,16.775],[3.9,16.775],[3.9,16.945],[2.4,16.945]]],"z0":0.0,"z1":0.86,"wall":"W09"},{"rings":[[[2.4,16.775],[3.9,16.775],[3.9,16.945],[2.4,16.945]]],"z0":2.08,"z1":2.4,"wall":"W09"},{"rings":[[[2.82,10.225],[2.82,11.005],[2.99,11.005],[2.99,10.225]]],"z0":0.0,"z1":1.28,"wall":"W15"},{"rings":[[[2.82,10.225],[2.82,11.005],[2.99,11.005],[2.99,10.225]]],"z0":1.88,"z1":2.4,"wall":"W15"}],"glass":[{"rings":[[[3.728,3.33],[4.473,3.33],[4.473,3.3499999999999996],[3.728,3.3499999999999996]]],"z0":0.865,"z1":2.135,"id":"V01"},{"rings":[[[5.573,3.33],[6.323,3.33],[6.323,3.3499999999999996],[5.573,3.3499999999999996]]],"z0":0.85,"z1":2.11,"id":"V02"},{"rings":[[[1.375,6.78],[1.875,6.78],[1.875,6.8],[1.375,6.8]]],"z0":0.86,"z1":2.13,"id":"V03"},{"rings":[[[2.295,6.78],[2.805,6.78],[2.805,6.8],[2.295,6.8]]],"z0":0.87,"z1":2.14,"id":"V04"},{"rings":[[[8.62,8.025],[9.86,8.025],[9.86,8.045],[8.62,8.045]]],"z0":0.86,"z1":2.12,"id":"V05"},{"rings":[[[7.085,16.127499999999998],[7.82,16.127499999999998],[7.82,16.1475],[7.085,16.1475]]],"z0":0.85,"z1":2.07,"id":"V06"},{"rings":[[[8.57,16.127499999999998],[9.32,16.127499999999998],[9.32,16.1475],[8.57,16.1475]]],"z0":0.855,"z1":2.085,"id":"V07"},{"rings":[[[2.4,16.849999999999998],[3.9,16.849999999999998],[3.9,16.87],[2.4,16.87]]],"z0":0.86,"z1":2.08,"id":"V08"},{"rings":[[[2.8950000000000005,10.225],[2.915,10.225],[2.915,11.005],[2.8950000000000005,11.005]]],"z0":1.28,"z1":1.88,"id":"V09"}],"doors":[{"id":"D01","rings":[[[6.173,0.0],[7.153,0.0],[7.153,0.2],[6.173,0.2]]]},{"id":"D02","rings":[[[8.983,3.245],[9.763,3.245],[9.763,3.425],[8.983,3.425]]]},{"id":"D03","rings":[[[6.743,3.255],[7.743,3.255],[7.743,3.425],[6.743,3.425]]]},{"id":"D04","rings":[[[1.205,8.395],[1.205,9.225],[1.375,9.225],[1.375,8.395]]]},{"id":"D05","rings":[[[4.24,11.825],[4.24,12.625],[4.41,12.625],[4.41,11.825]]]},{"id":"D06","rings":[[[4.43,12.815],[4.43,13.695],[4.6,13.695],[4.6,12.815]]]},{"id":"D07","rings":[[[5.62,11.0],[5.62,11.86],[5.79,11.86],[5.79,11.0]]]},{"id":"D08","rings":[[[5.62,12.04],[5.62,12.935],[5.79,12.935],[5.79,12.04]]]},{"id":"D09","rings":[[[8.393,1.02],[8.393,1.855],[8.563,1.855],[8.563,1.02]]]}],"declared_openings":[{"id":"V10","kind":"window","wall":"W32","note":"Ventana del tragaluz hacia la sala, en el muro central (diagonal). Los muros laterales no tienen ventana. El plano no la dibuja: medidas desconocidas."}],"spaces":[{"id":"S01","name":"Cocina + Sala + Comedor","area":42.89,"perimeter":38.51,"exterior":false,"rings":[[[4.6,12.625],[4.6,12.815],[4.6,13.695],[5.62,13.695],[5.62,12.935],[5.62,12.04],[5.62,11.86],[5.62,11.0],[5.62,7.93],[8.45,7.93],[8.45,7.425],[9.268,6.635],[9.763,6.635],[9.763,3.425],[8.983,3.425],[7.743,3.425],[6.743,3.425],[6.323,3.425],[5.573,3.425],[4.473,3.425],[3.728,3.425],[3.285,3.425],[3.285,6.875],[2.805,6.875],[2.295,6.875],[1.875,6.875],[1.375,6.875],[1.375,8.395],[1.375,9.225],[1.375,10.055],[4.225,10.055],[4.225,9.225],[4.41,9.225],[4.41,11.825],[4.41,12.625]]],"label":[5.89,5.672],"floor":0.15,"roofed":null,"note":null,"name_source":null,"openings":[{"id":"D02","kind":"door","width":0.78,"to":["1/2 Baño"]},{"id":"D03","kind":"door","width":1.0,"to":["Pórtico"]},{"id":"D04","kind":"door","width":0.83,"to":["Pasillo de servicio"]},{"id":"D05","kind":"door","width":0.8,"to":["Baño"]},{"id":"D06","kind":"door","width":0.88,"to":["Recámara 2"]},{"id":"D07","kind":"door","width":0.86,"to":["Recámara 3"]},{"id":"D08","kind":"door","width":0.895,"to":["Recámara 1"]},{"id":"V01","kind":"window","width":0.745,"to":["Pórtico"]},{"id":"V02","kind":"window","width":0.75,"to":["Pórtico"]},{"id":"V03","kind":"window","width":0.5,"to":["Cochera"]},{"id":"V04","kind":"window","width":0.51,"to":["Cochera"]},{"id":"V10","kind":"window","width":null,"to":["Tragaluz"]}],"neighbors":[{"name":"Recámara 1","via":"puerta"},{"name":"Recámara 2","via":"puerta"},{"name":"Recámara 3","via":"puerta"},{"name":"Baño","via":"puerta"},{"name":"1/2 Baño","via":"puerta"},{"name":"Tragaluz","via":"ventana"},{"name":"Cochera","via":"ventana"},{"name":"Pórtico","via":"puerta"},{"name":"Pasillo de servicio","via":"puerta"},{"name":"Lavandería","via":"solo muro"}]},{"id":"S02","name":"Recámara 1","area":16.15,"perimeter":17.37,"exterior":false,"rings":[[[5.79,12.935],[6.42,12.935],[6.42,13.105],[5.82,13.105],[5.82,16.055],[7.085,16.055],[7.82,16.055],[8.57,16.055],[9.32,16.055],[9.86,16.055],[9.86,12.04],[5.79,12.04]]],"label":[7.984,14.143],"floor":0.15,"roofed":null,"note":null,"name_source":null,"openings":[{"id":"D08","kind":"door","width":0.895,"to":["Cocina + Sala + Comedor"]},{"id":"V06","kind":"window","width":0.735,"to":["Patio"]},{"id":"V07","kind":"window","width":0.75,"to":["Patio"]}],"neighbors":[{"name":"Cocina + Sala + Comedor","via":"puerta"},{"name":"Recámara 2","via":"solo muro"},{"name":"Recámara 3","via":"solo muro"},{"name":"Patio","via":"ventana"}]},{"id":"S03","name":"Recámara 2","area":15.26,"perimeter":16.26,"exterior":false,"rings":[[[1.45,16.775],[2.4,16.775],[3.9,16.775],[5.62,16.775],[5.62,13.865],[4.43,13.865],[4.43,13.695],[4.43,12.815],[1.45,12.815]]],"label":[3.177,15.023],"floor":0.15,"roofed":null,"note":null,"name_source":null,"openings":[{"id":"D06","kind":"door","width":0.88,"to":["Cocina + Sala + Comedor"]},{"id":"V08","kind":"window","width":1.5,"to":["Patio"]}],"neighbors":[{"name":"Cocina + Sala + Comedor","via":"puerta"},{"name":"Recámara 1","via":"solo muro"},{"name":"Baño","via":"solo muro"},{"name":"Patio","via":"ventana"},{"name":"Lavandería","via":"solo muro"}]},{"id":"S04","name":"Recámara 3","area":15.03,"perimeter":16.82,"exterior":false,"rings":[[[6.41,10.82],[6.41,11.0],[5.79,11.0],[5.79,11.86],[9.86,11.86],[9.86,8.14],[8.62,8.14],[5.79,8.14],[5.79,10.82]]],"label":[8.048,9.968],"floor":0.15,"roofed":null,"note":null,"name_source":null,"openings":[{"id":"D07","kind":"door","width":0.86,"to":["Cocina + Sala + Comedor"]},{"id":"V05","kind":"window","width":1.24,"to":["Tragaluz"]}],"neighbors":[{"name":"Cocina + Sala + Comedor","via":"puerta"},{"name":"Recámara 1","via":"solo muro"},{"name":"Tragaluz","via":"ventana"}]},{"id":"S05","name":"Baño","area":2.94,"perimeter":7.3,"exterior":false,"rings":[[[2.99,12.625],[4.24,12.625],[4.24,10.225],[2.99,10.225]]],"label":[3.615,12.0],"floor":0.15,"roofed":null,"note":"El baño es un solo espacio; el murete de 5 cm divide la regadera dentro del baño.","name_source":"dueño (2026-10-08)","openings":[{"id":"D05","kind":"door","width":0.8,"to":["Cocina + Sala + Comedor"]},{"id":"V09","kind":"window","width":0.78,"to":["Lavandería"]}],"neighbors":[{"name":"Cocina + Sala + Comedor","via":"puerta"},{"name":"Recámara 2","via":"solo muro"},{"name":"Lavandería","via":"ventana"}]},{"id":"S06","name":"Bodega","area":1.99,"perimeter":5.71,"exterior":false,"rings":[[[8.563,0.2],[8.563,1.02],[8.563,1.855],[9.763,1.855],[9.763,0.2]]],"label":[9.163,1.028],"floor":0.0,"roofed":null,"note":null,"name_source":null,"openings":[{"id":"D09","kind":"door","width":0.835,"to":["Pórtico"]}],"neighbors":[{"name":"1/2 Baño","via":"solo muro"},{"name":"Pórtico","via":"puerta"}]},{"id":"S07","name":"1/2 Baño","area":1.46,"perimeter":4.84,"exterior":false,"rings":[[[8.563,3.245],[8.983,3.245],[9.763,3.245],[9.763,2.025],[8.563,2.025],[8.563,2.055]]],"label":[9.163,2.635],"floor":0.0,"roofed":null,"note":null,"name_source":null,"openings":[{"id":"D02","kind":"door","width":0.78,"to":["Cocina + Sala + Comedor"]}],"neighbors":[{"name":"Cocina + Sala + Comedor","via":"puerta"},{"name":"Bodega","via":"solo muro"},{"name":"Pórtico","via":"solo muro"}]},{"id":"S08","name":"Tragaluz","area":1.15,"perimeter":4.32,"exterior":false,"rings":[[[9.86,7.93],[9.86,6.805],[9.337,6.805],[8.62,7.497],[8.62,7.93]]],"label":[9.376,7.426],"floor":null,"roofed":null,"note":"Tragaluz que ilumina y ventila la Recámara 3. Lo forman el muro central (diagonal, hacia la sala) y dos muros laterales.","name_source":"dueño (2026-10-08)","openings":[{"id":"V05","kind":"window","width":1.24,"to":["Recámara 3"]},{"id":"V10","kind":"window","width":null,"to":["Cocina + Sala + Comedor"]}],"neighbors":[{"name":"Cocina + Sala + Comedor","via":"ventana"},{"name":"Recámara 3","via":"ventana"}]},{"id":"S09","name":"Patio","area":47.25,"perimeter":37.62,"exterior":true,"rings":[[[9.86,21.05],[9.86,16.22],[9.32,16.22],[8.57,16.22],[7.82,16.22],[7.085,16.22],[5.82,16.22],[5.82,16.945],[3.9,16.945],[2.4,16.945],[1.28,16.945],[1.28,12.625],[1.205,12.625],[0.2,12.625],[0.2,21.05]]],"label":[7.464,18.668],"floor":null,"roofed":null,"note":"Área exterior detrás de las recámaras.","name_source":"dueño (2026-10-08)","openings":[{"id":"V06","kind":"window","width":0.735,"to":["Recámara 1"]},{"id":"V07","kind":"window","width":0.75,"to":["Recámara 1"]},{"id":"V08","kind":"window","width":1.5,"to":["Recámara 2"]}],"neighbors":[{"name":"Recámara 1","via":"ventana"},{"name":"Recámara 2","via":"ventana"},{"name":"Pasillo de servicio","via":"abierto"},{"name":"Lavandería","via":"solo muro"}]},{"id":"S10","name":"Cochera","area":19.55,"perimeter":19.24,"exterior":true,"rings":[[[1.375,6.705],[1.875,6.705],[2.295,6.705],[2.805,6.705],[3.115,6.705],[3.115,3.255],[3.115,0.0],[0.2,0.0],[0.2,6.705],[1.205,6.705]]],"label":[1.658,4.98],"floor":0.0,"roofed":false,"note":"Área exterior frente a la cocina, hasta donde empieza el muro lateral de la cocina. No tiene techo.","name_source":"dueño (2026-10-08)","openings":[{"id":"V03","kind":"window","width":0.5,"to":["Cocina + Sala + Comedor"]},{"id":"V04","kind":"window","width":0.51,"to":["Cocina + Sala + Comedor"]}],"neighbors":[{"name":"Cocina + Sala + Comedor","via":"ventana"},{"name":"Pórtico","via":"abierto"},{"name":"Pasillo de servicio","via":"abierto"}]},{"id":"S11","name":"Pórtico","area":16.15,"perimeter":17.06,"exterior":true,"rings":[[[5.573,3.255],[6.323,3.255],[6.743,3.255],[7.743,3.255],[8.393,3.247],[8.393,2.055],[8.393,1.855],[8.393,1.02],[8.393,0.2],[7.153,0.2],[6.173,0.2],[3.24,0.2],[3.24,0.0],[3.115,0.0],[3.115,3.255],[3.728,3.255],[4.473,3.255]]],"label":[4.703,1.731],"floor":null,"roofed":true,"note":"Pórtico techado frente a la sala: acceso principal, puerta peatonal y puerta de la bodega.","name_source":"dueño (2026-10-08)","openings":[{"id":"D01","kind":"door","width":0.98,"to":["calle/exterior del lote"]},{"id":"D03","kind":"door","width":1.0,"to":["Cocina + Sala + Comedor"]},{"id":"D09","kind":"door","width":0.835,"to":["Bodega"]},{"id":"V01","kind":"window","width":0.745,"to":["Cocina + Sala + Comedor"]},{"id":"V02","kind":"window","width":0.75,"to":["Cocina + Sala + Comedor"]}],"neighbors":[{"name":"Cocina + Sala + Comedor","via":"puerta"},{"name":"Bodega","via":"puerta"},{"name":"1/2 Baño","via":"solo muro"},{"name":"Cochera","via":"abierto"}]},{"id":"S12","name":"Pasillo de servicio","area":5.95,"perimeter":13.85,"exterior":true,"rings":[[[1.205,8.395],[1.205,6.705],[0.2,6.705],[0.2,12.625],[1.205,12.625],[1.205,10.225],[1.205,9.225]]],"label":[0.703,9.725],"floor":null,"roofed":null,"note":"Pasillo lateral junto a la barda que conecta la cochera con el patio, pasando por la puerta de la cocina y la lavandería. Su borde sigue la cara exterior del muro de la cocina (x = 1.205 m); límites trazados por Claude a partir de la descripción del dueño.","name_source":"dueño (2026-10-08)","openings":[{"id":"D04","kind":"door","width":0.83,"to":["Cocina + Sala + Comedor"]}],"neighbors":[{"name":"Cocina + Sala + Comedor","via":"puerta"},{"name":"Patio","via":"abierto"},{"name":"Cochera","via":"abierto"},{"name":"Lavandería","via":"abierto"}]},{"id":"S13","name":"Lavandería","area":3.88,"perimeter":8.03,"exterior":true,"rings":[[[2.82,12.625],[2.82,11.005],[2.82,10.225],[1.205,10.225],[1.205,12.625],[1.28,12.625]]],"label":[2.013,11.815],"floor":null,"roofed":false,"note":"Fuera de la casa, detrás del baño; la ventana del baño da hacia ella. No está techada ni cerrada. Ocupa el recuadro entre el pasillo de servicio y el baño.","name_source":"dueño (2026-10-08)","openings":[{"id":"V09","kind":"window","width":0.78,"to":["Baño"]}],"neighbors":[{"name":"Cocina + Sala + Comedor","via":"solo muro"},{"name":"Recámara 2","via":"solo muro"},{"name":"Baño","via":"ventana"},{"name":"Patio","via":"solo muro"},{"name":"Pasillo de servicio","via":"abierto"}]}],"pending":9,"built_on":"2026-10-08"};
+const CUT_HEIGHT = 1.0;
+const TAP_TOLERANCE_PX = 6;
+
+const stage = document.getElementById('stage');
+const labelsLayer = document.getElementById('labels');
+const sheet = document.getElementById('sheet');
+const cx = SCENE.site.width / 2, cy = SCENE.site.depth / 2;
+
+const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const fmt = (v, d = 2) => (v === null || v === undefined) ? '—' : Number(v).toFixed(d);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+// ---------- escena ----------
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+stage.prepend(renderer.domElement);
+document.getElementById('loading').hidden = true;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 200);
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.maxPolarAngle = Math.PI * 0.49;
+controls.minDistance = 4;
+controls.maxDistance = 70;
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8f86, 0.75));
+const sun = new THREE.DirectionalLight(0xffffff, 0.75);
+sun.position.set(-9, 18, 12);
+sun.castShadow = true;
+sun.shadow.mapSize.set(1024, 1024);
+Object.assign(sun.shadow.camera, { left: -16, right: 16, top: 16, bottom: -16, near: 1, far: 60 });
+scene.add(sun);
+
+// Coordenadas del modelo (x a lo ancho, y hacia el fondo) → three.js (x, altura, -y), centrado en el terreno.
+function shape(rings) {
+  const toVec = ([x, y]) => new THREE.Vector2(x - cx, y - cy);
+  const s = new THREE.Shape(rings[0].map(toVec));
+  rings.slice(1).forEach(h => s.holes.push(new THREE.Path(h.map(toVec))));
+  return s;
+}
+function prism(rings, z0, z1, material) {
+  const geo = new THREE.ExtrudeGeometry(shape(rings), { depth: Math.max(z1 - z0, 0.005), bevelEnabled: false });
+  geo.rotateX(-Math.PI / 2);
+  const mesh = new THREE.Mesh(geo, material);
+  mesh.position.y = z0;
+  return mesh;
+}
+const toWorld = ([x, y], h = 0) => new THREE.Vector3(x - cx, h, -(y - cy));
+
+const mats = {
+  wall: new THREE.MeshStandardMaterial({ roughness: 0.92 }),
+  edge: new THREE.LineBasicMaterial(),
+  glass: new THREE.MeshStandardMaterial({ transparent: true, opacity: 0.45, roughness: 0.1 }),
+  door: new THREE.MeshStandardMaterial({ roughness: 0.8 }),
+  ground: new THREE.MeshStandardMaterial({ roughness: 1 }),
+};
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(SCENE.site.width + 30, SCENE.site.depth + 30), mats.ground);
+ground.rotation.x = -Math.PI / 2;
+ground.position.y = -0.03;
+ground.receiveShadow = true;
+scene.add(ground);
+
+const floors = [];
+const floorGroup = new THREE.Group();
+SCENE.spaces.forEach((sp, i) => {
+  const mat = new THREE.MeshStandardMaterial({ roughness: 0.95 });
+  const level = sp.floor ?? 0;
+  const mesh = prism(sp.rings, level - 0.02, level, mat);
+  mesh.receiveShadow = true;
+  mesh.userData.space = sp;
+  mesh.userData.tint = sp.exterior ? `--ext-${(i % 5) + 1}` : `--room-${(i % 8) + 1}`;
+  floors.push(mesh);
+  floorGroup.add(mesh);
+});
+scene.add(floorGroup);
+
+// marco del lote
+const lot = new THREE.LineLoop(
+  new THREE.BufferGeometry().setFromPoints(SCENE.site.polygon.map(p => toWorld(p, 0.005))),
+  new THREE.LineDashedMaterial({ dashSize: 0.3, gapSize: 0.2 }));
+lot.computeLineDistances();
+scene.add(lot);
+
+const wallGroup = new THREE.Group();
+scene.add(wallGroup);
+function buildWalls(cut) {
+  wallGroup.clear();
+  const top = cut ?? SCENE.storey_height;
+  SCENE.walls.forEach(w => {
+    const z1 = Math.min(w.z1, top);
+    if (z1 <= w.z0) return;
+    const mesh = prism(w.rings, w.z0, z1, mats.wall);
+    mesh.castShadow = true; mesh.receiveShadow = true;
+    wallGroup.add(mesh);
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry, 30), mats.edge);
+    edges.position.y = w.z0;
+    wallGroup.add(edges);
+  });
+  SCENE.glass.forEach(g => {
+    const z1 = Math.min(g.z1, top);
+    if (z1 > g.z0) wallGroup.add(prism(g.rings, g.z0, z1, mats.glass));
+  });
+  SCENE.doors.forEach(d => wallGroup.add(prism(d.rings, 0, 0.012, mats.door)));
+}
+
+// ---------- tema ----------
+function applyTheme() {
+  scene.background = new THREE.Color(css('--paper'));
+  mats.wall.color.set(css('--wall'));
+  mats.edge.color.set(css('--wall-edge'));
+  mats.glass.color.set(css('--glass'));
+  mats.door.color.set(css('--door'));
+  mats.ground.color.set(css('--ground'));
+  lot.material.color.set(css('--ink-soft'));
+  floors.forEach(f => f.material.color.set(f.userData.space === selected?.space ? css('--accent') : css(f.userData.tint)));
+}
+new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+
+// ---------- rótulos ----------
+const tags = SCENE.spaces.map(sp => {
+  const el = document.createElement('div');
+  el.className = 'tag' + (sp.exterior ? ' ext' : '');
+  el.innerHTML = `${esc(sp.name)}<small>${fmt(sp.area)} m²</small>`;
+  labelsLayer.appendChild(el);
+  return { el, sp, pos: toWorld(sp.label, (sp.floor ?? 0) + 0.05) };
+});
+const street = document.createElement('div');
+street.className = 'tag street';
+street.textContent = 'CALLE';
+labelsLayer.appendChild(street);
+tags.push({ el: street, sp: null, pos: toWorld([SCENE.site.width / 2, -1.6], 0) });
+
+function placeTags() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  const v = new THREE.Vector3();
+  tags.forEach(t => {
+    const hiddenExt = t.sp && t.sp.exterior && !showExterior;
+    v.copy(t.pos).project(camera);
+    const visible = v.z < 1 && Math.abs(v.x) < 1.1 && Math.abs(v.y) < 1.1 && !hiddenExt;
+    t.el.hidden = !visible;
+    if (visible) t.el.style.left = `${(v.x + 1) / 2 * w}px`, t.el.style.top = `${(1 - v.y) / 2 * h}px`;
+  });
+}
+
+// ---------- ficha ----------
+let selected = null;
+const interior = SCENE.spaces.filter(s => !s.exterior);
+const interiorArea = interior.reduce((a, s) => a + s.area, 0);
+
+function summaryHtml() {
+  const declared = SCENE.declared_openings.map(o => `<strong>${esc(o.id)}</strong>: ${esc(o.note)}`).join(' ');
+  return `
+    <span class="eyebrow">Resumen</span>
+    <h2>Terreno de ${fmt(SCENE.site.width)} × ${fmt(SCENE.site.depth)} m</h2>
+    <div class="figures">
+      <div class="fig"><b>${fmt(SCENE.site.area, 1)}</b><span>m² de terreno</span></div>
+      <div class="fig"><b>${fmt(interiorArea, 1)}</b><span>m² interiores (con tragaluz)</span></div>
+      <div class="fig"><b>${interior.length}</b><span>espacios interiores</span></div>
+    </div>
+    <p class="note">Toca un espacio para ver su área, sus puertas y ventanas, y con qué se conecta.</p>
+    <details>
+    <summary>Alturas y datos pendientes</summary>
+    <p class="note"><strong>Alturas supuestas:</strong> el plano no da alturas. Los muros se muestran a ${fmt(SCENE.storey_height)} m
+      y las puertas a ${fmt(SCENE.assumed.door_height)} m hasta que se confirmen. Las ventanas usan la altura del plano.</p>
+    ${declared ? `<p class="note">${declared}</p>` : ''}
+    <p class="note">Generado el ${esc(SCENE.built_on)} · ${SCENE.pending} datos pendientes de confirmar.</p>
+    </details>`;
+}
+
+function roofText(v) { return v === true ? 'Techado' : v === false ? 'Sin techo' : null; }
+
+function spaceHtml(sp) {
+  const badges = [sp.exterior ? 'Exterior' : 'Interior', roofText(sp.roofed), sp.floor !== null ? `NPT ${sp.floor >= 0 ? '+' : ''}${fmt(sp.floor)}` : null]
+    .filter(Boolean).map(b => `<span class="badge">${esc(b)}</span>`).join('');
+  const owner = sp.name_source ? `<span class="badge owner">Dato del dueño</span>` : '';
+  const openings = sp.openings.map(o => `<li><span><b class="kind-${o.kind}">${esc(o.id)}</b> ${o.kind === 'door' ? 'puerta' : 'ventana'} → ${esc(o.to.join(', '))}</span><span>${o.width ? fmt(o.width) + ' m' : 'sin medida'}</span></li>`).join('');
+  const neighbors = sp.neighbors.map(n => `<li><span>${esc(n.name)}</span><span>${esc(n.via)}</span></li>`).join('');
+  return `
+    <span class="eyebrow">${esc(sp.id)}</span>
+    <h2>${esc(sp.name)}</h2>
+    <div class="badges">${badges}${owner}</div>
+    <div class="figures">
+      <div class="fig"><b>${fmt(sp.area)}</b><span>m² libres</span></div>
+      <div class="fig"><b>${fmt(sp.perimeter)}</b><span>m perímetro</span></div>
+      <div class="fig"><b>${sp.openings.length}</b><span>vanos</span></div>
+    </div>
+    ${sp.note ? `<p class="note">${esc(sp.note)}</p>` : ''}
+    ${openings ? `<span class="eyebrow">Puertas y ventanas</span><ul class="list">${openings}</ul>` : ''}
+    ${neighbors ? `<span class="eyebrow">Vecinos</span><ul class="list">${neighbors}</ul>` : ''}
+    <button class="link" id="back">Ver resumen</button>`;
+}
+
+function select(mesh) {
+  selected = mesh ? mesh.userData : null;
+  sheet.innerHTML = selected ? spaceHtml(selected.space) : summaryHtml();
+  tags.forEach(t => t.el.classList.toggle('sel', !!selected && t.sp === selected.space));
+  applyTheme();
+  const back = document.getElementById('back');
+  if (back) back.addEventListener('click', () => select(null));
+}
+
+// ---------- interacción ----------
+const raycaster = new THREE.Raycaster();
+let downAt = null;
+renderer.domElement.addEventListener('pointerdown', e => { downAt = [e.clientX, e.clientY]; });
+renderer.domElement.addEventListener('pointerup', e => {
+  if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > TAP_TOLERANCE_PX) return;
+  const r = renderer.domElement.getBoundingClientRect();
+  raycaster.setFromCamera(new THREE.Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1), camera);
+  const hit = raycaster.intersectObjects(floors.filter(f => f.visible))[0];
+  select(hit ? hit.object : null);
+});
+
+let showExterior = true;
+const press = (on, off) => { on.setAttribute('aria-pressed', 'true'); off.setAttribute('aria-pressed', 'false'); };
+const b = id => document.getElementById(id);
+
+let mode = '3d';
+const VIEW_3D_DIRECTION = new THREE.Vector3(-0.45, 0.72, 0.55).normalize();
+const LOT_RADIUS = Math.hypot(SCENE.site.width, SCENE.site.depth) / 2;
+
+// Distancia para que todo el lote quepa en pantalla, sea vertical (celular) u horizontal.
+function fitDistance(margin) {
+  const vfov = THREE.MathUtils.degToRad(camera.fov);
+  const hfov = 2 * Math.atan(Math.tan(vfov / 2) * camera.aspect);
+  return (LOT_RADIUS * margin) / Math.sin(Math.min(vfov, hfov) / 2);
+}
+// En el celular la ficha tapa la parte baja: el modelo se corre hacia arriba en pantalla.
+function sheetShift() {
+  return stage.clientWidth < 900 ? sheet.offsetHeight / Math.max(stage.clientHeight, 1) : 0;
+}
+function frame() {
+  const shift = sheetShift();
+  if (mode === 'plan') {
+    const d = fitDistance(1.0 + shift);
+    controls.target.set(0, 0, d * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * shift);
+    camera.position.set(controls.target.x, d, controls.target.z + 0.001);
+  } else {
+    const d = fitDistance(0.92 + shift * 0.6);
+    controls.target.set(0, 0, 0);
+    camera.position.copy(VIEW_3D_DIRECTION).multiplyScalar(d);
+    camera.position.y -= d * shift * 0.35;
+  }
+  controls.update();
+}
+function view3d() {
+  press(b('view-3d'), b('view-plan'));
+  mode = '3d';
+  controls.enableRotate = true;
+  frame();
+}
+function viewPlan() {
+  press(b('view-plan'), b('view-3d'));
+  mode = 'plan';
+  controls.enableRotate = false;
+  setWalls(true);
+  frame();
+}
+function setWalls(cut) {
+  cut ? press(b('walls-cut'), b('walls-full')) : press(b('walls-full'), b('walls-cut'));
+  buildWalls(cut ? CUT_HEIGHT : null);
+}
+b('view-3d').addEventListener('click', view3d);
+b('view-plan').addEventListener('click', viewPlan);
+b('walls-full').addEventListener('click', () => setWalls(false));
+b('walls-cut').addEventListener('click', () => setWalls(true));
+b('toggle-ext').addEventListener('click', () => {
+  showExterior = !showExterior;
+  b('toggle-ext').setAttribute('aria-pressed', String(showExterior));
+  floors.forEach(f => { if (f.userData.space.exterior) f.visible = showExterior; });
+  if (!showExterior && selected?.space.exterior) select(null);
+});
+
+function resize() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / Math.max(h, 1);
+  camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(stage);
+
+setWalls(false);
+select(null);
+resize();
+view3d();
+(function loop() {
+  controls.update();
+  renderer.render(scene, camera);
+  placeTags();
+  requestAnimationFrame(loop);
+})();
+</script>

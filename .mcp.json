@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "house": {
+      "command": ".venv/bin/python",
+      "args": ["-m", "house_twin.mcp_server"]
+    }
+  }
+}

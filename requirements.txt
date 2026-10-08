@@ -1,0 +1,12 @@
+# Lectura de planos
+pypdf>=6.0
+ezdxf>=1.4
+# Geometría y BIM
+numpy>=2.0
+shapely>=2.0
+ifcopenshell>=0.8
+pillow>=10.0
+# Servidor MCP (API 2.x: MCPServer)
+mcp>=2.0,<3
+# Tests
+pytest>=8.0
