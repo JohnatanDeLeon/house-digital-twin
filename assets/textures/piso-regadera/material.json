@@ -1,0 +1,85 @@
+{
+ "name": "piso-regadera",
+ "applies_to": {
+  "spaces": [
+   "S05"
+  ],
+  "surface": "piso de la regadera",
+  "source": "dueño (2026-10-08): piso antiderrapante que está solo en la regadera del baño"
+ },
+ "size_m": {
+  "width": 0.4,
+  "height": 0.4,
+  "source": "supuesto: loseta de 20 × 20 cm; estimada en 17–20 cm porque mide ≈ 1.55 veces la tapa de la coladera (≈ 11 cm, medida comercial común); pendiente de medir"
+ },
+ "px_per_m": 3000,
+ "size_px": [
+  1200,
+  1200
+ ],
+ "tileable": true,
+ "grid": {
+  "cols": 2,
+  "rows": 2,
+  "grout_frac": 0.035,
+  "tile_m": 0.2,
+  "subgrid": {
+   "per_tile": 6,
+   "line_frac": 0.1,
+   "depth_mm": 0.8,
+   "edge_round_px": 3
+  },
+  "note": "esquinas = cruces de junta; la colocación es algo irregular, pero las juntas interiores del bloque coinciden con la cuadrícula; 6 × 6 cuadritos por loseta, canal blanco ≈ 8–10 % del paso"
+ },
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)"
+ },
+ "glass_material": null,
+ "source": {
+  "photo": "sources/fotos/piso-regadera.jpg",
+  "photo_meta": {
+   "taken": "2026-10-08T07:56:01",
+   "camera": "Samsung Galaxy S25 Ultra",
+   "focal_35mm": 23,
+   "iso": 2000,
+   "flash": false,
+   "light": "lámpara del baño; sombra del fotógrafo abajo a la izquierda"
+  },
+  "color": {
+   "white_reference": {
+    "box_px": [
+     600,
+     1700,
+     1500,
+     2700
+    ],
+    "brightest_fraction": 0.1,
+    "albedo_srgb": [
+     230,
+     230,
+     230
+    ],
+    "note": "canales blancos esmaltados del propio diseño (lo más claro de la zona); albedo supuesto"
+   }
+  },
+  "white_balance_gain": [
+   1.5367,
+   1.5367,
+   1.45
+  ]
+ },
+ "observed": {
+  "type": "loseta cerámica antiderrapante con diseño de mosaico: 6 × 6 cuadritos de superficie granulada, color piedra gris-beige, separados por canales blancos esmaltados",
+  "grout": "junta de cemento gris entre losetas, ancha (≈ 5–7 mm), sucia y con trazo irregular; una grieta sale de la coladera hacia la derecha",
+  "wear": "desgaste del estampado en manchas claras sobre varias losetas; manchas amarillas de jabón en la esquina con el muro",
+  "drain": "coladera redonda de acero inoxidable con 6 ranuras y 2 tornillos, asentada en un aro de cemento; pelo acumulado",
+  "wall": "el muro de la regadera arriba de este piso se ve con piezas grises mate, más grandes que el azulejo del resto del baño (por confirmar)"
+ },
+ "assumptions": [
+  "loseta de 20 × 20 cm (estimada 17–20 cm con la coladera)",
+  "canales blancos del diseño como referencia de color (albedo 230)",
+  "profundidades de junta (2 mm) y canales (0.8 mm)"
+ ]
+}

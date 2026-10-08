@@ -91,3 +91,21 @@ def test_constant_material_samples_darkest_part(tmp_path, monkeypatch):
     out = textures.build_texture(tmp_path / 'spec.json', photos_root=tmp_path)
     material = json.loads((out / 'material.json').read_text())
     assert material['pbr']['basecolor_srgb'] == [20, 20, 20] and material['pbr']['roughness'] == 0.35
+
+
+def test_mosaic_subgrid_sets_channel_roughness(tmp_path, monkeypatch):
+    monkeypatch.setattr(textures, 'TEXTURES_DIR', tmp_path / 'out')
+    Image.new('RGB', (200, 200), (150, 140, 130)).save(tmp_path / 'foto.png')
+    spec = {'name': 'mosaico', 'applies_to': {}, 'photo': 'foto.png',
+            'corners_px': {'top_left': [0, 0], 'top_right': [200, 0], 'bottom_right': [200, 200], 'bottom_left': [0, 200]},
+            'grid': {'cols': 1, 'rows': 1, 'grout_frac': 0.05, 'subgrid': {'per_tile': 4, 'line_frac': 0.2, 'depth_mm': 0.8, 'edge_round_px': 1}},
+            'size_m': {'width': 0.2, 'height': 0.2}, 'px_per_m': 1000,
+            'color': {'white_reference': {'box_px': [0, 0, 200, 200], 'albedo_srgb': [150, 140, 130]}},
+            'relief': {'type': 'grid', 'grout_depth_mm': 2, 'edge_round_px': 2, 'grain_mm': 0},
+            'roughness': {'base': 0.75, 'grain': 0, 'channel': 0.25, 'grout': 0.9}}
+    (tmp_path / 'spec.json').write_text(json.dumps(spec))
+    out = textures.build_texture(tmp_path / 'spec.json', photos_root=tmp_path)
+    r = np.asarray(Image.open(out / 'roughness.png')).astype(float) / 255
+    assert r[50, 0] == pytest.approx(0.9, abs=0.02)    # junta entre losetas (borde; el mapa va a media resolución)
+    assert r[50, 25] == pytest.approx(0.25, abs=0.02)  # canal entre cuadritos (1/4 de la loseta)
+    assert r[60, 60] == pytest.approx(0.75, abs=0.02)  # cuadrito

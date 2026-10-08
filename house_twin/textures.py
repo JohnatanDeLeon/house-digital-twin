@@ -252,6 +252,14 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
         shape_height = _panel_height(grain.shape, panels_px, relief)
     else:
         shape_height, grout = _grid_height(grain.shape, spec['grid'], relief)
+        if 'subgrid' in spec['grid']:  # loseta con diseño de mosaico: canales entre cuadritos dentro de cada pieza
+            sub = spec['grid']['subgrid']
+            n = sub['per_tile']
+            sub_height, channel = _grid_height(
+                grain.shape, {'cols': spec['grid']['cols'] * n, 'rows': spec['grid']['rows'] * n, 'grout_frac': sub['line_frac']},
+                {'grout_depth_mm': sub['depth_mm'], 'edge_round_px': sub['edge_round_px']})
+            shape_height = np.where(grout, shape_height, shape_height + sub_height)
+            roughness = np.where(channel, rough['channel'], roughness)
         roughness = np.where(grout, rough['grout'], roughness)
     height = shape_height + grain * relief['grain_mm'] / 1000
     roughness = np.clip(roughness, 0, 1)
