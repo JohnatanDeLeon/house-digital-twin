@@ -131,3 +131,30 @@ def test_every_opening_has_a_host_wall_and_connects_spaces(facts):
 def test_perimeter_walls_on_property_line(facts):
     west = [w for w in facts['walls'] if w['axis'] and abs(w['axis'][0][0] - 0.1) < 0.01]
     assert west and all(w['on_property_line'] for w in west)
+
+
+def _runs_along(opening, wall):
+    """El vano está sobre la banda del muro y en su misma dirección."""
+    (x0, y0), (x1, y1) = wall['axis'][0], wall['axis'][-1]
+    xs = [p[0] for p in opening['footprint']]; ys = [p[1] for p in opening['footprint']]
+    horizontal = abs(x1 - x0) > abs(y1 - y0)
+    if (max(xs) - min(xs) > max(ys) - min(ys)) != horizontal:
+        return False
+    lo, hi = (min(ys), max(ys)) if horizontal else (min(xs), max(xs))
+    mid = y0 if horizontal else x0
+    return lo - 0.01 <= mid <= hi + 0.01
+
+
+@pytest.mark.parametrize('source', ['facts', 'dxf_facts'])
+def test_openings_belong_to_the_wall_they_run_along(source, request):
+    """Un vano es del muro que atraviesa, no del que solo lo toca de costado (las ventanas de la cocina)."""
+    facts = request.getfixturevalue(source)
+    walls = {w['id']: w for w in facts['walls']}
+    for o in facts['openings']:
+        if o['footprint'] is None:
+            continue
+        near = [w for w in walls.values() if Polygon(w['footprint']).distance(Polygon(o['footprint'])) < 0.01]
+        aligned = [w['id'] for w in near if _runs_along(o, w)]
+        assert not aligned or o['host_wall'] in aligned, (o['id'], o['host_wall'], aligned)
+    kitchen = [_opening_at(facts, 1.6, 6.79), _opening_at(facts, 2.5, 6.79)]
+    assert kitchen[0]['host_wall'] == kitchen[1]['host_wall']
