@@ -60,7 +60,11 @@ def color_correct(photo: Image.Image, image: Image.Image, color: dict) -> tuple[
     if 'white_reference' in color:
         ref = color['white_reference']
         x0, y0, x1, y1 = ref['box_px']
-        measured = _srgb_to_linear(np.median(np.asarray(photo.crop((x0, y0, x1, y1))).reshape(-1, 3), axis=0) / 255)
+        pixels = np.asarray(photo.crop((x0, y0, x1, y1))).reshape(-1, 3).astype(float)
+        if 'brightest_fraction' in ref:  # referencia delgada (p. ej. una junta blanca) dentro de una zona más amplia
+            lum = pixels.mean(axis=1)
+            pixels = pixels[lum >= np.quantile(lum, 1 - ref['brightest_fraction'])]
+        measured = _srgb_to_linear(np.median(pixels, axis=0) / 255)
         gain = _srgb_to_linear(np.array(ref['albedo_srgb'], float) / 255) / measured
     else:
         balanced = lin * np.array(color['gain'], float)

@@ -1,6 +1,6 @@
 # Fase 4: acabados y texturas a partir de fotos
 
-Fuente: 6 fotos del dueño del 2026-10-07, entre las 23:18 y las 23:22. Todas son de noche, con luz artificial cálida, sin flash, tomadas con un Samsung Galaxy S25 Ultra en gran angular (23 mm equivalente). Las originales están en `sources/fotos/`, fuera de git. Cada material se describe en `sources/texturas/<nombre>.json` y se genera en `assets/textures/<nombre>/` con:
+Fuente: 8 fotos del dueño, del 2026-10-07 (23:18–23:33) y del 2026-10-08 (07:53). Todas son de noche, con luz artificial cálida, sin flash, tomadas con un Samsung Galaxy S25 Ultra en gran angular (23 mm equivalente). Las originales están en `sources/fotos/`, fuera de git. Cada material se describe en `sources/texturas/<nombre>.json` y se genera en `assets/textures/<nombre>/` con:
 
 ```bash
 python -m house_twin.cli texture sources/texturas/<nombre>.json
@@ -15,6 +15,7 @@ python -m house_twin.cli texture sources/texturas/<nombre>.json
 | `puerta-recamaras` | Mapas: color, rugosidad, relieve | Puertas D02, D05, D06, D07 y D08 | Foto; el dueño dice que las 5 son iguales |
 | `piso-interior` | Mapas repetibles (2 × 3 losetas) | Piso de S01–S05 y S07 | Foto; el dueño dice que es el piso de todo el interior |
 | `puerta-cocina` | Mapas + opacidad para los vidrios | Puerta D04 | Foto y dueño |
+| `azulejo-bano` | Mapas repetibles (3 × 2 azulejos) | Muros del baño S05 | Foto; el dueño dice que es el azulejo del baño con regadera |
 | `puerta-entrada` | Mapas + opacidad para el vidrio | Puerta D03 (entrada a la sala) | Foto y dueño |
 | `aluminio-negro` | Constante (color medido) | Marcos y hojas de V01–V10 | Foto; el dueño dice que todas las ventanas son de aluminio negro |
 | `vidrio-claro` | Constante (supuesto) | Vidrios de las ventanas y de D04 | Supuesto |
@@ -98,12 +99,25 @@ Los defectos reales (salpicaduras de pintura, marcas) se conservan.
   - Los herrajes se taparon con el mismo larguero; ese parche repite una mancha verde agua de más arriba.
   - El cerradero del pasador queda, porque va en el marco.
 
+### 7. Azulejo del baño con regadera (23:33:31 y 07:53:10)
+
+Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azulejos para la textura. La de cerca (23 mm) da la proporción y el estado.
+
+- **Azulejo:** cerámico esmaltado, rectangular vertical, puesto a junta corrida. Es gris claro con vetas y nubes beige y blancas tipo mármol o piedra.
+- **Esmalte:** muy brillante; la lámpara se refleja como un punto nítido.
+- **Proporción:** alto/ancho ≈ 1.47 en la foto de cerca, casi de frente. Es compatible con **20 × 30 cm**, pero falta medirlo.
+- **Junta:** boquilla blanca de ≈ 3 mm, hundida, con suciedad oscura. Tiene un **tramo vertical abierto** (sin boquilla) en la parte baja.
+- **Color:** en la foto de cerca, el centro de la junta sale *más oscuro* que el azulejo (≈ 113 contra 150), porque está hundida y sucia; lo que se ve claro a sus lados es el canto brillante. Esa foto no sirve como blanco. En la de lejos, junta y canto se mezclan en un tono casi neutro: se usa como referencia aproximada (albedo 225).
+- **Textura:** el reflejo de la lámpara en un azulejo se tapó con el mismo azulejo.
+- **Contexto:** a la derecha está la puerta de madera de los baños (la misma de `puerta-recamaras`) y abajo a la izquierda, el inodoro.
+
 ## Pendientes del dueño
 
 1. **Medidas:** ancho y alto de la hoja de una puerta de recámara y de una de baño, y tamaño de la loseta del piso.
 2. **Superficie de los espacios sin piso:** pórtico, bodega, cochera, pasillo de servicio, lavandería y patio (concreto, tierra, grava…), y del tragaluz.
 3. **Puerta D04:** ¿aluminio o acero? ¿Su vidrio es claro?
-4. **Puerta D03:** ancho de la hoja (¿hay un marco fijo a la izquierda?) y qué tan oscuro es el polarizado (¿se ve hacia adentro de día?).
-5. **Ventanas:** ¿todas tienen persiana enrollable? ¿La hoja fija tiene vidrio entintado o película?
-6. **Calibración de color:** una foto de día del piso con una hoja blanca tamaño carta encima.
-7. **Fotos nuevas:** el azulejo y la cenefa de la cocina de frente, la cara exterior de las puertas y los acabados exteriores (pendientes para mañana).
+4. **Baño:** medida del azulejo y hasta qué altura llega (¿al techo o a media altura?), y en qué muros está (¿todo el baño o solo la regadera?).
+5. **Puerta D03:** ancho de la hoja (¿hay un marco fijo a la izquierda?) y qué tan oscuro es el polarizado (¿se ve hacia adentro de día?).
+6. **Ventanas:** ¿todas tienen persiana enrollable? ¿La hoja fija tiene vidrio entintado o película?
+7. **Calibración de color:** una foto de día del piso con una hoja blanca tamaño carta encima.
+8. **Fotos nuevas:** el azulejo y la cenefa de la cocina de frente, la cara exterior de las puertas y los acabados exteriores (pendientes para mañana).
