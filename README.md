@@ -55,6 +55,11 @@ Herramientas: `house_summary`, `list_rooms`, `get_room`, `get_adjacent_rooms`, `
 
 ### Ver el modelo en 3D
 
+En el navegador (también en el celular): `docs/viewer/casa-jonhy-3d.html`, generado por `build`.
+Gira con el dedo, toca un espacio para ver su ficha, cambia a vista en planta o corta los muros a 1 m.
+
+En Blender:
+
 Abre `models/existing.ifc` en Blender con el add-on [Bonsai](https://bonsaibim.org)
 (*File → Open IFC Project*). Los espacios (`IfcSpace`) se pueden ocultar para ver muros y vanos.
 
@@ -70,6 +75,7 @@ house_twin/
   model.py            consultas semánticas (HouseModel)
   mcp_server.py       House MCP
   render.py           imagen de validación
+  viewer.py           visor 3D web (+ viewer_template.html, three.js)
   compare.py          hechos de dos fuentes lado a lado
   cli.py
 data/facts/           existing.facts.json (generado, versionado)

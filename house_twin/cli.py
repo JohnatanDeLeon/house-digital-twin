@@ -9,6 +9,7 @@ OWNER_ANNOTATIONS = ROOT / 'sources' / 'owner-annotations.json'
 FACTS_PATH = ROOT / 'data' / 'facts' / 'existing.facts.json'
 IFC_PATH = ROOT / 'models' / 'existing.ifc'
 OVERLAY_PATH = ROOT / 'docs' / 'analysis' / '02-hechos-planta-existente.png'
+VIEWER_PATH = ROOT / 'docs' / 'viewer' / 'casa-jonhy-3d.html'
 
 
 def _load_drawing(source: Path):
@@ -30,14 +31,17 @@ def build(source: Path):
     from house_twin.facts.builder import build_facts
     from house_twin.ifc_export import build_ifc
     from house_twin.render import render_facts
+    from house_twin.viewer import render_viewer
     facts = build_facts(_load_drawing(source), load_annotations(OWNER_ANNOTATIONS))
     FACTS_PATH.parent.mkdir(parents=True, exist_ok=True)
     FACTS_PATH.write_text(json.dumps(facts, ensure_ascii=False, indent=1))
     IFC_PATH.parent.mkdir(parents=True, exist_ok=True)
     build_ifc(facts).write(str(IFC_PATH))
     render_facts(facts, OVERLAY_PATH)
+    render_viewer(facts, VIEWER_PATH)
     print(f"{len(facts['spaces'])} espacios, {len(facts['walls'])} muros, {len(facts['openings'])} vanos")
-    print(f'→ {FACTS_PATH.relative_to(ROOT)}\n→ {IFC_PATH.relative_to(ROOT)}\n→ {OVERLAY_PATH.relative_to(ROOT)}')
+    for path in (FACTS_PATH, IFC_PATH, OVERLAY_PATH, VIEWER_PATH):
+        print(f'→ {path.relative_to(ROOT)}')
 
 
 def compare(source_a: Path, source_b: Path):

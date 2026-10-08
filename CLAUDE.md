@@ -17,7 +17,7 @@ Gemelo digital de una casa (Casa Jonhy). Código en inglés, comentarios y docum
 `sources/` → `house_twin.sources.*` (Drawing en metros) → `house_twin.facts.builder` →
 `data/facts/existing.facts.json` → `ifc_export` / `model` / `mcp_server`.
 
-- `data/facts/*.json`, `models/*.ifc` y `docs/analysis/02-*.png` son **generados**: no editarlos a mano,
+- `data/facts/*.json`, `models/*.ifc`, `docs/analysis/02-*.png` y `docs/viewer/*.html` son **generados**: no editarlos a mano,
   regenerar con `python -m house_twin.cli build`.
 - Si el CAD usa otros nombres de capa, se ajusta `LAYER_ROLES` en `house_twin/drawing.py`.
 - El PDF está ploteado a 1:77.4 aunque el cajetín diga 1:100: la escala sale de las cotas, nunca del rótulo.
