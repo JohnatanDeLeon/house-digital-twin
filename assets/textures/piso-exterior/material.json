@@ -10,7 +10,7 @@
    "S13"
   ],
   "surface": "piso",
-  "source": "dueño (2026-10-08): el piso de pórtico, pasillo de servicio, bodega, lavandería, cochera y patio es de concreto gris con algo de rugosidad"
+  "source": "dueño (2026-10-08): el piso de pórtico, pasillo de servicio, bodega, lavandería, cochera y patio es de concreto gris con algo de rugosidad; dueño (2026-10-08): confirmado, todos los exteriores tienen el mismo piso"
  },
  "size_m": {
   "width": 1.0,
@@ -62,14 +62,13 @@
  "observed": {
   "type": "firme de concreto gris con acabado escobillado: estrías finas en ondas (antiderrapante)",
   "texture": "poros pequeños, granos de arena expuestos y algunas piedritas",
-  "stains": "manchas gris azuladas abajo a la derecha que conservan la textura de ondas: probable humedad (rocío) o restos de sellador; quedan fuera del recorte",
+  "stains": "manchas gris azuladas abajo a la derecha que conservan la textura de ondas; el dueño confirma que no son humedad (origen sin identificar: probable sellador, pintura o cemento de otra mezcla); quedan fuera del recorte",
   "joint": "junta o grieta diagonal en el borde derecho, con una superficie más lisa del otro lado (otro colado o banqueta)",
   "spots": "salpicaduras claras de pintura o mortero a la izquierda"
  },
  "assumptions": [
   "escala: el recorte mide ≈ 1 × 1 m (foto de pie a ≈ 1.4 m)",
   "luminosidad media del concreto (albedo ≈ 0.40)",
-  "amplitud del relieve (0.6 mm)",
-  "que todos los exteriores tengan el mismo acabado (pendiente de confirmar por espacio)"
+  "amplitud del relieve (0.6 mm)"
  ]
 }

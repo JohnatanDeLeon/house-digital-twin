@@ -7,10 +7,11 @@
    "S03",
    "S04",
    "S05",
-   "S07"
+   "S07",
+   "S08"
   ],
   "surface": "piso",
-  "source": "dueño (2026-10-07): es el piso de todo el interior; pórtico, bodega, cochera, pasillo de servicio, lavandería y patio no tienen piso"
+  "source": "dueño (2026-10-07): es el piso de todo el interior; pórtico, bodega, cochera, pasillo de servicio, lavandería y patio no tienen piso; dueño (2026-10-08): el tragaluz tiene el mismo piso que el interior"
  },
  "size_m": {
   "width": 0.6,
@@ -35,6 +36,7 @@
   "roughness": "roughness.png",
   "normal": "normal.png (OpenGL)"
  },
+ "glass_material": null,
  "source": {
   "photo": "sources/fotos/piso-interior.jpg",
   "photo_meta": {

@@ -13,7 +13,7 @@ python -m house_twin.cli texture sources/texturas/<nombre>.json
 | Material | Tipo | Aplica a | Fuente del dato |
 |---|---|---|---|
 | `puerta-recamaras` | Mapas: color, rugosidad, relieve | Puertas D02, D05, D06, D07 y D08 | Foto; el dueño dice que las 5 son iguales |
-| `piso-interior` | Mapas repetibles (2 × 3 losetas) | Piso de S01–S05 y S07 | Foto; el dueño dice que es el piso de todo el interior |
+| `piso-interior` | Mapas repetibles (2 × 3 losetas) | Piso de S01–S05, S07 y el tragaluz S08 | Foto; el dueño dice que es el piso de todo el interior |
 | `puerta-cocina` | Mapas + opacidad para los vidrios | Puerta D04 | Foto y dueño |
 | `azulejo-bano` | Mapas repetibles (3 × 2 azulejos) | Muros del baño S05 | Foto; el dueño dice que es el azulejo del baño con regadera |
 | `piso-exterior` | Mapas repetibles (≈ 1 × 1 m, sin juntas) | Piso de S06 y S09–S13 | Foto; el dueño dice que todos los exteriores son de concreto gris |
@@ -24,7 +24,7 @@ python -m house_twin.cli texture sources/texturas/<nombre>.json
 | `vidrio-polarizado` | Constante (supuesto) | Vidrio de D03 | Dueño: «ventanal polarizado»; tono y transmisión supuestos |
 | `muro-interior` | Constante | Muros interiores | Dueño: yeso blanco con pintura blanca |
 
-**Exteriores y bodega** (dato del dueño): pórtico, bodega, cochera, pasillo de servicio, lavandería y patio no tienen loseta. Su piso es un firme de concreto gris (foto 9).
+**Exteriores y bodega** (dato del dueño): pórtico, bodega, cochera, pasillo de servicio, lavandería y patio no tienen loseta. Su piso es un firme de concreto gris (foto 9); el dueño confirma que es el mismo en todos. El tragaluz tiene la loseta del interior.
 
 ## Cómo se obtiene cada textura
 
@@ -131,7 +131,7 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 
 - **Firme:** de concreto gris con **acabado escobillado en ondas**. Las estrías finas onduladas lo hacen antiderrapante; tiene poros, granos de arena expuestos y algunas piedritas.
 - **Color:** con luz de día el gris sale neutro (`#babbbb` tal como lo registró la cámara). La luminosidad media es supuesta (albedo ≈ 0.40), porque la exposición automática no la fija.
-- **Manchas gris azuladas** abajo a la derecha. Conservan la textura de ondas, así que no son material nuevo: probablemente humedad del rocío o restos de un sellador. Quedan fuera del recorte.
+- **Manchas gris azuladas** abajo a la derecha. Conservan la textura de ondas y, según el dueño, **no son humedad**. Su origen queda sin identificar (sellador, pintura o cemento de otra mezcla). Quedan fuera del recorte.
 - **Junta o grieta diagonal** en el borde derecho, con una superficie más lisa del otro lado (otro colado o una banqueta).
 - **Escala:** no hay nada de tamaño conocido en la foto. Se supuso una foto tomada de pie, a ≈ 1.4 m, así que el recorte mide ≈ 1 × 1 m.
 - **Textura:** es repetible sin costuras gracias a `make_seamless`. En áreas grandes se nota algo la repetición cada metro; con más fotos del exterior se podría variar.
@@ -139,10 +139,9 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 ## Pendientes del dueño
 
 1. **Medidas:** ancho y alto de la hoja de una puerta de recámara y de una de baño, y tamaño de la loseta del piso.
-2. **Exteriores:** ¿todos tienen el mismo concreto escobillado, o alguno es liso, de tierra o de pasto (el patio, por ejemplo)? ¿Qué piso tiene el tragaluz? ¿Las manchas oscuras son humedad?
-3. **Puerta D04:** ¿aluminio o acero? ¿Su vidrio es claro?
-4. **Baño:** medida del azulejo y hasta qué altura llega (¿al techo o a media altura?), y en qué muros está (¿todo el baño o solo la regadera?). Medida de la loseta antiderrapante y del área de la regadera. ¿El muro de la regadera tiene otro azulejo?
-5. **Puerta D03:** ancho de la hoja (¿hay un marco fijo a la izquierda?) y qué tan oscuro es el polarizado (¿se ve hacia adentro de día?).
-6. **Ventanas:** ¿todas tienen persiana enrollable? ¿La hoja fija tiene vidrio entintado o película?
-7. **Calibración de color:** una foto de día del piso con una hoja blanca tamaño carta encima.
-8. **Fotos nuevas:** el azulejo y la cenefa de la cocina de frente, la cara exterior de las puertas y los acabados exteriores (pendientes para mañana).
+2. **Puerta D04:** ¿aluminio o acero? ¿Su vidrio es claro?
+3. **Baño:** medida del azulejo y hasta qué altura llega (¿al techo o a media altura?), y en qué muros está (¿todo el baño o solo la regadera?). Medida de la loseta antiderrapante y del área de la regadera. ¿El muro de la regadera tiene otro azulejo?
+4. **Puerta D03:** ancho de la hoja (¿hay un marco fijo a la izquierda?) y qué tan oscuro es el polarizado (¿se ve hacia adentro de día?).
+5. **Ventanas:** ¿todas tienen persiana enrollable? ¿La hoja fija tiene vidrio entintado o película?
+6. **Calibración de color:** una foto de día del piso con una hoja blanca tamaño carta encima.
+7. **Fotos nuevas:** el azulejo y la cenefa de la cocina de frente, la cara exterior de las puertas y los acabados exteriores (pendientes para mañana).

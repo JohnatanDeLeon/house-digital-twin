@@ -2,31 +2,88 @@
   "_doc": "Piso de concreto de los exteriores, con acabado escobillado en ondas. Textura repetible de ≈ 1 × 1 m hecha con make_seamless (no hay juntas que marquen el corte). Regenerar con: python -m house_twin.cli texture sources/texturas/piso-exterior.json",
   "name": "piso-exterior",
   "applies_to": {
-    "spaces": ["S06", "S09", "S10", "S11", "S12", "S13"],
+    "spaces": [
+      "S06",
+      "S09",
+      "S10",
+      "S11",
+      "S12",
+      "S13"
+    ],
     "surface": "piso",
-    "source": "dueño (2026-10-08): el piso de pórtico, pasillo de servicio, bodega, lavandería, cochera y patio es de concreto gris con algo de rugosidad"
+    "source": "dueño (2026-10-08): el piso de pórtico, pasillo de servicio, bodega, lavandería, cochera y patio es de concreto gris con algo de rugosidad; dueño (2026-10-08): confirmado, todos los exteriores tienen el mismo piso"
   },
   "photo": "sources/fotos/piso-exterior.jpg",
-  "photo_meta": {"taken": "2026-10-08T07:47:52", "camera": "Samsung Galaxy S25 Ultra", "focal_35mm": 23, "iso": 80, "flash": false, "light": "luz de día"},
-  "corners_px": {"top_left": [0, 300], "top_right": [2050, 300], "bottom_right": [2050, 2350], "bottom_left": [0, 2350]},
-  "size_m": {"width": 1.0, "height": 1.0, "source": "supuesto: foto tomada de pie, a ≈ 1.4 m y hacia abajo; con la cámara principal (23 mm) el ancho de la foto cubre ≈ 1.46 m, así que el recorte de 2050 px mide ≈ 1 m; no hay nada de tamaño conocido en la foto"},
+  "photo_meta": {
+    "taken": "2026-10-08T07:47:52",
+    "camera": "Samsung Galaxy S25 Ultra",
+    "focal_35mm": 23,
+    "iso": 80,
+    "flash": false,
+    "light": "luz de día"
+  },
+  "corners_px": {
+    "top_left": [
+      0,
+      300
+    ],
+    "top_right": [
+      2050,
+      300
+    ],
+    "bottom_right": [
+      2050,
+      2350
+    ],
+    "bottom_left": [
+      0,
+      2350
+    ]
+  },
+  "size_m": {
+    "width": 1.0,
+    "height": 1.0,
+    "source": "supuesto: foto tomada de pie, a ≈ 1.4 m y hacia abajo; con la cámara principal (23 mm) el ancho de la foto cubre ≈ 1.46 m, así que el recorte de 2050 px mide ≈ 1 m; no hay nada de tamaño conocido en la foto"
+  },
   "px_per_m": 2048,
   "seamless": true,
-  "flatten_lighting": {"exclude_darkest": 0.1, "note": "la foto se oscurece hacia abajo (luminancia 190 → 130)"},
-  "color": {"gain": [1.0, 1.0, 1.0], "mean_srgb": [170, 170, 169], "note": "luz de día con el balance de la cámara: el gris sale neutro (#babbbb) y se respeta; la luminosidad media es supuesta (concreto gris, albedo ≈ 0.40), porque la exposición automática no la fija"},
-  "relief": {"type": "flat", "grain_mm": 0.6, "note": "sin juntas: todo el relieve sale del detalle de la foto (estrías del escobillado, poros y arena); amplitud supuesta"},
-  "roughness": {"base": 0.88, "grain": 0.06, "note": "concreto mate y poroso"},
+  "flatten_lighting": {
+    "exclude_darkest": 0.1,
+    "note": "la foto se oscurece hacia abajo (luminancia 190 → 130)"
+  },
+  "color": {
+    "gain": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "mean_srgb": [
+      170,
+      170,
+      169
+    ],
+    "note": "luz de día con el balance de la cámara: el gris sale neutro (#babbbb) y se respeta; la luminosidad media es supuesta (concreto gris, albedo ≈ 0.40), porque la exposición automática no la fija"
+  },
+  "relief": {
+    "type": "flat",
+    "grain_mm": 0.6,
+    "note": "sin juntas: todo el relieve sale del detalle de la foto (estrías del escobillado, poros y arena); amplitud supuesta"
+  },
+  "roughness": {
+    "base": 0.88,
+    "grain": 0.06,
+    "note": "concreto mate y poroso"
+  },
   "observed": {
     "type": "firme de concreto gris con acabado escobillado: estrías finas en ondas (antiderrapante)",
     "texture": "poros pequeños, granos de arena expuestos y algunas piedritas",
-    "stains": "manchas gris azuladas abajo a la derecha que conservan la textura de ondas: probable humedad (rocío) o restos de sellador; quedan fuera del recorte",
+    "stains": "manchas gris azuladas abajo a la derecha que conservan la textura de ondas; el dueño confirma que no son humedad (origen sin identificar: probable sellador, pintura o cemento de otra mezcla); quedan fuera del recorte",
     "joint": "junta o grieta diagonal en el borde derecho, con una superficie más lisa del otro lado (otro colado o banqueta)",
     "spots": "salpicaduras claras de pintura o mortero a la izquierda"
   },
   "assumptions": [
     "escala: el recorte mide ≈ 1 × 1 m (foto de pie a ≈ 1.4 m)",
     "luminosidad media del concreto (albedo ≈ 0.40)",
-    "amplitud del relieve (0.6 mm)",
-    "que todos los exteriores tengan el mismo acabado (pendiente de confirmar por espacio)"
+    "amplitud del relieve (0.6 mm)"
   ]
 }
