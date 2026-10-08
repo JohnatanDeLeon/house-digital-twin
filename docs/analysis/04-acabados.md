@@ -1,6 +1,6 @@
 # Fase 4: acabados y texturas a partir de fotos
 
-Fuente: 10 fotos del dueño, del 2026-10-07 (23:18–23:33) y del 2026-10-08 (07:47–07:56). Todas son de noche, con luz artificial cálida, sin flash, tomadas con un Samsung Galaxy S25 Ultra en gran angular (23 mm equivalente). Las originales están en `sources/fotos/`, fuera de git. Cada material se describe en `sources/texturas/<nombre>.json` y se genera en `assets/textures/<nombre>/` con:
+Fuente: 11 fotos del dueño, del 2026-10-07 (23:18–23:33) y del 2026-10-08 (07:47–07:56). Todas son de noche, con luz artificial cálida, sin flash, tomadas con un Samsung Galaxy S25 Ultra en gran angular (23 mm equivalente). Las originales están en `sources/fotos/`, fuera de git. Cada material se describe en `sources/texturas/<nombre>.json` y se genera en `assets/textures/<nombre>/` con:
 
 ```bash
 python -m house_twin.cli texture sources/texturas/<nombre>.json
@@ -18,6 +18,7 @@ python -m house_twin.cli texture sources/texturas/<nombre>.json
 | `azulejo-bano` | Mapas repetibles (3 × 2 azulejos) | Muros del baño S05 | Foto; el dueño dice que es el azulejo del baño con regadera |
 | `piso-exterior` | Mapas repetibles (≈ 1 × 1 m, sin juntas) | Piso de S06 y S09–S13 | Foto; el dueño dice que todos los exteriores son de concreto gris |
 | `piso-regadera` | Mapas repetibles (2 × 2 losetas de mosaico) | Piso de la regadera (S05) | Foto; el dueño dice que el antiderrapante está solo en la regadera |
+| `puerta-pasillo` | Mapas + opacidad de herrería (casi todo hueco) | Puerta nueva entre cochera y pasillo de servicio (S10–S12) | Foto y dueño; **no está en el plano** |
 | `puerta-entrada` | Mapas + opacidad para el vidrio | Puerta D03 (entrada a la sala) | Foto y dueño |
 | `aluminio-negro` | Constante (color medido) | Marcos y hojas de V01–V10 | Foto; el dueño dice que todas las ventanas son de aluminio negro |
 | `vidrio-claro` | Constante (supuesto) | Vidrios de las ventanas y de D04 | Supuesto |
@@ -136,12 +137,27 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 - **Escala:** no hay nada de tamaño conocido en la foto. Se supuso una foto tomada de pie, a ≈ 1.4 m, así que el recorte mide ≈ 1 × 1 m.
 - **Textura:** es repetible sin costuras gracias a `make_seamless`. En áreas grandes se nota algo la repetición cada metro; con más fotos del exterior se podría variar.
 
+### 10. Puerta de herrería entre la cochera y el pasillo de servicio (07:48:20)
+
+- **No existe en el plano ni en el modelo:** ahí la adyacencia S10–S12 aparece como abierta (sin muro ni puerta). Hay que agregarla como dato del dueño, con su posición y medidas.
+- **Puerta:** de herrería de una hoja. Tiene marco de perfil, 3 barrotes cuadrados torcidos, 3 barrotes lisos con 2 adornos de fundición en rombo cada uno, 4 travesaños, 10 arillos de solera (filas de 3, 4 y 3) y lámina lisa en el tercio inferior.
+- **Acabado:** pintura negra a brocha (`#0d0e10` medido en la lámina), con polvo, desgaste y marcas de brocha.
+- **Herrajes:** bisagras de perno con ménsula anclada al muro, del lado izquierdo; portacandado de lámina con candado, del lado derecho.
+- **Provisionales:** cinta, trapo y amarres de alambre y cordón.
+- **Contexto visible:** el concreto de la cochera con un registro cuadrado, el portón de herrería negro hacia la calle y la barda colindante blanca con remate de tabique rojo.
+- **Textura:**
+  - La opacidad sale de la geometría medida (rectángulos, arillos y adornos), ajustada a la silueta oscura de la foto.
+  - Las piezas toman el color de la pintura, porque su borde en la foto es cielo.
+  - Ancho: el hueco del plano (1.005 m). Alto: supuesto (2.00 m).
+  - Límite: junto a los dos primeros arillos del centro queda una pequeña mancha del portón de la calle, que está detrás y también es negro.
+
 ## Pendientes del dueño
 
 1. **Medidas:** ancho y alto de la hoja de una puerta de recámara y de una de baño, y tamaño de la loseta del piso.
 2. **Puerta D04:** ¿aluminio o acero? ¿Su vidrio es claro?
-3. **Baño:** medida del azulejo y hasta qué altura llega (¿al techo o a media altura?), y en qué muros está (¿todo el baño o solo la regadera?). Medida de la loseta antiderrapante y del área de la regadera. ¿El muro de la regadera tiene otro azulejo?
-4. **Puerta D03:** ancho de la hoja (¿hay un marco fijo a la izquierda?) y qué tan oscuro es el polarizado (¿se ve hacia adentro de día?).
-5. **Ventanas:** ¿todas tienen persiana enrollable? ¿La hoja fija tiene vidrio entintado o película?
-6. **Calibración de color:** una foto de día del piso con una hoja blanca tamaño carta encima.
-7. **Fotos nuevas:** el azulejo y la cenefa de la cocina de frente, la cara exterior de las puertas y los acabados exteriores (pendientes para mañana).
+3. **Puerta de herrería del pasillo:** alto de la puerta, y si va al ras de la fachada de la cocina o más adentro del pasillo (distancia desde la esquina de la cochera).
+4. **Baño:** medida del azulejo y hasta qué altura llega (¿al techo o a media altura?), y en qué muros está (¿todo el baño o solo la regadera?). Medida de la loseta antiderrapante y del área de la regadera. ¿El muro de la regadera tiene otro azulejo?
+5. **Puerta D03:** ancho de la hoja (¿hay un marco fijo a la izquierda?) y qué tan oscuro es el polarizado (¿se ve hacia adentro de día?).
+6. **Ventanas:** ¿todas tienen persiana enrollable? ¿La hoja fija tiene vidrio entintado o película?
+7. **Calibración de color:** una foto de día del piso con una hoja blanca tamaño carta encima.
+8. **Fotos nuevas:** el azulejo y la cenefa de la cocina de frente, la cara exterior de las puertas y los acabados exteriores (pendientes para mañana).
