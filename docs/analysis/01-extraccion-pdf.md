@@ -1,5 +1,8 @@
 # Casa Jonhy: qué se puede extraer automáticamente del plano
 
+> **Nota (fase 2):** las áreas y vanos de este informe se calcularon con una primera versión por raster.
+> Las cifras vigentes, exactas por polígonos, están en [02-modelo-de-hechos.md](02-modelo-de-hechos.md).
+
 Fuente analizada: [`sources/casa-jonhy-levantamiento.pdf`](../../sources/casa-jonhy-levantamiento.pdf) (el DWG todavía no está disponible en esta sesión).
 Sistema de coordenadas: metros, con origen en la esquina del terreno del lado izquierdo de la calle.
 X va a lo ancho (0 a 10 m) y Y hacia el fondo (0 = calle/ACCESO, 21.24 = fondo).
@@ -98,7 +101,7 @@ Detectados por capa `VANOS` y pares de jambas. El ancho es el del vano en muro.
 - Algunos vanos (por ejemplo la puerta de la recámara 1) se detectan por `VANOS`, no por jambas.
   - El script de jambas todavía empareja mal un par de ventanas dobles. Se corrige con el DXF, donde puertas y ventanas suelen ser bloques.
 
-Validación visual: [`01-overlay-extraccion-pdf.png`](01-overlay-extraccion-pdf.png) muestra lo extraído (muros, vanos, ventanas y espacios coloreados con su área), redibujado desde los datos en metros.
+Validación visual: ver la imagen de la [fase 2](02-modelo-de-hechos.md).
 
 ## 4. Lo que el plano NO contiene
 

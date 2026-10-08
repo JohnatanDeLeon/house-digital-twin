@@ -1,0 +1,177 @@
+"""Ensambla `house.facts.json`: la fuente de verdad geométrica de la casa.
+
+Regla del modelo: los hechos vienen del plano (o del usuario) y declaran su fuente;
+lo que el plano no dice queda en `null` y se lista en `unknowns`. Nada se supone aquí.
+"""
+import re
+from datetime import date
+
+from shapely.geometry import Point, Polygon
+
+from house_twin.drawing import Drawing
+from house_twin.facts.faces import partition
+from house_twin.facts.naming import labels_inside, space_name
+from house_twin.facts.openings import detect_openings
+from house_twin.facts.walls import decompose_walls
+
+SCHEMA_VERSION = 1
+TOUCH = 0.02            # m: distancia para considerar que dos elementos se tocan
+PROPERTY_LINE_MIN = 0.3  # m de contacto con el lindero para marcar un muro como colindante
+MAX_WALL_THICKNESS = 0.3
+MIN_FACING = 0.3         # m de frente compartido para considerar dos espacios adyacentes
+MIN_WALL_SHARE = 0.15    # m: un muro cuenta como separador si aporta ≥ MIN_FACING × esto de franja (descarta esquinas)
+CONTENT_LAYERS = {'11-VEGETACION': 'vegetación', '501 ARBOL': 'árbol', '2 AUTOS': 'auto',
+                  '9-MUEBLES FIJOS': 'muebles fijos', '8-MUEBLES': 'muebles'}
+UNKNOWN = {'value': None, 'source': 'no está en el plano'}
+
+UNKNOWNS = [
+    {'id': 'U01', 'topic': 'altura de entrepiso', 'question': '¿Altura de piso terminado a lecho bajo de losa?', 'blocks': ['3D', 'segunda planta']},
+    {'id': 'U02', 'topic': 'losa', 'question': '¿Tipo y espesor de losa (concreto, vigueta y bovedilla, lámina)?', 'blocks': ['segunda planta']},
+    {'id': 'U03', 'topic': 'estructura', 'question': '¿Dónde hay castillos, columnas, trabes y cuáles muros son de carga?', 'blocks': ['segunda planta', 'remoción de muros']},
+    {'id': 'U04', 'topic': 'puertas', 'question': '¿Altura de las puertas?', 'blocks': ['3D']},
+    {'id': 'U05', 'topic': 'materiales', 'question': '¿Material de los muros (block, tabique)?', 'blocks': ['estructura']},
+    {'id': 'U06', 'topic': 'cochera', 'question': '¿La cochera está techada? ¿Con qué?', 'blocks': ['segunda planta']},
+    {'id': 'U07', 'topic': 'cotas generales', 'question': 'El plano rotula 10.00 × 21.25 pero la geometría mide 10.023 × 21.235. ¿Cuál es la medida real del terreno?', 'blocks': []},
+    {'id': 'U08', 'topic': 'ventanas', 'question': 'Confirmar que en los rótulos de ventana "a=" es antepecho y "h=" altura de ventana.', 'blocks': []},
+]
+
+
+def _coords(poly: Polygon):
+    return [[round(x, 3), round(y, 3)] for x, y in list(poly.exterior.coords)[:-1]]
+
+
+def _level_of(poly: Polygon, drawing: Drawing):
+    for t in drawing.texts_for('levels'):
+        match = re.search(r'NPT\s*([+-]\s*[\d.]+)', t.value)
+        if match and poly.contains(Point(t.position)):
+            return {'value': float(match.group(1).replace(' ', '')), 'source': f'rótulo "{t.value}"'}
+    return dict(UNKNOWN)
+
+
+def _space_fact(sid, poly, drawing, is_exterior):
+    labels = labels_inside(poly, drawing.texts_for('room_labels'))
+    name, contains = space_name(labels)
+    return {
+        'id': sid, 'name': name, 'labels': [t.value for t in labels], 'contains': contains,
+        'drawn_contents': _contents(poly, drawing),
+        'is_exterior': is_exterior, 'polygon': _coords(poly),
+        'area': round(poly.area, 2), 'perimeter': round(poly.length, 2),
+        'bbox': [round(v, 3) for v in poly.bounds], 'floor_level': _level_of(poly, drawing),
+        'source': 'plano: caras de MUROS + vanos',
+    }
+
+
+def _wall_axis(poly: Polygon, direction):
+    if direction is None:
+        return None, None
+    d = direction
+    normal = (-d[1], d[0])
+    pts = list(poly.exterior.coords)
+    along = [x*d[0] + y*d[1] for x, y in pts]
+    across = [x*normal[0] + y*normal[1] for x, y in pts]
+    mid = (max(across) + min(across)) / 2
+    p = lambda t: [round(d[0]*t + normal[0]*mid, 3), round(d[1]*t + normal[1]*mid, 3)]
+    return [p(min(along)), p(max(along))], round(max(along) - min(along), 3)
+
+
+def _wall_fact(wid, wall, lot: Polygon, exterior: list[Polygon]):
+    poly = wall['polygon']
+    axis, length = _wall_axis(poly, wall['direction'])
+    on_line = poly.boundary.intersection(lot.boundary.buffer(TOUCH)).length >= PROPERTY_LINE_MIN
+    faces_exterior = any(poly.buffer(TOUCH).intersects(e) for e in exterior)
+    return {
+        'id': wid, 'footprint': _coords(poly), 'axis': axis, 'length': length,
+        'thickness': round(wall['thickness'], 3) if wall['thickness'] else None,
+        'on_property_line': on_line, 'faces_exterior': faces_exterior, 'height': dict(UNKNOWN), 'load_bearing': dict(UNKNOWN),
+        'material': dict(UNKNOWN), 'source': 'plano: pares de caras de MUROS',
+    }
+
+
+def _touching(poly: Polygon, items, key='id'):
+    zone = poly.buffer(TOUCH)
+    return [i[key] for i, geom in items if zone.intersects(geom)]
+
+
+def _relate_openings(openings, walls, spaces):
+    wall_geoms = [(w, Polygon(w['footprint'])) for w in walls]
+    space_geoms = [(s, Polygon(s['polygon'])) for s in spaces]
+    for o in openings:
+        rect = Polygon(o['footprint'])
+        hosts = sorted(wall_geoms, key=lambda wg: -wg[1].intersection(rect.buffer(TOUCH)).area)
+        o['host_wall'] = hosts[0][0]['id'] if hosts and hosts[0][1].intersects(rect.buffer(TOUCH)) else None
+        o['connects'] = _touching(rect, space_geoms)
+
+
+def _facing_zone(a: Polygon, b: Polygon):
+    """Franja de muro entre dos espacios que se enfrentan; vacía si solo se tocan de lejos."""
+    reach = MAX_WALL_THICKNESS + TOUCH
+    return a.buffer(reach, cap_style='flat', join_style='mitre').intersection(b.buffer(reach, cap_style='flat', join_style='mitre')) \
+        .difference(a).difference(b)
+
+
+def _adjacency(walls, spaces, openings):
+    """Pares de espacios que comparten muro (enfrentados ≥ MIN_FACING) y lo que los conecta."""
+    space_geoms = {s['id']: Polygon(s['polygon']) for s in spaces}
+    wall_geoms = {w['id']: Polygon(w['footprint']) for w in walls}
+    pairs = {}
+    ids = sorted(space_geoms)
+    for i, a in enumerate(ids):
+        for b in ids[i+1:]:
+            zone = _facing_zone(space_geoms[a], space_geoms[b])
+            if zone.area < MIN_FACING * MAX_WALL_THICKNESS:
+                continue
+            walls_between = [wid for wid, g in wall_geoms.items() if g.intersection(zone).area >= MIN_FACING * MIN_WALL_SHARE]
+            pairs[(a, b)] = {'spaces': [a, b], 'walls': walls_between, 'doors': [], 'windows': []}
+    for o in openings:
+        if len(o['connects']) == 2:
+            entry = pairs.setdefault(tuple(sorted(o['connects'])), {'spaces': sorted(o['connects']), 'walls': [], 'doors': [], 'windows': []})
+            entry['doors' if o['kind'] == 'door' else 'windows'].append(o['id'])
+    return [pairs[k] for k in sorted(pairs)]
+
+
+def _contents(poly: Polygon, drawing: Drawing):
+    """Capas de ambientación presentes dentro del espacio (dato del plano, no un uso inferido)."""
+    found = []
+    for layer, label in CONTENT_LAYERS.items():
+        if any(poly.contains(Point(a)) for a, _ in drawing.segments.get(layer, [])):
+            found.append(label)
+    return found
+
+
+def build_facts(drawing: Drawing) -> dict:
+    openings = detect_openings(drawing)
+    faces = partition(drawing, openings)
+    opening_polys = [Polygon(o['footprint']) for o in openings]
+    walls_raw = decompose_walls(drawing, faces.wall_bodies, opening_polys)
+
+    spaces = [_space_fact(f'S{i+1:02d}', p, drawing, False) for i, p in enumerate(sorted(faces.spaces, key=lambda p: -p.area))]
+    spaces += [_space_fact(f'S{len(spaces)+i+1:02d}', p, drawing, True) for i, p in enumerate(faces.exterior)]
+    walls = [_wall_fact(f'W{i+1:02d}', w, faces.lot, faces.exterior) for i, w in enumerate(walls_raw)]
+    doors = [o for o in openings if o['kind'] == 'door']
+    windows = [o for o in openings if o['kind'] == 'window']
+    for prefix, group in (('D', doors), ('V', windows)):
+        for i, o in enumerate(group):
+            o['id'] = f'{prefix}{i+1:02d}'
+    openings = doors + windows
+    _relate_openings(openings, walls, spaces)
+
+    cal = drawing.metadata.get('calibration', {})
+    lot_w = faces.lot.bounds[2] - faces.lot.bounds[0]
+    lot_d = faces.lot.bounds[3] - faces.lot.bounds[1]
+    return {
+        'schema_version': SCHEMA_VERSION,
+        'name': 'Casa Jonhy — planta existente',
+        'units': 'm',
+        'frame': 'origen en la esquina del terreno a la izquierda de la calle; X a lo ancho, Y hacia el fondo',
+        'provenance': {
+            'source': drawing.source, 'built_on': date.today().isoformat(),
+            'precision_m': round(drawing.metadata.get('precision_m', 0), 4),
+            'calibration': {k: cal[k] for k in ('pt_per_m', 'paper_scale') if k in cal},
+        },
+        'site': {'polygon': _coords(faces.lot), 'width': round(lot_w, 3), 'depth': round(lot_d, 3),
+                 'area': round(faces.lot.area, 2), 'labeled_dimensions': [10.00, 21.25]},
+        'levels': [{'id': 'L0', 'name': 'Planta baja', 'elevation': 0.0, 'storey_height': dict(UNKNOWN)}],
+        'spaces': spaces, 'walls': walls, 'openings': openings,
+        'adjacency': _adjacency(walls, spaces, openings),
+        'unknowns': UNKNOWNS,
+    }
