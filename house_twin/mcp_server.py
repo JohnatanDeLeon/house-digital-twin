@@ -54,7 +54,7 @@ def create_server(facts_path: Path = DEFAULT_FACTS) -> MCPServer:
 
     @tool
     def get_adjacent_rooms(room: str) -> list[dict]:
-        """Espacios que comparten muro con `room`, indicando si se conectan por puerta, ventana o solo muro."""
+        """Espacios vecinos de `room`: conectados por puerta, abiertos entre sí (exteriores), por ventana o solo por muro."""
         return house.adjacent_rooms(room)
 
     @tool
@@ -69,7 +69,7 @@ def create_server(facts_path: Path = DEFAULT_FACTS) -> MCPServer:
 
     @tool
     def walk_path(start: str, end: str) -> dict:
-        """Recorrido por puertas entre dos espacios (cuántas puertas se cruzan y por dónde)."""
+        """Recorrido entre dos espacios por puertas y límites abiertos (cuántas puertas se cruzan y por dónde)."""
         return house.walk_path(start, end)
 
     @tool

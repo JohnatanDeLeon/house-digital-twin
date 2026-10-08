@@ -4,7 +4,8 @@ Gemelo digital de una casa (Casa Jonhy). Código en inglés, comentarios y docum
 
 ## Regla central: hechos vs. supuestos vs. propuestas
 
-- **Hecho**: dato que sale del plano (o que el dueño confirmó). Lleva `source`.
+- **Hecho**: dato que sale del plano o que el dueño confirmó. Lleva `source`. Lo que aporta el dueño
+  se registra en `sources/owner-annotations.json` (entrada, editable a mano), nunca en los generados.
 - **Desconocido**: el plano no lo dice → `value: null` y una entrada en `unknowns`. Nunca inventarlo.
 - **Supuesto**: solo donde un formato lo exige (alturas para el IFC). Vive en `ASSUMED_DEFAULTS`
   de `ifc_export.py` y se marca en el Pset `HDT_Provenance`. Jamás se escribe de vuelta a los hechos.

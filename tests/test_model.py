@@ -10,7 +10,8 @@ def house(facts):
 
 def test_find_room_ignores_accents_and_case(house):
     assert house.find_room('recamara 1')['name'] == 'Recámara 1'
-    assert house.find_room('S05')['name'] == 'Bodega'
+    bodega_id = house.find_room('bodega')['id']
+    assert house.find_room(bodega_id.lower())['name'] == 'Bodega'
 
 
 def test_find_room_by_label_inside_open_plan(house):
@@ -35,3 +36,10 @@ def test_bedrooms_share_wall_without_door(house):
 def test_walk_path_from_garage_to_bedroom(house):
     path = house.walk_path('cochera', 'Recámara 2')
     assert path['reachable'] and path['doors_crossed'] == 2
+
+
+def test_exterior_zones_connect_without_doors(house):
+    path = house.walk_path('patio', 'cochera')
+    assert path['reachable'] and path['doors_crossed'] == 0
+    neighbors = {n['name']: n['connection'] for n in house.adjacent_rooms('Lavandería')}
+    assert neighbors['Patio'] == 'abierto' and neighbors['Baño'] == 'ventana'

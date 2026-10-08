@@ -9,7 +9,8 @@ PX_PER_M = 60
 MARGIN = 50
 SPACE_COLORS = [(255, 214, 165), (202, 255, 191), (155, 246, 255), (189, 178, 255), (255, 198, 255),
                 (253, 255, 182), (160, 196, 255), (255, 173, 173), (210, 210, 210)]
-EXTERIOR_COLOR = (232, 240, 228)
+EXTERIOR_COLORS = [(222, 226, 218), (236, 236, 236), (214, 222, 230), (230, 224, 214), (226, 236, 222)]
+UNNAMED_EXTERIOR = (246, 246, 246)
 WALL_COLOR = (40, 40, 40)
 DOOR_COLOR = (230, 120, 20)
 WINDOW_COLOR = (30, 120, 230)
@@ -53,9 +54,13 @@ def render_facts(facts: dict, out_path: Path):
     canvas = _Canvas(site['width'], site['depth'])
     canvas.polygon(site['polygon'], fill=None, outline=(150, 150, 150))
     interiors = [s for s in facts['spaces'] if not s['is_exterior']]
+    exteriors = [s for s in facts['spaces'] if s['is_exterior']]
     for s in facts['spaces']:
-        color = EXTERIOR_COLOR if s['is_exterior'] else SPACE_COLORS[interiors.index(s) % len(SPACE_COLORS)]
-        canvas.polygon(s['polygon'], fill=color)
+        if not s['is_exterior']:
+            color = SPACE_COLORS[interiors.index(s) % len(SPACE_COLORS)]
+        else:
+            color = EXTERIOR_COLORS[exteriors.index(s) % len(EXTERIOR_COLORS)] if s['name'] else UNNAMED_EXTERIOR
+        canvas.polygon(s['polygon'], fill=color, outline=(170, 170, 170) if s['is_exterior'] else None)
     for w in facts['walls']:
         canvas.polygon(w['footprint'], fill=WALL_COLOR)
     for o in facts['openings']:

@@ -20,48 +20,62 @@ La imagen se dibuja **solo desde el JSON de hechos**, no desde el PDF. Si coinci
 
 ## Espacios
 
-| Id | Espacio | Área libre (m²) | Perímetro (m) | NPT |
-|---|---|---|---|---|
-| S01 | Cocina + Sala + Comedor | 42.82 | 38.47 | 0.15 |
-| S02 | Recámara 1 (con closet) | 16.12 | 17.35 | 0.15 |
-| S03 | Recámara 2 (con closet) | 15.24 | 16.25 | 0.15 |
-| S04 | Recámara 3 (con closet) | 14.99 | 16.80 | 0.15 |
-| S05 | Bodega | 1.98 | 5.71 | 0.00 |
-| S06 | Baño | 1.78 | 5.34 | — |
-| S07 | 1/2 Baño | 1.46 | 4.84 | 0.00 |
-| S08 | sin rótulo (regadera del baño, tras murete de 5 cm) | 1.16 | 4.36 | 0.15 |
-| S09 | sin rótulo (jardinera; el plano dibuja un árbol) | 1.14 | 4.31 | — |
-| S10 | exterior: cochera, acceso, lavandería y patio trasero | 92.65 | 80.26 | 0.00 |
+| Id | Espacio | Área libre (m²) | Perímetro (m) | NPT | Fuente del nombre |
+|---|---|---|---|---|---|
+| S01 | Cocina + Sala + Comedor | 42.82 | 38.47 | 0.15 | rótulos del plano |
+| S02 | Recámara 1 (con closet) | 16.12 | 17.35 | 0.15 | rótulo |
+| S03 | Recámara 2 (con closet) | 15.24 | 16.25 | 0.15 | rótulo |
+| S04 | Recámara 3 (con closet) | 14.99 | 16.80 | 0.15 | rótulo |
+| S05 | Baño (incluye la regadera tras el murete de 5 cm) | 2.94 | 7.30 | 0.15 | **dueño** |
+| S06 | Bodega | 1.98 | 5.71 | 0.00 | rótulo |
+| S07 | 1/2 Baño | 1.46 | 4.84 | 0.00 | rótulo |
+| S08 | sin nombre (recinto triangular con un árbol dibujado) | 1.14 | 4.31 | — | — |
+| S09 | Patio (exterior, detrás de las recámaras) | 47.18 | 37.59 | — | **dueño** |
+| S10 | Cochera (exterior, a la izquierda de la cocina y la sala) | 23.07 | 26.27 | 0.00 | **dueño** |
+| S11 | sin nombre (exterior frente a la sala) | 16.12 | 17.05 | — | — (U09) |
+| S12 | Lavandería (exterior, sin techo ni cerramiento) | 6.28 | 10.03 | — | **dueño** |
 
-- **Áreas interiores:**
-  - Rotuladas: 94.39 m².
-  - Contando S08 y S09: 96.69 m².
-  - Si la jardinera S09 está a cielo abierto, no debería contarse. Es dato a confirmar.
-- **Nivel de piso:** el baño S06 no tiene rótulo propio de NPT. Su rótulo `NPT+0.15` quedó dentro de la regadera, así que S06 queda como desconocido.
-- **Nombres:** "Lavandería + Cochera" son solo los rótulos que caen dentro del exterior. El patio trasero no tiene rótulo.
+- Interior con nombre: 95.55 m². Con S08: 96.69 m².
+- El área del baño descuenta el murete interior (W29).
+- Los exteriores no tienen muros entre sí. Sus límites son los que indicó el dueño:
+  - Patio: detrás de la línea del muro sur de la Recámara 2 (y = 12.62 m).
+  - Lavandería: entre esa línea, el muro norte de la cocina (y = 10.22 m) y el muro oeste del baño.
+  - Cochera: a la izquierda de la línea del muro oeste de la sala (x = 3.115 m).
+- El modelo los marca como conectados "abiertos": `walk_path` los cruza sin puerta.
+
+## Aportes del dueño
+
+Viven en [`sources/owner-annotations.json`](../../sources/owner-annotations.json), separados del plano. Cada espacio afectado lleva `name_source: "dueño (fecha)"`.
+
+- **Baño:** las dos piezas que separa el murete de 5 cm son un solo baño.
+- **Lavandería:** fuera de la casa, detrás del baño. La ventana del baño (V09) da hacia ella. No está techada ni cerrada.
+- **Patio:** la parte exterior detrás de los cuartos.
+- **Cochera:** la parte exterior fuera de la cocina, del lado izquierdo.
+
+Sin el archivo de anotaciones, el plano solo da 9 recintos interiores y un único exterior. Un test lo verifica.
 
 ## Vanos
 
 | Id | Tipo | Ancho (m) | Antepecho / altura (m) | Muro | Conecta |
 |---|---|---|---|---|---|
-| D01 | puerta | 0.979 | — / ? | W03 | Exterior ↔ calle (puerta peatonal en barda) |
+| D01 | puerta | 0.979 | — / ? | W03 | Frente (S11) ↔ calle (puerta peatonal en barda) |
 | D02 | puerta | 0.780 | — / ? | W06 | Zona social ↔ 1/2 Baño |
-| D03 | puerta | 1.002 | — / ? | W07 | Zona social ↔ Exterior (acceso principal) |
-| D04 | puerta | 0.832 | — / ? | W13 | Cocina ↔ Lavandería |
+| D03 | puerta | 1.002 | — / ? | W07 | Zona social ↔ Frente (S11) (acceso principal) |
+| D04 | puerta | 0.832 | — / ? | W13 | Cocina ↔ Cochera (pasillo lateral) |
 | D05 | puerta | 0.799 | — / ? | W19 | Zona social ↔ Baño |
 | D06 | puerta | 0.878 | — / ? | W26 | Zona social ↔ Recámara 2 |
 | D07 | puerta | 0.858 | — / ? | W08 | Zona social ↔ Recámara 3 |
 | D08 | puerta | 0.894 | — / ? | W08 | Zona social ↔ Recámara 1 |
-| D09 | puerta | 0.835 | — / ? | W24 | Bodega ↔ Exterior |
-| V01 | ventana | 0.744 | 0.865 / 1.27 | W07 | Sala ↔ Cochera |
-| V02 | ventana | 0.750 | 0.85 / 1.26 | W07 | Sala ↔ Cochera |
+| D09 | puerta | 0.835 | — / ? | W24 | Bodega ↔ Frente (S11) |
+| V01 | ventana | 0.744 | 0.865 / 1.27 | W07 | Sala ↔ Frente (S11) |
+| V02 | ventana | 0.750 | 0.85 / 1.26 | W07 | Sala ↔ Frente (S11) |
 | V03 | ventana | 0.498 | 0.86 / 1.27 | W13 | Cocina ↔ Cochera |
 | V04 | ventana | 0.511 | 0.87 / 1.27 | W23 | Cocina ↔ Cochera |
-| V05 | ventana | 1.238 | 0.86 / 1.26 | W04 | Recámara 3 ↔ Jardinera |
+| V05 | ventana | 1.238 | 0.86 / 1.26 | W04 | Recámara 3 ↔ S08 (recinto triangular) |
 | V06 | ventana | 0.734 | 0.85 / 1.22 | W10 | Recámara 1 ↔ Patio trasero |
 | V07 | ventana | 0.750 | 0.855 / 1.23 | W10 | Recámara 1 ↔ Patio trasero |
 | V08 | ventana | 1.500 | 0.86 / 1.22 | W09 | Recámara 2 ↔ Patio trasero |
-| V09 | ventana | 0.780 | 1.28 / 0.60 | W15 | Regadera ↔ Lavandería (ventana alta) |
+| V09 | ventana | 0.780 | 1.28 / 0.60 | W15 | Baño ↔ Lavandería (ventana alta) |
 
 ## Muros
 
@@ -79,7 +93,7 @@ La imagen se dibuja **solo desde el JSON de hechos**, no desde el PDF. Si coinci
   - `IfcSite → IfcBuilding → IfcBuildingStorey`;
   - 43 `IfcWall`;
   - 18 `IfcOpeningElement` que vacían su muro anfitrión, rellenos con 9 `IfcDoor` y 9 `IfcWindow`;
-  - 10 `IfcSpace`.
+  - 12 `IfcSpace`.
 - **Supuestos** (solo en el IFC, marcados en `HDT_Provenance`):
   - entrepiso 2.40 m;
   - puertas 2.10 m.
@@ -104,7 +118,10 @@ Los nombres se buscan sin importar acentos ni mayúsculas: "recamara 1" funciona
 
 ## Incógnitas que bloquean la segunda planta
 
-Están en `unknowns` del JSON (U01–U08): entrepiso, losa, estructura y muros de carga, altura de puertas, materiales, techo de la cochera, la discrepancia de las cotas generales (10.023 contra 10.00) y la lectura de `a=`/`h=`.
+Están en `unknowns` del JSON (U01–U10).
+
+- **Bloquean la segunda planta:** entrepiso, losa, estructura y muros de carga, techo de la cochera.
+- **Además:** altura de puertas, materiales, la discrepancia de las cotas generales (10.023 contra 10.00), la lectura de `a=`/`h=`, qué es el frente S11 y si S08 es jardinera a cielo abierto.
 
 ## Pendiente para la fase 3
 

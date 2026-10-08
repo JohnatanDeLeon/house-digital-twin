@@ -4,8 +4,10 @@ import ezdxf
 import pytest
 
 from house_twin.compare import compare_facts
+from house_twin.facts.annotations import load_annotations
 from house_twin.facts.builder import build_facts
 from house_twin.sources.dxf import inventory, load_dxf_drawing
+from tests.conftest import OWNER
 
 CM_PER_M = 100
 OFFSET_CM = (5_000.0, 12_000.0)
@@ -41,7 +43,7 @@ def dxf_path(request, pdf_drawing, tmp_path_factory):
 
 
 def test_dxf_round_trip_reproduces_pdf_facts(dxf_path, facts):
-    dxf_facts = build_facts(load_dxf_drawing(str(dxf_path)))
+    dxf_facts = build_facts(load_dxf_drawing(str(dxf_path)), load_annotations(OWNER))
     report = compare_facts(facts, dxf_facts)
     assert report['counts']['spaces'] == report['counts']['spaces'][:1] * 2
     assert report['counts']['openings'] == report['counts']['openings'][:1] * 2

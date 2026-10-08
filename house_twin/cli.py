@@ -5,6 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_SOURCE = ROOT / 'sources' / 'casa-jonhy-levantamiento.pdf'
+OWNER_ANNOTATIONS = ROOT / 'sources' / 'owner-annotations.json'
 FACTS_PATH = ROOT / 'data' / 'facts' / 'existing.facts.json'
 IFC_PATH = ROOT / 'models' / 'existing.ifc'
 OVERLAY_PATH = ROOT / 'docs' / 'analysis' / '02-hechos-planta-existente.png'
@@ -25,10 +26,11 @@ def _load_drawing(source: Path):
 
 
 def build(source: Path):
+    from house_twin.facts.annotations import load_annotations
     from house_twin.facts.builder import build_facts
     from house_twin.ifc_export import build_ifc
     from house_twin.render import render_facts
-    facts = build_facts(_load_drawing(source))
+    facts = build_facts(_load_drawing(source), load_annotations(OWNER_ANNOTATIONS))
     FACTS_PATH.parent.mkdir(parents=True, exist_ok=True)
     FACTS_PATH.write_text(json.dumps(facts, ensure_ascii=False, indent=1))
     IFC_PATH.parent.mkdir(parents=True, exist_ok=True)

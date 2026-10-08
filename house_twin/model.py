@@ -79,7 +79,7 @@ class HouseModel:
             if room_id not in a['spaces']:
                 continue
             other = self._spaces[next(x for x in a['spaces'] if x != room_id)]
-            via = 'puerta' if a['doors'] else 'ventana' if a['windows'] else 'solo muro'
+            via = 'puerta' if a['doors'] else 'abierto' if a.get('open') else 'ventana' if a['windows'] else 'solo muro'
             result.append({'id': other['id'], 'name': self._display(other), 'connection': via,
                            'doors': a['doors'], 'windows': a['windows'], 'walls': a['walls']})
         return result
@@ -95,15 +95,20 @@ class HouseModel:
         hosted = [o['id'] for o in self._openings.values() if o['host_wall'] == w['id']]
         return {**w, 'separates': sorted(set(between)), 'hosts_openings': hosted}
 
-    def walk_path(self, start: str, end: str) -> dict:
-        """Recorrido por puertas (BFS) entre dos espacios: la base del análisis de circulación."""
-        a, b = self.find_room(start)['id'], self.find_room(end)['id']
+    def _circulation_graph(self) -> dict[str, list[tuple[str, str]]]:
+        """Se pasa de un espacio a otro por una puerta o por un límite abierto (exteriores sin muro)."""
         graph: dict[str, list[tuple[str, str]]] = {}
-        for o in self._openings.values():
-            if o['kind'] == 'door' and len(o['connects']) == 2:
-                x, y = o['connects']
-                graph.setdefault(x, []).append((y, o['id']))
-                graph.setdefault(y, []).append((x, o['id']))
+        links = [(o['connects'], o['id']) for o in self._openings.values() if o['kind'] == 'door' and len(o['connects']) == 2]
+        links += [(a['spaces'], 'abierto') for a in self.facts['adjacency'] if a.get('open')]
+        for (x, y), via in links:
+            graph.setdefault(x, []).append((y, via))
+            graph.setdefault(y, []).append((x, via))
+        return graph
+
+    def walk_path(self, start: str, end: str) -> dict:
+        """Recorrido (BFS) entre dos espacios por puertas y límites abiertos: base del análisis de circulación."""
+        a, b = self.find_room(start)['id'], self.find_room(end)['id']
+        graph = self._circulation_graph()
         previous = {a: None}
         queue = deque([a])
         while queue:
@@ -119,7 +124,8 @@ class HouseModel:
             node_from, door = previous[node]
             steps.append({'from': self._display(self._spaces[node_from]), 'through': door, 'to': self._display(self._spaces[node])})
             node = node_from
-        return {'reachable': True, 'doors_crossed': len(steps), 'steps': steps[::-1]}
+        doors = sum(step['through'] != 'abierto' for step in steps)
+        return {'reachable': True, 'doors_crossed': doors, 'steps': steps[::-1]}
 
     def unknowns(self) -> list[dict]:
         return self.facts['unknowns']

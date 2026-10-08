@@ -61,11 +61,11 @@ Abre `models/existing.ifc` en Blender con el add-on [Bonsai](https://bonsaibim.o
 ## Estructura
 
 ```
-sources/              planos originales (PDF; el DXF va aquí)
+sources/              planos originales (PDF; el DXF va aquí) y owner-annotations.json (hechos del dueño)
 house_twin/
   drawing.py          contrato Drawing: segmentos y textos en metros por capa (LAYER_ROLES)
   sources/            adaptadores: pdf.py (+ pdf_content.py), dxf.py
-  facts/              openings.py, faces.py, walls.py, naming.py, builder.py
+  facts/              openings.py, faces.py, walls.py, naming.py, annotations.py, builder.py
   ifc_export.py       hechos → IFC4 (IfcOpenShell)
   model.py            consultas semánticas (HouseModel)
   mcp_server.py       House MCP

@@ -1,0 +1,31 @@
+{
+  "_doc": "Hechos confirmados por el dueño. Coordenadas en el marco del modelo (m; origen en la esquina del terreno a la izquierda de la calle). Las zonas exteriores se recortan contra el exterior real, así que sus polígonos solo marcan la región.",
+  "source": "dueño",
+  "confirmed_on": "2026-10-08",
+  "merge_spaces": [
+    {
+      "name": "Baño",
+      "anchors": [[3.6, 11.9], [3.6, 10.7]],
+      "note": "El baño es un solo espacio; el murete de 5 cm divide la regadera dentro del baño."
+    }
+  ],
+  "exterior_zones": [
+    {
+      "name": "Lavandería",
+      "region": [[0.0, 10.22], [2.82, 10.22], [2.82, 12.617], [0.0, 12.617]],
+      "roofed": false,
+      "enclosed": false,
+      "note": "Fuera de la casa, detrás del baño; la ventana del baño da hacia ella. No está techada ni cerrada."
+    },
+    {
+      "name": "Patio",
+      "region": [[0.0, 12.617], [10.1, 12.617], [10.1, 21.3], [0.0, 21.3]],
+      "note": "Área exterior detrás de las recámaras."
+    },
+    {
+      "name": "Cochera",
+      "region": [[0.0, -0.1], [3.115, -0.1], [3.115, 10.22], [0.0, 10.22]],
+      "note": "Área exterior a la izquierda de la cocina y la sala."
+    }
+  ]
+}

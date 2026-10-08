@@ -10,7 +10,8 @@
   "calibration": {
    "pt_per_m": 36.635518332076195,
    "paper_scale": 77.37424767945667
-  }
+  },
+  "owner_annotations": "2026-10-08"
  },
  "site": {
   "polygon": [
@@ -219,6 +220,14 @@
     "value": 0.15,
     "source": "rótulo \"NPT+0.15\""
    },
+   "roofed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
    "source": "plano: caras de MUROS + vanos"
   },
   {
@@ -298,6 +307,14 @@
     "value": 0.15,
     "source": "rótulo \"NPT+0.15\""
    },
+   "roofed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
    "source": "plano: caras de MUROS + vanos"
   },
   {
@@ -363,6 +380,14 @@
    "floor_level": {
     "value": 0.15,
     "source": "rótulo \"NPT+0.15\""
+   },
+   "roofed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
    },
    "source": "plano: caras de MUROS + vanos"
   },
@@ -431,10 +456,74 @@
     "value": 0.15,
     "source": "rótulo \"NPT+0.15\""
    },
+   "roofed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
    "source": "plano: caras de MUROS + vanos"
   },
   {
    "id": "S05",
+   "name": "Baño",
+   "labels": [
+    "BAÑO"
+   ],
+   "contains": [],
+   "drawn_contents": [
+    "muebles fijos"
+   ],
+   "is_exterior": false,
+   "polygon": [
+    [
+     2.987,
+     12.617
+    ],
+    [
+     4.239,
+     12.617
+    ],
+    [
+     4.239,
+     10.22
+    ],
+    [
+     2.987,
+     10.22
+    ]
+   ],
+   "area": 2.94,
+   "perimeter": 7.3,
+   "bbox": [
+    2.987,
+    10.22,
+    4.239,
+    12.617
+   ],
+   "floor_level": {
+    "value": 0.15,
+    "source": "rótulo \"NPT+0.15\""
+   },
+   "roofed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: caras de MUROS + vanos",
+   "name_source": "dueño (2026-10-08)",
+   "owner_note": "El baño es un solo espacio; el murete de 5 cm divide la regadera dentro del baño.",
+   "inner_partitions": [
+    "W29"
+   ]
+  },
+  {
+   "id": "S06",
    "name": "Bodega",
    "labels": [
     "BODEGA"
@@ -476,50 +565,11 @@
     "value": 0.0,
     "source": "rótulo \"NPT+0.00\""
    },
-   "source": "plano: caras de MUROS + vanos"
-  },
-  {
-   "id": "S06",
-   "name": "Baño",
-   "labels": [
-    "BAÑO"
-   ],
-   "contains": [],
-   "drawn_contents": [
-    "muebles fijos"
-   ],
-   "is_exterior": false,
-   "polygon": [
-    [
-     4.239,
-     11.818
-    ],
-    [
-     4.239,
-     11.199
-    ],
-    [
-     2.987,
-     11.199
-    ],
-    [
-     2.987,
-     12.617
-    ],
-    [
-     4.239,
-     12.617
-    ]
-   ],
-   "area": 1.78,
-   "perimeter": 5.34,
-   "bbox": [
-    2.987,
-    11.199,
-    4.239,
-    12.617
-   ],
-   "floor_level": {
+   "roofed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "enclosed": {
     "value": null,
     "source": "no está en el plano"
    },
@@ -575,55 +625,18 @@
     "value": 0.0,
     "source": "rótulo \"NPT+0.00\""
    },
-   "source": "plano: caras de MUROS + vanos"
-  },
-  {
-   "id": "S08",
-   "name": null,
-   "labels": [],
-   "contains": [],
-   "drawn_contents": [
-    "muebles fijos"
-   ],
-   "is_exterior": false,
-   "polygon": [
-    [
-     4.239,
-     11.147
-    ],
-    [
-     4.239,
-     10.22
-    ],
-    [
-     2.987,
-     10.22
-    ],
-    [
-     2.987,
-     10.999
-    ],
-    [
-     2.987,
-     11.147
-    ]
-   ],
-   "area": 1.16,
-   "perimeter": 4.36,
-   "bbox": [
-    2.987,
-    10.22,
-    4.239,
-    11.147
-   ],
-   "floor_level": {
-    "value": 0.15,
-    "source": "rótulo \"NPT+0.15\""
+   "roofed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
    },
    "source": "plano: caras de MUROS + vanos"
   },
   {
-   "id": "S09",
+   "id": "S08",
    "name": null,
    "labels": [],
    "contains": [],
@@ -665,30 +678,24 @@
     "value": null,
     "source": "no está en el plano"
    },
+   "roofed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
    "source": "plano: caras de MUROS + vanos"
   },
   {
-   "id": "S10",
-   "name": "Lavandería + Cochera",
-   "labels": [
-    "LAVANDERIA",
-    "COCHERA"
-   ],
+   "id": "S09",
+   "name": "Patio",
+   "labels": [],
    "contains": [],
-   "drawn_contents": [
-    "auto",
-    "muebles"
-   ],
+   "drawn_contents": [],
    "is_exterior": true,
    "polygon": [
-    [
-     0.2,
-     0.0
-    ],
-    [
-     0.2,
-     21.035
-    ],
     [
      9.853,
      21.035
@@ -738,21 +745,50 @@
      12.617
     ],
     [
-     2.82,
+     0.2,
      12.617
     ],
     [
-     2.82,
-     10.999
-    ],
-    [
-     2.82,
-     10.22
-    ],
-    [
-     1.205,
-     10.22
-    ],
+     0.2,
+     21.035
+    ]
+   ],
+   "area": 47.18,
+   "perimeter": 37.59,
+   "bbox": [
+    0.2,
+    12.617,
+    9.853,
+    21.035
+   ],
+   "floor_level": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "roofed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: caras de MUROS + vanos",
+   "name_source": "dueño (2026-10-08)",
+   "owner_note": "Área exterior detrás de las recámaras."
+  },
+  {
+   "id": "S10",
+   "name": "Cochera",
+   "labels": [
+    "COCHERA"
+   ],
+   "contains": [],
+   "drawn_contents": [
+    "auto"
+   ],
+   "is_exterior": true,
+   "polygon": [
     [
      1.205,
      9.221
@@ -789,6 +825,55 @@
      3.115,
      3.253
     ],
+    [
+     3.115,
+     0.0
+    ],
+    [
+     0.2,
+     0.0
+    ],
+    [
+     0.2,
+     10.22
+    ],
+    [
+     1.205,
+     10.22
+    ]
+   ],
+   "area": 23.07,
+   "perimeter": 26.27,
+   "bbox": [
+    0.2,
+    0.0,
+    3.115,
+    10.22
+   ],
+   "floor_level": {
+    "value": 0.0,
+    "source": "rótulo \"NPT+0.00\""
+   },
+   "roofed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: caras de MUROS + vanos",
+   "name_source": "dueño (2026-10-08)",
+   "owner_note": "Área exterior a la izquierda de la cocina y la sala."
+  },
+  {
+   "id": "S11",
+   "name": null,
+   "labels": [],
+   "contains": [],
+   "drawn_contents": [],
+   "is_exterior": true,
+   "polygon": [
     [
      3.728,
      3.253
@@ -848,21 +933,102 @@
     [
      3.24,
      0.0
+    ],
+    [
+     3.115,
+     0.0
+    ],
+    [
+     3.115,
+     3.253
     ]
    ],
-   "area": 92.65,
-   "perimeter": 80.26,
+   "area": 16.12,
+   "perimeter": 17.05,
    "bbox": [
-    0.2,
+    3.115,
     0.0,
-    9.853,
-    21.035
+    8.389,
+    3.253
    ],
    "floor_level": {
-    "value": 0.0,
-    "source": "rótulo \"NPT+0.00\""
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "roofed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
    },
    "source": "plano: caras de MUROS + vanos"
+  },
+  {
+   "id": "S12",
+   "name": "Lavandería",
+   "labels": [
+    "LAVANDERIA"
+   ],
+   "contains": [],
+   "drawn_contents": [
+    "muebles"
+   ],
+   "is_exterior": true,
+   "polygon": [
+    [
+     0.2,
+     12.617
+    ],
+    [
+     1.281,
+     12.617
+    ],
+    [
+     2.82,
+     12.617
+    ],
+    [
+     2.82,
+     10.999
+    ],
+    [
+     2.82,
+     10.22
+    ],
+    [
+     1.205,
+     10.22
+    ],
+    [
+     0.2,
+     10.22
+    ]
+   ],
+   "area": 6.28,
+   "perimeter": 10.03,
+   "bbox": [
+    0.2,
+    10.22,
+    2.82,
+    12.617
+   ],
+   "floor_level": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "roofed": {
+    "value": false,
+    "source": "dueño (2026-10-08)"
+   },
+   "enclosed": {
+    "value": false,
+    "source": "dueño (2026-10-08)"
+   },
+   "source": "plano: caras de MUROS + vanos",
+   "name_source": "dueño (2026-10-08)",
+   "owner_note": "Fuera de la casa, detrás del baño; la ventana del baño da hacia ella. No está techada ni cerrada."
   }
  ],
  "walls": [
@@ -3298,7 +3464,7 @@
    "id": "D01",
    "host_wall": "W03",
    "connects": [
-    "S10"
+    "S11"
    ]
   },
   {
@@ -3374,7 +3540,7 @@
    "host_wall": "W07",
    "connects": [
     "S01",
-    "S10"
+    "S11"
    ]
   },
   {
@@ -3450,7 +3616,7 @@
    "host_wall": "W19",
    "connects": [
     "S01",
-    "S06"
+    "S05"
    ]
   },
   {
@@ -3601,8 +3767,8 @@
    "id": "D09",
    "host_wall": "W24",
    "connects": [
-    "S05",
-    "S10"
+    "S06",
+    "S11"
    ]
   },
   {
@@ -3640,7 +3806,7 @@
    "host_wall": "W07",
    "connects": [
     "S01",
-    "S10"
+    "S11"
    ]
   },
   {
@@ -3678,7 +3844,7 @@
    "host_wall": "W07",
    "connects": [
     "S01",
-    "S10"
+    "S11"
    ]
   },
   {
@@ -3792,7 +3958,7 @@
    "host_wall": "W04",
    "connects": [
     "S04",
-    "S09"
+    "S08"
    ]
   },
   {
@@ -3830,7 +3996,7 @@
    "host_wall": "W10",
    "connects": [
     "S02",
-    "S10"
+    "S09"
    ]
   },
   {
@@ -3868,7 +4034,7 @@
    "host_wall": "W10",
    "connects": [
     "S02",
-    "S10"
+    "S09"
    ]
   },
   {
@@ -3906,7 +4072,7 @@
    "host_wall": "W09",
    "connects": [
     "S03",
-    "S10"
+    "S09"
    ]
   },
   {
@@ -3943,8 +4109,8 @@
    "id": "V09",
    "host_wall": "W15",
    "connects": [
-    "S08",
-    "S10"
+    "S05",
+    "S12"
    ]
   }
  ],
@@ -3998,9 +4164,10 @@
   {
    "spaces": [
     "S01",
-    "S06"
+    "S05"
    ],
    "walls": [
+    "W15",
     "W19",
     "W26"
    ],
@@ -4029,18 +4196,6 @@
     "S08"
    ],
    "walls": [
-    "W15",
-    "W19"
-   ],
-   "doors": [],
-   "windows": []
-  },
-  {
-   "spaces": [
-    "S01",
-    "S09"
-   ],
-   "walls": [
     "W04",
     "W06",
     "W35",
@@ -4060,19 +4215,43 @@
     "W13",
     "W14",
     "W15",
-    "W23",
-    "W31"
+    "W23"
    ],
    "doors": [
-    "D03",
     "D04"
    ],
    "windows": [
-    "V01",
-    "V02",
     "V03",
     "V04"
    ]
+  },
+  {
+   "spaces": [
+    "S01",
+    "S11"
+   ],
+   "walls": [
+    "W07",
+    "W31"
+   ],
+   "doors": [
+    "D03"
+   ],
+   "windows": [
+    "V01",
+    "V02"
+   ]
+  },
+  {
+   "spaces": [
+    "S01",
+    "S12"
+   ],
+   "walls": [
+    "W15"
+   ],
+   "doors": [],
+   "windows": []
   },
   {
    "spaces": [
@@ -4099,7 +4278,7 @@
   {
    "spaces": [
     "S02",
-    "S10"
+    "S09"
    ],
    "walls": [
     "W10",
@@ -4115,7 +4294,7 @@
   {
    "spaces": [
     "S03",
-    "S06"
+    "S05"
    ],
    "walls": [
     "W26"
@@ -4126,14 +4305,12 @@
   {
    "spaces": [
     "S03",
-    "S10"
+    "S09"
    ],
    "walls": [
     "W09",
     "W12",
     "W22",
-    "W26",
-    "W27",
     "W41"
    ],
    "doors": [],
@@ -4143,8 +4320,20 @@
   },
   {
    "spaces": [
+    "S03",
+    "S12"
+   ],
+   "walls": [
+    "W26",
+    "W27"
+   ],
+   "doors": [],
+   "windows": []
+  },
+  {
+   "spaces": [
     "S04",
-    "S09"
+    "S08"
    ],
    "walls": [
     "W04"
@@ -4157,6 +4346,21 @@
   {
    "spaces": [
     "S05",
+    "S12"
+   ],
+   "walls": [
+    "W15",
+    "W20",
+    "W26"
+   ],
+   "doors": [],
+   "windows": [
+    "V09"
+   ]
+  },
+  {
+   "spaces": [
+    "S06",
     "S07"
    ],
    "walls": [
@@ -4168,8 +4372,8 @@
   },
   {
    "spaces": [
-    "S05",
-    "S10"
+    "S06",
+    "S11"
    ],
    "walls": [
     "W03",
@@ -4182,33 +4386,8 @@
   },
   {
    "spaces": [
-    "S06",
-    "S08"
-   ],
-   "walls": [
-    "W19",
-    "W20",
-    "W29"
-   ],
-   "doors": [],
-   "windows": []
-  },
-  {
-   "spaces": [
-    "S06",
-    "S10"
-   ],
-   "walls": [
-    "W20",
-    "W26"
-   ],
-   "doors": [],
-   "windows": []
-  },
-  {
-   "spaces": [
     "S07",
-    "S10"
+    "S11"
    ],
    "walls": [
     "W30",
@@ -4219,17 +4398,40 @@
   },
   {
    "spaces": [
-    "S08",
-    "S10"
+    "S09",
+    "S12"
    ],
    "walls": [
-    "W15",
-    "W20"
+    "W01"
    ],
    "doors": [],
-   "windows": [
-    "V09"
-   ]
+   "windows": [],
+   "open": true
+  },
+  {
+   "spaces": [
+    "S10",
+    "S11"
+   ],
+   "walls": [
+    "W07"
+   ],
+   "doors": [],
+   "windows": [],
+   "open": true
+  },
+  {
+   "spaces": [
+    "S10",
+    "S12"
+   ],
+   "walls": [
+    "W01",
+    "W15"
+   ],
+   "doors": [],
+   "windows": [],
+   "open": true
   }
  ],
  "unknowns": [
@@ -4293,6 +4495,18 @@
    "id": "U08",
    "topic": "ventanas",
    "question": "Confirmar que en los rótulos de ventana \"a=\" es antepecho y \"h=\" altura de ventana.",
+   "blocks": []
+  },
+  {
+   "id": "U09",
+   "topic": "frente",
+   "question": "La franja exterior frente a la sala (entre la cochera y la bodega, con la puerta principal y la peatonal), ¿es parte de la cochera, un acceso/jardín, u otra cosa?",
+   "blocks": []
+  },
+  {
+   "id": "U10",
+   "topic": "jardinera",
+   "question": "El recinto triangular junto a la sala (donde el plano dibuja un árbol), ¿es jardinera a cielo abierto?",
    "blocks": []
   }
  ]

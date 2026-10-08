@@ -9,6 +9,7 @@ from datetime import date
 from shapely.geometry import Point, Polygon
 
 from house_twin.drawing import Drawing
+from house_twin.facts.annotations import SpacePiece, merge_spaces, split_exterior
 from house_twin.facts.faces import partition
 from house_twin.facts.naming import labels_inside, space_name
 from house_twin.facts.openings import detect_openings
@@ -33,6 +34,8 @@ UNKNOWNS = [
     {'id': 'U06', 'topic': 'cochera', 'question': '¿La cochera está techada? ¿Con qué?', 'blocks': ['segunda planta']},
     {'id': 'U07', 'topic': 'cotas generales', 'question': 'El plano rotula 10.00 × 21.25 pero la geometría mide 10.023 × 21.235. ¿Cuál es la medida real del terreno?', 'blocks': []},
     {'id': 'U08', 'topic': 'ventanas', 'question': 'Confirmar que en los rótulos de ventana "a=" es antepecho y "h=" altura de ventana.', 'blocks': []},
+    {'id': 'U09', 'topic': 'frente', 'question': 'La franja exterior frente a la sala (entre la cochera y la bodega, con la puerta principal y la peatonal), ¿es parte de la cochera, un acceso/jardín, u otra cosa?', 'blocks': []},
+    {'id': 'U10', 'topic': 'jardinera', 'question': 'El recinto triangular junto a la sala (donde el plano dibuja un árbol), ¿es jardinera a cielo abierto?', 'blocks': []},
 ]
 
 
@@ -48,17 +51,27 @@ def _level_of(poly: Polygon, drawing: Drawing):
     return dict(UNKNOWN)
 
 
-def _space_fact(sid, poly, drawing, is_exterior):
+def _space_fact(sid, piece: SpacePiece, drawing: Drawing, walls: list[dict]):
+    poly = piece.polygon
     labels = labels_inside(poly, drawing.texts_for('room_labels'))
-    name, contains = space_name(labels)
-    return {
-        'id': sid, 'name': name, 'labels': [t.value for t in labels], 'contains': contains,
-        'drawn_contents': _contents(poly, drawing),
-        'is_exterior': is_exterior, 'polygon': _coords(poly),
-        'area': round(poly.area, 2), 'perimeter': round(poly.length, 2),
+    label_name, contains = space_name(labels)
+    partitions = [walls[i] for i in piece.inner_partitions]
+    free_area = poly.area - sum(Polygon(w['footprint']).area for w in partitions)
+    fact = {
+        'id': sid, 'name': piece.owner.get('name', label_name), 'labels': [t.value for t in labels],
+        'contains': contains, 'drawn_contents': _contents(poly, drawing),
+        'is_exterior': piece.is_exterior, 'polygon': _coords(poly),
+        'area': round(free_area, 2), 'perimeter': round(poly.length, 2),
         'bbox': [round(v, 3) for v in poly.bounds], 'floor_level': _level_of(poly, drawing),
+        'roofed': piece.owner.get('roofed', dict(UNKNOWN)), 'enclosed': piece.owner.get('enclosed', dict(UNKNOWN)),
         'source': 'plano: caras de MUROS + vanos',
     }
+    if piece.owner:
+        fact['name_source'] = piece.owner['source']
+        fact['owner_note'] = piece.owner.get('note')
+    if partitions:
+        fact['inner_partitions'] = [w['id'] for w in partitions]
+    return fact
 
 
 def _wall_axis(poly: Polygon, direction):
@@ -122,6 +135,12 @@ def _adjacency(walls, spaces, openings):
                 continue
             walls_between = [wid for wid, g in wall_geoms.items() if g.intersection(zone).area >= MIN_FACING * MIN_WALL_SHARE]
             pairs[(a, b)] = {'spaces': [a, b], 'walls': walls_between, 'doors': [], 'windows': []}
+    exterior_ids = [s['id'] for s in spaces if s['is_exterior']]
+    for i, a in enumerate(exterior_ids):
+        for b in exterior_ids[i+1:]:
+            shared = space_geoms[a].buffer(TOUCH).intersection(space_geoms[b].buffer(TOUCH))
+            if shared.length / 2 >= MIN_FACING or shared.area >= MIN_FACING * TOUCH:
+                pairs.setdefault((a, b), {'spaces': [a, b], 'walls': [], 'doors': [], 'windows': []})['open'] = True
     for o in openings:
         if len(o['connects']) == 2:
             entry = pairs.setdefault(tuple(sorted(o['connects'])), {'spaces': sorted(o['connects']), 'walls': [], 'doors': [], 'windows': []})
@@ -138,15 +157,18 @@ def _contents(poly: Polygon, drawing: Drawing):
     return found
 
 
-def build_facts(drawing: Drawing) -> dict:
+def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
+    annotations = annotations or {}
     openings = detect_openings(drawing)
     faces = partition(drawing, openings)
     opening_polys = [Polygon(o['footprint']) for o in openings]
     walls_raw = decompose_walls(drawing, faces.wall_bodies, opening_polys)
 
-    spaces = [_space_fact(f'S{i+1:02d}', p, drawing, False) for i, p in enumerate(sorted(faces.spaces, key=lambda p: -p.area))]
-    spaces += [_space_fact(f'S{len(spaces)+i+1:02d}', p, drawing, True) for i, p in enumerate(faces.exterior)]
     walls = [_wall_fact(f'W{i+1:02d}', w, faces.lot, faces.exterior) for i, w in enumerate(walls_raw)]
+    interior = merge_spaces([SpacePiece(p, False) for p in faces.spaces], [w['polygon'] for w in walls_raw], annotations)
+    exterior = split_exterior(faces.exterior, annotations)
+    pieces = sorted(interior, key=lambda p: -p.polygon.area) + sorted(exterior, key=lambda p: -p.polygon.area)
+    spaces = [_space_fact(f'S{i+1:02d}', piece, drawing, walls) for i, piece in enumerate(pieces)]
     doors = [o for o in openings if o['kind'] == 'door']
     windows = [o for o in openings if o['kind'] == 'window']
     for prefix, group in (('D', doors), ('V', windows)):
@@ -167,6 +189,7 @@ def build_facts(drawing: Drawing) -> dict:
             'source': drawing.source, 'built_on': date.today().isoformat(),
             'precision_m': round(drawing.metadata.get('precision_m', 0), 4),
             'calibration': {k: cal[k] for k in ('pt_per_m', 'paper_scale') if k in cal},
+            'owner_annotations': annotations.get('confirmed_on'),
         },
         'site': {'polygon': _coords(faces.lot), 'width': round(lot_w, 3), 'depth': round(lot_d, 3),
                  'area': round(faces.lot.area, 2), 'labeled_dimensions': [10.00, 21.25]},

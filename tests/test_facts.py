@@ -12,14 +12,41 @@ def _opening_at(facts, x, y):
 def test_counts(facts):
     kinds = [o['kind'] for o in facts['openings']]
     assert kinds.count('door') == 9 and kinds.count('window') == 9
-    assert sum(not s['is_exterior'] for s in facts['spaces']) == 9
-    assert sum(s['is_exterior'] for s in facts['spaces']) == 1
+    assert sum(not s['is_exterior'] for s in facts['spaces']) == 8
+    assert sorted(s['name'] or '' for s in facts['spaces'] if s['is_exterior']) == ['', 'Cochera', 'Lavandería', 'Patio']
+
+
+def test_plan_alone_splits_bathroom_and_keeps_one_exterior(plan_only_facts):
+    assert sum(not s['is_exterior'] for s in plan_only_facts['spaces']) == 9
+    assert sum(s['is_exterior'] for s in plan_only_facts['spaces']) == 1
 
 
 @pytest.mark.parametrize('name,area', [('Recámara 1', 16.12), ('Recámara 2', 15.24), ('Recámara 3', 14.99),
                                        ('Cocina + Sala + Comedor', 42.82), ('Bodega', 1.98), ('1/2 Baño', 1.46)])
 def test_room_areas(facts, name, area):
     assert space_named(facts, name)['area'] == pytest.approx(area, abs=0.05)
+
+
+def test_owner_merges_bathroom_and_shower(facts):
+    bath = space_named(facts, 'Baño')
+    assert bath['area'] == pytest.approx(2.94, abs=0.05)
+    assert bath['floor_level']['value'] == 0.15
+    assert len(bath['inner_partitions']) == 1
+    assert bath['name_source'].startswith('dueño')
+
+
+def test_bathroom_window_faces_open_laundry(facts):
+    laundry = space_named(facts, 'Lavandería')
+    assert laundry['is_exterior'] and laundry['roofed']['value'] is False and laundry['enclosed']['value'] is False
+    window = _opening_at(facts, 2.9, 10.6)
+    assert sorted(window['connects']) == sorted([space_named(facts, 'Baño')['id'], laundry['id']])
+
+
+def test_exterior_zones_are_where_the_owner_said(facts):
+    assert space_named(facts, 'Patio')['bbox'][1] == pytest.approx(12.617, abs=0.01)
+    assert space_named(facts, 'Cochera')['bbox'][2] == pytest.approx(3.115, abs=0.01)
+    assert 'LAVANDERIA' in space_named(facts, 'Lavandería')['labels']
+    assert 'COCHERA' in space_named(facts, 'Cochera')['labels']
 
 
 def test_site_matches_lot(facts):
