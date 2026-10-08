@@ -8,7 +8,8 @@ Digital twin of a residential property, combining BIM/IFC, 3D modeling, spatial 
 | 1. Extracción de la planta desde el levantamiento (PDF vectorial) | ✅ [informe](docs/analysis/01-extraccion-pdf.md) |
 | 2. Modelo de hechos → IFC → House MCP (solo lectura) | ✅ [informe](docs/analysis/02-modelo-de-hechos.md) |
 | 3. Validación contra el DXF original; el DXF pasa a ser la fuente | ✅ [informe](docs/analysis/03-validacion-dxf.md) |
-| 4. Variantes y propuestas (`create_variant`, segunda planta, escaleras) | pendiente |
+| 4. Fidelidad visual: Blender + Bonsai, materiales, texturas e iluminación | siguiente |
+| Variantes y propuestas de remodelación (`create_variant`) | sin fecha |
 
 ## Cómo funciona
 
@@ -62,6 +63,7 @@ En Blender:
 
 Abre `models/existing.ifc` en Blender con el add-on [Bonsai](https://bonsaibim.org)
 (*File → Open IFC Project*). Los espacios (`IfcSpace`) se pueden ocultar para ver muros y vanos.
+Probado con Blender 5.2.2 LTS y Bonsai 0.9.0 (Bonsai 0.9 exige Blender 5.1 o más nuevo).
 
 ## Estructura
 

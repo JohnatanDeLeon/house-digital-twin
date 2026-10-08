@@ -66,11 +66,11 @@ hr { border: 0; border-top: 1px solid var(--rule); margin: 0; }
   <header>
     <span class="eyebrow">Traspaso para agentes · house-digital-twin</span>
     <h1>Casa Jonhy: cómo retomar el trabajo</h1>
-    <p class="lede">Estado del gemelo digital de la casa al cierre del PR #2 y lo necesario para continuar en una sesión nueva, después de fusionar el PR a <code>main</code>.</p>
+    <p class="lede">Estado del gemelo digital de la casa tras el PR #2, con la fase 4 replanteada hacia la fidelidad visual (Blender + Bonsai), y lo necesario para continuar en una sesión nueva desde <code>main</code>.</p>
     <div class="meta">
-      <span class="pill">Actualizado: 2026-10-08</span>
+      <span class="pill">Actualizado: 2026-10-07</span>
       <span class="pill">Repo: JohnatanDeLeon/house-digital-twin</span>
-      <span class="pill">PR #2 → main</span>
+      <span class="pill">Fase 4: fidelidad visual</span>
       <span class="pill ok">47 tests en verde</span>
     </div>
   </header>
@@ -87,13 +87,14 @@ hr { border: 0; border-top: 1px solid var(--rule); margin: 0; }
 3. Prepara el entorno: python -m venv .venv &amp;&amp; .venv/bin/pip install -r requirements.txt,
    luego .venv/bin/python -m pytest y .venv/bin/python -m house_twin.cli build. Confirma que todo pasa.
 4. Pregúntame los datos pendientes (U01–U11) que tenga a la mano y regístralos en sources/owner-annotations.json.
-5. Siguiente tarea: fase 4 (variantes y análisis de escaleras para una segunda planta), según la hoja de traspaso.
+5. Siguiente tarea: fase 4 (fidelidad visual con Blender + Bonsai), empezando por el primer pendiente de «Próximo trabajo».
 Trabaja en una rama nueva desde main; no modifiques existing.* para propuestas.</pre>
   </section>
 
   <section>
     <h2>Qué es el proyecto</h2>
-    <p>El dueño quiere un modelo digital fiel de su casa sobre el que Claude pueda razonar: consultar espacios y áreas, analizar circulación, proponer remodelaciones (como una segunda planta y la mejor ubicación de la escalera), compararlas, modificar el modelo y generar visualizaciones. Lo prioritario es la fidelidad geométrica y el control, no la estética del render.</p>
+    <p>El dueño quiere un modelo digital fiel de su casa sobre el que Claude pueda razonar: consultar espacios y áreas, analizar circulación, proponer remodelaciones, compararlas, modificar el modelo y generar visualizaciones.</p>
+    <p><strong>El objetivo es que el modelo sea lo más fiel posible a la casa real</strong>: primero la geometría y las medidas, después materiales, texturas e iluminación en Blender + Bonsai. La segunda planta y el análisis de escaleras fueron solo un ejemplo de uso, no un requisito.</p>
     <p>La regla del modelo: <strong>la IA propone, el modelo contiene la realidad</strong>. Cada dato dice de dónde viene. Lo que no se sabe queda como desconocido y nunca se inventa.</p>
     <p>El dueño escribe en español y suele trabajar desde el celular.</p>
   </section>
@@ -107,7 +108,8 @@ Trabaja en una rama nueva desde main; no modifiques existing.* para propuestas.<
         <tr><td>2. Hechos → IFC → House MCP (solo lectura)</td><td>Hecha</td><td><code>docs/analysis/02-modelo-de-hechos.md</code></td></tr>
         <tr><td>3. DXF como fuente primaria, PDF como validación</td><td>Hecha</td><td><code>docs/analysis/03-validacion-dxf.md</code></td></tr>
         <tr><td>Visor 3D web para celular</td><td>Hecho y publicado</td><td><code>docs/viewer/casa-jonhy-3d.html</code> · <a href="https://claude.ai/artifact/FPKbkQujoJbiNyD1MZLnJF">artefacto</a></td></tr>
-        <tr><td>4. Variantes, segunda planta, escaleras</td><td><strong>Siguiente</strong></td><td>ver «Próximo trabajo»</td></tr>
+        <tr><td>4. Fidelidad visual: Blender + Bonsai, materiales, iluminación</td><td><strong>Siguiente</strong></td><td>ver «Próximo trabajo»</td></tr>
+        <tr><td>Variantes y propuestas de remodelación</td><td>Sin fecha</td><td>después de la fase 4</td></tr>
       </tbody>
     </table></div>
   </section>
@@ -116,10 +118,11 @@ Trabaja en una rama nueva desde main; no modifiques existing.* para propuestas.<
     <h2>Arranque técnico</h2>
     <ol>
       <li>Clonar y entrar a <code>main</code>, ya con el PR #2 fusionado. Crear una rama nueva para el trabajo.</li>
-      <li>Entorno: <code>python -m venv .venv &amp;&amp; .venv/bin/pip install -r requirements.txt</code>. Python 3.13 probado. El contenedor de la nube es efímero, así que hay que reinstalar en cada sesión nueva (no hay hook de arranque todavía).</li>
+      <li>Entorno: <code>python -m venv .venv &amp;&amp; .venv/bin/pip install -r requirements.txt</code>. Probado con Python 3.12 y 3.13. El contenedor de la nube es efímero, así que hay que reinstalar en cada sesión nueva (no hay hook de arranque todavía).</li>
       <li>Verificar: <code>.venv/bin/python -m pytest</code> debe dar 47 pasados, y <code>.venv/bin/python -m house_twin.cli build</code> debe imprimir «13 espacios, 40 muros, 19 vanos».</li>
       <li>Artefactos generados (no editar a mano): <code>data/facts/existing.facts.json</code>, <code>models/existing.ifc</code>, <code>docs/analysis/02-hechos-planta-existente.png</code>, <code>docs/viewer/casa-jonhy-3d.html</code>.</li>
       <li>El visor está publicado como artefacto. Para actualizarlo desde otra sesión, se publica el HTML regenerado pasando su URL como <code>url</code>, tras leerlo con <code>action: "read"</code>.</li>
+      <li>Blender (solo en la PC del dueño, no en la nube): Blender 5.2.2 LTS en <code>~/.local/opt/blender</code>, con el binario en <code>~/.local/bin/blender</code>, y Bonsai 0.9.0 estable como extensión. Bonsai 0.9 exige Blender 5.1 o más nuevo. Se instala con <code>blender --background --command extension install-file -r user_default -e add-on-bonsai-v0.9.0-linux-x64.zip</code>. La GPU es una Intel Iris Xe: EEVEE la usa, Cycles renderiza solo con CPU.</li>
     </ol>
 <pre><code>.venv/bin/python -m house_twin.cli build                     # DXF → hechos → IFC → imagen → visor
 .venv/bin/python -m house_twin.cli build --source sources/casa-jonhy-levantamiento.pdf
@@ -205,54 +208,49 @@ data/facts/existing.facts.json  (espacios, muros, vanos, adjacency, unknowns, an
   <section>
     <h2>Datos pendientes del dueño</h2>
     <div class="callout">
-      <p><strong>Lo que más bloquea:</strong> sin U01–U03 no hay análisis serio de segunda planta. El DXF no trae ninguna capa de estructura.</p>
+      <p><strong>Lo que más bloquea la fidelidad:</strong> U01 y U04. Sin ellas, el 3D usa los supuestos de 2.40 m y 2.10 m, y ninguna textura compensa proporciones equivocadas. El DXF no trae ninguna capa de estructura.</p>
     </div>
     <div class="table-wrap"><table>
       <thead><tr><th>Id</th><th>Pregunta</th><th>Bloquea</th></tr></thead>
       <tbody>
-        <tr><td>U01</td><td>Altura de piso terminado a lecho bajo de losa</td><td>3D, segunda planta</td></tr>
-        <tr><td>U02</td><td>Tipo y espesor de losa</td><td>Segunda planta</td></tr>
-        <tr><td>U03</td><td>Castillos, columnas, trabes y muros de carga</td><td>Segunda planta, remoción de muros</td></tr>
-        <tr><td>U04</td><td>Altura de las puertas</td><td>3D</td></tr>
-        <tr><td>U05</td><td>Material de los muros</td><td>Estructura</td></tr>
+        <tr><td>U01</td><td>Altura de piso terminado a lecho bajo de losa</td><td>3D, fidelidad</td></tr>
+        <tr><td>U02</td><td>Tipo y espesor de losa</td><td>3D (volumen exterior)</td></tr>
+        <tr><td>U03</td><td>Castillos, columnas, trabes y muros de carga</td><td>Remodelaciones</td></tr>
+        <tr><td>U04</td><td>Altura de las puertas</td><td>3D, fidelidad</td></tr>
+        <tr><td>U05</td><td>Material de los muros</td><td>Estructura, materiales</td></tr>
         <tr><td>U07</td><td>Frente real del terreno: 10.00 m (cota) o 10.03 m (dibujo)</td><td>—</td></tr>
         <tr><td>U08</td><td>Confirmar que «a=» es el antepecho y «h=» la altura de ventana</td><td>—</td></tr>
-        <tr><td>U10</td><td>¿El tragaluz está abierto al cielo o cubierto?</td><td>Segunda planta</td></tr>
+        <tr><td>U10</td><td>¿El tragaluz está abierto al cielo o cubierto?</td><td>3D, iluminación natural</td></tr>
         <tr><td>U11</td><td>Medidas de la ventana V10 del tragaluz a la sala</td><td>3D</td></tr>
       </tbody>
     </table></div>
+    <p>Por pedir en la fase 4 (todavía no están en <code>unknowns</code>): orientación del norte respecto al terreno, para la luz del sol; acabados de cada espacio (piso, muros, plafón, carpintería, cancelería), mejor con fotos; tipo y temperatura de color de las luminarias.</p>
     <p>Ya respondidas: U06 (la cochera no tiene techo) y U09 (el frente de la sala es un pórtico techado).</p>
   </section>
 
   <section>
     <h2>Próximo trabajo</h2>
+    <p>Fase 4: que el modelo se vea y se mida como la casa real. Todo dato visual sigue la misma regla: viene de una medición, una foto o una confirmación del dueño, o queda marcado como supuesto.</p>
     <ol>
-      <li><strong>Infraestructura de variantes.</strong>
+      <li><strong>GUIDs estables en el IFC.</strong> Cada <code>build</code> genera GUIDs nuevos, así que todo lo que se asigne en Bonsai (materiales, estilos) se pierde al regenerar. Hay que derivarlos de los ids de los hechos (W01, D01, …) para que sean reproducibles. Esto va primero.</li>
+      <li><strong>Revisión en Bonsai.</strong> Ya se comprobó que Bonsai abre <code>existing.ifc</code> sin interfaz (40 muros, 9 puertas, 9 ventanas, 13 espacios, 1 nivel). Falta que el dueño lo revise con la interfaz abierta y corregir lo que se vea mal.</li>
+      <li><strong>Medidas pendientes.</strong> Registrar U01, U02, U04 y U11 en <code>sources/owner-annotations.json</code> y llevarlas al IFC y al visor en lugar de los supuestos.</li>
+      <li><strong>Materiales y acabados.</strong> Agregar acabados por espacio y por elemento a los hechos (con <code>source</code>, o desconocido), exportarlos como <code>IfcMaterial</code> y estilos de superficie, y montar texturas PBR a partir de las fotos del dueño.</li>
+      <li><strong>Iluminación.</strong>
         <ul>
-          <li>Crear <code>create_variant</code>, que copie los hechos de la casa existente a <code>data/variants/proposal-NN.json</code> y <code>models/proposal-NN.ifc</code>.</li>
-          <li>Definir operaciones sobre la variante: agregar o quitar muro, agregar vano, crear nivel.</li>
-          <li>Comparar variantes contra la existente.</li>
-          <li>Exponerlo en el House MCP como herramientas de escritura, que solo tocan variantes.</li>
+          <li>Pasar la instalación eléctrica del DXF al modelo de hechos: 9 spots en <code>23- ILUMINACION</code>, 12 contactos y 8 apagadores en la capa mal nombrada <code>5 CORTES</code>, y el centro de carga en <code>GAS</code>.</li>
+          <li>Colocar las luces del render en la posición de los spots, no inventadas.</li>
+          <li>Luz del sol a partir de la ubicación en Saltillo y la orientación del norte (pendiente del dueño).</li>
         </ul>
       </li>
-      <li><strong>Análisis de escaleras</strong> (<code>find_stair_candidates</code>), la pregunta original del dueño.
-        <ul>
-          <li>Buscar dónde caben escaleras rectas, en L o en U.</li>
-          <li>Puntuar cada candidato: área que quita a cada espacio, impacto en recorridos (<code>walk_path</code>), conexión con zonas de circulación, iluminación y respeto al tragaluz.</li>
-          <li>Altura de piso a piso: parametrizada mientras U01/U02 sigan abiertas, y declarada como supuesto en el resultado.</li>
-          <li>Sin estructura (U03), marcar todo como exploratorio.</li>
-        </ul>
-      </li>
-      <li><strong>Instalación eléctrica del DXF</strong> al modelo de hechos:
-        <ul>
-          <li>12 contactos y 8 apagadores en la capa mal nombrada <code>5 CORTES</code>;</li>
-          <li>9 spots en <code>23- ILUMINACION</code>;</li>
-          <li>el centro de carga en <code>GAS</code>.</li>
-        </ul>
-      </li>
+      <li><strong>Render reproducible.</strong> Un script de Blender (<code>bpy</code>, con Bonsai) que abra el IFC, aplique materiales y luces y genere vistas de cada espacio sin retoques a mano. EEVEE para iterar y Cycles (CPU) para las imágenes finales. El visor web del celular se mantiene para consultas rápidas.</li>
+    </ol>
+    <h3>Después de la fase 4</h3>
+    <ul>
+      <li><strong>Variantes y propuestas:</strong> <code>create_variant</code>, operaciones sobre la variante (muros, vanos, niveles), comparación contra la casa existente y herramientas de escritura en el House MCP que solo tocan variantes. Una segunda planta o la ubicación de una escalera son ejemplos de uso, no requisitos.</li>
       <li><strong>Hook de arranque</strong> (SessionStart) para que el entorno se instale solo en sesiones en la nube. El dueño aún no lo ha pedido.</li>
       <li><strong>Visor:</strong> el encuadre en celular se corrigió después de la última prueba en navegador, que solo pasó un chequeo de sintaxis. Confirmar con el dueño que se ve bien.</li>
-    </ol>
+    </ul>
   </section>
 
   <hr>
@@ -260,7 +258,7 @@ data/facts/existing.facts.json  (espacios, muros, vanos, adjacency, unknowns, an
     <h2>Enlaces</h2>
     <ul>
       <li>Repo: <a href="https://github.com/JohnatanDeLeon/house-digital-twin">github.com/JohnatanDeLeon/house-digital-twin</a></li>
-      <li>PR de esta etapa: <a href="https://github.com/JohnatanDeLeon/house-digital-twin/pull/2">#2</a>, de la rama <code>ccr-8d9f9c58-4j3rrl</code> a <code>main</code>. El DXF entró antes por el PR #1.</li>
+      <li>PRs anteriores: <a href="https://github.com/JohnatanDeLeon/house-digital-twin/pull/1">#1</a> (DXF) y <a href="https://github.com/JohnatanDeLeon/house-digital-twin/pull/2">#2</a> (DXF como fuente primaria, visor 3D).</li>
       <li>Visor 3D: <a href="https://claude.ai/artifact/FPKbkQujoJbiNyD1MZLnJF">claude.ai/artifact/FPKbkQujoJbiNyD1MZLnJF</a></li>
       <li>Sesión original: <a href="https://claude.ai/code/session_013E6MqiVMzmu15SMGUbXiYE">claude.ai/code/session_013E6MqiVMzmu15SMGUbXiYE</a></li>
     </ul>
