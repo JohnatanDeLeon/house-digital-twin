@@ -70,7 +70,7 @@ el mismo elemento conserva su GUID entre `build`s.
 
 Con los acabados: `python -m house_twin.cli scene [--render]` abre el IFC con Bonsai, aplica las texturas de
 `assets/textures/` y guarda `models/existing.blend` (fuera de git). Con `--render` también deja vistas previas en
-`docs/analysis/05-renders/` (Cycles en CPU, ~5 min). Si se recarga el IFC dentro de Blender, los materiales se
+`docs/analysis/05-renders/` (Cycles en CPU, ~5 min). La colección `Recorrido` tiene una cámara por espacio a la altura de los ojos; para caminar adentro, *View → Navigation → Walk Navigation* (Shift + `). Si se recarga el IFC dentro de Blender, los materiales se
 pierden: hay que volver a correr `scene`.
 
 ## Estructura

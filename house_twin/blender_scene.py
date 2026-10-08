@@ -7,6 +7,7 @@ Abre el IFC con Bonsai, crea un material PBR por textura de `assets/textures/` y
 puerta o ventana según sus partes. Las coordenadas de textura se calculan en metros a partir de la
 geometría, así que la escala de cada textura es la real (`size_m`). Se lanza con `python -m house_twin.cli scene`.
 """
+import json
 import math
 import sys
 from pathlib import Path
@@ -18,7 +19,7 @@ from mathutils import Vector
 ARGS = sys.argv[sys.argv.index('--') + 1:]
 ROOT = Path(ARGS[0])
 sys.path.insert(0, str(ROOT))
-from house_twin.finishes import Finishes, load_materials  # noqa: E402  (necesita la raíz en sys.path)
+from house_twin.finishes import Finishes, _inside, load_materials  # noqa: E402  (necesita la raíz en sys.path)
 
 TEXTURES = ROOT / 'assets' / 'textures'
 FACTS = ROOT / 'data' / 'facts' / 'existing.facts.json'
@@ -262,7 +263,6 @@ def apply_finishes(ifc_path):
     for obj in list(bpy.data.objects):  # escena de inicio: cubo, cámara y luz
         bpy.data.objects.remove(obj)
     bpy.ops.bim.load_project(filepath=str(ifc_path))
-    import json
     facts = json.loads(FACTS.read_text())
     specs = load_materials(TEXTURES)
     scene = Scene(Finishes(facts, specs), specs, facts['spaces'])
@@ -312,13 +312,44 @@ CAMERAS = {  # nombre: (posición, a dónde mira, lente mm)
 }
 
 
-def add_cameras():
+EYE_HEIGHT_M = 1.6
+ROOM_CORNER_INSET_M = 0.35
+ROOM_LENS_MM = 14  # gran angular, como las fotos del celular
+
+
+def _camera(name, location, target, lens, collection):
+    cam = bpy.data.objects.new(name, bpy.data.cameras.new(name))
+    cam.location = location
+    cam.rotation_euler = (Vector(target) - Vector(location)).to_track_quat('-Z', 'Y').to_euler()
+    cam.data.lens = lens
+    collection.objects.link(cam)
+    return cam
+
+
+def room_viewpoint(polygon):
+    """Desde una esquina hacia la esquina más lejana: así se ve casi todo el cuarto de un vistazo."""
+    cx, cy = sum(p[0] for p in polygon) / len(polygon), sum(p[1] for p in polygon) / len(polygon)
+    best = None
+    for x, y in polygon:
+        d = math.hypot(cx - x, cy - y) or 1
+        eye = (x + (cx - x) / d * ROOM_CORNER_INSET_M, y + (cy - y) / d * ROOM_CORNER_INSET_M)
+        if not _inside(eye, polygon):
+            continue  # esquina entrante de un cuarto en L
+        far = max(polygon, key=lambda q: math.hypot(q[0] - x, q[1] - y))
+        reach = math.hypot(far[0] - x, far[1] - y)
+        if best is None or reach > best[0]:
+            best = (reach, eye, far)
+    return best[1], best[2]
+
+
+def add_cameras(spaces):
     for name, (location, target, lens) in CAMERAS.items():
-        cam = bpy.data.objects.new(f'camara-{name}', bpy.data.cameras.new(name))
-        cam.location = location
-        cam.rotation_euler = (Vector(target) - Vector(location)).to_track_quat('-Z', 'Y').to_euler()
-        cam.data.lens = lens
-        bpy.context.scene.collection.objects.link(cam)
+        _camera(f'camara-{name}', location, target, lens, bpy.context.scene.collection)
+    tour = bpy.data.collections.new('Recorrido')  # una cámara por espacio, a la altura de los ojos
+    bpy.context.scene.collection.children.link(tour)
+    for space in spaces:
+        eye, far = room_viewpoint(space['polygon'])
+        _camera(f"{space['id']} {space['name'] or 'sin rótulo'}", (*eye, EYE_HEIGHT_M), (*far, 1.0), ROOM_LENS_MM, tour)
 
 
 def render_all(folder: Path, samples=64):
@@ -350,7 +381,7 @@ def main():
     ifc_path, blend_path = Path(ARGS[1]), Path(ARGS[2])
     scene = apply_finishes(ifc_path)
     light_scene()
-    add_cameras()
+    add_cameras(json.loads(FACTS.read_text())['spaces'])
     show_materials()
     blend_path.parent.mkdir(parents=True, exist_ok=True)
     bpy.ops.wm.save_as_mainfile(filepath=str(blend_path), relative_remap=True)
