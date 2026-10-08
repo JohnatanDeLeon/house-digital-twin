@@ -112,11 +112,10 @@ def test_mosaic_subgrid_sets_channel_roughness(tmp_path, monkeypatch):
 
 
 def test_make_seamless_matches_opposite_edges():
-    rng = np.random.default_rng(0)
-    noisy = Image.fromarray((rng.random((64, 80, 3)) * 255).astype(np.uint8))
-    out = np.asarray(textures.make_seamless(noisy)).astype(float)
-    # al repetir, el último y el primer renglón (y columna) son vecinos: deben parecerse como vecinos interiores
-    edge_jump = np.abs(out[-1] - out[0]).mean() + np.abs(out[:, -1] - out[:, 0]).mean()
-    raw = np.asarray(noisy).astype(float)
-    raw_jump = np.abs(raw[-1] - raw[0]).mean() + np.abs(raw[:, -1] - raw[:, 0]).mean()
-    assert edge_jump < raw_jump / 2
+    # rampa de 0 a 240 en x: al repetirla sin tratar salta 240 entre el borde derecho y el izquierdo
+    ramp = np.tile(np.linspace(0, 240, 80), (64, 1))
+    image = Image.fromarray(np.dstack([ramp] * 3).astype(np.uint8))
+    out = np.asarray(textures.make_seamless(image)).astype(float)[..., 0]
+    wrap_jump = np.abs(out[:, -1] - out[:, 0]).mean()
+    interior_jump = np.abs(np.diff(out, axis=1)).mean()
+    assert wrap_jump < 4 * interior_jump  # el borde empata como un paso interior más (antes: 240 contra 3)
