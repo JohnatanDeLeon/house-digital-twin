@@ -16,7 +16,7 @@
  "size_m": {
   "width": 0.6,
   "height": 0.9,
-  "source": "supuesto: loseta de 30 × 30 cm estimada por la escala de la puerta; pendiente de medir"
+  "source": "dueño (2026-10-08): las losetas son de 30 × 30 cm (antes estimado por la escala de la puerta, coincide)"
  },
  "px_per_m": 2560,
  "size_px": [
@@ -74,7 +74,6 @@
   "condition": "buen estado; manchas puntuales de suciedad sobre la junta; sin fisuras visibles"
  },
  "assumptions": [
-  "loseta de 30 × 30 cm (pendiente de medir)",
   "luminosidad media del beige (sin blanco de referencia en la foto)",
   "balance de color tomado de la foto de la puerta",
   "junta hundida 1.5 mm y canto redondeado"
