@@ -215,7 +215,7 @@ Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-rega
   - **Ventana negra con retícula** de 3 × 5 vidrios, en un **entrante en ángulo**. El dueño confirmó que es la ventana del tragaluz hacia la sala: **V10**, en el muro diagonal W32 (1.12 m), que el plano no dibuja.
   - Medidas estimadas por proporción, a confirmar: **ancho ≈ 0.8 m y alto ≈ 1.1 m, con antepecho ≈ 0.9 m**.
   - En la sala también se ven la puerta de entrada D03 por dentro y dos cortinas grises a sus lados, que tapan las ventanas V01 y V02.
-- **Cortina negra entre la cocina y el comedor:** cuelga sobre el muro, junto al refrigerador. Por su tamaño parece tapar un **vano o una puerta**, que en el plano no aparece ahí. Falta preguntar.
+- **Cortina negra entre la cocina y el comedor:** cuelga junto al refrigerador. El dueño confirmó que solo tapa la ventana que hay ahí. No es un vano nuevo. Por su posición es una de las ventanas de la cocina hacia la cochera (V03 o V04, en W21).
 - **Pasillo de las recámaras:** angosto, con 3 puertas de madera y foco al centro. Coincide con el «pasillo a las recámaras» incluido en S01.
 
 ### Recámara con closet y una ventana (fotos `recamara-a-1` a `recamara-a-4`)
@@ -233,7 +233,7 @@ Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-rega
 - **Sala:** sala en L gris reclinable y mesa de centro redonda de vidrio.
 - **Comedor:** mesa de comedor oscura con 6 sillas talladas.
 - **Muro de la sala:** TV de pared.
-- **Ventanas de la sala:** cortinas grises.
+- **Ventanas de la sala:** cortinas grises. La ventana de la cocina junto al refrigerador lleva cortina negra.
 
 ## Fachada y orientación (2026-10-08, 08:12–09:29)
 
