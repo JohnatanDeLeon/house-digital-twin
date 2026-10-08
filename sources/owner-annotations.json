@@ -141,7 +141,8 @@
         9.4,
         7.5
       ],
-      "note": "Tragaluz que ilumina y ventila la Recámara 3. Lo forman el muro central (diagonal, hacia la sala) y dos muros laterales."
+      "note": "Tragaluz que ilumina y ventila la Recámara 3. Lo forman el muro central (diagonal, hacia la sala) y dos muros laterales. Está abierto al cielo (dato del dueño, 2026-10-08).",
+      "roofed": false
     }
   ],
   "add_openings": [
@@ -184,6 +185,11 @@
       "answer": "Las puertas miden 2.10 m del piso al vano (al cerramiento de concreto).",
       "value": 2.1,
       "answered_on": "2026-10-07"
+    },
+    {
+      "id": "U10",
+      "answer": "El tragaluz está abierto al cielo, sin domo ni vidrio.",
+      "answered_on": "2026-10-08"
     }
   ]
 }

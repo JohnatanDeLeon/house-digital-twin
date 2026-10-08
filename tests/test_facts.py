@@ -67,7 +67,8 @@ def test_portico_is_roofed_and_garage_is_not(facts):
 def test_owner_answers_close_unknowns(facts, plan_only_facts):
     assert {'U06', 'U09'} <= {u['id'] for u in plan_only_facts['unknowns']}
     assert not {'U06', 'U09'} & {u['id'] for u in facts['unknowns']}
-    assert {a['id'] for a in facts['answered']} == {'U01', 'U04', 'U06', 'U09'}
+    assert {a['id'] for a in facts['answered']} == {'U01', 'U04', 'U06', 'U09', 'U10'}
+    assert space_named(facts, 'Tragaluz')['roofed']['value'] is False  # U10: abierto al cielo
 
 
 def test_site_matches_lot(facts):
