@@ -343,13 +343,27 @@ def room_viewpoint(polygon):
 
 
 def add_cameras(spaces):
-    for name, (location, target, lens) in CAMERAS.items():
-        _camera(f'camara-{name}', location, target, lens, bpy.context.scene.collection)
+    fixed = {name: _camera(f'camara-{name}', location, target, lens, bpy.context.scene.collection)
+             for name, (location, target, lens) in CAMERAS.items()}
     tour = bpy.data.collections.new('Recorrido')  # una cámara por espacio, a la altura de los ojos
     bpy.context.scene.collection.children.link(tour)
+    cameras = [fixed['aerea']]
     for space in spaces:
         eye, far = room_viewpoint(space['polygon'])
-        _camera(f"{space['id']} {space['name'] or 'sin rótulo'}", (*eye, EYE_HEIGHT_M), (*far, 1.0), ROOM_LENS_MM, tour)
+        cameras.append(_camera(f"{space['id']} {space['name'] or 'sin rótulo'}", (*eye, EYE_HEIGHT_M), (*far, 1.0),
+                               ROOM_LENS_MM, tour))
+    bind_to_frames(cameras)
+
+
+def bind_to_frames(cameras):
+    """Un fotograma por cámara (marcador ligado): con ← y → se pasa de un cuarto al siguiente."""
+    sc = bpy.context.scene
+    for frame, cam in enumerate(cameras, start=1):
+        marker = sc.timeline_markers.new(cam.name, frame=frame)
+        marker.camera = cam
+    sc.frame_start, sc.frame_end = 1, len(cameras)
+    sc.frame_set(1)
+    sc.camera = cameras[0]
 
 
 def render_all(folder: Path, samples=64):
@@ -362,6 +376,8 @@ def render_all(folder: Path, samples=64):
     sc.render.image_settings.file_format = 'JPEG'
     sc.render.image_settings.quality = 88
     folder.mkdir(parents=True, exist_ok=True)
+    for marker in sc.timeline_markers:  # el .blend ya se guardó: aquí los marcadores cambiarían la cámara del render
+        marker.camera = None
     for name in CAMERAS:
         sc.camera = bpy.data.objects[f'camara-{name}']
         sc.render.filepath = str(folder / f'{name}.jpg')
