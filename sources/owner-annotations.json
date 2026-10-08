@@ -1,5 +1,5 @@
 {
-  "_doc": "Hechos confirmados por el dueño. Coordenadas en el marco del modelo (m; origen en la esquina del terreno a la izquierda de la calle). Las zonas exteriores se recortan contra el exterior real, así que sus polígonos solo marcan la región.",
+  "_doc": "Hechos confirmados por el dueño. Coordenadas en el marco del modelo (m; origen en la esquina del terreno a la izquierda de la calle). Las zonas exteriores se recortan contra el exterior real, así que sus polígonos solo marcan la región. Los límites siguen las caras de muro exactas del DXF (data/raw/plano.dxf).",
   "source": "dueño",
   "confirmed_on": "2026-10-08",
   "merge_spaces": [
@@ -24,19 +24,19 @@
       "region": [
         [
           1.205,
-          10.22
+          10.225
         ],
         [
           2.82,
-          10.22
+          10.225
         ],
         [
           2.82,
-          12.617
+          12.625
         ],
         [
           1.205,
-          12.617
+          12.625
         ]
       ],
       "roofed": false,
@@ -48,11 +48,11 @@
       "region": [
         [
           0.0,
-          12.617
+          12.625
         ],
         [
           10.1,
-          12.617
+          12.625
         ],
         [
           10.1,
@@ -78,11 +78,11 @@
         ],
         [
           3.115,
-          6.702
+          6.705
         ],
         [
           0.0,
-          6.702
+          6.705
         ]
       ],
       "note": "Área exterior frente a la cocina, hasta donde empieza el muro lateral de la cocina. No tiene techo.",
@@ -93,19 +93,19 @@
       "region": [
         [
           0.0,
-          6.702
+          6.705
         ],
         [
           1.205,
-          6.702
+          6.705
         ],
         [
           1.205,
-          12.617
+          12.625
         ],
         [
           0.0,
-          12.617
+          12.625
         ]
       ],
       "note": "Pasillo lateral junto a la barda que conecta la cochera con el patio, pasando por la puerta de la cocina y la lavandería. Su borde sigue la cara exterior del muro de la cocina (x = 1.205 m); límites trazados por Claude a partir de la descripción del dueño."

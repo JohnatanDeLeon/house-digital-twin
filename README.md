@@ -7,13 +7,13 @@ Digital twin of a residential property, combining BIM/IFC, 3D modeling, spatial 
 |---|---|
 | 1. Extracción de la planta desde el levantamiento (PDF vectorial) | ✅ [informe](docs/analysis/01-extraccion-pdf.md) |
 | 2. Modelo de hechos → IFC → House MCP (solo lectura) | ✅ [informe](docs/analysis/02-modelo-de-hechos.md) |
-| 3. Validación contra el DXF original | ⏳ falta subir el DXF a `sources/` |
+| 3. Validación contra el DXF original; el DXF pasa a ser la fuente | ✅ [informe](docs/analysis/03-validacion-dxf.md) |
 | 4. Variantes y propuestas (`create_variant`, segunda planta, escaleras) | pendiente |
 
 ## Cómo funciona
 
 ```
-sources/*.pdf | *.dxf ──► Drawing (metros, por capa CAD)
+data/raw/plano.dxf (primaria) | sources/*.pdf (validación) ──► Drawing (metros, por capa CAD)
                               │
                               ▼
                  data/facts/existing.facts.json   ← fuente de verdad: hechos + incógnitas
@@ -37,10 +37,10 @@ python -m venv .venv
 ## Uso
 
 ```bash
-.venv/bin/python -m house_twin.cli build                         # plano → hechos → IFC → imagen
-.venv/bin/python -m house_twin.cli build --source sources/x.dxf  # lo mismo desde el DXF
-.venv/bin/python -m house_twin.cli inspect-dxf sources/x.dxf     # capas, entidades, bloques, unidades
-.venv/bin/python -m house_twin.cli compare sources/casa-jonhy-levantamiento.pdf sources/x.dxf
+.venv/bin/python -m house_twin.cli build                              # DXF → hechos → IFC → imagen → visor
+.venv/bin/python -m house_twin.cli build --source sources/casa-jonhy-levantamiento.pdf  # desde el PDF
+.venv/bin/python -m house_twin.cli inspect-dxf data/raw/plano.dxf     # capas, entidades, bloques, unidades
+.venv/bin/python -m house_twin.cli compare sources/casa-jonhy-levantamiento.pdf data/raw/plano.dxf
 .venv/bin/python -m pytest
 ```
 
@@ -66,7 +66,8 @@ Abre `models/existing.ifc` en Blender con el add-on [Bonsai](https://bonsaibim.o
 ## Estructura
 
 ```
-sources/              planos originales (PDF; el DXF va aquí) y owner-annotations.json (hechos del dueño)
+data/raw/plano.dxf    plano original (fuente primaria)
+sources/              PDF del levantamiento (validación) y owner-annotations.json (hechos del dueño)
 house_twin/
   drawing.py          contrato Drawing: segmentos y textos en metros por capa (LAYER_ROLES)
   sources/            adaptadores: pdf.py (+ pdf_content.py), dxf.py

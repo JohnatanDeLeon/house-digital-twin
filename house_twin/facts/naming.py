@@ -24,10 +24,11 @@ def _phrases(labels: list[Text]) -> list[str]:
     for t in labels:
         is_stacked = previous and abs(previous.position[1] - t.position[1]) < STACKED_LINE_GAP \
             and abs(previous.position[0] - t.position[0]) < STACKED_LINE_GAP
+        value = ' '.join(t.value.split())  # un MTEXT de varias líneas ("1/2\nBAÑO") es una sola frase
         if is_stacked:
-            phrases[-1] = f'{phrases[-1]} {t.value}'
+            phrases[-1] = f'{phrases[-1]} {value}'
         else:
-            phrases.append(t.value)
+            phrases.append(value)
         previous = t
     return phrases
 

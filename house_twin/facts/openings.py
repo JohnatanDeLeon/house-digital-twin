@@ -166,7 +166,7 @@ def _overlaps(a: OpeningRect, b: OpeningRect):
 def _label_value(drawing: Drawing, prefix: str, centre):
     candidates = []
     for t in drawing.texts_for('window_labels'):
-        match = re.match(rf'\s*{prefix}\s*=\s*([\d.]+)', t.value)
+        match = re.search(rf'(?:^|\n)\s*{prefix}\s*=\s*([\d.]+)', t.value)
         if match:
             d = ((t.position[0]-centre[0])**2 + (t.position[1]-centre[1])**2) ** 0.5
             candidates.append((d, float(match.group(1))))

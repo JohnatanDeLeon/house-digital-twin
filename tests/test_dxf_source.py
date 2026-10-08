@@ -62,3 +62,32 @@ def test_inventory_reports_layers_and_blocks(dxf_path):
     inv = inventory(str(dxf_path))
     assert inv['blocks_used'] == {'PUERTA_TEST': 1}
     assert inv['layers']['MUROS']['entities']['LINE'] > 0
+
+
+# ---------- el DXF real del levantamiento ----------
+REAL_DXF = OWNER.parent.parent / 'data' / 'raw' / 'plano.dxf'
+
+
+@pytest.fixture(scope='module')
+def real_dxf_facts():
+    return build_facts(load_dxf_drawing(str(REAL_DXF)), load_annotations(OWNER))
+
+
+def test_real_dxf_declares_wrong_units_and_loader_corrects_them():
+    drawing = load_dxf_drawing(str(REAL_DXF))
+    assert drawing.metadata['units_declared'] == 4  # milímetros, según el encabezado
+    assert drawing.metadata['meters_per_unit'] == 1.0  # pero está dibujado en metros
+    assert 'no cuadra' in drawing.metadata['units_warning']
+
+
+def test_real_dxf_lot_is_10_03_by_21_25(real_dxf_facts):
+    assert real_dxf_facts['site']['width'] == pytest.approx(10.03, abs=1e-3)
+    assert real_dxf_facts['site']['depth'] == pytest.approx(21.25, abs=1e-3)
+
+
+def test_real_dxf_agrees_with_pdf(real_dxf_facts, facts):
+    report = compare_facts(facts, real_dxf_facts)
+    assert report['max_space_area_diff_m2'] <= 0.15  # el PDF quedó ~0.1 % chico por el ploteo
+    assert report['max_opening_width_diff_m'] <= 0.005
+    assert report['openings_only_in_b'] == []
+    assert sorted(s['name'] for s in real_dxf_facts['spaces']) == sorted(s['name'] for s in facts['spaces'])

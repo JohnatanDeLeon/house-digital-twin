@@ -4,7 +4,8 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_SOURCE = ROOT / 'sources' / 'casa-jonhy-levantamiento.pdf'
+# El DXF es la fuente primaria; el PDF queda como validación (`compare`)
+DEFAULT_SOURCE = ROOT / 'data' / 'raw' / 'plano.dxf'
 OWNER_ANNOTATIONS = ROOT / 'sources' / 'owner-annotations.json'
 FACTS_PATH = ROOT / 'data' / 'facts' / 'existing.facts.json'
 IFC_PATH = ROOT / 'models' / 'existing.ifc'
