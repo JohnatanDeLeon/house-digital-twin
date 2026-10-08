@@ -20,6 +20,7 @@ PARALLEL_TOL = 1e-3
 STRIP_INSIDE_RATIO = 0.9
 MIN_RESIDUAL_AREA = 1e-4
 SNAP = 1e-3  # m: absorbe diferencias de redondeo entre franjas y vanos contiguos
+IN_LINE_RATIO = 0.5  # fracción del espesor del muro que el vano debe compartir con su banda
 
 
 @dataclass
@@ -90,6 +91,33 @@ def _snap_union(geoms):
     return unary_union(grown).buffer(-SNAP, join_style='mitre')
 
 
+def _spans(geom, d):
+    """Extensión de la geometría a lo largo de la dirección `d` y a través de ella."""
+    coords = [c for part in getattr(geom, 'geoms', [geom]) for c in part.exterior.coords]
+    along = [x*d[0] + y*d[1] for x, y in coords]
+    across = [-x*d[1] + y*d[0] for x, y in coords]
+    return (min(along), max(along)), (min(across), max(across))
+
+
+def _shares_band(piece, band, direction, thickness) -> bool:
+    """La pieza atraviesa la banda del muro (comparte su espesor), no solo la toca de costado en una esquina."""
+    _, (p_lo, p_hi) = _spans(piece, direction)
+    _, (b_lo, b_hi) = _spans(band, direction)
+    return min(p_hi, b_hi) - max(p_lo, b_lo) >= IN_LINE_RATIO * thickness
+
+
+def _in_line(opening: Polygon, strip: Strip) -> bool:
+    return _shares_band(opening, strip.polygon, strip.direction, strip.thickness)
+
+
+def _runs_along(piece, wall) -> bool:
+    """La pieza sobrante es alargada en la dirección del muro y está sobre su banda."""
+    if wall['direction'] is None:
+        return False
+    (a_lo, a_hi), (c_lo, c_hi) = _spans(piece, wall['direction'])
+    return a_hi - a_lo > c_hi - c_lo and _shares_band(piece, wall['polygon'], wall['direction'], wall['thickness'])
+
+
 def _merge_bands(strips, openings):
     bands: dict[tuple, list[Strip]] = {}
     for s in strips:
@@ -97,7 +125,8 @@ def _merge_bands(strips, openings):
     runs = []
     for key, members in bands.items():
         geoms = [s.polygon for s in members]
-        merged = _snap_union(geoms + [o for o in openings if any(o.buffer(SNAP).intersects(g) for g in geoms)])
+        merged = _snap_union(geoms + [o for o in openings
+                                      if any(o.buffer(SNAP).intersects(s.polygon) and _in_line(o, s) for s in members)])
         for part in getattr(merged, 'geoms', [merged]):
             runs.append({'polygon': part, 'direction': members[0].direction, 'thickness': members[0].thickness})
     return runs
@@ -116,7 +145,7 @@ def _polygonal(geom):
     return unary_union([g for g in parts if g.geom_type in ('Polygon', 'MultiPolygon') and g.area > 0])
 
 
-def _assign(runs, region):
+def _assign(runs, region, openings):
     claimed = Polygon()
     walls = []
     for run in sorted(runs, key=_run_length, reverse=True):
@@ -129,7 +158,9 @@ def _assign(runs, region):
         if piece.area <= MIN_RESIDUAL_AREA:
             continue
         shared = lambda w: w['polygon'].boundary.intersection(piece.boundary).length
-        host = max(walls, key=shared)
+        # un sobrante con un vano va con el muro que el vano continúa, no con el que lo toca de costado
+        holds_opening = any(piece.intersection(o).area > 0.5 * o.area for o in openings)
+        host = max(walls, key=lambda w: (holds_opening and shared(w) > 0 and _runs_along(piece, w), shared(w)))
         if shared(host) > 0:
             host['polygon'] = _polygonal(_snap_union([host['polygon'], piece]))
         else:
@@ -146,4 +177,4 @@ def decompose_walls(drawing: Drawing, wall_bodies: list[Polygon], opening_polys:
     region = unary_union(wall_bodies + opening_polys).buffer(0)
     segments = [s for s in drawing.segments_for('walls') if s[0] != s[1]]
     runs = _merge_bands(_strips(segments, region), opening_polys)
-    return _assign(runs, region)
+    return _assign(runs, region, opening_polys)
