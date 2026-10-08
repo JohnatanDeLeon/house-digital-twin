@@ -1,4 +1,4 @@
-"""Exporta `house.facts.json` a IFC4 con IfcOpenShell: muros, vanos con puerta/ventana y espacios.
+"""Exporta `house.facts.json` a IFC4 con IfcOpenShell: muros, vanos con puerta/ventana, espacios y acabados de piso.
 
 El IFC necesita alturas que el plano no da. Se usan los supuestos de ASSUMED_DEFAULTS,
 y cada elemento lleva en el Pset `HDT_Provenance` qué dato es hecho y cuál es supuesto,
@@ -12,6 +12,7 @@ import ifcopenshell.api.aggregate
 import ifcopenshell.api.context
 import ifcopenshell.api.feature
 import ifcopenshell.api.geometry
+import ifcopenshell.api.material
 import ifcopenshell.api.project
 import ifcopenshell.api.pset
 import ifcopenshell.api.root
@@ -20,8 +21,12 @@ import ifcopenshell.api.unit
 import ifcopenshell.guid
 from ifcopenshell.util.shape_builder import ShapeBuilder
 
+from house_twin.finishes import Finishes
+
 ASSUMED_DEFAULTS = {'storey_height': 2.40, 'door_height': 2.10, 'window_sill': 0.90, 'window_height': 1.20}
 PANEL_THICKNESS = 0.05
+FLOOR_FINISH_THICKNESS = 0.01  # la loseta o el firme: su cara de arriba es el nivel 0 de piso terminado
+PART_NAMES = {'leaf': 'Hoja', 'frame': 'Marco', 'glass': 'Vidrio'}
 OPENING_OVERCUT = 0.01  # el vano sobresale del muro para que el corte booleano sea limpio
 GUID_NAMESPACE = uuid.UUID('6f2b8c1e-3d4a-5b6c-8d7e-9f0a1b2c3d4e')  # fijo: cambiarlo cambia todos los GlobalId
 
@@ -52,6 +57,22 @@ class _IfcContext:
         solid = self.builder.extrude(self.builder.profile(curve), magnitude=height, position=(0.0, 0.0, base_z))
         rep = self.builder.get_representation(self.body, [solid])
         ifcopenshell.api.geometry.assign_representation(self.model, product=product, representation=rep)
+
+    def material(self, name):
+        """Un IfcMaterial por textura, compartido: su nombre es el de `assets/textures/<nombre>/`."""
+        found = next((m for m in self.model.by_type('IfcMaterial') if m.Name == name), None)
+        return found or ifcopenshell.api.material.add_material(self.model, name=name, category='acabado')
+
+    def assign_parts(self, product, parts: dict[str, str]):
+        if len(parts) == 1:
+            ifcopenshell.api.material.assign_material(self.model, products=[product], material=self.material(*parts.values()))
+            return
+        constituents = ifcopenshell.api.material.add_material_set(self.model, name=product.Name, set_type='IfcMaterialConstituentSet')
+        for part, name in sorted(parts.items()):
+            ifcopenshell.api.material.add_constituent(self.model, constituent_set=constituents, material=self.material(name),
+                                                      name=PART_NAMES[part])
+        ifcopenshell.api.material.assign_material(self.model, products=[product], type='IfcMaterialConstituentSet',
+                                                  material=constituents)
 
     def pset(self, product, name, properties):
         known = {k: v for k, v in properties.items() if v is not None}
@@ -107,7 +128,7 @@ def _add_declared_opening(ctx: _IfcContext, o, walls):
         ctx.pset(host, 'HDT_DeclaredOpenings', {o['id']: f"{o['kind']} sin medidas; conecta {','.join(o['connects'])}"})
 
 
-def _add_opening(ctx: _IfcContext, o, walls, storey):
+def _add_opening(ctx: _IfcContext, o, walls, storey, finishes: Finishes | None):
     if o['footprint'] is None:
         _add_declared_opening(ctx, o, walls)
         return
@@ -127,6 +148,9 @@ def _add_opening(ctx: _IfcContext, o, walls, storey):
     ctx.pset(filler, 'HDT_Provenance', {'FactId': o['id'], 'Width': o['width'], 'SillHeight': sill, 'SillAssumed': sill_assumed,
                                         'Height': height, 'HeightAssumed': height_assumed, 'HostWall': o['host_wall'],
                                         'Connects': ','.join(o['connects'])})
+    parts = finishes.opening(o['id']) if finishes else {}
+    if parts:
+        ctx.assign_parts(filler, parts)
 
 
 def _add_spaces(ctx: _IfcContext, facts, storey, height):
@@ -139,6 +163,22 @@ def _add_spaces(ctx: _IfcContext, facts, storey, height):
                                            'FloorLevel': s['floor_level']['value'], 'IsExterior': s['is_exterior']})
         spaces.append(space)
     ifcopenshell.api.aggregate.assign_object(ctx.model, products=spaces, relating_object=storey)
+
+
+def _add_floor_finishes(ctx: _IfcContext, facts, storey, finishes: Finishes):
+    """Acabado de piso de cada espacio que lo tiene registrado: un IfcCovering delgado bajo el nivel 0."""
+    coverings = []
+    for s in facts['spaces']:
+        name = finishes.floor(s['id'])
+        if name is None:
+            continue
+        covering = ctx.element('IfcCovering', f"{s['id']}-piso", 'FLOORING')
+        ctx.extrude_polygon(covering, s['polygon'], FLOOR_FINISH_THICKNESS, -FLOOR_FINISH_THICKNESS)
+        ctx.assign_parts(covering, {'leaf': name})
+        ctx.pset(covering, 'HDT_Provenance', {'Space': s['id'], 'Finish': name, 'ThicknessAssumed': True})
+        coverings.append(covering)
+    if coverings:
+        ifcopenshell.api.spatial.assign_container(ctx.model, products=coverings, relating_structure=storey)
 
 
 def _identity(entity) -> str:
@@ -174,7 +214,7 @@ def _stabilize_guids(model: ifcopenshell.file):
         entity.GlobalId = ifcopenshell.guid.compress(uuid.uuid5(GUID_NAMESPACE, key).hex)
 
 
-def build_ifc(facts: dict) -> ifcopenshell.file:
+def build_ifc(facts: dict, finishes: Finishes | None = None) -> ifcopenshell.file:
     ctx = _IfcContext(facts['name'])
     site = ctx.element('IfcSite', 'Terreno')
     building = ctx.element('IfcBuilding', 'Casa')
@@ -186,7 +226,9 @@ def build_ifc(facts: dict) -> ifcopenshell.file:
     height, _ = _value_or_assumed(facts['levels'][0]['storey_height'], 'storey_height')
     walls = _add_walls(ctx, facts, storey, height)
     for o in facts['openings']:
-        _add_opening(ctx, o, walls, storey)
+        _add_opening(ctx, o, walls, storey, finishes)
     _add_spaces(ctx, facts, storey, height)
+    if finishes:
+        _add_floor_finishes(ctx, facts, storey, finishes)
     _stabilize_guids(ctx.model)
     return ctx.model

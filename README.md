@@ -68,6 +68,11 @@ Probado con Blender 5.2.2 LTS y Bonsai 0.9.0 (Bonsai 0.9 exige Blender 5.1 o má
 Después de un `build`, *File → Revert IFC Project* recarga el modelo. Los GlobalId son deterministas, así que
 el mismo elemento conserva su GUID entre `build`s.
 
+Con los acabados: `python -m house_twin.cli scene [--render]` abre el IFC con Bonsai, aplica las texturas de
+`assets/textures/` y guarda `models/existing.blend` (fuera de git). Con `--render` también deja vistas previas en
+`docs/analysis/05-renders/` (Cycles en CPU, ~5 min). Si se recarga el IFC dentro de Blender, los materiales se
+pierden: hay que volver a correr `scene`.
+
 ## Estructura
 
 ```
@@ -78,6 +83,8 @@ house_twin/
   sources/            adaptadores: pdf.py (+ pdf_content.py), dxf.py
   facts/              openings.py, faces.py, walls.py, naming.py, annotations.py, builder.py
   ifc_export.py       hechos → IFC4 (IfcOpenShell)
+  finishes.py         qué textura lleva cada cara de muro, piso y vano (según el applies_to de cada textura)
+  blender_scene.py    corre dentro de Blender: IFC + texturas → escena con materiales y renders
   model.py            consultas semánticas (HouseModel)
   mcp_server.py       House MCP
   render.py           imagen de validación

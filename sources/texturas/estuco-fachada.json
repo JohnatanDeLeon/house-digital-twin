@@ -4,6 +4,10 @@
   "kind": "procedural",
   "applies_to": {
     "surface": "muros exteriores",
+    "spaces": [
+      "S11"
+    ],
+    "street_facade": true,
     "zones": [
       "fachada a la calle",
       "pórtico (S11)"

@@ -1,0 +1,76 @@
+from pathlib import Path
+
+import pytest
+
+from house_twin.finishes import Finishes, load_materials
+from house_twin.ifc_export import build_ifc
+
+TEXTURES = Path(__file__).resolve().parent.parent / 'assets' / 'textures'
+
+
+def _material(spaces=None, surface=None, **extra):
+    applies = {k: v for k, v in {'spaces': spaces, 'surface': surface}.items() if v is not None}
+    return {'applies_to': {**applies, **extra}}
+
+
+@pytest.fixture
+def toy():
+    """Dos cuartos interiores (A, baño B) y un patio C, separados por muros de 0.2 m; la calle en Y < 0."""
+    facts = {'site': {'polygon': [[0, 0], [0, 5], [6, 5], [6, 0]]},
+             'spaces': [{'id': 'A', 'is_exterior': False, 'polygon': [[0.2, 0.2], [2.8, 0.2], [2.8, 2.8], [0.2, 2.8]]},
+                        {'id': 'B', 'is_exterior': False, 'polygon': [[3.0, 0.2], [5.8, 0.2], [5.8, 2.8], [3.0, 2.8]]},
+                        {'id': 'C', 'is_exterior': True, 'polygon': [[0.2, 3.0], [5.8, 3.0], [5.8, 4.8], [0.2, 4.8]]}]}
+    materials = {'yeso': _material(['A', 'B'], 'muros interiores'), 'azulejo': _material(['B'], 'muros'),
+                 'aplanado': _material(['C'], 'muros exteriores'), 'estuco': _material([], 'muros exteriores', street_facade=True),
+                 'loseta': _material(['A', 'B'], 'piso'), 'antiderrapante': _material(['B'], 'piso de la regadera')}
+    return Finishes(facts, materials)
+
+
+def test_wall_face_takes_the_finish_of_the_space_it_faces(toy):
+    assert toy.wall_face((2.8, 1.0), (-1, 0)) == ('yeso', 'A')
+    assert toy.wall_face((1.0, 3.0), (0, 1)) == ('aplanado', 'C')
+
+
+def test_most_specific_finish_wins(toy):
+    assert toy.wall_face((3.0, 1.0), (1, 0)) == ('azulejo', 'B')  # el baño está en el yeso y en el azulejo
+
+
+def test_street_and_neighbour_faces(toy):
+    assert toy.wall_face((1.0, 0.0), (0, -1)) == ('estuco', 'calle')
+    assert toy.wall_face((0.0, 1.0), (-1, 0)) == (None, 'colindancia')
+
+
+def test_jamb_prefers_the_interior_side(toy):
+    # mocheta de un vano en el muro entre A y C: mira a lo largo del muro, a ningún espacio
+    assert toy.wall_face((1.0, 2.9), (1, 0)) == ('yeso', 'A')
+
+
+def test_floor_ignores_partial_zones(toy):
+    assert toy.floor('B') == 'loseta'  # el piso de la regadera es una zona sin geometría propia
+    assert toy.floor('C') is None
+
+
+def test_real_finishes(dxf_facts):
+    finishes = Finishes(dxf_facts, load_materials(TEXTURES))
+    names = {s['name']: s['id'] for s in dxf_facts['spaces']}
+    assert finishes.floor(names['Pórtico']) == 'piso-exterior'
+    assert finishes.floor(names['Tragaluz']) == 'piso-interior'
+    assert finishes.walls[names['Baño']] == 'azulejo-bano'
+    assert finishes.walls[names['Pórtico']] == finishes.street == 'estuco-fachada'
+    assert finishes.opening('D03') == {'leaf': 'puerta-entrada', 'glass': 'vidrio-polarizado'}
+    assert finishes.opening('V01') == {'frame': 'aluminio-negro', 'glass': 'vidrio-claro'}
+
+
+def test_ifc_carries_floor_finishes_and_materials(dxf_facts):
+    import ifcopenshell.util.element as ue
+    import ifcopenshell.validate
+    model = build_ifc(dxf_facts, Finishes(dxf_facts, load_materials(TEXTURES)))
+    log = ifcopenshell.validate.json_logger()
+    ifcopenshell.validate.validate(model, log)
+    assert log.statements == []
+    floors = {c.Name: ue.get_material(c).Name for c in model.by_type('IfcCovering')}
+    assert len(floors) == len(dxf_facts['spaces'])
+    assert set(floors.values()) == {'piso-interior', 'piso-exterior'}
+    d03 = next(d for d in model.by_type('IfcDoor') if d.Name == 'D03')
+    parts = {c.Name: c.Material.Name for c in ue.get_material(d03).MaterialConstituents}
+    assert parts == {'Hoja': 'puerta-entrada', 'Vidrio': 'vidrio-polarizado'}

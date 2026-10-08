@@ -215,7 +215,7 @@ Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-rega
   - **Ventana negra con retícula** de 3 × 5 vidrios, en un **entrante en ángulo**. El dueño confirmó que es la ventana del tragaluz hacia la sala: **V10**, en el muro diagonal W32 (1.12 m), que el plano no dibuja.
   - Medidas estimadas por proporción, a confirmar: **ancho ≈ 0.8 m y alto ≈ 1.1 m, con antepecho ≈ 0.9 m**.
   - En la sala también se ven la puerta de entrada D03 por dentro y dos cortinas grises a sus lados, que tapan las ventanas V01 y V02.
-- **Cortina negra entre la cocina y el comedor:** cuelga junto al refrigerador. El dueño confirmó que solo tapa la ventana que hay ahí. No es un vano nuevo. Por su posición es una de las ventanas de la cocina hacia la cochera (V03 o V04, en W21).
+- **Cortina negra entre la cocina y el comedor:** cuelga junto al refrigerador. El dueño confirmó que solo tapa la ventana que hay ahí, la de la cocina más cercana al comedor: **V04** (x = 2.30–2.81 m en W21). No es un vano nuevo.
 - **Pasillo de las recámaras:** angosto, con 3 puertas de madera y foco al centro. Coincide con el «pasillo a las recámaras» incluido en S01.
 
 ### Recámara con closet y una ventana (fotos `recamara-a-1` a `recamara-a-4`)
@@ -281,6 +281,35 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 - **Posición de la reja peatonal:** en la foto parece ≈ 0.5 m más a la izquierda de donde el plano pone D01 (x = 6.17–7.15 m). Con gran angular y sin vista frontal limpia no es concluyente.
 - **Detrás de la abertura derecha del pórtico** se ven una ventana pequeña con protección y un vano oscuro. El plano no tiene ninguna ventana entre D03 y la bodega: podría ser una ventana del medio baño que el plano no dibuja.
 
+## Aplicación al modelo (2026-10-08)
+
+`python -m house_twin.cli scene --render` abre el IFC con Bonsai, aplica las texturas y guarda `models/existing.blend`.
+
+- **Muros:** cada cara toma el acabado del espacio al que mira. El baño lleva azulejo y el resto del interior, yeso blanco. Pasillo de servicio, patio y cochera llevan aplanado, y pórtico y fachada, estuco. Los muros se cortan en los límites de los espacios, porque una misma cara puede dar al baño y al pasillo. Las mochetas de los vanos toman el acabado del lado interior.
+- **Pisos:** nuevos `IfcCovering` (FLOORING) de 1 cm bajo el nivel 0, uno por espacio, con su material (`piso-interior` o `piso-exterior`).
+- **Puertas y ventanas:** el IFC lleva su material; las de vidrio, como `IfcMaterialConstituentSet` (Hoja/Marco + Vidrio). Las puertas estiran la foto a todo el vano. Las ventanas son corredizas de 2 hojas, con perfil de 4.5 cm y traslape central de 6 cm (**supuesto**).
+- **Escala real:** las coordenadas de textura se calculan en metros y cada textura se repite según su `size_m`.
+- **Luz de la vista previa:** sol a 150° de rumbo y 50° de altura (media mañana de octubre, aproximado). La orientación sale de la brújula del dueño: la fachada mira a 27°.
+
+| Aérea | Sala hacia la cocina | Pasillo de recámaras | Baño |
+|---|---|---|---|
+| ![](05-renders/aerea.jpg) | ![](05-renders/sala-cocina.jpg) | ![](05-renders/pasillo.jpg) | ![](05-renders/bano.jpg) |
+
+**Sin acabado todavía** (salen en gris violáceo para que se noten):
+- **Muros de la lavandería S13:** ninguna textura la incluye. ¿Llevan el mismo aplanado que el pasillo y el patio?
+- **D01** (reja peatonal del pórtico) y **D09** (puerta de la bodega): falta su foto. La de lámina acanalada (07:49:34) podría ser D09.
+
+**Con textura, pero sin geometría en el modelo:**
+- `piso-regadera`: falta el área de la regadera.
+- `closet-madera`: faltan los closets.
+- `puerta-pasillo`: faltan las 2 puertas de herrería del pasillo de servicio.
+
+**Falta para un render fiel:**
+- Techo (losa y tirol).
+- Zoclo, persianas y cortinas.
+- Luz artificial: los focos.
+- Muros del tragaluz: en la foto de R3 se ven **azul claro**, pero por ahora llevan yeso blanco.
+
 ## Pendientes del dueño
 
 1. **Aplanados exteriores:** foto de cerca del estuco de la fachada y el pórtico, con luz rasante y algo de tamaño conocido, para reemplazar la textura sintética. ¿Dónde se tomaron las fotos 07:47:26 (aplanado de grano fino con estrías) y 07:49:34 (puerta de lámina acanalada)?
@@ -292,4 +321,5 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 7. **Puerta D03:** ancho de la hoja (¿hay un marco fijo a la izquierda?) y qué tan oscuro es el polarizado (¿se ve hacia adentro de día?).
 8. **Ventanas:** ¿todas tienen persiana enrollable? ¿La hoja fija tiene vidrio entintado o película?
 9. **Calibración de color:** una foto de día del piso con una hoja blanca tamaño carta encima.
-10. **Fotos nuevas:** el azulejo y la cenefa de la cocina de frente, la cara exterior de las puertas y los acabados exteriores (pendientes para mañana).
+10. **Lavandería y tragaluz:** ¿qué acabado tienen los muros de la lavandería? ¿Los del tragaluz están pintados de azul claro?
+11. **Fotos nuevas:** el azulejo y la cenefa de la cocina de frente, la cara exterior de las puertas y los acabados exteriores (pendientes para mañana).

@@ -32,6 +32,10 @@ Gemelo digital de una casa (Casa Jonhy). Código en inglés, comentarios y docum
   `python -m house_twin.cli texture sources/texturas/<nombre>.json`. No editar los mapas a mano.
 - Tamaños y blancos de referencia que no estén medidos van en `assumptions` y en `size_m.source`.
 - Normal maps en convención OpenGL (la de Blender).
+- Dónde va cada textura lo dice su `applies_to` (`spaces` + `surface`, `openings` + `part`, `street_facade`);
+  `house_twin/finishes.py` lo resuelve (gana la textura que lista menos espacios) y lo usan el IFC (pisos como
+  `IfcCovering` y materiales de vanos) y `blender_scene.py`. Una superficie sin acabado sale en gris violáceo (`sin-dato`).
+- `finishes.py` solo usa la biblioteca estándar: lo importa también el Python de Blender.
 
 ## Comandos
 
@@ -40,6 +44,7 @@ Gemelo digital de una casa (Casa Jonhy). Código en inglés, comentarios y docum
 .venv/bin/python -m house_twin.cli compare A B
 .venv/bin/python -m house_twin.cli inspect-dxf data/raw/plano.dxf
 .venv/bin/python -m house_twin.cli texture sources/texturas/puerta-recamaras.json
+.venv/bin/python -m house_twin.cli scene [--render]   # necesita `blender` con Bonsai en el PATH
 .venv/bin/python -m pytest
 ```
 

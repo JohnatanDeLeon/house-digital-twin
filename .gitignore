@@ -6,3 +6,7 @@ __pycache__/
 
 # Fotos de la casa: privadas y pesadas, solo en la PC del dueño. Al repo entran las texturas derivadas.
 sources/fotos/
+
+# Escena de Blender: se regenera con `python -m house_twin.cli scene` (las texturas van por ruta relativa)
+*.blend
+*.blend1
