@@ -22,6 +22,7 @@ PLAUSIBLE_HALF_EXTENT_M = (1.0, 100.0)  # mitad del lado mayor de una casa, en m
 DOOR_BLOCK = 'PUERTA'  # bloque de puerta del CAD: su arco mayor es el abatimiento, con centro en la bisagra
 LIGHT_BLOCK = 'salidaaaaaaaaaa spot'  # salida de foco en el techo (capa 23- ILUMINACION): el centro de su círculo
 DEVICE_BLOCKS = {'CONTACTO': 'outlet', 'APAGADOR SIMPLE': 'switch'}  # en la capa 5 CORTES, pero dibujados en planta
+SANITARY_BLOCKS = {'WC': 'toilet', 'LAVABO': 'basin'}  # muebles de baño (capa 9-MUEBLES FIJOS)
 
 
 def _effective_layer(entity, parent_layer):
@@ -105,6 +106,7 @@ def load_dxf_drawing(dxf_path: str) -> Drawing:
     drawing.metadata['door_swings'] = _door_swings(doc, to_m)
     drawing.metadata['ceiling_lights'] = _ceiling_lights(doc, to_m)
     drawing.metadata['devices'] = _devices(doc, to_m)
+    drawing.metadata['sanitary'] = _sanitary(doc, to_m)
     return drawing
 
 
@@ -130,6 +132,18 @@ def _devices(doc, to_m) -> list[dict]:
             c = ins.matrix44().transform((*centre, 0))
             devices.append({'kind': kind, 'position': list(to_m((c.x, c.y)))})
     return devices
+
+
+def _sanitary(doc, to_m) -> list[dict]:
+    """Inodoros y lavabos del CAD: tipo y rectángulo que ocupa cada inserción (con su giro), en metros del modelo."""
+    result = []
+    for name, kind in SANITARY_BLOCKS.items():
+        for ins in doc.modelspace().query(f'INSERT[name=="{name}"]'):
+            pts = [to_m(p) for e in ins.virtual_entities() for p in _polyline_points(e, 1e-3)]
+            if pts:
+                result.append({'kind': kind, 'bbox': [min(x for x, _ in pts), min(y for _, y in pts),
+                                                      max(x for x, _ in pts), max(y for _, y in pts)]})
+    return result
 
 
 def _ceiling_lights(doc, to_m) -> list[list[float]]:

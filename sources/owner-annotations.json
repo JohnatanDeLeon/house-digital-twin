@@ -438,6 +438,23 @@
    "note": "Regadera: piso antiderrapante de losetas de 20 × 20 cm (dueño, 2026-10-09), separado del resto del baño por un sardinel de 5 cm (el murete de 5 cm del plano)."
   }
  ],
+ "shared_plates": [
+  {
+   "anchors": [
+    [
+     4.24,
+     11.693
+    ],
+    [
+     4.24,
+     11.459
+    ]
+   ],
+   "material": "placa-beige",
+   "source": "dueño (2026-10-09): el baño no tiene apagador ni contacto abajo; foto del baño (2026-10-07): apagador arriba y contacto abajo en una sola placa beige",
+   "note": "El plano dibuja el apagador (A05) y el contacto (C10) del baño por separado; en la casa son una sola placa, en el lugar del apagador."
+  }
+ ],
  "answered_unknowns": [
   {
    "id": "U06",

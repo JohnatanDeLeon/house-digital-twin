@@ -210,3 +210,15 @@ def test_shower_area_is_the_bathroom_beyond_the_curb(facts):
     xs, ys = [p[0] for p in shower['polygon']], [p[1] for p in shower['polygon']]
     assert (min(xs), max(xs)) == pytest.approx((2.99, 4.24), abs=0.01)  # el PDF de validación difiere en mm
     assert (min(ys), max(ys)) == pytest.approx((10.225, 11.155), abs=0.01)
+
+
+def test_plan_bathroom_fixtures_and_shared_plate(dxf_facts):
+    by_kind = {}
+    for f in dxf_facts['fixtures']:
+        by_kind.setdefault((f['kind'], f['space']), []).append(f)
+    toilet, basin = by_kind[('toilet', 'S05')][0], by_kind[('basin', 'S05')][0]
+    assert toilet['facing'] == basin['facing'] == [1, 0] and toilet['back_centre'][0] == basin['back_centre'][0] == 2.99
+    assert toilet['back_centre'][1] < basin['back_centre'][1]  # el inodoro del lado de la regadera, el lavabo junto a la puerta
+    bath = [d for d in dxf_facts['devices'] if d['space'] == 'S05']
+    assert len(bath) == 2 and len({tuple(d['position']) for d in bath}) == 1  # una sola placa (dueño)
+    assert {d['plate']['material'] for d in bath} == {'placa-beige'}

@@ -28,7 +28,7 @@ from house_twin.finishes import Finishes
 from house_twin.furniture import closet_meshes
 from house_twin.hardware import for_leaf, knob_mesh, placements
 from house_twin.lighting import luminaire_meshes
-from house_twin.plumbing import shower_mesh, valve_meshes
+from house_twin.plumbing import faucet_mesh, sanitary_mesh, shower_mesh, valve_meshes
 
 ASSUMED_DEFAULTS = {'storey_height': 2.40, 'door_height': 2.10, 'window_sill': 0.90, 'window_height': 1.20,
                     'slab_thickness': 0.10}  # losa: U02 sin respuesta; 10 cm es común en losa maciza de casa
@@ -301,10 +301,13 @@ def _add_devices(ctx: _IfcContext, facts, storey, spec):
         ifcopenshell.api.geometry.assign_representation(
             ctx.model, product=element, representation=ctx.builder.get_representation(ctx.body, [ctx.builder.polygonal_face_set(points, faces)]))
         ifcopenshell.api.spatial.assign_container(ctx.model, products=[element], relating_structure=storey)
-        ifcopenshell.api.material.assign_material(ctx.model, products=[element], material=ctx.material(spec['material']))
+        plate = device.get('plate') or {}
+        ifcopenshell.api.material.assign_material(ctx.model, products=[element], material=ctx.material(plate.get('material') or spec['material']))
         z, z_source = device_height(spec, device)
         ctx.pset(element, 'HDT_Provenance', {'FactId': device['id'], 'Space': device['space'], 'Position': device['source'],
-                                             'Height': z, 'HeightSource': z_source, 'Finish': spec['applies_to']['source']})
+                                             'Height': z, 'HeightSource': z_source,
+                                             'Finish': plate.get('source') or spec['applies_to']['source'],
+                                             'SharedPlate': plate.get('id'), 'PlateWith': ','.join(plate.get('with', [])) or None})
 
 
 def _add_shower_fittings(ctx: _IfcContext, facts, storey, spec):
@@ -323,6 +326,31 @@ def _add_shower_fittings(ctx: _IfcContext, facts, storey, spec):
         ifcopenshell.api.material.assign_material(ctx.model, products=[element], material=ctx.material(spec['material']))
         ctx.pset(element, 'HDT_Provenance', {'FactId': shower['id'], 'Space': shower['space'], 'Height': source,
                                              'Position': spec['mount']['source']})
+
+
+def _add_sanitary(ctx: _IfcContext, facts, storey, spec):
+    """Inodoros y lavabos (IfcSanitaryTerminal) donde el plano los dibuja, en los espacios que tiene la especificación;
+    la mezcladora del lavabo va como IfcValve."""
+    if not spec:
+        return
+    for fixture in facts.get('fixtures', []):
+        if fixture['kind'] not in ('toilet', 'basin') or fixture['space'] not in spec['applies_to']['spaces']:
+            continue
+        kind = 'TOILETPAN' if fixture['kind'] == 'toilet' else 'WASHHANDBASIN'
+        parts = [(fixture['id'], 'IfcSanitaryTerminal', kind, sanitary_mesh(spec, fixture), spec['material'],
+                  spec[fixture['kind']]['source'])]
+        if fixture['kind'] == 'basin':
+            faucet = spec['basin']['faucet']
+            parts.append((f"{fixture['id']}-mezcladora", 'IfcValve', 'FAUCET', faucet_mesh(spec, fixture), faucet['material'],
+                          faucet['note']))
+        for name, ifc_class, predefined, (points, faces), material, source in parts:
+            element = ctx.element(ifc_class, name, predefined)
+            ifcopenshell.api.geometry.assign_representation(
+                ctx.model, product=element, representation=ctx.builder.get_representation(ctx.body, [ctx.builder.polygonal_face_set(points, faces)]))
+            ifcopenshell.api.spatial.assign_container(ctx.model, products=[element], relating_structure=storey)
+            ifcopenshell.api.material.assign_material(ctx.model, products=[element], material=ctx.material(material))
+            ctx.pset(element, 'HDT_Provenance', {'FactId': fixture['id'], 'Space': fixture['space'],
+                                                 'Position': fixture['source'], 'Shape': source})
 
 
 def _add_spaces(ctx: _IfcContext, facts, storey, height):
@@ -401,7 +429,7 @@ def _stabilize_guids(model: ifcopenshell.file):
 
 def build_ifc(facts: dict, finishes: Finishes | None = None, hardware: list[dict] | None = None,
               furniture: list[dict] | None = None, luminaires: list[dict] | None = None,
-              devices: dict | None = None, shower: dict | None = None) -> ifcopenshell.file:
+              devices: dict | None = None, shower: dict | None = None, sanitary: dict | None = None) -> ifcopenshell.file:
     ctx = _IfcContext(facts['name'])
     site = ctx.element('IfcSite', 'Terreno')
     building = ctx.element('IfcBuilding', 'Casa')
@@ -420,6 +448,7 @@ def build_ifc(facts: dict, finishes: Finishes | None = None, hardware: list[dict
     _add_lights(ctx, facts, storey, height, luminaires or [])
     _add_devices(ctx, facts, storey, devices)
     _add_shower_fittings(ctx, facts, storey, shower)
+    _add_sanitary(ctx, facts, storey, sanitary)
     _add_spaces(ctx, facts, storey, height)
     if finishes:
         _add_floor_finishes(ctx, facts, storey, finishes)

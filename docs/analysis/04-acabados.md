@@ -319,7 +319,16 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
   - **Estimado con la foto:** centro de las llaves a ≈ 20 cm del fondo, brazo de ≈ 40 cm con caída de ≈ 8 cm y regadera de 20 × 20 cm.
   - **Cromo:** su reflectancia es un valor de tabla, no medido; en un metal pulido, la foto solo muestra el reflejo del cuarto.
   - **Sin modelar:** la regadera de mano con su manguera, la barra y la cortina.
-- **Observación:** en la foto del baño, el apagador con contacto tiene una **placa beige**, no negra. Falta confirmarlo con el dueño.
+- **Placa del baño (corrección del dueño):** el baño no tiene apagador ni contacto abajo. El plano dibuja el apagador (A05) y el contacto (C10) por separado, pero en la casa son **una sola placa**, en el lugar del apagador, con la tecla arriba y el contacto sencillo abajo (foto).
+  - Va en `shared_plates` de las anotaciones. La posición del plano del contacto queda en `plan_position`.
+  - Es **beige**, no negra: **(170, 169, 151)**, medido contra el azulejo del mismo muro (`placa-beige`).
+  - Su altura es la del apagador, 1.22 m; está supuesta, porque viene de la recámara 3.
+- **Inodoro y lavabo:** su posición sale del plano (bloques `WC` y `LAVABO`, hechos `WC02` y `LV02`): los 2 están contra el muro del fondo, con el inodoro del lado de la regadera, igual que en la foto.
+  - **Forma:** inodoro de 2 piezas con la tapa cerrada y lavabo de pedestal con mezcladora cromada, armados con perfiles torneados.
+  - **Medidas:** son las comunes, **supuestas**: taza a 0.38 m, tanque a 0.77 m y borde del lavabo a 0.83 m.
+  - **Color:** hueso, **(185, 183, 170)**, medido en el tanque contra el azulejo de atrás (`porcelana-hueso`).
+  - **Medio baño:** el plano también tiene inodoro y lavabo (`WC01` y `LV01`), pero sin foto no se modelan.
+  - **Recorrido:** el inodoro y el lavabo frenan el paso, como los muebles.
 
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 

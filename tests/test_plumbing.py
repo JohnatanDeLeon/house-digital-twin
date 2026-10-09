@@ -29,3 +29,19 @@ def test_shower_head_hangs_below_the_outlet_and_inside_the_bathroom():
     assert max(p[2] for p in points) <= 1.90 + spec['shower']['pipe_radius_m'] + 1e-9
     assert min(p[0] for p in points) > 2.99  # no atraviesa el muro de enfrente
     assert _signed_volume(points, faces) > 0
+
+
+def _fixture(kind):
+    return {'id': 'X', 'kind': kind, 'space': 'S05', 'back_centre': [2.99, 11.667], 'facing': [1, 0]}
+
+
+def test_toilet_and_basin_stand_in_front_of_their_wall():
+    from house_twin.plumbing import faucet_mesh, load_sanitary_spec, sanitary_mesh
+    spec = load_sanitary_spec()
+    for kind, top in (('toilet', 0.775), ('basin', 0.835)):
+        points, faces = sanitary_mesh(spec, _fixture(kind))
+        assert min(p[0] for p in points) >= 2.99 - 1e-9  # no se mete en el muro
+        assert min(p[2] for p in points) >= -1e-9 and abs(max(p[2] for p in points) - top) < 1e-6
+        assert _signed_volume(points, faces) > 0
+    points, faces = faucet_mesh(spec, _fixture('basin'))
+    assert _signed_volume(points, faces) > 0

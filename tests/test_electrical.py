@@ -43,4 +43,6 @@ def test_ifc_has_outlets_and_switches(dxf_facts):
     ifcopenshell.validate.validate(model, log)
     assert log.statements == []
     assert len(model.by_type('IfcOutlet')) == 12 and len(model.by_type('IfcSwitchingDevice')) == 8
-    assert {ue.get_material(e).Name for e in model.by_type('IfcOutlet') + model.by_type('IfcSwitchingDevice')} == {'placa-negra'}
+    materials = {e.Name: ue.get_material(e).Name for e in model.by_type('IfcOutlet') + model.by_type('IfcSwitchingDevice')}
+    assert {n for n, m in materials.items() if m == 'placa-beige'} == {'A05', 'C10'}  # la placa del baño (dueño)
+    assert {m for n, m in materials.items() if n not in ('A05', 'C10')} == {'placa-negra'}

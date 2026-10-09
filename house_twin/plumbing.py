@@ -45,3 +45,54 @@ def shower_mesh(spec: dict):
     head = oriented_box(end, spec['mount']['along'], spec['mount']['into_room'], (-w / 2, w / 2), (-t, 0), (-d / 2, d / 2))
     return merge([cylinder(start, elbow, s['pipe_radius_m'], s['segments']),
                   cylinder(elbow, end, s['pipe_radius_m'], s['segments']), head])
+
+
+SANITARY_PATH = ROOT / 'sources' / 'sanitarios' / 'muebles-bano.json'
+
+
+def load_sanitary_spec(path: Path = SANITARY_PATH) -> dict | None:
+    return json.loads(path.read_text()) if path.exists() else None
+
+
+def _frame(fixture):
+    """Marco del mueble: `x` a lo ancho, `y` del muro hacia el cuarto, `z` arriba (triedro derecho)."""
+    fx, fy = fixture['facing']
+    return fixture['back_centre'], (fy, -fx), (fx, fy)
+
+
+def _to_world(fixture, points):
+    (ox, oy), (ax, ay), (fx, fy) = _frame(fixture)
+    return [(ox + x * ax + y * fx, oy + x * ay + y * fy, z) for x, y, z in points]
+
+
+def _oval(part):
+    """Sólido torneado y vuelto óvalo (radio x, radio y), centrado en `centre_y`."""
+    points, faces = lathe(part['profile'], part['segments'])
+    rx, ry = part['radius']
+    return [(x * rx, part['centre_y'] + y * ry, z) for x, y, z in points], faces
+
+
+def _box(b):
+    return oriented_box((0.0, 0.0, 0.0), (1.0, 0.0), (0.0, 1.0), b['x'], b['z'], b['y'])
+
+
+def sanitary_mesh(spec: dict, fixture: dict):
+    """Malla de porcelana del inodoro o del lavabo, en coordenadas del mundo."""
+    if fixture['kind'] == 'toilet':
+        t = spec['toilet']
+        parts = [_oval(t['bowl']), _oval(t['seat']), _box(t['tank']), _box(t['tank_lid']), _box(t['neck'])]
+    else:
+        b = spec['basin']
+        parts = [_oval(b['pedestal']), _oval(b['bowl'])]
+    points, faces = merge(parts)
+    return _to_world(fixture, points), faces
+
+
+def faucet_mesh(spec: dict, fixture: dict):
+    """Mezcladora del lavabo: base, cuello y 2 manijas."""
+    f = spec['basin']['faucet']
+    h = f['handles']
+    parts = [_box(f['base']), cylinder(*f['spout'], f['spout_radius'], 16)]
+    parts += [cylinder((x, h['y'], h['z'][0]), (x, h['y'], h['z'][1]), h['radius'], 16) for x in h['x']]
+    points, faces = merge(parts)
+    return _to_world(fixture, points), faces
