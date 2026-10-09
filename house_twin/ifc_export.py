@@ -135,15 +135,15 @@ def _add_opening(ctx: _IfcContext, o, walls, storey, finishes: Finishes | None):
     is_door = o['kind'] == 'door'
     sill, sill_assumed = (0.0, False) if is_door else _value_or_assumed(o['sill_height'], 'window_sill')
     height, height_assumed = _value_or_assumed(o['height'], 'door_height' if is_door else 'window_height')
-    void = ctx.element('IfcOpeningElement', f"{o['id']}-vano", 'OPENING')
-    ctx.extrude_polygon(void, _grown(o['footprint'], OPENING_OVERCUT), height, sill)
     filler = ctx.element('IfcDoor' if is_door else 'IfcWindow', o['id'], 'DOOR' if is_door else 'WINDOW')
     ctx.extrude_polygon(filler, _panel(o['footprint'], PANEL_THICKNESS), height, sill)
     filler.OverallWidth, filler.OverallHeight = o['width'], height
     host = walls.get(o['host_wall'])
-    if host:
+    if host:  # sin muro (puerta de herrería entre dos muros) no hay hueco que cortar: la puerta va sola
+        void = ctx.element('IfcOpeningElement', f"{o['id']}-vano", 'OPENING')
+        ctx.extrude_polygon(void, _grown(o['footprint'], OPENING_OVERCUT), height, sill)
         ifcopenshell.api.feature.add_feature(ctx.model, feature=void, element=host)
-    ifcopenshell.api.feature.add_filling(ctx.model, opening=void, element=filler)
+        ifcopenshell.api.feature.add_filling(ctx.model, opening=void, element=filler)
     ifcopenshell.api.spatial.assign_container(ctx.model, products=[filler], relating_structure=storey)
     ctx.pset(filler, 'HDT_Provenance', {'FactId': o['id'], 'Width': o['width'], 'SillHeight': sill, 'SillAssumed': sill_assumed,
                                         'Height': height, 'HeightAssumed': height_assumed, 'HostWall': o['host_wall'],

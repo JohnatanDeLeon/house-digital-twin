@@ -351,12 +351,13 @@ def _weld_points(item) -> list[tuple[float, float]]:
 
 
 def procedural_sheet_door(spec: dict, size_px: tuple[int, int], colors: dict[str, list[int]]):
-    """Puerta de lámina pintada, dibujada por código con las medidas tomadas en la foto rectificada.
+    """Puerta de lámina o de herrería pintada, dibujada por código con las medidas tomadas en la foto rectificada.
 
-    No se copia la foto: los brillos del sol, los reflejos y las manchas sueltas no quedan en el color base.
-    Lo que sí sale de la foto es la geometría (`layout`, en fracciones de la cara) y los colores (`colors`); el
-    desgaste (polvo, óxido en las soldaduras) se reparte con ruido donde la foto lo muestra.
-    Devuelve color base, altura (m) y rugosidad.
+    No se copia la foto: los brillos del sol, los reflejos y lo que se ve a través de los huecos no quedan en el
+    color base. Lo que sí sale de la foto es la geometría (`layout`, en fracciones de la cara) y los colores
+    (`colors`); el desgaste (polvo, óxido en las soldaduras) se reparte con ruido donde la foto lo muestra.
+    Con `opacity.holes`, dentro de esos rectángulos solo quedan opacas las piezas (barrotes, arillos, adornos).
+    Devuelve color base, altura (m), rugosidad y opacidad (None si la puerta es toda lámina).
     """
     W, H = size_px
     px_per_m = spec['px_per_m']
@@ -367,6 +368,7 @@ def procedural_sheet_door(spec: dict, size_px: tuple[int, int], colors: dict[str
     roughness = np.full((H, W), spec['roughness']['base'])
     rust = np.zeros((H, W))
     dust = np.zeros((H, W))
+    pieces = np.zeros((H, W), bool)  # herrería que tapa los huecos
     for item in spec['layout']:
         x0, y0, x1, y1 = item.get('rect_frac', (0, 0, 1, 1))
         inside = (u >= x0) & (u < x1) & (v >= y0) & (v < y1)
@@ -402,6 +404,28 @@ def procedural_sheet_door(spec: dict, size_px: tuple[int, int], colors: dict[str
                 height[ys, xs] += h * np.sqrt(np.clip(1 - (d / r) ** 2, 0, 1))
                 if rng.random() < item['rust_share']:
                     rust[ys, xs] = np.maximum(rust[ys, xs], np.clip(1 - d / halo, 0, 1) ** 0.7)
+        elif kind == 'bar':  # barrote o travesaño redondeado; `twist_pitch_mm` lo hace torcido (estrías en diagonal)
+            vertical = (x1 - x0) * W < (y1 - y0) * H
+            along, across = (yy, (u - (x0 + x1) / 2) * W) if vertical else (xx, (v - (y0 + y1) / 2) * H)
+            half = ((x1 - x0) * W if vertical else (y1 - y0) * H) / 2
+            profile = h * np.sqrt(np.clip(1 - (across / half) ** 2, 0, 1))
+            if 'twist_pitch_mm' in item:
+                pitch = item['twist_pitch_mm'] / 1000 * px_per_m
+                profile *= 0.7 + 0.3 * np.cos(2 * np.pi * (along + across) / pitch)
+            height = np.where(inside, np.maximum(height, profile), height)
+            pieces |= inside
+        elif kind == 'ring':  # arillo de solera: anillo de sección redondeada
+            cx, cy = item['center_frac'][0] * W, item['center_frac'][1] * H
+            d = np.abs(np.hypot(xx - cx, yy - cy) - item['radius_frac_w'] * W) / (item['thickness_frac_w'] * W / 2)
+            ring = d <= 1
+            height = np.where(ring, np.maximum(height, h * np.sqrt(np.clip(1 - d ** 2, 0, 1))), height)
+            pieces |= ring
+        elif kind == 'ornament':  # adorno de fundición: rombo con picos, más alto al centro
+            cx, cy = item['center_frac'][0] * W, item['center_frac'][1] * H
+            a, b = item['size_frac_w'][0] * W / 2, item['size_frac_w'][1] * W / 2
+            d = np.abs(xx - cx) / a + np.abs(yy - cy) / b
+            height = np.where(d <= 1, np.maximum(height, h * (1 - d)), height)
+            pieces |= d <= 1
         elif kind == 'dust':  # polvo pegado abajo: motas cada vez más densas hacia el piso
             amount = np.clip((v - y0) / (y1 - y0), 0, 1) ** item['ramp_power'] * item['max_cover']
             speck = _periodic_noise((H, W), item['speck_mm'] / 1000 * px_per_m, rng)
@@ -417,14 +441,23 @@ def procedural_sheet_door(spec: dict, size_px: tuple[int, int], colors: dict[str
     # color: pintura medida, apenas variada; se oscurece en lo hundido (juntas, ranuras) y lleva óxido y polvo encima
     cavity = np.clip((_blur(height, spec['cavity']['radius_mm'] / 1000 * px_per_m) - height) / (spec['cavity']['depth_mm'] / 1000), 0, 1)
     shade = (1 - spec['cavity']['darkening'] * cavity) * (1 + paint['variation'] * _periodic_noise((H, W), 0.05 * px_per_m, rng))
-    rust *= np.clip(0.6 + 0.4 * _periodic_noise((H, W), 0.003 * px_per_m, rng), 0, 1)
     lin = _srgb_to_linear(np.array(colors['paint'], float) / 255)[None, None, :] * shade[..., None]
-    lin = lin * (1 - rust[..., None]) + _srgb_to_linear(np.array(colors['rust'], float) / 255) * rust[..., None]
-    dust_amount = dust * spec['dust_opacity']
-    lin = lin * (1 - dust_amount[..., None]) + _srgb_to_linear(np.array(colors['dust'], float) / 255) * dust_amount[..., None]
     rough = spec['roughness']
-    roughness = roughness + (rough['rust'] - roughness) * rust + (rough['dust'] - roughness) * dust
-    return _to_image(lin), height, np.clip(roughness, 0, 1)
+    if rust.any():
+        rust *= np.clip(0.6 + 0.4 * _periodic_noise((H, W), 0.003 * px_per_m, rng), 0, 1)
+        lin = lin * (1 - rust[..., None]) + _srgb_to_linear(np.array(colors['rust'], float) / 255) * rust[..., None]
+        roughness = roughness + (rough['rust'] - roughness) * rust
+    if dust.any():
+        dust_amount = dust * spec['dust_opacity']
+        lin = lin * (1 - dust_amount[..., None]) + _srgb_to_linear(np.array(colors['dust'], float) / 255) * dust_amount[..., None]
+        roughness = roughness + (rough['dust'] - roughness) * dust
+    alpha = None
+    if 'opacity' in spec:
+        holes = np.zeros((H, W), bool)
+        for x0, y0, x1, y1 in spec['opacity']['holes']:
+            holes |= (u >= x0) & (u < x1) & (v >= y0) & (v < y1)
+        alpha = np.where(holes & ~pieces, 0.0, 1.0)
+    return _to_image(lin), height, np.clip(roughness, 0, 1), alpha
 
 
 def build_procedural(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
@@ -433,11 +466,13 @@ def build_procedural(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
     source = {'method': 'procedural', 'seed': spec['seed'], 'references': spec.get('references', [])}
     if spec['generator'] == 'stucco':
         base, height, roughness = procedural_stucco(spec, size_px)
+        alpha = None
         parameters = {k: spec[k] for k in ('plates', 'grain', 'color', 'roughness')}
     elif spec['generator'] == 'sheet_door':
         colors, gain = measured_colors(spec, photos_root)
-        base, height, roughness = procedural_sheet_door(spec, size_px, colors)
-        parameters = {k: spec[k] for k in ('layout', 'paint', 'cavity', 'bevel_mm', 'dust_opacity', 'roughness')}
+        base, height, roughness, alpha = procedural_sheet_door(spec, size_px, colors)
+        parameters = {k: spec[k] for k in ('layout', 'paint', 'cavity', 'bevel_mm', 'roughness', 'dust_opacity', 'opacity')
+                      if k in spec}
         source.update(photo=spec['photo'], photo_meta=spec.get('photo_meta', {}), color=spec['color'],
                       white_balance_gain=gain, measured_srgb=colors)
     else:
@@ -447,11 +482,14 @@ def build_procedural(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
     base.save(out / 'basecolor.jpg', quality=92)
     Image.fromarray((roughness * 255).round().astype(np.uint8)).resize(detail_px, Image.LANCZOS).save(out / 'roughness.png', optimize=True)
     _normal_map(height, px_per_m).resize(detail_px, Image.LANCZOS).save(out / 'normal.png', optimize=True)
+    maps = {'basecolor': 'basecolor.jpg', 'roughness': 'roughness.png', 'normal': 'normal.png (OpenGL)'}
+    if alpha is not None:  # huecos de la herrería: transparentes, sin vidrio
+        Image.fromarray((alpha * 255).astype(np.uint8)).save(out / 'opacity.png', optimize=True)
+        maps['opacity'] = 'opacity.png (0 = hueco)'
     material = {
         'name': spec['name'], 'applies_to': spec['applies_to'], 'kind': 'procedural', 'tileable': spec['tileable'],
-        'size_m': spec['size_m'], 'px_per_m': px_per_m, 'size_px': list(size_px),
-        'maps': {'basecolor': 'basecolor.jpg', 'roughness': 'roughness.png', 'normal': 'normal.png (OpenGL)'},
-        'source': source, 'parameters': parameters,
+        'size_m': spec['size_m'], 'px_per_m': px_per_m, 'size_px': list(size_px), 'maps': maps,
+        'glass_material': spec.get('opacity', {}).get('glass_material'), 'source': source, 'parameters': parameters,
         'observed': spec.get('observed', {}), 'assumptions': spec.get('assumptions', []),
     }
     (out / 'material.json').write_text(json.dumps(material, ensure_ascii=False, indent=1) + '\n')

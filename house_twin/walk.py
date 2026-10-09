@@ -19,11 +19,11 @@ MAP_SIZES = {'basecolor': 1024, 'normal': 1024, 'roughness': 512, 'opacity': 512
 GLASS_ALPHA = 0.3  # el vidrio de una puerta se deja ver un poco, en vez de desaparecer
 
 
-def _light_map(src: Path, dst: Path, kind: str):
+def _light_map(src: Path, dst: Path, kind: str, glass: bool = False):
     img = Image.open(src)
     img = img.convert('L' if kind in ('roughness', 'opacity') else 'RGB')
     img.thumbnail((MAP_SIZES[kind], MAP_SIZES[kind]), Image.LANCZOS)
-    if kind == 'opacity':  # 0 = vidrio, 1 = hoja → alfa del visor
+    if kind == 'opacity' and glass:  # 0 = vidrio, 1 = hoja → alfa del visor; sin vidrio, el hueco queda en 0
         img = img.point(lambda v: round(255 * (GLASS_ALPHA + (1 - GLASS_ALPHA) * v / 255)))
     img.save(dst, quality=90 if kind == 'normal' else 82)
 
@@ -40,7 +40,7 @@ def _material_entry(name: str, spec: dict, folder: Path, out: Path) -> dict:
         src = next(iter(sorted(folder.glob(f'{kind}.*'))), None)
         if src is None:
             continue
-        _light_map(src, out / name / f'{kind}.jpg', kind)
+        _light_map(src, out / name / f'{kind}.jpg', kind, glass=bool(spec.get('glass_material')))
         entry['maps'][kind] = f'texturas/{name}/{kind}.jpg'
     return entry
 

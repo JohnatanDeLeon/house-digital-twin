@@ -18,7 +18,7 @@ python -m house_twin.cli texture sources/texturas/<nombre>.json
 | `azulejo-bano` | Mapas repetibles (3 × 2 azulejos) | Muros del baño S05 | Foto; el dueño dice que es el azulejo del baño con regadera |
 | `piso-exterior` | Mapas repetibles (≈ 1 × 1 m, sin juntas) | Piso de S06 y S09–S13 | Foto; el dueño dice que todos los exteriores son de concreto gris |
 | `piso-regadera` | Mapas repetibles (2 × 2 losetas de mosaico) | Piso de la regadera (S05) | Foto; el dueño dice que el antiderrapante está solo en la regadera |
-| `puerta-pasillo` | Mapas + opacidad de herrería (casi todo hueco) | 2 puertas nuevas del pasillo de servicio: hacia la cochera (S10–S12) y hacia el patio (S12–S09) | Foto y dueño (las dos son iguales); **no están en el plano** |
+| `puerta-pasillo` | Procedural con opacidad de herrería (casi todo hueco) | D10 (cochera ↔ pasillo) y D11 (pasillo ↔ patio) | Medidas de la foto y dueño (las dos son iguales); **no están en el plano** |
 | `closet-madera` | Mapas repetibles de la veta impresa (hojas lisas de melamina) | Puertas de closet de 2 recámaras | Foto; el dueño dice que el closet de la recámara más grande (R1) no tiene puertas |
 | `puerta-entrada` | Mapas + opacidad para el vidrio | Puerta D03 (entrada a la sala) | Foto y dueño |
 | `aluminio-negro` | Constante (color medido) | Marcos y hojas de V01–V10 | Foto; el dueño dice que todas las ventanas son de aluminio negro |
@@ -143,17 +143,19 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 
 ### 10. Puertas de herrería del pasillo de servicio (07:48:20)
 
-- **Son dos y no están en el plano ni en el modelo:** la foto es la que da a la cochera; el dueño dice que la que da al patio es igual. En el modelo las adyacencias S10–S12 y S12–S09 aparecen abiertas (sin muro ni puerta). Los dos límites del pasillo miden 1.005 m, lo que cuadra con dos puertas iguales. Hay que agregarlas como dato del dueño, con su posición y medidas.
+- **Dónde van (dueño, 2026-10-08):** el plano no las dibuja; entran como `add_openings` del dueño, con su rectángulo.
+  - **D10, cochera ↔ pasillo:** en y = 6.705 m. En la foto, su poste izquierdo queda al final del muro de la cocina. Cubre de la barda (x = 0.20 m) a la cara del muro de la cocina (x = 1.205 m): 1.005 m.
+  - **D11, pasillo ↔ patio:** al final del muro de la recámara 2 (y = 16.945 m), donde se abre el patio ancho. Cubre de la barda al muro de la recámara 2 (x = 1.28 m): 1.08 m. El dueño dice que es igual a D10; no hay foto.
+- **El pasillo de servicio crece:** la franja de 1.08 m entre la barda y la recámara 2 queda del lado del pasillo, porque la puerta del patio está al final de ella. El pasillo pasa de 5.95 a 10.62 m² y el patio baja en lo mismo. Entre la cochera, el pasillo y el patio ya no hay paso abierto: se cruzan las dos puertas.
+- **Puertas sin muro:** van entre dos muros, no dentro de uno. Por eso no tienen `host_wall` ni hueco (`IfcOpeningElement`) en el IFC. La altura del dato U04 (2.10 m) es la de los vanos de muro y no les llega: esperan la medida del dueño. Mientras tanto, el IFC usa la altura supuesta, marcada como supuesto.
+- **Altura estimada de la foto:** ancho/alto = 0.530, calculado con la perspectiva y la focal de la cámara. Las esquinas salen en ángulo recto (coseno 0.003), así que la estimación es consistente. Con 1.005 m de ancho da ≈ 1.90 m. Es solo una referencia, no un dato.
 - **Puerta:** de herrería de una hoja. Tiene marco de perfil, 3 barrotes cuadrados torcidos, 3 barrotes lisos con 2 adornos de fundición en rombo cada uno, 4 travesaños, 10 arillos de solera (filas de 3, 4 y 3) y lámina lisa en el tercio inferior.
-- **Acabado:** pintura negra a brocha (`#0d0e10` medido en la lámina), con polvo, desgaste y marcas de brocha.
-- **Herrajes:** bisagras de perno con ménsula anclada al muro, del lado izquierdo; portacandado de lámina con candado, del lado derecho.
-- **Provisionales:** cinta, trapo y amarres de alambre y cordón.
-- **Contexto visible:** el concreto de la cochera con un registro cuadrado, el portón de herrería negro hacia la calle y la barda colindante blanca con remate de tabique rojo.
-- **Textura:**
-  - La opacidad sale de la geometría medida (rectángulos, arillos y adornos), ajustada a la silueta oscura de la foto.
-  - Las piezas toman el color de la pintura, porque su borde en la foto es cielo.
-  - Ancho: el hueco del plano (1.005 m). Alto: supuesto (2.00 m).
-  - Límite: junto a los dos primeros arillos del centro queda una pequeña mancha del portón de la calle, que está detrás y también es negro.
+- **Acabado:** pintura negra a brocha (`#1f1e25` contra el muro del pasillo), con polvo, desgaste y marcas de brocha.
+- **Herrajes:** bisagras de perno con ménsula anclada al muro, del lado izquierdo; portacandado de lámina con candado, del lado derecho. Irán como objetos 3D.
+- **Textura: dibujada, no copiada** (generador `sheet_door`, igual que D09):
+  - La versión anterior pegaba la foto. En los huecos quedaban la calle, la cochera y los cables, y el portacandado, que va de un solo lado. En Blender esos huecos no eran transparentes (la opacidad solo se usaba con vidrio) y en el recorrido se veían al 30 %.
+  - Ahora barrotes, travesaños, arillos y adornos se dibujan con las medidas tomadas en la foto rectificada. La opacidad sale de esas mismas piezas: los huecos son transparentes en Blender (Alpha del Principled) y se recortan en el recorrido, donde la sombra también sigue a los barrotes.
+  - **Color:** la cámara expuso para la calle, así que la lámina sin referencia daba casi negro (8, 8, 11). Con el muro del pasillo como blanco (albedo supuesto 222) da (31, 30, 37), parecido al negro de la bodega.
 
 ### 11. Puertas de closet (07:45:49 y 07:46:12)
 
@@ -322,7 +324,6 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 **Con textura, pero sin geometría en el modelo:**
 - `piso-regadera`: falta el área de la regadera.
 - `closet-madera`: faltan los closets.
-- `puerta-pasillo`: faltan las 2 puertas de herrería del pasillo de servicio.
 
 **Falta para un render fiel:**
 - Techo (losa y tirol).
@@ -336,7 +337,7 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 2. **Medidas:** ancho y alto de la hoja de una puerta de recámara y de una de baño. Para saber qué muro del pasillo está corrido: ancho interior del baño (el plano da 1.25 m) y de la recámara 3 de este a oeste (el plano da 4.07 m).
 3. **Puerta D04:** ¿aluminio o acero? ¿Su vidrio es claro?
 4. **Closets:** ¿de qué recámara es cada foto? Medidas de un módulo (ancho de hoja y alto total). Una foto del techo de tirol de cerca.
-5. **Puertas de herrería del pasillo:** alto, y dónde está cada una: la de la cochera, ¿al ras de la fachada de la cocina o más adentro? La del patio, ¿en la esquina del muro de la recámara 2 / lavandería o en otro punto?
+5. **Puertas de herrería del pasillo (D10, D11):** alto, del piso a lo más alto del marco (estimado ≈ 1.90 m). La posición ya está.
 6. **Baño:** medida del azulejo y hasta qué altura llega (¿al techo o a media altura?), y en qué muros está (¿todo el baño o solo la regadera?). Medida de la loseta antiderrapante y del área de la regadera. ¿El muro de la regadera tiene otro azulejo?
 7. **Puerta D03:** ancho de la hoja (¿hay un marco fijo a la izquierda?) y qué tan oscuro es el polarizado (¿se ve hacia adentro de día?).
 8. **Ventanas:** ¿todas tienen persiana enrollable? ¿La hoja fija tiene vidrio entintado o película?

@@ -48,6 +48,14 @@
    "region": [
     [
      0.0,
+     16.945
+    ],
+    [
+     1.28,
+     16.945
+    ],
+    [
+     1.28,
      12.625
     ],
     [
@@ -63,7 +71,7 @@
      21.3
     ]
    ],
-   "note": "Área exterior detrás de las recámaras."
+   "note": "Área exterior detrás de las recámaras. La franja junto a la recámara 2 (x < 1.28 m) queda del lado del pasillo: la puerta de herrería está al final de ese muro (dueño, 2026-10-08)."
   },
   {
    "name": "Cochera",
@@ -104,11 +112,19 @@
      12.625
     ],
     [
-     0.0,
+     1.28,
      12.625
+    ],
+    [
+     1.28,
+     16.945
+    ],
+    [
+     0.0,
+     16.945
     ]
    ],
-   "note": "Pasillo lateral junto a la barda que conecta la cochera con el patio, pasando por la puerta de la cocina y la lavandería. Su borde sigue la cara exterior del muro de la cocina (x = 1.205 m); límites trazados por Claude a partir de la descripción del dueño."
+   "note": "Pasillo lateral junto a la barda que conecta la cochera con el patio, pasando por la puerta de la cocina y la lavandería. Su borde sigue la cara exterior del muro de la cocina (x = 1.205 m); límites trazados por Claude a partir de la descripción del dueño. Se extiende junto a la recámara 2 hasta la puerta de herrería del patio, al final de ese muro (dueño, 2026-10-08)."
   },
   {
    "name": "Pórtico",
@@ -163,6 +179,70 @@
     ]
    ],
    "note": "Ventana del tragaluz hacia la sala, en el muro central (diagonal). Los muros laterales no tienen ventana. El plano no la dibuja: medidas desconocidas."
+  },
+  {
+   "kind": "door",
+   "footprint": [
+    [
+     0.2,
+     6.705
+    ],
+    [
+     1.205,
+     6.705
+    ],
+    [
+     1.205,
+     6.755
+    ],
+    [
+     0.2,
+     6.755
+    ]
+   ],
+   "connects_anchors": [
+    [
+     0.7,
+     7.2
+    ],
+    [
+     0.7,
+     6.3
+    ]
+   ],
+   "note": "Puerta de herrería entre la cochera y el pasillo de servicio (dueño, 2026-10-08). Posición: en la foto, el poste izquierdo queda al final del muro de la cocina (y = 6.705 m); cubre de la barda (x = 0.20 m) a la cara del muro de la cocina (x = 1.205 m). Altura pendiente de medir."
+  },
+  {
+   "kind": "door",
+   "footprint": [
+    [
+     0.2,
+     16.895
+    ],
+    [
+     1.28,
+     16.895
+    ],
+    [
+     1.28,
+     16.945
+    ],
+    [
+     0.2,
+     16.945
+    ]
+   ],
+   "connects_anchors": [
+    [
+     0.7,
+     16.5
+    ],
+    [
+     0.7,
+     17.4
+    ]
+   ],
+   "note": "Puerta de herrería entre el pasillo de servicio y el patio, igual a la de la cochera, al final del muro de la recámara 2 (dueño, 2026-10-08). Cubre de la barda (x = 0.20 m) al muro de la recámara 2 (x = 1.28 m); no hay foto. Altura pendiente de medir."
   }
  ],
  "answered_unknowns": [

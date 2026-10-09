@@ -741,27 +741,19 @@
      16.945
     ],
     [
-     1.28,
-     12.625
-    ],
-    [
-     1.205,
-     12.625
-    ],
-    [
      0.2,
-     12.625
+     16.945
     ],
     [
      0.2,
      21.05
     ]
    ],
-   "area": 47.25,
-   "perimeter": 37.62,
+   "area": 42.58,
+   "perimeter": 28.98,
    "bbox": [
     0.2,
-    12.625,
+    16.22,
     9.86,
     21.05
    ],
@@ -779,7 +771,7 @@
    },
    "source": "plano: caras de MUROS + vanos",
    "name_source": "dueño (2026-10-08)",
-   "owner_note": "Área exterior detrás de las recámaras."
+   "owner_note": "Área exterior detrás de las recámaras. La franja junto a la recámara 2 (x < 1.28 m) queda del lado del pasillo: la puerta de herrería está al final de ese muro (dueño, 2026-10-08)."
   },
   {
    "id": "S10",
@@ -971,6 +963,14 @@
    "polygon": [
     [
      1.205,
+     10.225
+    ],
+    [
+     1.205,
+     9.225
+    ],
+    [
+     1.205,
      8.395
     ],
     [
@@ -983,28 +983,28 @@
     ],
     [
      0.2,
+     16.945
+    ],
+    [
+     1.28,
+     16.945
+    ],
+    [
+     1.28,
      12.625
     ],
     [
      1.205,
      12.625
-    ],
-    [
-     1.205,
-     10.225
-    ],
-    [
-     1.205,
-     9.225
     ]
    ],
-   "area": 5.95,
-   "perimeter": 13.85,
+   "area": 10.62,
+   "perimeter": 22.64,
    "bbox": [
     0.2,
     6.705,
-    1.205,
-    12.625
+    1.28,
+    16.945
    ],
    "floor_level": {
     "value": null,
@@ -1020,7 +1020,7 @@
    },
    "source": "plano: caras de MUROS + vanos",
    "name_source": "dueño (2026-10-08)",
-   "owner_note": "Pasillo lateral junto a la barda que conecta la cochera con el patio, pasando por la puerta de la cocina y la lavandería. Su borde sigue la cara exterior del muro de la cocina (x = 1.205 m); límites trazados por Claude a partir de la descripción del dueño."
+   "owner_note": "Pasillo lateral junto a la barda que conecta la cochera con el patio, pasando por la puerta de la cocina y la lavandería. Su borde sigue la cara exterior del muro de la cocina (x = 1.205 m); límites trazados por Claude a partir de la descripción del dueño. Se extiende junto a la recámara 2 hasta la puerta de herrería del patio, al final de ese muro (dueño, 2026-10-08)."
   },
   {
    "id": "S13",
@@ -3379,6 +3379,84 @@
    ]
   },
   {
+   "kind": "door",
+   "footprint": [
+    [
+     0.2,
+     6.705
+    ],
+    [
+     1.205,
+     6.705
+    ],
+    [
+     1.205,
+     6.755
+    ],
+    [
+     0.2,
+     6.755
+    ]
+   ],
+   "width": 1.005,
+   "wall_thickness": null,
+   "detected_by": "dueño (2026-10-08)",
+   "sill_height": {
+    "value": 0.0,
+    "source": "definición de puerta"
+   },
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "host_wall": null,
+   "connects": [
+    "S12",
+    "S10"
+   ],
+   "owner_note": "Puerta de herrería entre la cochera y el pasillo de servicio (dueño, 2026-10-08). Posición: en la foto, el poste izquierdo queda al final del muro de la cocina (y = 6.705 m); cubre de la barda (x = 0.20 m) a la cara del muro de la cocina (x = 1.205 m). Altura pendiente de medir.",
+   "id": "D10"
+  },
+  {
+   "kind": "door",
+   "footprint": [
+    [
+     0.2,
+     16.895
+    ],
+    [
+     1.28,
+     16.895
+    ],
+    [
+     1.28,
+     16.945
+    ],
+    [
+     0.2,
+     16.945
+    ]
+   ],
+   "width": 1.08,
+   "wall_thickness": null,
+   "detected_by": "dueño (2026-10-08)",
+   "sill_height": {
+    "value": 0.0,
+    "source": "definición de puerta"
+   },
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "host_wall": null,
+   "connects": [
+    "S12",
+    "S09"
+   ],
+   "owner_note": "Puerta de herrería entre el pasillo de servicio y el patio, igual a la de la cochera, al final del muro de la recámara 2 (dueño, 2026-10-08). Cubre de la barda (x = 0.20 m) al muro de la recámara 2 (x = 1.28 m); no hay foto. Altura pendiente de medir.",
+   "id": "D11"
+  },
+  {
    "kind": "window",
    "footprint": [
     [
@@ -3951,15 +4029,26 @@
    ],
    "walls": [
     "W09",
-    "W12",
     "W20",
-    "W25",
     "W37"
    ],
    "doors": [],
    "windows": [
     "V08"
    ]
+  },
+  {
+   "spaces": [
+    "S03",
+    "S12"
+   ],
+   "walls": [
+    "W09",
+    "W12",
+    "W25"
+   ],
+   "doors": [],
+   "windows": []
   },
   {
    "spaces": [
@@ -4046,20 +4135,11 @@
     "S12"
    ],
    "walls": [],
-   "doors": [],
+   "doors": [
+    "D11"
+   ],
    "windows": [],
-   "open": true
-  },
-  {
-   "spaces": [
-    "S09",
-    "S13"
-   ],
-   "walls": [
-    "W25"
-   ],
-   "doors": [],
-   "windows": []
+   "open": false
   },
   {
    "spaces": [
@@ -4077,9 +4157,11 @@
     "S12"
    ],
    "walls": [],
-   "doors": [],
+   "doors": [
+    "D10"
+   ],
    "windows": [],
-   "open": true
+   "open": false
   },
   {
    "spaces": [

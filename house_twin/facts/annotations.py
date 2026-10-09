@@ -3,7 +3,8 @@
 - merge_spaces: une caras que el plano separa pero son un solo espacio (p. ej. baño + regadera).
 - rename_spaces: da nombre a un recinto que el plano no rotula (p. ej. el tragaluz).
 - exterior_zones: nombra zonas del exterior abierto (cochera, patio…), que no tienen muros que las separen.
-- add_openings: vanos que existen pero el plano no dibuja; sin medidas inventadas.
+- add_openings: vanos que existen pero el plano no dibuja; sin medidas inventadas. Con `footprint` (puertas de
+  herrería entre dos muros, que no van dentro de uno) el vano tiene geometría; con `height`, su altura.
 - answered_unknowns: respuestas del dueño a las incógnitas del modelo (las resuelve el builder).
   Con `value` (m) el builder además lleva la medida al hecho que contesta (U01, U04).
 - measurements: medidas del dueño entre dos muros (anclados por un punto dentro de cada uno). No mueven la
@@ -73,11 +74,17 @@ def owner_openings(walls: list[dict], spaces: list[dict], annotation: dict) -> l
     unknown = {'value': None, 'source': 'no está en el plano'}
     result = []
     for entry in annotation.get('add_openings', []):
-        host = next((w['id'] for w in walls if Polygon(w['footprint']).buffer(0.01).contains(Point(entry['host_wall_anchor']))), None)
+        anchor = entry.get('host_wall_anchor')
+        host = next((w['id'] for w in walls if anchor and Polygon(w['footprint']).buffer(0.01).contains(Point(anchor))), None)
         connects = [s['id'] for a in entry['connects_anchors'] for s in spaces if Polygon(s['polygon']).contains(Point(a))]
-        result.append({'kind': entry['kind'], 'footprint': None, 'width': entry.get('width'),
-                       'wall_thickness': None, 'detected_by': source, 'sill_height': dict(unknown),
-                       'height': dict(unknown), 'host_wall': host, 'connects': connects, 'owner_note': entry.get('note')})
+        footprint, width = entry.get('footprint'), entry.get('width')
+        if footprint:  # ancho = lado largo del rectángulo
+            width = round(max(Point(footprint[0]).distance(Point(footprint[1])), Point(footprint[1]).distance(Point(footprint[2]))), 3)
+        sill = {'value': 0.0, 'source': 'definición de puerta'} if entry['kind'] == 'door' and footprint else dict(unknown)
+        height = {'value': entry['height'], 'source': source} if entry.get('height') is not None else dict(unknown)
+        result.append({'kind': entry['kind'], 'footprint': footprint, 'width': width,
+                       'wall_thickness': None, 'detected_by': source, 'sill_height': sill,
+                       'height': height, 'host_wall': host, 'connects': connects, 'owner_note': entry.get('note')})
     return result
 
 

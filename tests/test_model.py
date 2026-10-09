@@ -1,5 +1,7 @@
 import pytest
+from shapely.geometry import Polygon
 
+from house_twin.facts.builder import _walls_between
 from house_twin.model import HouseModel, RoomNotFound
 
 
@@ -35,17 +37,26 @@ def test_bedrooms_share_wall_without_door(house):
 
 def test_walk_path_from_garage_to_bedroom(house):
     path = house.walk_path('cochera', 'Recámara 2')
-    assert path['reachable'] and path['doors_crossed'] == 2
+    assert path['reachable'] and path['doors_crossed'] == 3  # herrería del pasillo, cocina y recámara
 
 
-def test_exterior_zones_connect_without_doors(house):
+def test_service_passage_joins_patio_and_garage_through_its_gates(house):
     path = house.walk_path('patio', 'cochera')
-    assert path['reachable'] and path['doors_crossed'] == 0
+    assert path['reachable'] and path['doors_crossed'] == 2  # las dos puertas de herrería
     assert [step['to'] for step in path['steps']] == ['Pasillo de servicio', 'Cochera']
     neighbors = {n['name']: n['connection'] for n in house.adjacent_rooms('Lavandería')}
     assert neighbors == {'Pasillo de servicio': 'abierto', 'Baño': 'ventana', 'Cocina + Sala + Comedor': 'solo muro',
                          'Recámara 2': 'solo muro'}
 
 
-def test_corner_contact_is_not_adjacency(house):
-    assert 'Pasillo de servicio' not in {n['name'] for n in house.adjacent_rooms('Recámara 2')}
+def test_corner_contact_is_not_adjacency():
+    # dos cuartos que solo se miran en diagonal por una esquina, con un muro en ella, no son vecinos
+    a = Polygon([(0, 0), (2, 0), (2, 2), (0, 2)])
+    b = Polygon([(2.2, 2.2), (4, 2.2), (4, 4), (2.2, 4)])
+    corner = {'W1': Polygon([(2, 2), (2.2, 2), (2.2, 2.2), (2, 2.2)])}
+    assert _walls_between(a, b, corner) == []
+    assert _walls_between(a, Polygon([(2.2, 0), (4, 0), (4, 2), (2.2, 2)]), {'W2': Polygon([(2, 0), (2.2, 0), (2.2, 2), (2, 2)])}) == ['W2']
+
+
+def test_service_passage_runs_along_bedroom_2(house):
+    assert house.adjacent_rooms('Recámara 2') and 'Pasillo de servicio' in {n['name'] for n in house.adjacent_rooms('Recámara 2')}
