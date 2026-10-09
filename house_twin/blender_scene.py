@@ -1,6 +1,6 @@
 """Escena de Blender con los acabados aplicados. Corre DENTRO de Blender (con Bonsai), no con el Python del repo:
 
-    blender --background --python house_twin/blender_scene.py -- <raíz> <ifc> <salida.blend> [<carpeta de renders>]
+    blender --background --python house_twin/blender_scene.py -- <raíz> <ifc> <salida.blend> [--render DIR] [--glb ARCHIVO]
 
 Abre el IFC con Bonsai, crea un material PBR por textura de `assets/textures/` y lo asigna según
 `house_twin.finishes`: cada cara de muro según el espacio al que mira, cada piso según su espacio y cada
@@ -20,6 +20,7 @@ ARGS = sys.argv[sys.argv.index('--') + 1:]
 ROOT = Path(ARGS[0])
 sys.path.insert(0, str(ROOT))
 from house_twin.finishes import Finishes, _inside, load_materials  # noqa: E402  (necesita la raíz en sys.path)
+from house_twin.sunlight import sun_direction  # noqa: E402
 
 TEXTURES = ROOT / 'assets' / 'textures'
 FACTS = ROOT / 'data' / 'facts' / 'existing.facts.json'
@@ -28,10 +29,6 @@ WINDOW_FRAME_M = 0.045
 WINDOW_MEETING_M = 0.06
 CUT_COLOR = (0.18, 0.18, 0.18)       # cabeza de muro cortada: se ve porque el modelo aún no tiene techo
 UNKNOWN_COLOR = (0.55, 0.52, 0.60)   # superficie sin acabado registrado: gris violáceo para que se note
-# Orientación medida por el dueño con brújula: la fachada mira a 27° (el fondo, +Y, a 207°). Sin saber si es
-# norte magnético o verdadero (en Saltillo difieren ≈ 4°), basta para la vista previa.
-BACK_AZIMUTH_DEG = 207
-SUN_AZIMUTH_DEG, SUN_ELEVATION_DEG = 150, 50  # media mañana de octubre en Saltillo, aproximado
 
 
 def srgb_to_linear(c):
@@ -248,6 +245,7 @@ class Scene:
         parts = self.finishes.opening(oid)
         if 'frame' in parts:  # ventana: marco procedural con las medidas del vano
             size = write_uvs(obj, fit='metres')
+            obj['hdt_size'] = list(size)  # el visor web dibuja el marco con estas medidas
             mat = window_material(f'ventana-{oid}', size, self.specs[parts['frame']], self.specs[parts['glass']])
             obj.data.materials.clear()
             obj.data.materials.append(mat)
@@ -285,18 +283,12 @@ def apply_finishes(ifc_path):
     return scene
 
 
-def _direction(azimuth_deg, elevation_deg=0.0):
-    """Rumbo de brújula → vector de la escena (+Y apunta a BACK_AZIMUTH_DEG, +X a 90° a su derecha)."""
-    a, e = math.radians(azimuth_deg - BACK_AZIMUTH_DEG), math.radians(elevation_deg)
-    return Vector((math.sin(a) * math.cos(e), math.cos(a) * math.cos(e), math.sin(e)))
-
-
 def light_scene():
     sc = bpy.context.scene
     sun = bpy.data.objects.new('sol', bpy.data.lights.new('sol', 'SUN'))
     sun.data.energy = 4.0
     sun.data.angle = math.radians(0.53)
-    sun.rotation_euler = (-_direction(SUN_AZIMUTH_DEG, SUN_ELEVATION_DEG)).to_track_quat('-Z', 'Y').to_euler()
+    sun.rotation_euler = (-Vector(sun_direction())).to_track_quat('-Z', 'Y').to_euler()
     sc.collection.objects.link(sun)
     world = bpy.data.worlds.new('cielo')
     world.use_nodes = True
@@ -397,8 +389,33 @@ def show_materials():
                     space.shading.type = 'MATERIAL'
 
 
+def export_glb(path: Path):
+    """Geometría, UV y nombres de material para el recorrido web; las imágenes las pone el visor (versión ligera)."""
+    bpy.ops.object.select_all(action='DESELECT')
+    for obj in bpy.data.objects:
+        if obj.type == 'MESH' and not obj.hide_render:
+            kind, name = _ifc_name(obj)
+            obj['hdt_kind'], obj['hdt_id'] = kind, name  # el glTF limpia los nombres: el id viaja en extras
+            obj.select_set(True)
+    for cam in bpy.data.collections['Recorrido'].objects:
+        cam['hdt_kind'], cam['hdt_id'] = 'camera', cam.name
+        cam.select_set(True)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    bpy.ops.export_scene.gltf(filepath=str(path), export_format='GLB', use_selection=True, export_extras=True,
+                              export_cameras=True, export_lights=False, export_materials='EXPORT',
+                              export_image_format='NONE', export_apply=False)
+
+
 def main():
-    ifc_path, blend_path = Path(ARGS[1]), Path(ARGS[2])
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('root')
+    parser.add_argument('ifc', type=Path)
+    parser.add_argument('blend', type=Path)
+    parser.add_argument('--render', type=Path)
+    parser.add_argument('--glb', type=Path)
+    args = parser.parse_args(ARGS)
+    ifc_path, blend_path = args.ifc, args.blend
     scene = apply_finishes(ifc_path)
     light_scene()
     add_cameras(json.loads(FACTS.read_text())['spaces'])
@@ -408,8 +425,10 @@ def main():
     print(f'materiales: {sorted(scene.materials)}')
     for line in sorted(scene.unknown):
         print(f'sin acabado: {line}')
-    if len(ARGS) > 3:
-        render_all(Path(ARGS[3]))
+    if args.glb:
+        export_glb(args.glb)
+    if args.render:
+        render_all(args.render)
 
 
 main()

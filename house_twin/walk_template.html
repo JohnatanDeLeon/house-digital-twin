@@ -1,0 +1,476 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Recorrido Casa Jonhy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Recorrido a la altura de los ojos: la vista 3D ocupa toda la pantalla; arriba la barra para saltar de cuarto,
+   abajo el cuarto actual con sus coordenadas, la planta en miniatura y (en el celular) el joystick. */
+:root {
+  --paper: #eef1f4;          /* papel de dibujo con tinte azul, como el visor 3D */
+  --ink: #1d2733;
+  --ink-soft: #5a6878;
+  --rule: #cfd6de;
+  --surface: rgba(255, 255, 255, 0.86);
+  --accent: #2f62c9;         /* azul de plano */
+  --map-wall: #1d2733;
+  --map-room: #dfe6ee;
+  --map-ext: #eef1f4;
+  --font-display: 'Archivo Narrow', 'Arial Narrow', 'Roboto Condensed', sans-serif;
+  --font-body: 'Public Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-data: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #151b22; --ink: #e6ebf1; --ink-soft: #9aa7b6; --rule: #2c3540; --surface: rgba(29, 37, 46, 0.86);
+    --accent: #6f9bf2; --map-wall: #e6ebf1; --map-room: #2a3440; --map-ext: #1b222a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #151b22; --ink: #e6ebf1; --ink-soft: #9aa7b6; --rule: #2c3540; --surface: rgba(29, 37, 46, 0.86);
+  --accent: #6f9bf2; --map-wall: #e6ebf1; --map-room: #2a3440; --map-ext: #1b222a; color-scheme: dark;
+}
+html, body { height: 100%; }
+[hidden] { display: none !important; }
+*, *::before, *::after { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-body); overflow: hidden; }
+#app { position: fixed; inset: 0; touch-action: none; user-select: none; -webkit-user-select: none; }
+#app canvas.view { display: block; width: 100%; height: 100%; cursor: grab; }
+
+.bar {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 3;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px;
+  background: var(--surface); border-bottom: 1px solid var(--rule);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.brand { display: flex; flex-direction: column; line-height: 1.05; margin-right: auto; min-width: 0; }
+.eyebrow { font-family: var(--font-data); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+.brand strong { font-family: var(--font-display); font-size: 21px; font-weight: 700; letter-spacing: 0.01em; }
+.field { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.field label { font-family: var(--font-data); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+select, .btn {
+  font: 500 14px/1.2 var(--font-body); color: var(--ink); background: var(--paper);
+  border: 1px solid var(--rule); border-radius: 6px; padding: 8px 10px; min-height: 38px;
+}
+select { max-width: 62vw; }
+.btn { cursor: pointer; }
+select:focus-visible, .btn:focus-visible, #map:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.here {
+  position: absolute; left: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); z-index: 2;
+  background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 12px;
+  display: grid; gap: 2px; max-width: calc(100% - 32px - 120px);
+}
+.here .room { font-family: var(--font-display); font-size: 18px; font-weight: 600; }
+.here .coords { font-family: var(--font-data); font-size: 11.5px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+body.touch .here { left: auto; right: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px + 200px); max-width: 60vw; }
+
+#map {
+  position: absolute; right: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); z-index: 2;
+  width: 92px; height: 190px; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; cursor: crosshair;
+}
+
+.stick {
+  position: absolute; left: 22px; bottom: calc(env(safe-area-inset-bottom, 0px) + 22px); z-index: 2;
+  width: 132px; height: 132px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--rule); touch-action: none;
+}
+.stick .knob {
+  position: absolute; left: 50%; top: 50%; width: 54px; height: 54px; margin: -27px 0 0 -27px; border-radius: 50%;
+  background: var(--accent); opacity: 0.85;
+}
+
+.hint {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 4;
+  width: min(420px, calc(100% - 32px)); background: var(--surface); border: 1px solid var(--rule); border-radius: 8px;
+  padding: 18px 20px; display: grid; gap: 10px;
+}
+.hint h2 { margin: 0; font-family: var(--font-display); font-size: 22px; text-wrap: balance; }
+.hint dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font-size: 14px; }
+.hint dt { font-family: var(--font-data); font-size: 12.5px; color: var(--accent); white-space: nowrap; }
+.hint dd { margin: 0; }
+.hint p { margin: 0; font-size: 13px; color: var(--ink-soft); line-height: 1.45; }
+.hint .btn { justify-self: start; background: var(--accent); color: var(--paper); border-color: var(--accent); }
+
+.status {
+  position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; padding-inline: 16px;
+  background: var(--paper); font-family: var(--font-data); font-size: 13px; color: var(--ink-soft); text-align: center;
+}
+.status strong { display: block; font-family: var(--font-display); font-size: 22px; color: var(--ink); margin-bottom: 6px; }
+@media (max-width: 520px) { .brand strong { font-size: 18px; } .field label { display: none; } }
+</style>
+
+<div id="app">
+  <header class="bar">
+    <div class="brand"><span class="eyebrow">Recorrido · planta baja</span><strong>Casa Jonhy</strong></div>
+    <div class="field">
+      <label for="room">Ir a</label>
+      <select id="room"></select>
+    </div>
+    <button class="btn" id="help" type="button" aria-label="Cómo moverse">?</button>
+  </header>
+  <div class="here" id="here" aria-live="polite"><span class="room" id="here-room">—</span><span class="coords" id="here-coords"></span></div>
+  <canvas id="map" tabindex="0" aria-label="Planta: toca un cuarto para ir ahí"></canvas>
+  <div class="stick" id="stick" hidden><div class="knob" id="knob"></div></div>
+  <div class="hint" id="hint" hidden>
+    <h2>Camina por la casa</h2>
+    <dl id="hint-keys"></dl>
+    <p>Las puertas no estorban: se pueden atravesar. Toca un cuarto en la planta de la esquina para ir directo. Todavía no hay techo, así que el sol entra por arriba.</p>
+    <button class="btn" id="hint-ok" type="button">Empezar</button>
+  </div>
+  <div class="status" id="status"><div><strong>Cargando la casa…</strong><span id="status-detail">geometría y texturas</span></div></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script>
+const DATA = /*__WALK_DATA__*/null;
+const EYE = 1.6;              // m, altura de los ojos
+const RADIUS = 0.22;          // m, medio ancho de una persona: no se acerca más a un muro
+const WALK = 1.3, RUN = 2.8;  // m/s
+const LOOK = 0.0025;          // rad por píxel
+const WINDOW_FRAME = 0.045, WINDOW_MEETING = 0.06;  // m, mismo supuesto que la escena de Blender
+const isTouch = matchMedia('(pointer: coarse)').matches;
+
+const app = document.getElementById('app');
+const $ = id => document.getElementById(id);
+const status = (title, detail) => { $('status').hidden = false; $('status').innerHTML = `<div><strong>${title}</strong><span>${detail}</span></div>`; };
+
+// ---------- escena ----------
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isTouch ? 1.5 : 2));
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.domElement.className = 'view';
+app.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xbcd3ea);
+const camera = new THREE.PerspectiveCamera(70, 1, 0.05, 200);
+camera.rotation.order = 'YXZ';
+
+// Modelo (x a lo ancho, y al fondo, z arriba) → three.js (x, z, -y), como lo exporta Blender a glTF.
+const toThree = (x, y, z = 0) => new THREE.Vector3(x, z, -y);
+const site = DATA.site, siteW = Math.max(...site.map(p => p[0])), siteD = Math.max(...site.map(p => p[1]));
+const centre = toThree(siteW / 2, siteD / 2);
+
+scene.add(new THREE.HemisphereLight(0xdfe9f5, 0xb3a894, 0.6));
+const sun = new THREE.DirectionalLight(0xfff4e5, 1.7);
+const [sx, sy, sz] = DATA.sun;
+sun.position.copy(centre).add(toThree(sx, sy, sz).multiplyScalar(30));
+sun.target.position.copy(centre);
+sun.castShadow = true;
+sun.shadow.mapSize.set(isTouch ? 1024 : 2048, isTouch ? 1024 : 2048);
+sun.shadow.bias = -0.0004;
+Object.assign(sun.shadow.camera, { left: -15, right: 15, top: 15, bottom: -15, near: 1, far: 70 });
+scene.add(sun, sun.target);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), new THREE.MeshStandardMaterial({ color: 0x9d998b, roughness: 1 }));
+ground.rotation.x = -Math.PI / 2;
+ground.position.set(centre.x, -0.02, centre.z);
+ground.receiveShadow = true;
+scene.add(ground);
+
+// ---------- materiales: la escala real sale de material.json ----------
+const texLoader = new THREE.TextureLoader();
+const maxAniso = renderer.capabilities.getMaxAnisotropy();
+const linearColor = rgb => new THREE.Color(rgb[0] / 255, rgb[1] / 255, rgb[2] / 255).convertSRGBToLinear();
+
+// UV del glTF: v' = 1 − v de Blender. Con flipY = false, esta transformación repite lo que hace el nodo Mapping de Blender.
+function uvTransform(spec) {
+  if (!spec.tileable) return { repeat: [1, 1], offset: [0, 0] };
+  const su = 1 / spec.size_m[0], sv = 1 / spec.size_m[1];
+  const lu = -(spec.origin_m.x || 0) * su, lv = -(spec.origin_m.y || 0) * sv;
+  return { repeat: [su, sv], offset: [lu, -lv - sv] };
+}
+function texture(path, srgb, spec) {
+  const t = texLoader.load(path, () => { pending.delete(path); });
+  pending.add(path);
+  const { repeat, offset } = uvTransform(spec);
+  t.flipY = false;
+  t.wrapS = t.wrapT = spec.tileable ? THREE.RepeatWrapping : THREE.ClampToEdgeWrapping;
+  t.repeat.set(...repeat);
+  t.offset.set(...offset);
+  t.anisotropy = maxAniso;
+  if (srgb) t.encoding = THREE.sRGBEncoding;
+  return t;
+}
+const pending = new Set();
+
+function constantMaterial(pbr) {
+  const glass = (pbr.transmission || 0) > 0;
+  return new THREE.MeshStandardMaterial({
+    color: linearColor(pbr.basecolor_srgb), roughness: pbr.roughness ?? 0.5, metalness: pbr.metalness ?? pbr.metallic ?? 0,
+    transparent: glass, opacity: glass ? 0.28 : 1, side: glass ? THREE.DoubleSide : THREE.FrontSide,
+  });
+}
+function mappedMaterial(spec) {
+  const m = new THREE.MeshStandardMaterial({ roughness: 1 });
+  if (spec.maps.basecolor) m.map = texture(spec.maps.basecolor, true, spec);
+  if (spec.maps.roughness) m.roughnessMap = texture(spec.maps.roughness, false, spec);
+  if (spec.maps.normal) m.normalMap = texture(spec.maps.normal, false, spec);
+  if (spec.maps.opacity) { m.alphaMap = texture(spec.maps.opacity, false, spec); m.transparent = true; }
+  return m;
+}
+const materialCache = {};
+function materialFor(name) {
+  if (materialCache[name]) return materialCache[name];
+  const spec = DATA.materials[name];
+  let m;
+  if (name === 'corte') m = new THREE.MeshStandardMaterial({ color: 0x2e2e2e, roughness: 0.9 });
+  else if (!spec) m = new THREE.MeshStandardMaterial({ color: 0x9a90a8, roughness: 0.9 });  // sin acabado registrado
+  else m = spec.kind === 'constant' ? constantMaterial(spec.pbr) : mappedMaterial(spec);
+  return (materialCache[name] = m);
+}
+
+// Ventana corrediza de 2 hojas: marco perimetral y traslape central de aluminio negro; el resto, vidrio.
+function windowMaterial(size) {
+  const [w, h] = size, px = 220 / Math.max(w, h);
+  const c = document.createElement('canvas');
+  c.width = Math.max(8, Math.round(w * px)); c.height = Math.max(8, Math.round(h * px));
+  const g = c.getContext('2d'), f = Math.max(2, WINDOW_FRAME * px), m = Math.max(2, WINDOW_MEETING * px);
+  g.fillStyle = 'rgba(176, 204, 214, 0.26)'; g.fillRect(0, 0, c.width, c.height);
+  g.fillStyle = '#10110d';
+  g.fillRect(0, 0, c.width, f); g.fillRect(0, c.height - f, c.width, f);
+  g.fillRect(0, 0, f, c.height); g.fillRect(c.width - f, 0, f, c.height);
+  g.fillRect(c.width / 2 - m / 2, 0, m, c.height);
+  const t = new THREE.CanvasTexture(c);
+  t.flipY = false; t.encoding = THREE.sRGBEncoding;
+  t.repeat.set(1 / w, 1 / h); t.offset.set(0, 1 - 1 / h);  // UV en metros, v' = 1 − v
+  return new THREE.MeshStandardMaterial({ map: t, transparent: true, roughness: 0.35, side: THREE.DoubleSide });
+}
+
+// ---------- casa ----------
+const colliders = [];
+const tour = [];
+function tagOf(obj) {
+  for (let o = obj; o; o = o.parent) if (o.userData && o.userData.hdt_kind) return o.userData;
+  return {};
+}
+async function loadHouse() {
+  const res = await fetch('casa.glb');
+  if (!res.ok) throw new Error(`casa.glb: ${res.status}`);
+  const buffer = await res.arrayBuffer();
+  const gltf = await new Promise((ok, fail) => new THREE.GLTFLoader().parse(buffer, '', ok, fail));
+  gltf.scene.updateMatrixWorld(true);
+  gltf.scene.traverse(obj => {
+    const tag = tagOf(obj);
+    if (obj.isCamera && tag.hdt_kind === 'camera') tour.push({ label: tag.hdt_id, camera: obj });
+    if (!obj.isMesh) return;
+    const name = obj.material && obj.material.name;
+    obj.material = tag.hdt_kind === 'IfcWindow' && tag.hdt_size ? windowMaterial(tag.hdt_size) : materialFor(name);
+    obj.castShadow = tag.hdt_kind !== 'IfcWindow';
+    obj.receiveShadow = true;
+    if (tag.hdt_kind === 'IfcWall' || tag.hdt_kind === 'IfcWindow') colliders.push(obj);
+  });
+  scene.add(gltf.scene);
+  tour.sort((a, b) => a.label.localeCompare(b.label, 'es', { numeric: true }));
+}
+
+// ---------- jugador ----------
+const player = { pos: new THREE.Vector3(), yaw: 0, pitch: 0 };
+function goTo(stop) {
+  if (stop.start) {  // punto calculado de los hechos: posición y dirección en el modelo
+    const { at, facing } = stop.start;
+    player.pos.copy(toThree(at[0], at[1], EYE));
+    player.yaw = Math.atan2(-facing[0], facing[1]);
+    player.pitch = -0.05;
+    return;
+  }
+  const p = new THREE.Vector3(), q = new THREE.Quaternion();
+  stop.camera.getWorldPosition(p); stop.camera.getWorldQuaternion(q);
+  const dir = new THREE.Vector3(0, 0, -1).applyQuaternion(q);
+  player.pos.set(p.x, EYE, p.z);
+  player.yaw = Math.atan2(-dir.x, -dir.z);
+  player.pitch = Math.max(-0.35, Math.min(0.2, Math.asin(dir.y)));
+}
+function teleport(mx, my) {
+  player.pos.set(mx, EYE, -my);
+}
+
+const ray = new THREE.Raycaster();
+const AXES = [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 0, 1)];
+// Se mueve un eje a la vez: si un muro corta el paso en X, igual se avanza en Z (se desliza a lo largo del muro).
+function blocked(axis, step) {
+  const dir = axis.clone().multiplyScalar(Math.sign(step));
+  const side = new THREE.Vector3(-dir.z, 0, dir.x).multiplyScalar(RADIUS * 0.8);
+  for (const h of [0.3, 1.1]) {
+    for (const s of [-1, 0, 1]) {
+      const origin = player.pos.clone().setY(h).addScaledVector(side, s);
+      ray.set(origin, dir); ray.far = Math.abs(step) + RADIUS;
+      if (ray.intersectObjects(colliders, false).length) return true;
+    }
+  }
+  return false;
+}
+function move(forward, strafe, dt, fast) {
+  const len = Math.hypot(forward, strafe);
+  if (len < 0.01) return false;
+  const k = Math.min(1, len) * (fast ? RUN : WALK) * dt / len;
+  const fx = -Math.sin(player.yaw), fz = -Math.cos(player.yaw);
+  const dx = (fx * forward + -fz * strafe) * k, dz = (fz * forward + fx * strafe) * k;
+  if (dx && !blocked(AXES[0], dx)) player.pos.x += dx;
+  if (dz && !blocked(AXES[1], dz)) player.pos.z += dz;
+  return true;
+}
+
+// ---------- entradas ----------
+const keys = new Set();
+addEventListener('keydown', e => {
+  if (e.target.tagName === 'SELECT') return;
+  keys.add(e.code);
+  if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) e.preventDefault();
+});
+addEventListener('keyup', e => keys.delete(e.code));
+addEventListener('blur', () => keys.clear());
+function keyboardAxes() {
+  const f = (keys.has('KeyW') || keys.has('ArrowUp') ? 1 : 0) - (keys.has('KeyS') || keys.has('ArrowDown') ? 1 : 0);
+  const s = (keys.has('KeyD') || keys.has('ArrowRight') ? 1 : 0) - (keys.has('KeyA') || keys.has('ArrowLeft') ? 1 : 0);
+  return [f, s, keys.has('ShiftLeft') || keys.has('ShiftRight')];
+}
+function look(dx, dy) {
+  player.yaw -= dx * LOOK;
+  player.pitch = Math.max(-1.3, Math.min(1.3, player.pitch - dy * LOOK));
+}
+
+const view = renderer.domElement;
+let drag = null;
+view.addEventListener('pointerdown', e => {
+  if (e.pointerType === 'mouse' && !document.pointerLockElement && view.requestPointerLock) {
+    try { const r = view.requestPointerLock(); if (r && r.catch) r.catch(() => {}); } catch (_) { /* sin pointer lock: se arrastra */ }
+  }
+  drag = { id: e.pointerId, x: e.clientX, y: e.clientY };
+  view.setPointerCapture(e.pointerId);
+});
+view.addEventListener('pointermove', e => {
+  if (document.pointerLockElement === view) { look(e.movementX, e.movementY); return; }
+  if (!drag || drag.id !== e.pointerId) return;
+  look(e.clientX - drag.x, e.clientY - drag.y);
+  drag.x = e.clientX; drag.y = e.clientY;
+});
+const endDrag = e => { if (drag && drag.id === e.pointerId) drag = null; };
+view.addEventListener('pointerup', endDrag);
+view.addEventListener('pointercancel', endDrag);
+
+// Joystick: el desplazamiento del pulgar, normalizado al radio, es la velocidad.
+const stick = $('stick'), knob = $('knob');
+const joy = { id: null, f: 0, s: 0 };
+function joyUpdate(e) {
+  const r = stick.getBoundingClientRect(), R = r.width / 2;
+  let dx = e.clientX - (r.left + R), dy = e.clientY - (r.top + R);
+  const d = Math.hypot(dx, dy), max = R - 20;
+  if (d > max) { dx *= max / d; dy *= max / d; }
+  knob.style.transform = `translate(${dx}px, ${dy}px)`;
+  joy.f = -dy / max; joy.s = dx / max;
+}
+stick.addEventListener('pointerdown', e => { joy.id = e.pointerId; stick.setPointerCapture(e.pointerId); joyUpdate(e); e.stopPropagation(); });
+stick.addEventListener('pointermove', e => { if (e.pointerId === joy.id) joyUpdate(e); });
+const joyEnd = e => { if (e.pointerId !== joy.id) return; joy.id = null; joy.f = joy.s = 0; knob.style.transform = ''; };
+stick.addEventListener('pointerup', joyEnd);
+stick.addEventListener('pointercancel', joyEnd);
+
+// ---------- dónde estoy: planta y cuarto ----------
+function inside([x, y], poly) {
+  let c = false;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const [xi, yi] = poly[i], [xj, yj] = poly[j];
+    if ((yi > y) !== (yj > y) && x < xi + (y - yi) * (xj - xi) / (yj - yi)) c = !c;
+  }
+  return c;
+}
+const modelXY = () => [player.pos.x, -player.pos.z];
+const spaceAt = p => DATA.spaces.find(s => inside(p, s.polygon));
+
+const map = $('map'), mg = map.getContext('2d');
+const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+function mapScale() {
+  const dpr = window.devicePixelRatio || 1, w = map.clientWidth, h = map.clientHeight;
+  if (map.width !== Math.round(w * dpr)) { map.width = Math.round(w * dpr); map.height = Math.round(h * dpr); }
+  const pad = 6, k = Math.min((w - 2 * pad) / siteW, (h - 2 * pad) / siteD);
+  return { dpr, k, ox: (w - siteW * k) / 2, oy: (h + siteD * k) / 2 };  // la calle abajo, el fondo arriba
+}
+function drawMap(current) {
+  const { dpr, k, ox, oy } = mapScale();
+  const P = ([x, y]) => [ox + x * k, oy - y * k];
+  mg.setTransform(dpr, 0, 0, dpr, 0, 0);
+  mg.clearRect(0, 0, map.width, map.height);
+  const poly = (pts, fill) => { mg.beginPath(); pts.forEach((p, i) => mg[i ? 'lineTo' : 'moveTo'](...P(p))); mg.closePath(); mg.fillStyle = fill; mg.fill(); };
+  for (const s of DATA.spaces) poly(s.polygon, s === current ? css('--accent') : (s.exterior ? css('--map-ext') : css('--map-room')));
+  for (const w of DATA.walls) poly(w, css('--map-wall'));
+  const [px, py] = P(modelXY());
+  const fx = -Math.sin(player.yaw), fy = Math.cos(player.yaw);  // hacia dónde mira, en el modelo
+  mg.fillStyle = css('--accent'); mg.strokeStyle = css('--paper'); mg.lineWidth = 1.5;
+  mg.beginPath(); mg.moveTo(px + fx * 9, py - fy * 9); mg.lineTo(px - fy * 4.5 - fx * 2, py - fx * 4.5 + fy * 2);
+  mg.lineTo(px + fy * 4.5 - fx * 2, py + fx * 4.5 + fy * 2); mg.closePath(); mg.fill(); mg.stroke();
+}
+map.addEventListener('pointerdown', e => {
+  const { k, ox, oy } = mapScale(), r = map.getBoundingClientRect();
+  const p = [(e.clientX - r.left - ox) / k, (oy - (e.clientY - r.top)) / k];
+  if (spaceAt(p)) teleport(...p);
+  e.stopPropagation();
+});
+
+let lastRoom = null;
+function updateHere() {
+  const p = modelXY(), s = spaceAt(p);
+  if (s !== lastRoom) {
+    $('here-room').textContent = s ? `${s.id} · ${s.name}` : 'Dentro de un muro';
+    if (s) { const i = tour.findIndex(t => t.label.startsWith(s.id + ' ')); if (i >= 0) $('room').value = String(i); }
+    lastRoom = s;
+  }
+  $('here-coords').textContent = `x ${p[0].toFixed(2)} m · y ${p[1].toFixed(2)} m · ojos a ${EYE.toFixed(2)} m`;
+  drawMap(s);
+}
+
+// ---------- ayuda ----------
+const HELP = isTouch
+  ? [['Joystick', 'caminar (más lejos del centro, más rápido)'], ['Arrastra', 'mirar alrededor'], ['Planta', 'toca un cuarto para ir ahí']]
+  : [['Clic', 'mirar con el mouse (Esc lo suelta)'], ['W A S D', 'caminar; también las flechas'], ['Shift', 'correr'], ['Planta', 'clic en un cuarto para ir ahí']];
+$('hint-keys').innerHTML = HELP.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+const toggleHint = show => { $('hint').hidden = !show; };
+$('help').addEventListener('click', () => toggleHint($('hint').hidden));
+$('hint-ok').addEventListener('click', () => toggleHint(false));
+if (isTouch) { document.body.classList.add('touch'); stick.hidden = false; }
+
+// ---------- ciclo ----------
+function resize() {
+  const w = app.clientWidth, h = app.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h; camera.fov = w < h ? 80 : 70;
+  camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize);
+const clock = new THREE.Clock();
+function frame() {
+  const dt = Math.min(clock.getDelta(), 0.05);
+  const [kf, ks, fast] = keyboardAxes();
+  const moved = move(kf + joy.f, ks + joy.s, dt, fast || Math.hypot(joy.f, joy.s) > 0.92);
+  if (moved && !$('hint').hidden) toggleHint(false);
+  camera.position.copy(player.pos);
+  camera.rotation.set(player.pitch, player.yaw, 0);
+  renderer.render(scene, camera);
+  updateHere();
+  requestAnimationFrame(frame);
+}
+
+loadHouse().then(() => {
+  const select = $('room');
+  const entrance = DATA.entrance && { label: `Entrada (${DATA.entrance.door})`, start: DATA.entrance };
+  if (entrance) tour.unshift(entrance);
+  select.innerHTML = tour.map((t, i) => `<option value="${i}">${t.label}</option>`).join('');
+  select.addEventListener('change', () => { goTo(tour[Number(select.value)]); select.blur(); });
+  if (tour.length) goTo(tour[0]); else teleport(siteW / 2, 1);
+  resize();
+  $('status').hidden = true;
+  toggleHint(true);
+  frame();
+}).catch(err => {
+  console.error(err);
+  status('No pude cargar la casa', location.protocol === 'file:'
+    ? 'El navegador no deja leer casa.glb desde un archivo local. Abre el enlace publicado, o sirve la carpeta con: python -m http.server'
+    : `Revisa que casa.glb esté junto a esta página. (${err.message})`);
+});
+</script>

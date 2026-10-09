@@ -60,6 +60,10 @@ Herramientas: `house_summary`, `list_rooms`, `get_room`, `get_adjacent_rooms`, `
 En el navegador (también en el celular): `docs/viewer/casa-jonhy-3d.html`, generado por `build`.
 Gira con el dedo, toca un espacio para ver su ficha, cambia a vista en planta o corta los muros a 1 m.
 
+Para caminar adentro, con las texturas: `docs/viewer/recorrido/`, generado por `scene`. En la PC se camina con W A S D
+y el mouse, y en el celular con un joystick táctil. Los muros chocan, las puertas se atraviesan y una planta en
+miniatura muestra dónde estás. Necesita servirse por HTTP (`python -m http.server` en esa carpeta), no como archivo local.
+
 En Blender:
 
 Abre `models/existing.ifc` en Blender con el add-on [Bonsai](https://bonsaibim.org)
@@ -84,7 +88,9 @@ house_twin/
   facts/              openings.py, faces.py, walls.py, naming.py, annotations.py, builder.py
   ifc_export.py       hechos → IFC4 (IfcOpenShell)
   finishes.py         qué textura lleva cada cara de muro, piso y vano (según el applies_to de cada textura)
-  blender_scene.py    corre dentro de Blender: IFC + texturas → escena con materiales y renders
+  blender_scene.py    corre dentro de Blender: IFC + texturas → escena con materiales, GLB y renders
+  walk.py             recorrido web en primera persona (GLB + texturas ligeras + walk_template.html)
+  sunlight.py         orientación medida y sol de la vista previa (lo comparten Blender y la web)
   model.py            consultas semánticas (HouseModel)
   mcp_server.py       House MCP
   render.py           imagen de validación

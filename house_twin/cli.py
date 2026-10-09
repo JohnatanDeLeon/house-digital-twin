@@ -14,6 +14,7 @@ VIEWER_PATH = ROOT / 'docs' / 'viewer' / 'casa-jonhy-3d.html'
 TEXTURES_DIR = ROOT / 'assets' / 'textures'
 BLEND_PATH = ROOT / 'models' / 'existing.blend'
 RENDERS_DIR = ROOT / 'docs' / 'analysis' / '05-renders'
+WALK_DIR = ROOT / 'docs' / 'viewer' / 'recorrido'
 
 
 def _load_drawing(source: Path):
@@ -69,20 +70,24 @@ def texture(spec: Path):
 
 
 def scene(render: bool):
-    """Escena de Blender con los acabados (y renders de vista previa): corre `blender_scene.py` dentro de Blender."""
+    """Escena de Blender con los acabados, recorrido web y (opcional) renders: corre `blender_scene.py` dentro de Blender."""
     import shutil
     import subprocess
+    from house_twin.finishes import load_materials
+    from house_twin.walk import build_walk
     blender = shutil.which('blender')
     if blender is None:
         raise SystemExit('No encuentro `blender` en el PATH (ver README: Blender + Bonsai)')
     args = [blender, '--background', '--python', str(ROOT / 'house_twin' / 'blender_scene.py'), '--',
-            str(ROOT), str(IFC_PATH), str(BLEND_PATH)] + ([str(RENDERS_DIR)] if render else [])
+            str(ROOT), str(IFC_PATH), str(BLEND_PATH), '--glb', str(WALK_DIR / 'casa.glb')]
+    args += ['--render', str(RENDERS_DIR)] if render else []
     out = subprocess.run(args, capture_output=True, text=True)
     report = [line for line in out.stdout.splitlines() if line.startswith(('materiales:', 'sin acabado:', 'Error'))]
     print('\n'.join(report))
     if out.returncode != 0 or not BLEND_PATH.exists():
         raise SystemExit(out.stderr[-2000:] or 'Blender falló')
-    for path in [BLEND_PATH] + (sorted(RENDERS_DIR.glob('*.jpg')) if render else []):
+    walk = build_walk(json.loads(FACTS_PATH.read_text()), load_materials(TEXTURES_DIR), TEXTURES_DIR, WALK_DIR)
+    for path in [BLEND_PATH, WALK_DIR / 'casa.glb', walk] + (sorted(RENDERS_DIR.glob('*.jpg')) if render else []):
         print(f'→ {path.relative_to(ROOT)}')
 
 
@@ -98,7 +103,7 @@ def main():
     i.add_argument('source', type=Path)
     t = sub.add_parser('texture', help='foto → texturas PBR según un JSON de sources/texturas/')
     t.add_argument('spec', type=Path)
-    sc = sub.add_parser('scene', help='IFC + texturas → escena de Blender (models/existing.blend)')
+    sc = sub.add_parser('scene', help='IFC + texturas → escena de Blender y recorrido web (docs/viewer/recorrido/)')
     sc.add_argument('--render', action='store_true', help='también renderiza las vistas previas (Cycles, CPU: ~5 min)')
     args = parser.parse_args()
     if args.command == 'build':
