@@ -1,0 +1,350 @@
+{
+ "name": "reja-portico",
+ "applies_to": {
+  "openings": [
+   "D01"
+  ],
+  "viewed_from": "S11",
+  "source": "dueño (2026-10-09): fotos del frente del pórtico desde adentro"
+ },
+ "kind": "procedural",
+ "tileable": false,
+ "size_m": {
+  "width": 0.98,
+  "height": 2.3,
+  "source": "ancho: plano (0.98 m); alto: ≈ 2.30 m, estimado con las fotos (llega a la misma altura que las ventanas: antepecho ≈ 1.00 m + 1.30 m medido por el dueño)"
+ },
+ "px_per_m": 800,
+ "size_px": [
+  784,
+  1840
+ ],
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)",
+  "opacity": "opacity.png (0 = hueco)"
+ },
+ "glass_material": null,
+ "source": {
+  "method": "procedural",
+  "seed": 53,
+  "references": [],
+  "photo": "sources/fotos/fachada-interior-2.jpg",
+  "photo_meta": {
+   "taken": "2026-10-09T08:46:59",
+   "camera": "Samsung Galaxy S25 Ultra",
+   "focal_35mm": 13,
+   "light": "luz de día nublada, tomada desde el pórtico hacia la calle"
+  },
+  "color": {
+   "white_reference": {
+    "box_px": [
+     300,
+     1300,
+     600,
+     1700
+    ],
+    "albedo_srgb": [
+     222,
+     222,
+     220
+    ],
+    "note": "muro de la bodega, liso y pintado de blanco; está de lado respecto de la reja, así que recibe una luz parecida pero no igual. Mismo blanco exterior supuesto que los demás aplanados"
+   },
+   "measure_px_per_m": 500,
+   "samples": {
+    "paint": {
+     "rect_frac": [
+      0.1,
+      0.8,
+      0.9,
+      0.95
+     ],
+     "keep": "darkest",
+     "fraction": 0.3,
+     "note": "lámina de abajo"
+    }
+   }
+  },
+  "white_balance_gain": [
+   2.1972,
+   2.1665,
+   2.0643
+  ],
+  "measured_srgb": {
+   "paint": [
+    29,
+    30,
+    36
+   ]
+  }
+ },
+ "parameters": {
+  "layout": [
+   {
+    "kind": "level",
+    "rect_frac": [
+     0.0133,
+     0.7717,
+     0.949,
+     0.9783
+    ],
+    "height_mm": -3,
+    "note": "lámina lisa, asentada detrás del marco"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.0133,
+     0.0809,
+     0.949,
+     0.0843
+    ],
+    "height_mm": 6,
+    "note": "travesaño de solera bajo los arillos"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.0133,
+     0.4404,
+     0.949,
+     0.4439
+    ],
+    "height_mm": 5,
+    "note": "varilla redonda a la altura del pasador"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.1612,
+     0.0152,
+     0.1816,
+     0.7674
+    ],
+    "height_mm": 8,
+    "twist_pitch_mm": 60,
+    "note": "barrote cuadrado torcido"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.4755,
+     0.0152,
+     0.4959,
+     0.7674
+    ],
+    "height_mm": 8,
+    "twist_pitch_mm": 60,
+    "note": "barrote cuadrado torcido"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.7837,
+     0.0152,
+     0.8041,
+     0.7674
+    ],
+    "height_mm": 8,
+    "twist_pitch_mm": 60,
+    "note": "barrote cuadrado torcido"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.324,
+     0.0152,
+     0.3393,
+     0.7674
+    ],
+    "height_mm": 6,
+    "note": "barrote liso con 4 adornos"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.6332,
+     0.0152,
+     0.6485,
+     0.7674
+    ],
+    "height_mm": 6,
+    "note": "barrote liso con 4 adornos"
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.0857,
+     0.05
+    ],
+    "radius_frac_w": 0.06122,
+    "thickness_frac_w": 0.00918,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.4102,
+     0.05
+    ],
+    "radius_frac_w": 0.06122,
+    "thickness_frac_w": 0.00918,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.5653,
+     0.05
+    ],
+    "radius_frac_w": 0.06122,
+    "thickness_frac_w": 0.00918,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.8735,
+     0.05
+    ],
+    "radius_frac_w": 0.06122,
+    "thickness_frac_w": 0.00918,
+    "height_mm": 4
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.3316,
+     0.1896
+    ],
+    "size_frac_w": [
+     0.0327,
+     0.051
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.3316,
+     0.3391
+    ],
+    "size_frac_w": [
+     0.0327,
+     0.051
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.3316,
+     0.5365
+    ],
+    "size_frac_w": [
+     0.0327,
+     0.051
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.3316,
+     0.6722
+    ],
+    "size_frac_w": [
+     0.0327,
+     0.051
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.6408,
+     0.1896
+    ],
+    "size_frac_w": [
+     0.0327,
+     0.051
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.6408,
+     0.3391
+    ],
+    "size_frac_w": [
+     0.0327,
+     0.051
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.6408,
+     0.5365
+    ],
+    "size_frac_w": [
+     0.0327,
+     0.051
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.6408,
+     0.6722
+    ],
+    "size_frac_w": [
+     0.0327,
+     0.051
+    ],
+    "height_mm": 10
+   }
+  ],
+  "paint": {
+   "variation": 0.03,
+   "orange_peel_mm": 1.5,
+   "orange_peel_height_mm": 0.04,
+   "note": "esmalte negro"
+  },
+  "cavity": {
+   "radius_mm": 5,
+   "depth_mm": 3,
+   "darkening": 0.5
+  },
+  "bevel_mm": 1.0,
+  "roughness": {
+   "base": 0.55,
+   "note": "esmalte negro con algo de polvo"
+  },
+  "opacity": {
+   "holes": [
+    [
+     0.0133,
+     0.0196,
+     0.949,
+     0.7652
+    ]
+   ],
+   "note": "todo lo de adentro del marco es hueco salvo travesaños, barrotes, arillos y adornos"
+  }
+ },
+ "observed": {
+  "type": "reja de una hoja: marco de perfil, 4 arillos arriba, 3 barrotes torcidos y 2 lisos con 4 adornos, varilla a media altura y lámina lisa abajo (desde ≈ 1.76 m medidos desde arriba)",
+  "hardware": "pasador con candado en el larguero del lado este (izquierda vista desde el pórtico), a la altura de la varilla; no va en la textura (es de un solo lado)",
+  "rings": "los arillos no van en todos los huecos: en el 1.º, 3.º, 4.º y 6.º desde la izquierda (vista desde el pórtico)"
+ },
+ "assumptions": [
+  "relieve y paso del torcido (6 cm) como el portón",
+  "el larguero derecho (≈ 5 cm) incluye el canto del marco fijo"
+ ]
+}

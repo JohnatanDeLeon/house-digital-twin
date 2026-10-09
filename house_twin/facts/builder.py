@@ -10,8 +10,8 @@ from datetime import date
 from shapely.geometry import LineString, Point, Polygon
 
 from house_twin.drawing import Drawing
-from house_twin.facts.annotations import (SpacePiece, merge_spaces, owner_measurements, owner_openings, rename_spaces,
-                                         split_exterior)
+from house_twin.facts.annotations import (SpacePiece, correct_openings, merge_spaces, owner_measurements, owner_openings,
+                                          rename_spaces, split_exterior)
 from house_twin.facts.faces import partition
 from house_twin.facts.naming import labels_inside, space_name
 from house_twin.facts.openings import detect_openings
@@ -318,6 +318,7 @@ def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
         o['id'] = f"V{len(windows)+1:02d}" if o['kind'] == 'window' else f"D{len(doors)+1:02d}"
         (windows if o['kind'] == 'window' else doors).append(o)
     openings = doors + windows
+    correct_openings(openings, annotations)
 
     cal = drawing.metadata.get('calibration', {})
     lot_w = faces.lot.bounds[2] - faces.lot.bounds[0]

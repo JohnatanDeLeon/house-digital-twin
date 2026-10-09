@@ -1,0 +1,388 @@
+{
+  "_doc": "Herrería de la abertura chica del frente del pórtico (V12). Se DIBUJA por código con las medidas tomadas en la foto rectificada (no se pega la foto: en los huecos tenía la calle y los coches). Posiciones en fracciones de la cara (0–1, origen arriba a la izquierda, vista desde el pórtico). Regenerar con: python -m house_twin.cli texture sources/texturas/ventana-portico-chica.json",
+  "name": "ventana-portico-chica",
+  "kind": "procedural",
+  "generator": "sheet_door",
+  "tileable": false,
+  "applies_to": {
+    "openings": [
+      "V12"
+    ],
+    "viewed_from": "S11",
+    "source": "dueño (2026-10-09): fotos del frente del pórtico desde adentro; medidas del dueño"
+  },
+  "photo": "sources/fotos/fachada-interior-2.jpg",
+  "photo_meta": {
+    "taken": "2026-10-09T08:46:59",
+    "camera": "Samsung Galaxy S25 Ultra",
+    "focal_35mm": 13,
+    "light": "luz de día nublada, tomada desde el pórtico hacia la calle"
+  },
+  "corners_px": {
+    "top_left": [
+      2810,
+      1007
+    ],
+    "top_right": [
+      3484,
+      1026
+    ],
+    "bottom_right": [
+      3461,
+      1636
+    ],
+    "bottom_left": [
+      2803,
+      1656
+    ]
+  },
+  "size_m": {
+    "width": 1.5,
+    "height": 1.3,
+    "source": "dueño (2026-10-09): 150 × 130 cm, medida con cinta"
+  },
+  "px_per_m": 800,
+  "seed": 62,
+  "color": {
+    "srgb": {
+      "paint": [
+        29,
+        30,
+        36
+      ]
+    },
+    "note": "el negro medido en la lámina de la reja del pórtico (D01), en la misma foto y con el muro de la bodega como blanco; los perfiles de la ventana son muy delgados para medirlos. Coincide con el negro de la herrería del pasillo (31, 30, 37)"
+  },
+  "layout": [
+    {
+      "kind": "bar",
+      "rect_frac": [
+        0.0053,
+        0.1317,
+        0.9933,
+        0.1395
+      ],
+      "height_mm": 6,
+      "note": "travesaño de solera bajo los arillos"
+    },
+    {
+      "kind": "bar",
+      "rect_frac": [
+        0.18,
+        0.0171,
+        0.1933,
+        0.9766
+      ],
+      "height_mm": 8,
+      "twist_pitch_mm": 60,
+      "note": "barrote cuadrado torcido"
+    },
+    {
+      "kind": "bar",
+      "rect_frac": [
+        0.384,
+        0.0171,
+        0.3973,
+        0.9766
+      ],
+      "height_mm": 8,
+      "twist_pitch_mm": 60,
+      "note": "barrote cuadrado torcido"
+    },
+    {
+      "kind": "bar",
+      "rect_frac": [
+        0.5887,
+        0.0171,
+        0.602,
+        0.9766
+      ],
+      "height_mm": 8,
+      "twist_pitch_mm": 60,
+      "note": "barrote cuadrado torcido"
+    },
+    {
+      "kind": "bar",
+      "rect_frac": [
+        0.7893,
+        0.0171,
+        0.8027,
+        0.9766
+      ],
+      "height_mm": 8,
+      "twist_pitch_mm": 60,
+      "note": "barrote cuadrado torcido"
+    },
+    {
+      "kind": "bar",
+      "rect_frac": [
+        0.9827,
+        0.0171,
+        0.996,
+        0.9766
+      ],
+      "height_mm": 8,
+      "twist_pitch_mm": 60,
+      "note": "barrote cuadrado torcido"
+    },
+    {
+      "kind": "bar",
+      "rect_frac": [
+        0.0823,
+        0.0171,
+        0.0923,
+        0.9766
+      ],
+      "height_mm": 6,
+      "note": "barrote liso con 2 adornos"
+    },
+    {
+      "kind": "bar",
+      "rect_frac": [
+        0.2857,
+        0.0171,
+        0.2957,
+        0.9766
+      ],
+      "height_mm": 6,
+      "note": "barrote liso con 2 adornos"
+    },
+    {
+      "kind": "bar",
+      "rect_frac": [
+        0.489,
+        0.0171,
+        0.499,
+        0.9766
+      ],
+      "height_mm": 6,
+      "note": "barrote liso con 2 adornos"
+    },
+    {
+      "kind": "bar",
+      "rect_frac": [
+        0.6903,
+        0.0171,
+        0.7003,
+        0.9766
+      ],
+      "height_mm": 6,
+      "note": "barrote liso con 2 adornos"
+    },
+    {
+      "kind": "bar",
+      "rect_frac": [
+        0.895,
+        0.0171,
+        0.905,
+        0.9766
+      ],
+      "height_mm": 6,
+      "note": "barrote liso con 2 adornos"
+    },
+    {
+      "kind": "ring",
+      "center_frac": [
+        0.04,
+        0.085
+      ],
+      "radius_frac_w": 0.03867,
+      "thickness_frac_w": 0.006,
+      "height_mm": 4
+    },
+    {
+      "kind": "ring",
+      "center_frac": [
+        0.2387,
+        0.085
+      ],
+      "radius_frac_w": 0.03867,
+      "thickness_frac_w": 0.006,
+      "height_mm": 4
+    },
+    {
+      "kind": "ring",
+      "center_frac": [
+        0.4413,
+        0.085
+      ],
+      "radius_frac_w": 0.03867,
+      "thickness_frac_w": 0.006,
+      "height_mm": 4
+    },
+    {
+      "kind": "ring",
+      "center_frac": [
+        0.6447,
+        0.085
+      ],
+      "radius_frac_w": 0.03867,
+      "thickness_frac_w": 0.006,
+      "height_mm": 4
+    },
+    {
+      "kind": "ring",
+      "center_frac": [
+        0.846,
+        0.085
+      ],
+      "radius_frac_w": 0.03867,
+      "thickness_frac_w": 0.006,
+      "height_mm": 4
+    },
+    {
+      "kind": "ornament",
+      "center_frac": [
+        0.0873,
+        0.3492
+      ],
+      "size_frac_w": [
+        0.0213,
+        0.0333
+      ],
+      "height_mm": 10
+    },
+    {
+      "kind": "ornament",
+      "center_frac": [
+        0.0873,
+        0.7623
+      ],
+      "size_frac_w": [
+        0.0213,
+        0.0333
+      ],
+      "height_mm": 10
+    },
+    {
+      "kind": "ornament",
+      "center_frac": [
+        0.2907,
+        0.3492
+      ],
+      "size_frac_w": [
+        0.0213,
+        0.0333
+      ],
+      "height_mm": 10
+    },
+    {
+      "kind": "ornament",
+      "center_frac": [
+        0.2907,
+        0.7623
+      ],
+      "size_frac_w": [
+        0.0213,
+        0.0333
+      ],
+      "height_mm": 10
+    },
+    {
+      "kind": "ornament",
+      "center_frac": [
+        0.494,
+        0.3492
+      ],
+      "size_frac_w": [
+        0.0213,
+        0.0333
+      ],
+      "height_mm": 10
+    },
+    {
+      "kind": "ornament",
+      "center_frac": [
+        0.494,
+        0.7623
+      ],
+      "size_frac_w": [
+        0.0213,
+        0.0333
+      ],
+      "height_mm": 10
+    },
+    {
+      "kind": "ornament",
+      "center_frac": [
+        0.6953,
+        0.3492
+      ],
+      "size_frac_w": [
+        0.0213,
+        0.0333
+      ],
+      "height_mm": 10
+    },
+    {
+      "kind": "ornament",
+      "center_frac": [
+        0.6953,
+        0.7623
+      ],
+      "size_frac_w": [
+        0.0213,
+        0.0333
+      ],
+      "height_mm": 10
+    },
+    {
+      "kind": "ornament",
+      "center_frac": [
+        0.9,
+        0.3492
+      ],
+      "size_frac_w": [
+        0.0213,
+        0.0333
+      ],
+      "height_mm": 10
+    },
+    {
+      "kind": "ornament",
+      "center_frac": [
+        0.9,
+        0.7623
+      ],
+      "size_frac_w": [
+        0.0213,
+        0.0333
+      ],
+      "height_mm": 10
+    }
+  ],
+  "opacity": {
+    "holes": [
+      [
+        0.0053,
+        0.0249,
+        0.9933,
+        0.9727
+      ]
+    ],
+    "note": "todo lo de adentro del marco es hueco salvo travesaños, barrotes, arillos y adornos"
+  },
+  "bevel_mm": 1.0,
+  "paint": {
+    "variation": 0.03,
+    "orange_peel_mm": 1.5,
+    "orange_peel_height_mm": 0.04,
+    "note": "esmalte negro"
+  },
+  "cavity": {
+    "radius_mm": 5,
+    "depth_mm": 3,
+    "darkening": 0.5
+  },
+  "roughness": {
+    "base": 0.55,
+    "note": "esmalte negro con algo de polvo"
+  },
+  "observed": {
+    "type": "ventana sin vidrio, cerrada con herrería: marco de perfil, arillos arriba sobre un travesaño de solera, barrotes torcidos y lisos alternados (cada liso con 2 adornos) y travesaño abajo; 5 barrotes torcidos, 5 lisos y 5 arillos",
+    "proportion": "la foto rectificada da ancho/alto = 1.19; con las medidas del dueño es 1.15 (3 % de diferencia)"
+  },
+  "assumptions": [
+    "relieve y paso del torcido como el portón"
+  ]
+}

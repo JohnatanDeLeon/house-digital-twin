@@ -310,6 +310,116 @@
    "note": "Portón de herrería de la cochera hacia la calle. El plano lo dibuja entre la barda (bisagra en x = 0.20 m) y el muro del pórtico (bisagra en x = 3.24 m), con las 2 hojas abriendo hacia la cochera; no tiene muro anfitrión. Altura estimada con la foto del dueño.",
    "height": 2.23,
    "measure_source": "estimación con 1 foto desde la cochera (2026-10-09 08:47, gran angular de 13 mm): proporción 1.365 por homografía y focal, sobre el ancho del plano (3.04 m); ±5 cm"
+  },
+  {
+   "kind": "window",
+   "host_wall_anchor": [
+    7.393,
+    0.1
+   ],
+   "connects_anchors": [
+    [
+     7.393,
+     0.6
+    ],
+    [
+     7.393,
+     -0.6
+    ]
+   ],
+   "footprint": [
+    [
+     6.393,
+     0.0
+    ],
+    [
+     8.393,
+     0.0
+    ],
+    [
+     8.393,
+     0.2
+    ],
+    [
+     6.393,
+     0.2
+    ]
+   ],
+   "sill_height": 1.0,
+   "height": 1.3,
+   "measure_source": "dueño (2026-10-09): 200 × 130 cm, medida con cinta",
+   "sill_source": "estimación con 2 fotos desde el pórtico (2026-10-09 08:46–08:47, gran angular de 13 mm): homografía de la reja peatonal (0.98 m de ancho del plano); el largo total del muro sale con 1 cm de diferencia; ±5 cm. Cuadra con el alto medido: arriba queda a 2.30 m, como en las fotos",
+   "note": "Abertura grande del frente del pórtico, cerrada con herrería y sin vidrio (el plano no la dibuja). Arranca en la cara del muro de la bodega (x = 8.393 m), como se ve en las fotos."
+  },
+  {
+   "kind": "window",
+   "host_wall_anchor": [
+    4.173,
+    0.1
+   ],
+   "connects_anchors": [
+    [
+     4.173,
+     0.6
+    ],
+    [
+     4.173,
+     -0.6
+    ]
+   ],
+   "footprint": [
+    [
+     3.423,
+     0.0
+    ],
+    [
+     4.923,
+     0.0
+    ],
+    [
+     4.923,
+     0.2
+    ],
+    [
+     3.423,
+     0.2
+    ]
+   ],
+   "sill_height": 1.0,
+   "height": 1.3,
+   "measure_source": "dueño (2026-10-09): 150 × 130 cm, medida con cinta",
+   "sill_source": "estimación con 2 fotos desde el pórtico (2026-10-09 08:46–08:47, gran angular de 13 mm): homografía de la reja peatonal (0.98 m de ancho del plano); el largo total del muro sale con 1 cm de diferencia; ±5 cm. Cuadra con el alto medido: arriba queda a 2.30 m, como en las fotos",
+   "note": "Abertura chica del frente del pórtico, cerrada con herrería y sin vidrio (el plano no la dibuja). Queda a 0.20 m de la reja (pilastra medida en las fotos); entre ella y el portón queda una pilastra de ≈ 0.18 m."
+  }
+ ],
+ "opening_corrections": [
+  {
+   "anchor": [
+    6.663,
+    0.1
+   ],
+   "footprint": [
+    [
+     5.123,
+     0.0
+    ],
+    [
+     6.103,
+     0.0
+    ],
+    [
+     6.103,
+     0.2
+    ],
+    [
+     5.123,
+     0.2
+    ]
+   ],
+   "height": 2.3,
+   "measure_source": "posición: medidas del dueño (2026-10-09; ventana grande de 2.00 m desde el muro de la bodega) más la pilastra de 0.29 m entre esa ventana y la reja, medida en las 2 fotos desde el pórtico (2026-10-09 08:46–08:47, gran angular de 13 mm): homografía de la reja peatonal (0.98 m de ancho del plano); el largo total del muro sale con 1 cm de diferencia",
+   "height_source": "estimación con las mismas fotos: la reja llega a la misma altura que las ventanas (antepecho ≈ 1.00 m + 1.30 m medido = 2.30 m); la foto da 2.29 m",
+   "note": "Reja peatonal del pórtico (D01). El plano la pone en x = 6.17–7.15 m; en las fotos y con las medidas del dueño queda en x = 5.12–6.10 m (≈ 1.05 m hacia la cochera); el camino curvo del piso va de ella a la puerta de entrada (D03). El candado se ve del lado este (hacia la bodega), al revés que la bisagra del plano: sin confirmar."
   }
  ],
  "answered_unknowns": [

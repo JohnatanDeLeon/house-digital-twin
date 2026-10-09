@@ -83,8 +83,8 @@ def owner_openings(walls: list[dict], spaces: list[dict], annotation: dict) -> l
             width = round(max(Point(footprint[0]).distance(Point(footprint[1])), Point(footprint[1]).distance(Point(footprint[2]))), 3)
         measured = entry.get('measure_source', source)  # p. ej. una estimación con fotos que el dueño aceptó
         sill = {'value': 0.0, 'source': 'definición de puerta'} if entry['kind'] == 'door' and footprint else dict(unknown)
-        if entry.get('sill_height') is not None:
-            sill = {'value': entry['sill_height'], 'source': measured}
+        if entry.get('sill_height') is not None:  # el antepecho puede tener otra fuente que el alto
+            sill = {'value': entry['sill_height'], 'source': entry.get('sill_source', measured)}
         height = {'value': entry['height'], 'source': measured} if entry.get('height') is not None else dict(unknown)
         opening = {'kind': entry['kind'], 'footprint': footprint, 'width': width,
                    'wall_thickness': None, 'detected_by': entry.get('detected_by', source), 'sill_height': sill,
@@ -93,6 +93,33 @@ def owner_openings(walls: list[dict], spaces: list[dict], annotation: dict) -> l
             opening['grid'] = {**entry['grid'], 'source': source}
         result.append(opening)
     return result
+
+
+def correct_openings(openings: list[dict], annotation: dict):
+    """Correcciones del dueño a vanos del plano: otra posición (`footprint`) u otra altura.
+
+    El vano se identifica por un punto dentro de su huella del plano. La huella del plano queda en `plan_footprint`
+    para no perder el dato original, y el abatimiento se mueve con el vano.
+    """
+    source = f"{annotation.get('source', 'dueño')} ({annotation.get('confirmed_on', 's/f')})"
+    for entry in annotation.get('opening_corrections', []):
+        opening = next((o for o in openings if o['footprint'] and Polygon(o['footprint']).buffer(0.01).contains(Point(entry['anchor']))), None)
+        if opening is None:
+            raise ValueError(f"corrección sin vano en {entry['anchor']}")
+        measured = entry.get('measure_source', source)
+        if 'footprint' in entry:
+            old, new = Polygon(opening['footprint']).centroid, Polygon(entry['footprint']).centroid
+            dx, dy = new.x - old.x, new.y - old.y
+            opening['plan_footprint'], opening['footprint'] = opening['footprint'], entry['footprint']
+            opening['position_source'] = measured
+            swing = opening.get('swing')
+            if swing:
+                for key in ('hinge_end', 'latch_end'):
+                    swing[key] = [round(swing[key][0] + dx, 3), round(swing[key][1] + dy, 3)]
+                swing['source'] += '; desplazado con el vano'
+        if entry.get('height') is not None:
+            opening['height'] = {'value': entry['height'], 'source': entry.get('height_source', measured)}
+        opening['owner_note'] = entry.get('note')
 
 
 def split_exterior(exterior: list[Polygon], annotation: dict) -> list[SpacePiece]:

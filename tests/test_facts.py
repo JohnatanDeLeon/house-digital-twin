@@ -11,7 +11,7 @@ def _opening_at(facts, x, y):
 
 def test_counts(facts):
     kinds = [o['kind'] for o in facts['openings'] if o['footprint'] and o['host_wall']]
-    assert kinds.count('door') == 9 and kinds.count('window') == 10  # 9 del plano + la del tragaluz (dueño)
+    assert kinds.count('door') == 9 and kinds.count('window') == 12  # 9 del plano + tragaluz y 2 del pórtico (dueño)
     gates = [o for o in facts['openings'] if o['footprint'] and not o['host_wall']]  # herrería: pasillo (dueño) y portón
     assert [o['kind'] for o in gates] == ['door', 'door', 'door']
     assert sum(not s['is_exterior'] for s in facts['spaces']) == 8
@@ -118,7 +118,8 @@ def test_owner_heights_reach_the_facts(facts):
     storey = facts['levels'][0]['storey_height']
     assert storey['value'] == 2.60 and storey['source'].endswith('U01')
     doors = [o for o in facts['openings'] if o['kind'] == 'door' and o['host_wall']]
-    assert len(doors) == 9 and all(o['height']['value'] == 2.10 for o in doors)
+    assert len(doors) == 9 and all(o['height']['value'] == 2.10 for o in doors if o['id'] != 'D01')
+    assert doors[0]['id'] == 'D01' and doors[0]['height']['value'] == 2.30  # la reja llega a la altura de las ventanas
     gates = [o for o in facts['openings'] if o['kind'] == 'door' and not o['host_wall']]
     by_id = {o['id']: o for o in gates}
     assert by_id['D10']['height']['value'] is None and by_id['D11']['height']['value'] is None  # U04 no llega a la herrería
@@ -182,3 +183,18 @@ def test_owner_measurement_is_compared_with_the_plan(dxf_facts):
     assert hallway['value'] == 1.10 and hallway['plan_value'] == pytest.approx(1.21, abs=0.005)
     assert hallway['matches_plan'] is False
     assert any(w.startswith('M01:') for w in dxf_facts['source_warnings'])
+
+
+def test_owner_corrects_plan_opening_position(dxf_facts):
+    d01 = next(o for o in dxf_facts['openings'] if o['id'] == 'D01')
+    assert d01['plan_footprint'][0][0] == pytest.approx(6.17, abs=0.01) and d01['footprint'][0] == [5.123, 0.0]  # el dato del plano se conserva
+    assert d01['swing']['hinge_end'] == [6.103, 0.1] and 'desplazado' in d01['swing']['source']
+    assert 'dueño' in d01['position_source']
+
+
+def test_portico_windows_are_measured_by_owner(facts):
+    by_id = {o['id']: o for o in facts['openings']}
+    assert (by_id['V11']['width'], by_id['V11']['height']['value']) == (2.0, 1.3)
+    assert (by_id['V12']['width'], by_id['V12']['height']['value']) == (1.5, 1.3)
+    assert by_id['V11']['host_wall'] == by_id['V12']['host_wall'] == 'W03'
+    assert 'estimación' in by_id['V11']['sill_height']['source'] and 'cinta' in by_id['V11']['height']['source']
