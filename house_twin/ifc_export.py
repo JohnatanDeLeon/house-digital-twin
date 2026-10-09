@@ -22,6 +22,7 @@ import ifcopenshell.guid
 from ifcopenshell.util.shape_builder import ShapeBuilder
 
 from house_twin.finishes import Finishes
+from house_twin.hardware import for_leaf, knob_mesh, placements
 
 ASSUMED_DEFAULTS = {'storey_height': 2.40, 'door_height': 2.10, 'window_sill': 0.90, 'window_height': 1.20}
 PANEL_THICKNESS = 0.05
@@ -139,7 +140,7 @@ def _add_declared_opening(ctx: _IfcContext, o, walls):
         ctx.pset(host, 'HDT_DeclaredOpenings', {o['id']: f"{o['kind']} sin medidas; conecta {','.join(o['connects'])}"})
 
 
-def _add_opening(ctx: _IfcContext, o, walls, storey, finishes: Finishes | None):
+def _add_opening(ctx: _IfcContext, o, walls, storey, finishes: Finishes | None, hardware=None, spaces=()):
     if o['footprint'] is None:
         _add_declared_opening(ctx, o, walls)
         return
@@ -162,6 +163,25 @@ def _add_opening(ctx: _IfcContext, o, walls, storey, finishes: Finishes | None):
     parts = finishes.opening(o['id']) if finishes else {}
     if parts:
         ctx.assign_parts(filler, parts)
+    if is_door and o.get('swing'):
+        for spec in for_leaf(hardware or [], parts.get('leaf')):
+            _add_hardware(ctx, filler, o, spec, height, spaces)
+
+
+def _add_hardware(ctx: _IfcContext, door, o, spec, height, spaces):
+    """Herraje de la puerta (chapa): IfcDiscreteAccessory con malla torneada, parte de la puerta (no del nivel)."""
+    places = placements(spec, o, height, PANEL_THICKNESS, spaces)
+    points, faces = knob_mesh(spec, places)
+    item = ctx.builder.polygonal_face_set(points, faces)
+    accessory = ctx.element('IfcDiscreteAccessory', f"{o['id']}-{spec['name']}")
+    accessory.ObjectType = spec['name']
+    ifcopenshell.api.geometry.assign_representation(ctx.model, product=accessory,
+                                                    representation=ctx.builder.get_representation(ctx.body, [item]))
+    ifcopenshell.api.aggregate.assign_object(ctx.model, products=[accessory], relating_object=door)
+    ifcopenshell.api.material.assign_material(ctx.model, products=[accessory], material=ctx.material(spec['material']))
+    ctx.pset(accessory, 'HDT_Provenance', {'FactId': o['id'], 'Source': spec['applies_to']['source'],
+                                           'Position': spec['position']['source'], 'Swing': o['swing']['source'],
+                                           'TurnButtonSide': next((o['swing']['opens_into'] for p in places if p['button']), '')})
 
 
 def _add_spaces(ctx: _IfcContext, facts, storey, height):
@@ -225,7 +245,7 @@ def _stabilize_guids(model: ifcopenshell.file):
         entity.GlobalId = ifcopenshell.guid.compress(uuid.uuid5(GUID_NAMESPACE, key).hex)
 
 
-def build_ifc(facts: dict, finishes: Finishes | None = None) -> ifcopenshell.file:
+def build_ifc(facts: dict, finishes: Finishes | None = None, hardware: list[dict] | None = None) -> ifcopenshell.file:
     ctx = _IfcContext(facts['name'])
     site = ctx.element('IfcSite', 'Terreno')
     building = ctx.element('IfcBuilding', 'Casa')
@@ -237,7 +257,7 @@ def build_ifc(facts: dict, finishes: Finishes | None = None) -> ifcopenshell.fil
     height, _ = _value_or_assumed(facts['levels'][0]['storey_height'], 'storey_height')
     walls = _add_walls(ctx, facts, storey, height)
     for o in facts['openings']:
-        _add_opening(ctx, o, walls, storey, finishes)
+        _add_opening(ctx, o, walls, storey, finishes, hardware, facts['spaces'])
     _add_spaces(ctx, facts, storey, height)
     if finishes:
         _add_floor_finishes(ctx, facts, storey, finishes)

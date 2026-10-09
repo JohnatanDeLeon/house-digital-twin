@@ -20,6 +20,7 @@ ARGS = sys.argv[sys.argv.index('--') + 1:]
 ROOT = Path(ARGS[0])
 sys.path.insert(0, str(ROOT))
 from house_twin.finishes import Finishes, _inside, load_materials  # noqa: E402  (necesita la raíz en sys.path)
+from house_twin.hardware import load_hardware  # noqa: E402
 from house_twin.sunlight import sun_direction  # noqa: E402
 
 TEXTURES = ROOT / 'assets' / 'textures'
@@ -168,14 +169,17 @@ def _main_axis(obj, front=None):
     return _face_axis(normal)
 
 
-def write_uvs(obj, fit=None, front=None):
-    """UV en metros del mundo (muros y pisos). Con `fit`, relativas al objeto: 'unit' 0–1, 'metres' 0–ancho."""
+def write_uvs(obj, fit=None, front=None, axis=None):
+    """UV en metros del mundo (muros y pisos). Con `fit`, relativas al objeto: 'unit' 0–1, 'metres' 0–ancho.
+
+    `axis` fija hacia dónde crece la U (p. ej. desde el canto de la chapa hacia la bisagra).
+    """
     mw, rot = obj.matrix_world, obj.matrix_world.to_3x3()
     bm = bmesh.new()
     bm.from_mesh(obj.data)
     layer = bm.loops.layers.uv.verify()
     if fit:
-        axis = _main_axis(obj, front)
+        axis = axis or _main_axis(obj, front)
         pts = [mw @ v.co for v in bm.verts]
         u0, u1 = min(p.dot(axis) for p in pts), max(p.dot(axis) for p in pts)
         z0, z1 = min(p.z for p in pts), max(p.z for p in pts)
@@ -259,6 +263,24 @@ class Scene:
         write_uvs(obj)
         self._set(obj, [self.finishes.floor(space_id) or 'sin-dato'] * len(obj.data.polygons))
 
+    def _latch_axis(self, oid, parts):
+        """Si la textura de la hoja dice de qué lado tiene la chapa, la U arranca en el canto de la chapa del plano."""
+        swing = self.openings.get(oid, {}).get('swing')
+        side = self.specs.get(parts.get('leaf'), {}).get('latch_side')
+        if not swing or side not in ('left', 'right'):
+            return None
+        (lx, ly), (hx, hy) = swing['latch_end'], swing['hinge_end']
+        axis = Vector((hx - lx, hy - ly, 0)).normalized()
+        return axis if side == 'left' else -axis
+
+    def accessory(self, obj, hardware):
+        """Herraje (chapa): material de su especificación y sombreado suave salvo en los filos."""
+        name = obj.name.split('/')[-1].split('-', 1)[-1]
+        spec = next((h for h in hardware if h['name'] == name), None)
+        self._set(obj, [spec['material'] if spec else 'sin-dato'] * len(obj.data.polygons))
+        obj.data.shade_smooth()
+        obj.data.set_sharp_from_angle(angle=math.radians(35))
+
     def _front(self, obj, space_id):
         """¿La normal mira hacia `space_id`? Se prueba un punto a VIEW_PROBE_M del centro del vano."""
         if space_id is None:
@@ -278,7 +300,7 @@ class Scene:
             obj.data.materials.clear()
             obj.data.materials.append(mat)
             return
-        write_uvs(obj, fit='unit', front=self._front(obj, self.finishes.viewed_from(oid)))
+        write_uvs(obj, fit='unit', front=self._front(obj, self.finishes.viewed_from(oid)), axis=self._latch_axis(oid, parts))
         if 'leaf' not in parts:
             self.unknown.add(f'{obj.name}: sin textura de hoja')
         self._set(obj, [parts.get('leaf', 'sin-dato')] * len(obj.data.polygons))
@@ -296,6 +318,7 @@ def apply_finishes(ifc_path):
     facts = json.loads(FACTS.read_text())
     specs = load_materials(TEXTURES)
     scene = Scene(Finishes(facts, specs), specs, facts['spaces'], {o['id']: o for o in facts['openings']})
+    hardware = load_hardware()
     for obj in [o for o in bpy.data.objects if o.type == 'MESH']:
         ifc_class, name = _ifc_name(obj)
         if obj.data.users > 1:
@@ -306,6 +329,8 @@ def apply_finishes(ifc_path):
             scene.floor(obj, name.removesuffix('-piso'))
         elif ifc_class in ('IfcDoor', 'IfcWindow'):
             scene.opening(obj, name)
+        elif ifc_class == 'IfcDiscreteAccessory':
+            scene.accessory(obj, hardware)
         elif ifc_class in ('IfcSpace', 'IfcOpeningElement'):
             obj.hide_render = obj.hide_viewport = True
     return scene

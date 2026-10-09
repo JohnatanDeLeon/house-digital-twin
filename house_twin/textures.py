@@ -584,7 +584,7 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
         'name': spec['name'], 'applies_to': spec['applies_to'],
         'size_m': spec['size_m'], 'px_per_m': px_per_m, 'size_px': list(size_px), 'tileable': relief['type'] == 'grid' or bool(spec.get('seamless')),
         'grid': spec.get('grid'),
-        'maps': maps, 'glass_material': spec.get('opacity', {}).get('glass_material'),
+        'maps': maps, 'glass_material': spec.get('opacity', {}).get('glass_material'), 'latch_side': spec.get('latch_side'),
         'source': {'photo': spec['photo'], 'photo_meta': spec.get('photo_meta', {}),
                    'color': spec['color'], 'white_balance_gain': gain},
         'observed': spec.get('observed', {}), 'assumptions': spec.get('assumptions', []),

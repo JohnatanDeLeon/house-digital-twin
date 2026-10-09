@@ -1,0 +1,34 @@
+{
+ "_doc": "Chapa de perilla de las puertas de madera: una perilla de cada lado de la hoja. Perfil torneado medido en la foto (mm: radio, distancia a la cara de la hoja). Se genera dentro del IFC (IfcDiscreteAccessory, parte de su puerta) con `python -m house_twin.cli build`.",
+ "name": "perilla",
+ "kind": "knob_set",
+ "applies_to": {
+  "leaf_material": "puerta-recamaras",
+  "source": "dueño (2026-10-08): fotos de la chapa de una puerta de madera; las cinco puertas de madera son iguales (dueño, 2026-10-07)"
+ },
+ "photo": "sources/fotos/perilla-recamara.jpg",
+ "photo_meta": {"taken": "2026-10-08T22:38:43", "camera": "Samsung Galaxy S25 Ultra", "focal_35mm": 23, "light": "foco de la recámara, de noche"},
+ "position": {
+  "from_latch_frac": 0.072,
+  "from_top_frac": 0.485,
+  "source": "parche de la perilla en la foto de la hoja (sources/texturas/puerta-recamaras.json): centro a 0.072 del ancho desde el canto de la chapa y a 0.485 del alto desde arriba; con la hoja de 0.80 × 2.04 m son 5.8 cm de entrada y 1.05 m del piso. Las fracciones se aplican a la hoja del modelo para que la perilla quede donde la textura tiene el hueco"
+ },
+ "profile_mm": [[0, 0], [29, 0], [29, 3], [27, 7], [15, 8], [12, 12], [12, 18], [20, 22], [25, 27], [27, 33], [27.5, 38], [26, 45], [22, 51], [17, 54], [16.5, 55], [13, 53.5], [0, 52]],
+ "segments": 40,
+ "turn_button": {
+  "size_mm": [10, 18, 5],
+  "side": "opens_into",
+  "note": "botón de seguro (privacidad), del lado de adentro del cuarto: la puerta abre hacia ese lado"
+ },
+ "material": "laton-envejecido",
+ "observed": {
+  "type": "chapa de perilla tipo bola con roseta redonda, de entrada estándar (≈ 6 cm)",
+  "finish": "latón envejecido: roseta cepillada y clara, perilla más oscura y gastada",
+  "measures": "en la foto, la roseta mide lo mismo que la entrada (≈ 5.8 cm) y la perilla ≈ 5.5 cm; el hueco del centro ≈ 3.3 cm, con un botón de seguro vertical de ≈ 1 × 1.8 cm",
+  "latch": "pestillo en el canto y cerradero en el marco (no se modelan: se ven solo con la puerta abierta)"
+ },
+ "assumptions": [
+  "salida de la perilla (5.5 cm desde la cara) y espesor de la roseta: típicos, la foto es de frente",
+  "la perilla de afuera es igual a la de adentro, sin botón (la de emergencia tiene un orificio que no se modela)"
+ ]
+}

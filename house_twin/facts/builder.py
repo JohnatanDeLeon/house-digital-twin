@@ -117,6 +117,32 @@ def _relate_openings(openings, walls, spaces):
         o['connects'] = _touching(rect, space_geoms)
 
 
+SWING_MATCH_M = 0.05  # la bisagra del bloque de puerta cae en el vano (o a pocos cm)
+
+
+def _axis_ends(footprint):
+    """Extremos del eje largo de un vano: los puntos medios de sus lados cortos."""
+    p0, p1, p2, p3 = footprint
+    mid = lambda a, b: ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
+    if Point(p0).distance(Point(p1)) >= Point(p1).distance(Point(p2)):
+        return mid(p0, p3), mid(p1, p2)
+    return mid(p0, p1), mid(p3, p2)
+
+
+def _assign_swings(doors, spaces, swings):
+    """Abatimiento de cada puerta según el bloque del CAD: de qué lado va la bisagra y hacia qué espacio abre."""
+    space_geoms = [(s['id'], Polygon(s['polygon'])) for s in spaces]
+    for swing in swings:
+        hinge = Point(swing['hinge'])
+        door = min(doors, key=lambda o: Polygon(o['footprint']).distance(hinge), default=None)
+        if door is None or Polygon(door['footprint']).distance(hinge) > SWING_MATCH_M:
+            continue
+        ends = sorted(_axis_ends(door['footprint']), key=lambda e: hinge.distance(Point(e)))
+        into = next((sid for sid, g in space_geoms if g.contains(Point(swing['arc_mid']))), None)
+        door['swing'] = {'hinge_end': [round(v, 3) for v in ends[0]], 'latch_end': [round(v, 3) for v in ends[1]],
+                         'opens_into': into, 'source': 'plano: bloque PUERTA (centro del arco = bisagra)'}
+
+
 def _facing_zone(a: Polygon, b: Polygon):
     """Franja de muro entre dos espacios que se enfrentan; vacía si solo se tocan de lejos.
 
@@ -192,6 +218,7 @@ def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
         for i, o in enumerate(group):
             o['id'] = f'{prefix}{i+1:02d}'
     _relate_openings(doors + windows, walls, spaces)
+    _assign_swings(doors, spaces, drawing.metadata.get('door_swings', []))
     for o in owner_openings(walls, spaces, annotations):
         o['id'] = f"V{len(windows)+1:02d}" if o['kind'] == 'window' else f"D{len(doors)+1:02d}"
         (windows if o['kind'] == 'window' else doors).append(o)

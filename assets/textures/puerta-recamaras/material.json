@@ -27,6 +27,8 @@
   "roughness": "roughness.png",
   "normal": "normal.png (OpenGL)"
  },
+ "glass_material": null,
+ "latch_side": "left",
  "source": {
   "photo": "sources/fotos/puerta-recamaras.jpg",
   "photo_meta": {
