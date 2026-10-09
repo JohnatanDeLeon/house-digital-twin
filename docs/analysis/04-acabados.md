@@ -424,7 +424,7 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 - **Buros:** 2, de cajones de laminado claro dentro de un marco metálico gris.
 - **Baúl:** de tela gris, al pie de la cama.
 - **Espejo:** de cuerpo entero, parado sobre el buro izquierdo y apoyado en el muro.
-- **Televisión (dato del dueño: 85")**: 1.88 × 1.06 m, en el muro de la puerta, con el centro a ≈ 1.68 m.
+- **Televisión (dato del dueño: 85")**: 1.88 × 1.06 m, en el muro de la puerta. Va cargada hacia la esquina poniente, a ≈ 0.1 m de ella y a ≈ 1 m del entrante de la puerta (corrección del dueño: no topa con la puerta), con el centro a ≈ 1.68 m.
 - **Minisplit:** en el muro poniente, arriba del contacto.
 - **Colores** (medidos contra el muro, con la luz del foco): cobija (114, 59, 127), cabecera (37, 38, 46), laminado de los buros (178, 150, 106) y marco (100, 105, 103).
 - **Sin modelar:** las cortinas, la ropa y los objetos sueltos.

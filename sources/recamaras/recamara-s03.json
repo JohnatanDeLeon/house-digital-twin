@@ -124,10 +124,10 @@
     1
    ]
   },
-  "u_centre": 1.5,
+  "u_centre": 1.04,
   "z_bottom": 1.15,
   "size_source": "dueño (2026-10-09): 85 pulgadas → pantalla de 1.88 × 1.06 m",
-  "position_source": "fotos: en el muro de la puerta (y = 12.815 m), entre la esquina poniente y la puerta; centrada en el muro (x ≈ 2.95 m) y con el centro a ≈ 1.68 m (estimado con el muro de 2.60 m)",
+  "position_source": "fotos: en el muro de la puerta (y = 12.815 m), cargada hacia la esquina poniente: su borde queda a ≈ 0.1 m de esa esquina y a ≈ 1 m del canto del entrante de la puerta (dueño, 2026-10-09: no topa con la puerta); centro a ≈ 1.68 m de alto",
   "screen_material": "pantalla-tv",
   "body_material": "plastico-negro"
  },
