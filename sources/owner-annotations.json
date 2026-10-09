@@ -242,7 +242,24 @@
      6.3
     ]
    ],
-   "note": "Puerta de herrería entre la cochera y el pasillo de servicio (dueño, 2026-10-08). Posición: en la foto, el poste izquierdo queda al final del muro de la cocina (y = 6.705 m); cubre de la barda (x = 0.20 m) a la cara del muro de la cocina (x = 1.205 m). Altura pendiente de medir."
+   "note": "Puerta de herrería entre la cochera y el pasillo de servicio (dueño, 2026-10-08). Posición: en la foto, el poste izquierdo queda al final del muro de la cocina (y = 6.705 m); cubre de la barda (x = 0.20 m) a la cara del muro de la cocina (x = 1.205 m). Altura pendiente de medir.",
+   "leaves": [
+    {
+     "hinge_end": [
+      1.205,
+      6.73
+     ],
+     "latch_end": [
+      0.2,
+      6.73
+     ],
+     "opens_into_anchor": [
+      0.7,
+      7.2
+     ],
+     "source": "bisagra: foto desde el pasillo (bisagras del lado izquierdo, ancladas al muro de la cocina); hacia dónde abre: supuesto (hacia el pasillo)"
+    }
+   ]
   },
   {
    "kind": "door",
@@ -274,7 +291,24 @@
      17.4
     ]
    ],
-   "note": "Puerta de herrería entre el pasillo de servicio y el patio, igual a la de la cochera, al final del muro de la recámara 2 (dueño, 2026-10-08). Cubre de la barda (x = 0.20 m) al muro de la recámara 2 (x = 1.28 m); no hay foto. Altura pendiente de medir."
+   "note": "Puerta de herrería entre el pasillo de servicio y el patio, igual a la de la cochera, al final del muro de la recámara 2 (dueño, 2026-10-08). Cubre de la barda (x = 0.20 m) al muro de la recámara 2 (x = 1.28 m); no hay foto. Altura pendiente de medir.",
+   "leaves": [
+    {
+     "hinge_end": [
+      1.28,
+      16.92
+     ],
+     "latch_end": [
+      0.2,
+      16.92
+     ],
+     "opens_into_anchor": [
+      0.7,
+      16.5
+     ],
+     "source": "supuesto: igual que la de la cochera (bisagras en el muro de la casa, el de la recámara 2) y abre hacia el pasillo; no hay foto"
+    }
+   ]
   },
   {
    "kind": "door",
@@ -309,7 +343,39 @@
    ],
    "note": "Portón de herrería de la cochera hacia la calle. El plano lo dibuja entre la barda (bisagra en x = 0.20 m) y el muro del pórtico (bisagra en x = 3.24 m), con las 2 hojas abriendo hacia la cochera; no tiene muro anfitrión. Altura estimada con la foto del dueño.",
    "height": 2.23,
-   "measure_source": "estimación con 1 foto desde la cochera (2026-10-09 08:47, gran angular de 13 mm): proporción 1.365 por homografía y focal, sobre el ancho del plano (3.04 m); ±5 cm"
+   "measure_source": "estimación con 1 foto desde la cochera (2026-10-09 08:47, gran angular de 13 mm): proporción 1.365 por homografía y focal, sobre el ancho del plano (3.04 m); ±5 cm",
+   "leaves": [
+    {
+     "hinge_end": [
+      0.2,
+      0.025
+     ],
+     "latch_end": [
+      1.72,
+      0.025
+     ],
+     "opens_into_anchor": [
+      1.7,
+      0.6
+     ],
+     "source": "plano: arco de la hoja con centro en la barda (x = 0.20 m), hacia la cochera"
+    },
+    {
+     "hinge_end": [
+      3.24,
+      0.025
+     ],
+     "latch_end": [
+      1.72,
+      0.025
+     ],
+     "opens_into_anchor": [
+      1.7,
+      0.6
+     ],
+     "source": "plano: arco de la hoja con centro en el muro del pórtico (x = 3.24 m), hacia la cochera"
+    }
+   ]
   },
   {
    "kind": "window",

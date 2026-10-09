@@ -39,3 +39,17 @@ def test_walk_offers_proposals_next_to_the_current_house(tmp_path, dxf_facts):
     assert data['variants'] == [{'id': 'v', 'name': 'Propuesta', 'description': 'd', 'disclaimer': None, 'overrides': {'D03': 'nueva'}}]
     door = next(o for o in facts['openings'] if o['id'] == 'D03')
     assert focus['at'][1] > max(p[1] for p in door['footprint']) and focus['facing'] == [0.0, -1.0]  # en la sala, mirando la puerta
+
+
+def test_doors_swing_toward_the_space_they_open_into(dxf_facts):
+    from house_twin.walk import doors
+    by_id = {d['id']: d for d in doors(dxf_facts)}
+    assert by_id['D03']['leaves'][0]['opens_toward'] == [0.0, 1.0]  # la puerta de la entrada abre hacia la sala
+    assert len(by_id['D12']['leaves']) == 2 and all(l['opens_toward'][1] > 0 for l in by_id['D12']['leaves'])
+    assert by_id['D10']['leaves'][0]['assumed'] and not by_id['D03']['leaves'][0]['assumed']
+
+
+def test_walk_starts_on_the_street_in_front_of_the_porch_gate(dxf_facts):
+    from house_twin.walk import street_start
+    start = street_start(dxf_facts)
+    assert start['door'] == 'D01' and start['at'][1] < 0 and start['facing'] == [0.0, 1.0]

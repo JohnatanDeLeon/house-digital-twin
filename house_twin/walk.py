@@ -67,6 +67,55 @@ def entrance(facts: dict) -> dict | None:
             'facing': list(across)}
 
 
+DOOR_PROBE_M = 0.3  # se prueba a este lado de la hoja para saber hacia qué espacio abre
+
+
+def doors(facts: dict) -> list[dict]:
+    """Puertas que se abren en el recorrido: por hoja, la bisagra, el canto de la chapa y hacia dónde gira.
+
+    Salen del abatimiento de los hechos (bloque PUERTA del plano) o de las hojas que declara el dueño (`leaves`).
+    Una puerta sin ese dato no se abre: queda cerrada, como un muro."""
+    spaces = {s['id']: s for s in facts['spaces']}
+    result = []
+    for o in facts['openings']:
+        leaves = o.get('leaves') or ([o['swing']] if o.get('swing') else [])
+        if o['kind'] != 'door' or not o['footprint'] or not leaves:
+            continue
+        out = []
+        for leaf in leaves:
+            (hx, hy), (lx, ly) = leaf['hinge_end'], leaf['latch_end']
+            length = ((lx - hx) ** 2 + (ly - hy) ** 2) ** 0.5
+            n = (-(ly - hy) / length, (lx - hx) / length)
+            mid = ((hx + lx) / 2, (hy + ly) / 2)
+            into = spaces.get(leaf.get('opens_into'))
+            if into and not _inside((mid[0] + n[0] * DOOR_PROBE_M, mid[1] + n[1] * DOOR_PROBE_M), into['polygon']):
+                n = (-n[0], -n[1])
+            out.append({'hinge': [hx, hy], 'latch': [lx, ly], 'opens_toward': [round(n[0], 4), round(n[1], 4)],
+                        'assumed': 'supuesto' in leaf.get('source', '')})
+        result.append({'id': o['id'], 'leaves': out})
+    return result
+
+
+STREET_STEP_M = 1.8  # el recorrido empieza en la banqueta, a esta distancia de la puerta de la calle
+
+
+def street_start(facts: dict) -> dict | None:
+    """En la calle, frente a la puerta que lleva al espacio exterior de la entrada principal (la reja del pórtico)."""
+    door = entrance(facts)
+    if door is None:
+        return None
+    entry = next(o for o in facts['openings'] if o['id'] == door['door'])
+    spaces = {s['id']: s for s in facts['spaces']}
+    porch = next((c for c in entry['connects'] if spaces[c]['is_exterior']), None)
+    street_y = min(p[1] for p in facts['site']['polygon'])
+    gate = next((o for o in facts['openings'] if o['kind'] == 'door' and o['footprint'] and o['connects'] == [porch]
+                 and min(p[1] for p in o['footprint']) <= street_y + 0.01), None)
+    if gate is None:
+        return None
+    cx = sum(p[0] for p in gate['footprint']) / 4
+    return {'door': gate['id'], 'at': [round(cx, 3), round(street_y - STREET_STEP_M, 3)], 'facing': [0.0, 1.0]}
+
+
 FOCUS_DISTANCE_M = 2.3  # al elegir una propuesta, se mira lo que cambia de cuerpo entero, también en el celular
 
 
@@ -113,6 +162,8 @@ def build_walk(facts: dict, materials: dict[str, dict], textures_dir: Path, out_
         'site': facts['site']['polygon'],
         'sun': [round(c, 4) for c in sun_direction()],
         'entrance': entrance(facts),
+        'start': street_start(facts),
+        'doors': doors(facts),
         'variants': [{'id': v['id'], 'name': v['name'], 'description': v['description'], 'disclaimer': v.get('disclaimer'),
                       'overrides': opening_overrides(v), 'focus': focus(facts, v['changes'][0]['opening'])}
                      for v in variants or []],

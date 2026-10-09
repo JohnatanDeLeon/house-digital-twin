@@ -89,6 +89,10 @@ def owner_openings(walls: list[dict], spaces: list[dict], annotation: dict) -> l
         opening = {'kind': entry['kind'], 'footprint': footprint, 'width': width,
                    'wall_thickness': None, 'detected_by': entry.get('detected_by', source), 'sill_height': sill,
                    'height': height, 'host_wall': host, 'connects': connects, 'owner_note': entry.get('note')}
+        if 'leaves' in entry:  # hojas de la puerta: bisagra, canto de la chapa y hacia qué espacio abre
+            opening['leaves'] = [{'hinge_end': leaf['hinge_end'], 'latch_end': leaf['latch_end'],
+                                  'opens_into': next((s['id'] for s in spaces if Polygon(s['polygon']).contains(Point(leaf['opens_into_anchor']))), None),
+                                  'source': leaf['source']} for leaf in entry['leaves']]
         if 'grid' in entry:  # retícula: vidrios a lo ancho (las dos hojas) y a lo alto, y ancho del perfil
             opening['grid'] = {**entry['grid'], 'source': source}
         result.append(opening)
