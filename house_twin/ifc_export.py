@@ -367,7 +367,7 @@ def _add_kitchen(ctx: _IfcContext, storey, spec):
         return
     for part in kitchen_parts(spec):
         element = ctx.element(part['ifc'], part['id'], part['type'])
-        if part['type'] == 'USERDEFINED':
+        if part['type'] == 'USERDEFINED' or part['ifc'] == 'IfcCovering':
             element.ObjectType = part.get('object_type') or 'mueble de cocina'
         points, faces = part['mesh']
         ifcopenshell.api.geometry.assign_representation(

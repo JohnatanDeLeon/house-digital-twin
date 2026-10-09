@@ -370,10 +370,18 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
   - **Tarja:** de granito negro, con llave cuello de ganso.
   - **Estufa y refrigerador:** son `IfcElectricAppliance` negros, con colores supuestos.
   - **En el recorrido:** todo frena el paso.
+- **Azulejo, cenefa y murales** (foto de frente):
+  - **Escala:** el muro del fondo mide 2.85 m (plano) y 3085 px → ≈ 1082 px/m. La foto está derecha (verticales paralelas), así que la escala vertical es la misma; con la cubierta (0.90 m) como ancla, la cámara queda a ≈ 1.09 m.
+  - **Hasta dónde llega el azulejo:** la línea que parecía el techo es el **remate del azulejo, a ≈ 2.23 m**; arriba hay pintura blanca y el techo queda fuera de la foto. Cubre los 3 muros del nicho de la barra, del piso a 2.23 m. Afuera del nicho, el muro es pintado.
+  - **`azulejo-cocina`:** blanco brillante con veteado beige tenue, de **≈ 20 × 30 cm (supuesto)**: juntas cada 205–220 × 320–335 px. Es una columna de 1 × 2 azulejos recortada a la izquierda del mueble alto, sin el reflejo de la ventana y con los agujeros de taquetes tapados. El color se midió contra el muro pintado de arriba: (198, 202, 196).
+  - **`cenefa-cocina`:** listelo de frutas de **≈ 20 × 5.5 cm a 1.24–1.29 m**. Una pieza tomada tal cual (es un diseño impreso) y repetida en los 3 muros.
+  - **`mural-frutas`:** 2 murales iguales, de 2 azulejos (0.40 m) cada uno, sobre la cenefa y hasta el mueble alto (1.295–1.537 m). Su centro está en x = 2.02 y 3.55 m. Se tomó el mural derecho, que no tiene enfrente la llave de la tarja. En el modelo es una placa de 3 mm (`IfcCovering` CLADDING).
+  - **Cómo se aplica:** `Finishes` acepta franjas (`up_to_m: [desde, hasta]`) y zonas en planta (`region_m`); entre capas del mismo espacio gana la franja más angosta. Blender corta los muros en esas alturas y zonas.
+  - **Límite:** la cuadrícula se alinea con la junta de arriba de la cenefa. Debajo, las juntas reales quedan 5.5 cm más abajo.
 - **Pendiente:**
-  - el azulejo blanco de la pared con su cenefa de frutas y los 2 murales;
   - el protector de vidrio detrás de la estufa;
-  - el microondas con su repisa y la cortina.
+  - el microondas con su repisa y la cortina;
+  - el centro de carga en el costado derecho.
 
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 

@@ -289,7 +289,34 @@
      "material": "esmalte-negro",
      "source": "foto: estufa Mabe de 30\" de 4 quemadores y comal; medidas comunes"
     }
-   ]
+   ],
+   "decals": [
+    {
+     "id": "mural-1",
+     "u": [
+      0.447,
+      0.847
+     ],
+     "z": [
+      1.295,
+      1.537
+     ],
+     "material": "mural-frutas"
+    },
+    {
+     "id": "mural-2",
+     "u": [
+      1.979,
+      2.379
+     ],
+     "z": [
+      1.295,
+      1.537
+     ],
+     "material": "mural-frutas"
+    }
+   ],
+   "decals_source": "foto de frente: murales centrados en x = 2.022 y 3.554 m, entre la junta sobre la cenefa y el mueble alto (ver sources/texturas/mural-frutas.json)"
   },
   {
    "id": "refrigerador",

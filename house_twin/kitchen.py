@@ -10,6 +10,7 @@ from house_twin.hardware import cylinder, merge, oriented_box
 
 ROOT = Path(__file__).resolve().parent.parent
 SPEC_PATH = ROOT / 'sources' / 'cocina' / 'cocineta.json'
+DECAL_THICKNESS_M = 0.003  # un mural sobresale apenas del azulejo: así no pelea con la cara del muro
 
 
 def load_kitchen(path: Path = SPEC_PATH) -> dict | None:
@@ -123,6 +124,9 @@ def kitchen_parts(spec: dict) -> list[dict]:
                           'type': 'REFRIGERATOR' if appliance['kind'] == 'fridge' else 'USERDEFINED',
                           'object_type': None if appliance['kind'] == 'fridge' else 'estufa de gas',
                           'material': appliance['material'], 'mesh': merge(pieces), 'source': appliance['source']})
+        for decal in run.get('decals', []):  # murales: placa delgada sobre el azulejo, con su imagen
+            parts.append({'id': f"cocina-{decal['id']}", 'ifc': 'IfcCovering', 'type': 'CLADDING', 'material': decal['material'],
+                          'mesh': frame.box(decal['u'], decal['z'], (0, DECAL_THICKNESS_M)), 'source': run.get('decals_source')})
         if handles:
             parts.append({'id': f'cocina-{rid}-jaladeras', 'ifc': 'IfcDiscreteAccessory', 'type': None,
                           'material': m['handles'], 'mesh': merge(handles)})

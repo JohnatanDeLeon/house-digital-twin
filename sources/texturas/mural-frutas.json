@@ -1,0 +1,85 @@
+{
+ "_doc": "Mural de frutas de la cocina (2 azulejos decorados lado a lado, sobre la cenefa). Se recorta de la foto el mural derecho (sin la llave de la tarja enfrente ni el reflejo de la ventana); el izquierdo es el mismo diseño. La parte de arriba queda detrás del mueble alto. Regenerar con: python -m house_twin.cli texture sources/texturas/mural-frutas.json",
+ "name": "mural-frutas",
+ "kind": "photo",
+ "applies_to": {
+  "decal": "murales de la cocina",
+  "source": "fotos de la cocina (dueño, 2026-10-09): 2 murales iguales de un bodegón de frutas, sobre la cenefa"
+ },
+ "photo": "sources/fotos/cocina-frente.jpg",
+ "photo_meta": {
+  "taken": "2026-10-09T13:13:13",
+  "camera": "Samsung Galaxy S25 Ultra",
+  "focal_35mm": 23,
+  "light": "luz de día de la ventana"
+ },
+ "corners_px": {
+  "top_left": [
+   2580,
+   1022
+  ],
+  "top_right": [
+   2985,
+   1022
+  ],
+  "bottom_right": [
+   2985,
+   1270
+  ],
+  "bottom_left": [
+   2580,
+   1270
+  ]
+ },
+ "size_m": {
+  "width": 0.4,
+  "height": 0.24,
+  "source": "2 azulejos de 20 cm de ancho (junta al centro); de alto, lo que se ve entre la cenefa y el mueble alto (≈ 248 px a ≈ 1082 px/m)"
+ },
+ "px_per_m": 1500,
+ "color": {
+  "white_reference": {
+   "box_px": [
+    3020,
+    1060,
+    3090,
+    1220
+   ],
+   "albedo_srgb": [
+    198,
+    202,
+    196
+   ],
+   "note": "azulejo blanco junto al mural, con el color que da la textura azulejo-cocina (medida contra el muro pintado)"
+  }
+ },
+ "relief": {
+  "type": "flat",
+  "grain_mm": 0.01,
+  "note": "impreso"
+ },
+ "roughness": {
+  "base": 0.1,
+  "grain": 0.02,
+  "note": "esmaltado"
+ },
+ "observed": {
+  "design": "bodegón: girasoles, jarrón verde, tazón de talavera con manzanas, uvas y limón sobre una repisa; firmado abajo a la derecha"
+ },
+ "assumptions": [
+  "el mural izquierdo es igual al derecho",
+  "la parte de arriba (detrás del mueble) no se ve en la foto"
+ ],
+ "placement_m": {
+  "z": [
+   1.295,
+   1.537
+  ],
+  "centres_x": [
+   2.022,
+   3.554
+  ],
+  "wall_y": 10.055,
+  "source": "foto de frente: centros de los murales a 1125 y 2783 px (≈ 1082 px/m desde la esquina en 425 px); alto, de la junta sobre la cenefa al borde que tapa el mueble alto"
+ }
+}
