@@ -1,0 +1,26 @@
+{
+  "_doc": "Perfil de aluminio negro de las ventanas (marco, cabezal, riel y hoja corrediza). Material liso: color medido en la foto, sin mapas.",
+  "name": "aluminio-negro",
+  "kind": "constant",
+  "applies_to": {
+    "openings": ["V01", "V02", "V03", "V04", "V05", "V06", "V07", "V08", "V09", "V10"],
+    "part": "marcos y hojas",
+    "source": "dueño (2026-10-07): todas las ventanas de la casa tienen marcos de aluminio en color negro"
+  },
+  "photo": "sources/fotos/ventana.jpg",
+  "photo_meta": {"taken": "2026-10-07T23:19:20", "camera": "Samsung Galaxy S25 Ultra", "focal_35mm": 23, "iso": 1600, "flash": false, "light": "artificial cálida, de noche"},
+  "color": {"white_reference": {"box_px": [2400, 600, 2800, 2600], "albedo_srgb": [235, 235, 235], "note": "muro a la derecha de la ventana, en el mismo plano; yeso con pintura blanca (dato del dueño), albedo supuesto"}},
+  "pbr": {
+    "sample": {"box_px": [900, 380, 2160, 470], "darkest_fraction": 0.4, "note": "cabezal superior, sin salpicaduras"},
+    "metallic": 0.0,
+    "roughness": 0.35,
+    "note": "acabado de pintura electrostática o anodizado negro: se trata como dieléctrico satinado (reflejo suave, sin brillo metálico en la foto)"
+  },
+  "observed": {
+    "type": "ventana corrediza de 2 hojas, perfil de aluminio negro",
+    "condition": "salpicaduras de pintura blanca de los muros en marco y vidrio (9–14 % del área en los perfiles laterales) y marcas naranjas en el cabezal; son de esta ventana, no se generalizan",
+    "hardware": "pestillo negro en el larguero de la hoja corrediza",
+    "setting": "empotrada en el muro, con mocheta y repisón de yeso; sobre ella, la caja de una persiana enrollable de aluminio plata"
+  },
+  "assumptions": ["pintura o anodizado negro tratado como dieléctrico satinado (rugosidad 0.35)", "albedo del muro de referencia"]
+}

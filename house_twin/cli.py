@@ -11,6 +11,11 @@ FACTS_PATH = ROOT / 'data' / 'facts' / 'existing.facts.json'
 IFC_PATH = ROOT / 'models' / 'existing.ifc'
 OVERLAY_PATH = ROOT / 'docs' / 'analysis' / '02-hechos-planta-existente.png'
 VIEWER_PATH = ROOT / 'docs' / 'viewer' / 'casa-jonhy-3d.html'
+TEXTURES_DIR = ROOT / 'assets' / 'textures'
+BLEND_PATH = ROOT / 'models' / 'existing.blend'
+RENDERS_DIR = ROOT / 'docs' / 'analysis' / '05-renders'
+WALK_DIR = ROOT / 'docs' / 'viewer' / 'recorrido'
+GLB_PATH = ROOT / 'models' / 'existing.glb'
 
 
 def _load_drawing(source: Path):
@@ -30,6 +35,7 @@ def _load_drawing(source: Path):
 def build(source: Path):
     from house_twin.facts.annotations import load_annotations
     from house_twin.facts.builder import build_facts
+    from house_twin.finishes import Finishes, load_materials
     from house_twin.ifc_export import build_ifc
     from house_twin.render import render_facts
     from house_twin.viewer import render_viewer
@@ -37,7 +43,7 @@ def build(source: Path):
     FACTS_PATH.parent.mkdir(parents=True, exist_ok=True)
     FACTS_PATH.write_text(json.dumps(facts, ensure_ascii=False, indent=1))
     IFC_PATH.parent.mkdir(parents=True, exist_ok=True)
-    build_ifc(facts).write(str(IFC_PATH))
+    build_ifc(facts, Finishes(facts, load_materials(TEXTURES_DIR))).write(str(IFC_PATH))
     render_facts(facts, OVERLAY_PATH)
     render_viewer(facts, VIEWER_PATH)
     print(f"{len(facts['spaces'])} espacios, {len(facts['walls'])} muros, {len(facts['openings'])} vanos")
@@ -57,6 +63,35 @@ def inspect_dxf(source: Path):
     print(json.dumps(inventory(str(source)), ensure_ascii=False, indent=1))
 
 
+def texture(spec: Path):
+    from house_twin.textures import build_texture
+    out = build_texture(spec.resolve())
+    for f in sorted(out.iterdir()):
+        print(f'→ {f.relative_to(ROOT)}')
+
+
+def scene(render: bool):
+    """Escena de Blender con los acabados, recorrido web y (opcional) renders: corre `blender_scene.py` dentro de Blender."""
+    import shutil
+    import subprocess
+    from house_twin.finishes import load_materials
+    from house_twin.walk import build_walk
+    blender = shutil.which('blender')
+    if blender is None:
+        raise SystemExit('No encuentro `blender` en el PATH (ver README: Blender + Bonsai)')
+    args = [blender, '--background', '--python', str(ROOT / 'house_twin' / 'blender_scene.py'), '--',
+            str(ROOT), str(IFC_PATH), str(BLEND_PATH), '--glb', str(GLB_PATH)]
+    args += ['--render', str(RENDERS_DIR)] if render else []
+    out = subprocess.run(args, capture_output=True, text=True)
+    report = [line for line in out.stdout.splitlines() if line.startswith(('materiales:', 'sin acabado:', 'Error'))]
+    print('\n'.join(report))
+    if out.returncode != 0 or not BLEND_PATH.exists():
+        raise SystemExit(out.stderr[-2000:] or 'Blender falló')
+    walk = build_walk(json.loads(FACTS_PATH.read_text()), load_materials(TEXTURES_DIR), TEXTURES_DIR, WALK_DIR, GLB_PATH)
+    for path in [BLEND_PATH, GLB_PATH, walk] + (sorted(RENDERS_DIR.glob('*.jpg')) if render else []):
+        print(f'→ {path.relative_to(ROOT)}')
+
+
 def main():
     parser = argparse.ArgumentParser(prog='house_twin')
     sub = parser.add_subparsers(dest='command', required=True)
@@ -67,6 +102,10 @@ def main():
     c.add_argument('source_b', type=Path)
     i = sub.add_parser('inspect-dxf', help='capas, entidades, bloques y unidades de un DXF')
     i.add_argument('source', type=Path)
+    t = sub.add_parser('texture', help='foto → texturas PBR según un JSON de sources/texturas/')
+    t.add_argument('spec', type=Path)
+    sc = sub.add_parser('scene', help='IFC + texturas → escena de Blender y recorrido web (docs/viewer/recorrido/)')
+    sc.add_argument('--render', action='store_true', help='también renderiza las vistas previas (Cycles, CPU: ~5 min)')
     args = parser.parse_args()
     if args.command == 'build':
         build(args.source)
@@ -74,6 +113,10 @@ def main():
         compare(args.source_a, args.source_b)
     elif args.command == 'inspect-dxf':
         inspect_dxf(args.source)
+    elif args.command == 'texture':
+        texture(args.spec)
+    elif args.command == 'scene':
+        scene(args.render)
 
 
 if __name__ == '__main__':

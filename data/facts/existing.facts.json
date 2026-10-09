@@ -5,7 +5,7 @@
  "frame": "origen en la esquina del terreno a la izquierda de la calle; X a lo ancho, Y hacia el fondo",
  "provenance": {
   "source": "dxf:data/raw/plano.dxf",
-  "built_on": "2026-10-07",
+  "built_on": "2026-10-08",
   "precision_m": 0.0,
   "calibration": {},
   "owner_annotations": "2026-10-08"
@@ -38,7 +38,8 @@
   ]
  },
  "source_warnings": [
-  "$INSUNITS=4 no cuadra con la geometría (21.25 unidades de lado); se usó 6"
+  "$INSUNITS=4 no cuadra con la geometría (21.25 unidades de lado); se usó 6",
+  "M01: el dueño mide 1.1 m (ancho libre del pasillo de recámaras, de muro a muro) y el plano da 1.21 m entre W18 y W16"
  ],
  "levels": [
   {
@@ -676,8 +677,8 @@
     "source": "no está en el plano"
    },
    "roofed": {
-    "value": null,
-    "source": "no está en el plano"
+    "value": false,
+    "source": "dueño (2026-10-08)"
    },
    "enclosed": {
     "value": null,
@@ -685,7 +686,7 @@
    },
    "source": "plano: caras de MUROS + vanos",
    "name_source": "dueño (2026-10-08)",
-   "owner_note": "Tragaluz que ilumina y ventila la Recámara 3. Lo forman el muro central (diagonal, hacia la sala) y dos muros laterales."
+   "owner_note": "Tragaluz que ilumina y ventila la Recámara 3. Lo forman el muro central (diagonal, hacia la sala) y dos muros laterales. Está abierto al cielo (dato del dueño, 2026-10-08)."
   },
   {
    "id": "S09",
@@ -4091,6 +4092,22 @@
    "open": true
   }
  ],
+ "measurements": [
+  {
+   "id": "M01",
+   "what": "ancho libre del pasillo de recámaras, de muro a muro",
+   "walls": [
+    "W18",
+    "W16"
+   ],
+   "value": 1.1,
+   "source": "dueño (2026-10-08)",
+   "plan_value": 1.21,
+   "difference": -0.11,
+   "matches_plan": false,
+   "note": "en el pasillo caben 3 losetas enteras de 30 cm; en la foto, el corte queda del lado de la recámara 3"
+  }
+ ],
  "unknowns": [
   {
    "id": "U02",
@@ -4128,14 +4145,6 @@
    "topic": "ventanas",
    "question": "Confirmar que en los rótulos de ventana \"a=\" es antepecho y \"h=\" altura de ventana.",
    "blocks": []
-  },
-  {
-   "id": "U10",
-   "topic": "tragaluz",
-   "question": "¿El tragaluz está abierto al cielo o cubierto (domo, vidrio)? Define si cuenta como área interior.",
-   "blocks": [
-    "segunda planta"
-   ]
   },
   {
    "id": "U11",
@@ -4184,6 +4193,16 @@
    "question": "La franja exterior frente a la sala (entre la cochera y la bodega, con la puerta principal y la peatonal), ¿es parte de la cochera, un acceso/jardín, u otra cosa?",
    "blocks": [],
    "answer": "La franja frente a la sala es un pórtico techado.",
+   "source": "dueño (2026-10-08)"
+  },
+  {
+   "id": "U10",
+   "topic": "tragaluz",
+   "question": "¿El tragaluz está abierto al cielo o cubierto (domo, vidrio)? Define si cuenta como área interior.",
+   "blocks": [
+    "segunda planta"
+   ],
+   "answer": "El tragaluz está abierto al cielo, sin domo ni vidrio.",
    "source": "dueño (2026-10-08)"
   }
  ]

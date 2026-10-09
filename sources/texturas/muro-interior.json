@@ -1,0 +1,24 @@
+{
+  "_doc": "Muros interiores: yeso con pintura blanca. Liso: la foto no muestra relieve por encima del ruido del sensor, así que es un material sin mapas.",
+  "name": "muro-interior",
+  "kind": "constant",
+  "applies_to": {
+    "surface": "muros interiores",
+    "spaces": ["S01", "S02", "S03", "S04", "S05", "S06", "S07", "S08"],
+    "source": "dueño (2026-10-07): todo el interior de la casa tiene yeso blanco con pintura blanca; los exteriores tienen otra textura"
+  },
+  "photo": "sources/fotos/muro-interior.jpg",
+  "photo_meta": {"taken": "2026-10-07T23:19:39", "camera": "Samsung Galaxy S25 Ultra", "focal_35mm": 23, "iso": 1000, "flash": false, "light": "artificial cálida, de noche"},
+  "pbr": {
+    "basecolor_srgb": [235, 235, 235],
+    "metallic": 0.0,
+    "roughness": 0.9,
+    "note": "blanco: es la misma superficie que sirve de referencia de color en las demás fotos, así que no se puede medir sin una referencia independiente; mate: la luz cae en un degradado suave (luminancia 96–175) sin reflejo de la lámpara"
+  },
+  "observed": {
+    "finish": "yeso liso con pintura blanca mate; sin textura de llana visible a esta distancia",
+    "condition": "una perforación de clavo, rozaduras oscuras cerca del piso (a la altura de un zoclo) y una marca pequeña a media altura",
+    "objects": "pantalla LED montada en el muro, con un cargador encima; no es acabado"
+  },
+  "assumptions": ["albedo del blanco 235 sRGB (≈ 0.83 lineal), el mismo que en las demás fotos", "pintura mate (rugosidad 0.9)"]
+}

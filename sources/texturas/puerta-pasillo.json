@@ -1,0 +1,335 @@
+{
+  "_doc": "Puertas de herrería del pasillo de servicio (hacia la cochera y hacia el patio, iguales): marco, barrotes torcidos y lisos con adornos, arillos y lámina abajo. Casi todo es hueco: la opacidad sale de la geometría medida, ajustada a la silueta oscura de la foto. Posiciones en fracciones (0–1, origen arriba a la izquierda). Regenerar con: python -m house_twin.cli texture sources/texturas/puerta-pasillo.json",
+  "name": "puerta-pasillo",
+  "applies_to": {
+    "openings": [],
+    "boundaries": [
+      {
+        "between": [
+          "S10",
+          "S12"
+        ],
+        "where": "cochera ↔ pasillo de servicio, límite en y = 6.705 m entre x = 0.20 y 1.205 m"
+      },
+      {
+        "between": [
+          "S12",
+          "S09"
+        ],
+        "where": "pasillo de servicio ↔ patio, límite en y = 12.625 m entre x = 0.20 y 1.205 m"
+      }
+    ],
+    "source": "dueño (2026-10-08): puerta de metal negra entre la cochera y el pasillo de servicio, y otra igual entre el pasillo y el patio; ninguna está en el plano ni en el modelo (las adyacencias S10–S12 y S09–S12 figuran como abiertas)"
+  },
+  "photo": "sources/fotos/puerta-pasillo.jpg",
+  "photo_meta": {
+    "taken": "2026-10-08T07:48:20",
+    "camera": "Samsung Galaxy S25 Ultra",
+    "focal_35mm": 23,
+    "iso": 25,
+    "flash": false,
+    "light": "luz de día, tomada desde el pasillo hacia la cochera y la calle"
+  },
+  "corners_px": {
+    "top_left": [
+      478,
+      557
+    ],
+    "top_right": [
+      2462,
+      507
+    ],
+    "bottom_right": [
+      2418,
+      3897
+    ],
+    "bottom_left": [
+      713,
+      3970
+    ]
+  },
+  "size_m": {
+    "width": 1.0,
+    "height": 2.0,
+    "source": "ancho: los dos límites del pasillo miden 1.005 m en el plano (entre el muro colindante, x = 0.20 m, y la cara del muro de la cocina, x = 1.205 m); alto: supuesto provisional, pendiente de medir"
+  },
+  "px_per_m": 1000,
+  "color": {
+    "as_shot": true,
+    "note": "luz de día con el balance de la cámara; no hay blanco en el plano de la puerta (los muros quedan de lado)"
+  },
+  "relief": {
+    "type": "flat",
+    "grain_mm": 0.15,
+    "note": "pintura a brocha sobre lámina y barrotes; sin piezas hundidas"
+  },
+  "opacity": {
+    "holes": [
+      [
+        0.035,
+        0.02,
+        0.962,
+        0.735
+      ]
+    ],
+    "opaque": [
+      [
+        0,
+        0,
+        0.035,
+        1
+      ],
+      [
+        0.962,
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        0,
+        1,
+        0.02
+      ],
+      [
+        0,
+        0.735,
+        1,
+        1
+      ],
+      [
+        0.035,
+        0.076,
+        0.962,
+        0.082
+      ],
+      [
+        0.035,
+        0.345,
+        0.962,
+        0.351
+      ],
+      [
+        0.035,
+        0.411,
+        0.962,
+        0.417
+      ],
+      [
+        0.035,
+        0.669,
+        0.962,
+        0.675
+      ],
+      [
+        0.1535,
+        0.02,
+        0.1705,
+        0.74
+      ],
+      [
+        0.4125,
+        0.02,
+        0.4295,
+        0.74
+      ],
+      [
+        0.6745,
+        0.02,
+        0.6915,
+        0.74
+      ],
+      [
+        0.287,
+        0.02,
+        0.297,
+        0.74
+      ],
+      [
+        0.55,
+        0.02,
+        0.56,
+        0.74
+      ],
+      [
+        0.823,
+        0.02,
+        0.833,
+        0.74
+      ]
+    ],
+    "rings": [
+      {
+        "center_frac": [
+          0.227,
+          0.052
+        ],
+        "radius_frac_w": 0.062,
+        "thickness_frac_w": 0.009
+      },
+      {
+        "center_frac": [
+          0.488,
+          0.052
+        ],
+        "radius_frac_w": 0.062,
+        "thickness_frac_w": 0.009
+      },
+      {
+        "center_frac": [
+          0.76,
+          0.052
+        ],
+        "radius_frac_w": 0.062,
+        "thickness_frac_w": 0.009
+      },
+      {
+        "center_frac": [
+          0.092,
+          0.382
+        ],
+        "radius_frac_w": 0.062,
+        "thickness_frac_w": 0.009
+      },
+      {
+        "center_frac": [
+          0.358,
+          0.382
+        ],
+        "radius_frac_w": 0.062,
+        "thickness_frac_w": 0.009
+      },
+      {
+        "center_frac": [
+          0.62,
+          0.382
+        ],
+        "radius_frac_w": 0.062,
+        "thickness_frac_w": 0.009
+      },
+      {
+        "center_frac": [
+          0.897,
+          0.382
+        ],
+        "radius_frac_w": 0.062,
+        "thickness_frac_w": 0.009
+      },
+      {
+        "center_frac": [
+          0.225,
+          0.707
+        ],
+        "radius_frac_w": 0.062,
+        "thickness_frac_w": 0.009
+      },
+      {
+        "center_frac": [
+          0.492,
+          0.707
+        ],
+        "radius_frac_w": 0.062,
+        "thickness_frac_w": 0.009
+      },
+      {
+        "center_frac": [
+          0.763,
+          0.707
+        ],
+        "radius_frac_w": 0.062,
+        "thickness_frac_w": 0.009
+      }
+    ],
+    "blobs": [
+      {
+        "center_frac": [
+          0.292,
+          0.215
+        ],
+        "size_frac_w": [
+          0.028,
+          0.045
+        ]
+      },
+      {
+        "center_frac": [
+          0.292,
+          0.543
+        ],
+        "size_frac_w": [
+          0.028,
+          0.045
+        ]
+      },
+      {
+        "center_frac": [
+          0.555,
+          0.215
+        ],
+        "size_frac_w": [
+          0.028,
+          0.045
+        ]
+      },
+      {
+        "center_frac": [
+          0.555,
+          0.655
+        ],
+        "size_frac_w": [
+          0.028,
+          0.045
+        ]
+      },
+      {
+        "center_frac": [
+          0.828,
+          0.218
+        ],
+        "size_frac_w": [
+          0.028,
+          0.045
+        ]
+      },
+      {
+        "center_frac": [
+          0.828,
+          0.545
+        ],
+        "size_frac_w": [
+          0.028,
+          0.045
+        ]
+      }
+    ],
+    "refine_dark": {
+      "dilate_px": 3,
+      "max_luminance": 80
+    },
+    "note": "medido en la foto rectificada: 4 travesaños, 3 barrotes torcidos, 3 lisos con 2 adornos cada uno y 10 arillos (filas de 3, 4 y 3); la lámina ocupa desde 0.735 de la altura; las piezas dentro de los huecos toman el color de la pintura negra medido en la lámina (#0d0e10)",
+    "fill_pieces_srgb": [
+      13,
+      14,
+      16
+    ]
+  },
+  "roughness": {
+    "base": 0.6,
+    "grain": 0.1,
+    "note": "esmalte negro envejecido y con polvo"
+  },
+  "observed": {
+    "type": "puerta de herrería de una hoja: marco de perfil, barrotes cuadrados torcidos y lisos, arillos de solera y lámina lisa en el tercio inferior",
+    "finish": "pintura negra a brocha, con polvo y desgaste; la lámina muestra las marcas de la brocha",
+    "ornaments": "adornos de fundición en forma de rombo con picos en los barrotes lisos",
+    "hardware": "bisagras de perno con ménsula anclada al muro (lado izquierdo); portacandado de lámina con candado (lado derecho)",
+    "temporary": "cinta y trapo en el poste izquierdo; amarres de alambre y cordón",
+    "context": "desde el pasillo se ve la cochera: concreto con un registro cuadrado, el portón de herrería negro hacia la calle, la barda colindante pintada de blanco con remate de tabique rojo y el poste de luz de la calle"
+  },
+  "assumptions": [
+    "alto de 2.00 m (pendiente de medir)",
+    "ancho igual al hueco del plano (1.005 m)",
+    "que cada puerta esté sobre el límite del espacio en el modelo (posición pendiente de confirmar)",
+    "color tal como lo registró la cámara con luz de día"
+  ]
+}

@@ -1,0 +1,84 @@
+{
+ "name": "estuco-fachada",
+ "applies_to": {
+  "surface": "muros exteriores",
+  "spaces": [
+   "S11"
+  ],
+  "street_facade": true,
+  "zones": [
+   "fachada a la calle",
+   "pórtico (S11)"
+  ],
+  "source": "dueño (2026-10-08): la fachada y el pórtico tienen un acabado más rugoso que los demás exteriores, con pastas de estuco; es un punto medio entre «Lace Trowel» y «Pebbled Dash»"
+ },
+ "kind": "procedural",
+ "tileable": true,
+ "size_m": {
+  "width": 0.6,
+  "height": 0.6,
+  "source": "tamaño de repetición elegido para que las placas (≈ 3 cm) no se noten repetidas"
+ },
+ "px_per_m": 2000,
+ "size_px": [
+  1200,
+  1200
+ ],
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)"
+ },
+ "source": {
+  "method": "procedural",
+  "seed": 134,
+  "references": [
+   {
+    "name": "Lace Trowel",
+    "use": "placas grandes aplanadas por la llana, con bordes y sombras marcadas",
+    "note": "imagen de catálogo compartida por el dueño; no se guarda en el repo"
+   },
+   {
+    "name": "Pebbled Dash",
+    "use": "grano fino de piedrita, uniforme",
+    "note": "imagen de catálogo compartida por el dueño; no se guarda en el repo"
+   }
+  ]
+ },
+ "parameters": {
+  "plates": {
+   "size_m": 0.03,
+   "coverage": 0.45,
+   "edge_softness": 0.12,
+   "height_mm": 3.0,
+   "note": "punto medio: placas más chicas y bajas que en «Lace Trowel» (≈ 5–8 cm y relieve fuerte), cubriendo la mitad de la superficie"
+  },
+  "grain": {
+   "size_m": 0.0015,
+   "height_mm": 0.25,
+   "note": "grano tipo «Pebbled Dash», algo más fino"
+  },
+  "color": {
+   "albedo_srgb": [
+    222,
+    222,
+    220
+   ],
+   "crevice_darkening": 0.12,
+   "note": "mismo blanco exterior que el zarpeo (supuesto); un poco más oscuro entre placas por polvo y sombra fina"
+  },
+  "roughness": {
+   "base": 0.9,
+   "note": "pintura mate"
+  }
+ },
+ "observed": {
+  "from_photos": "en las fotos de la fachada (13 mm, desde la calle) se ve un estuco blanco con grumos marcados, más rugoso que la barda de la cochera; no hay foto de cerca",
+  "owner": "más rugoso que el zarpeo de pasillo, patio y cochera, con pastas de estuco"
+ },
+ "assumptions": [
+  "textura sintética: forma, tamaño y relieve de las placas son una interpretación de dos referencias de catálogo, no medidas",
+  "placas de ≈ 3 cm cubriendo ≈ 45 % de la superficie, con 3 mm de relieve",
+  "mismo blanco que el zarpeo exterior"
+ ]
+}

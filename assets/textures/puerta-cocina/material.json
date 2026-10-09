@@ -1,0 +1,74 @@
+{
+ "name": "puerta-cocina",
+ "applies_to": {
+  "openings": [
+   "D04"
+  ],
+  "source": "dueño (2026-10-07): puerta de la cocina que da acceso al pasillo de servicio, patio y lavandería; aluminio pintado de negro, con ventana en la parte de arriba"
+ },
+ "size_m": {
+  "width": 0.83,
+  "height": 2.1,
+  "source": "vano D04 del plano (0.83 m) y altura de vano confirmada por el dueño (U04, 2.10 m); supuesto: el conjunto negro (marco + hoja) ocupa todo el vano"
+ },
+ "px_per_m": 1600,
+ "size_px": [
+  1328,
+  3360
+ ],
+ "tileable": false,
+ "grid": null,
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)",
+  "opacity": "opacity.png (0 = vidrio)"
+ },
+ "glass_material": "vidrio-claro",
+ "source": {
+  "photo": "sources/fotos/puerta-cocina.jpg",
+  "photo_meta": {
+   "taken": "2026-10-07T23:20:28",
+   "camera": "Samsung Galaxy S25 Ultra",
+   "focal_35mm": 23,
+   "iso": 1250,
+   "flash": false,
+   "light": "artificial cálida, de noche; el reflejo de la lámpara cae en el vidrio izquierdo"
+  },
+  "color": {
+   "white_reference": {
+    "box_px": [
+     120,
+     600,
+     500,
+     1800
+    ],
+    "albedo_srgb": [
+     235,
+     235,
+     235
+    ],
+    "note": "muro de yeso a la izquierda de la puerta (blanco, dato del dueño); albedo supuesto"
+   }
+  },
+  "white_balance_gain": [
+   1.346,
+   1.346,
+   1.3314
+  ]
+ },
+ "observed": {
+  "type": "puerta de una hoja con marco de perfil negro; mitad superior con 2 vidrios y retícula, mitad inferior con tablero de lámina acanalada (duela vertical)",
+  "finish": "esmalte negro brillante a brocha, con escurrimientos; retícula y junquillos de los vidrios pintados de blanco, con salpicaduras negras",
+  "ornaments": "4 adornos de fundición (tipo flor) soldados en las barras verticales de la retícula",
+  "hardware": "2 bisagras de munición del lado izquierdo; cerradura de sobreponer con cilindro en el travesaño medio (lado derecho); pasador de sobreponer con llave más abajo; una pieza cilíndrica en la esquina superior derecha (probable tope o pasador)",
+  "glass": "transparente con suciedad y residuos de pintura; se ve el pasillo detrás con poco contraste (no se distingue si es claro sucio o tiene película)",
+  "surroundings": "vano con mochetas de yeso blanco; a la derecha, azulejo blanco brillante con una cenefa de frutas y platos de talavera; piso de loseta igual al del interior hasta la puerta"
+ },
+ "assumptions": [
+  "el conjunto negro ocupa todo el vano de 0.83 × 2.10 m",
+  "muro izquierdo blanco como referencia de color",
+  "profundidad del tablero (3 mm) y de las ranuras (1.5 mm)",
+  "vidrio claro, igual al de las ventanas"
+ ]
+}

@@ -8,7 +8,7 @@ Digital twin of a residential property, combining BIM/IFC, 3D modeling, spatial 
 | 1. Extracción de la planta desde el levantamiento (PDF vectorial) | ✅ [informe](docs/analysis/01-extraccion-pdf.md) |
 | 2. Modelo de hechos → IFC → House MCP (solo lectura) | ✅ [informe](docs/analysis/02-modelo-de-hechos.md) |
 | 3. Validación contra el DXF original; el DXF pasa a ser la fuente | ✅ [informe](docs/analysis/03-validacion-dxf.md) |
-| 4. Fidelidad visual: Blender + Bonsai, materiales, texturas e iluminación | siguiente |
+| 4. Fidelidad visual: Blender + Bonsai, materiales, texturas e iluminación | en curso: [acabados](docs/analysis/04-acabados.md) |
 | Variantes y propuestas de remodelación (`create_variant`) | sin fecha |
 
 ## Cómo funciona
@@ -42,6 +42,7 @@ python -m venv .venv
 .venv/bin/python -m house_twin.cli build --source sources/casa-jonhy-levantamiento.pdf  # desde el PDF
 .venv/bin/python -m house_twin.cli inspect-dxf data/raw/plano.dxf     # capas, entidades, bloques, unidades
 .venv/bin/python -m house_twin.cli compare sources/casa-jonhy-levantamiento.pdf data/raw/plano.dxf
+.venv/bin/python -m house_twin.cli texture sources/texturas/puerta-recamaras.json  # foto → texturas PBR
 .venv/bin/python -m pytest
 ```
 
@@ -59,6 +60,10 @@ Herramientas: `house_summary`, `list_rooms`, `get_room`, `get_adjacent_rooms`, `
 En el navegador (también en el celular): `docs/viewer/casa-jonhy-3d.html`, generado por `build`.
 Gira con el dedo, toca un espacio para ver su ficha, cambia a vista en planta o corta los muros a 1 m.
 
+Para caminar adentro, con las texturas: `docs/viewer/recorrido/`, generado por `scene`. En la PC se camina con W A S D
+y el mouse, y en el celular con un joystick táctil. Los muros chocan, las puertas se atraviesan y una planta en
+miniatura muestra dónde estás. Necesita servirse por HTTP (`python -m http.server` en esa carpeta), no como archivo local.
+
 En Blender:
 
 Abre `models/existing.ifc` en Blender con el add-on [Bonsai](https://bonsaibim.org)
@@ -66,6 +71,11 @@ Abre `models/existing.ifc` en Blender con el add-on [Bonsai](https://bonsaibim.o
 Probado con Blender 5.2.2 LTS y Bonsai 0.9.0 (Bonsai 0.9 exige Blender 5.1 o más nuevo).
 Después de un `build`, *File → Revert IFC Project* recarga el modelo. Los GlobalId son deterministas, así que
 el mismo elemento conserva su GUID entre `build`s.
+
+Con los acabados: `python -m house_twin.cli scene [--render]` abre el IFC con Bonsai, aplica las texturas de
+`assets/textures/` y guarda `models/existing.blend` (fuera de git). Con `--render` también deja vistas previas en
+`docs/analysis/05-renders/` (Cycles en CPU, ~5 min). La colección `Recorrido` tiene una cámara por espacio a la altura de los ojos, cada una ligada a un fotograma: en vista de cámara (Numpad 0), ← y → pasan de un cuarto al siguiente; para caminar adentro, *View → Navigation → Walk Navigation* (Shift + `). Si se recarga el IFC dentro de Blender, los materiales se
+pierden: hay que volver a correr `scene`.
 
 ## Estructura
 
@@ -77,6 +87,10 @@ house_twin/
   sources/            adaptadores: pdf.py (+ pdf_content.py), dxf.py
   facts/              openings.py, faces.py, walls.py, naming.py, annotations.py, builder.py
   ifc_export.py       hechos → IFC4 (IfcOpenShell)
+  finishes.py         qué textura lleva cada cara de muro, piso y vano (según el applies_to de cada textura)
+  blender_scene.py    corre dentro de Blender: IFC + texturas → escena con materiales, GLB y renders
+  walk.py             recorrido web en primera persona (GLB + texturas ligeras + walk_template.html)
+  sunlight.py         orientación medida y sol de la vista previa (lo comparten Blender y la web)
   model.py            consultas semánticas (HouseModel)
   mcp_server.py       House MCP
   render.py           imagen de validación

@@ -1,0 +1,48 @@
+{
+  "_doc": "Puerta de la cocina al pasillo de servicio (D04): marco y hoja de perfil negro, vidrios con retícula blanca arriba y tablero acanalado abajo. Posiciones en fracciones de la cara (0–1, origen arriba a la izquierda). Regenerar con: python -m house_twin.cli texture sources/texturas/puerta-cocina.json",
+  "name": "puerta-cocina",
+  "applies_to": {
+    "openings": ["D04"],
+    "source": "dueño (2026-10-07): puerta de la cocina que da acceso al pasillo de servicio, patio y lavandería; aluminio pintado de negro, con ventana en la parte de arriba"
+  },
+  "photo": "sources/fotos/puerta-cocina.jpg",
+  "photo_meta": {"taken": "2026-10-07T23:20:28", "camera": "Samsung Galaxy S25 Ultra", "focal_35mm": 23, "iso": 1250, "flash": false, "light": "artificial cálida, de noche; el reflejo de la lámpara cae en el vidrio izquierdo"},
+  "corners_px": {"top_left": [706, 222], "top_right": [2172, 251], "bottom_right": [2053, 3786], "bottom_left": [862, 3833]},
+  "size_m": {"width": 0.83, "height": 2.10, "source": "vano D04 del plano (0.83 m) y altura de vano confirmada por el dueño (U04, 2.10 m); supuesto: el conjunto negro (marco + hoja) ocupa todo el vano"},
+  "px_per_m": 1600,
+  "color": {"white_reference": {"box_px": [120, 600, 500, 1800], "albedo_srgb": [235, 235, 235], "note": "muro de yeso a la izquierda de la puerta (blanco, dato del dueño); albedo supuesto"}},
+  "patches": [
+    {"note": "cerradura de sobreponer: se tapa con el mismo travesaño; irá como objeto 3D", "from_frac": [0.60, 0.512, 0.18, 0.040], "to_frac": [0.82, 0.512]},
+    {"note": "pasador con llave: se tapa con el mismo acanalado de abajo; irá como objeto 3D", "from_frac": [0.82, 0.700, 0.18, 0.050], "to_frac": [0.82, 0.620]}
+  ],
+  "relief": {
+    "type": "features",
+    "features": [
+      {"kind": "recess", "rect_frac": [0.054, 0.552, 0.950, 0.962], "depth_mm": 3},
+      {"kind": "grooves", "rect_frac": [0.054, 0.552, 0.950, 0.962], "x_frac": [0.169, 0.187, 0.271, 0.289, 0.373, 0.392, 0.482, 0.500, 0.584, 0.602, 0.687, 0.705, 0.789, 0.807], "width_frac": 0.008, "depth_mm": 1.5}
+    ],
+    "grain_mm": 0.08,
+    "note": "acanalado medido en la foto rectificada: 7 juntas de duela con doble ranura, cada ~0.10 del ancho (≈ 8.5 cm); profundidades supuestas"
+  },
+  "opacity": {
+    "holes": [[0.062, 0.030, 0.472, 0.506], [0.518, 0.030, 0.928, 0.506]],
+    "opaque": [[0.259, 0.030, 0.271, 0.506], [0.717, 0.030, 0.729, 0.506], [0.062, 0.192, 0.928, 0.200], [0.062, 0.341, 0.928, 0.349]],
+    "glass_material": "vidrio-claro",
+    "note": "dos vidrios, cada uno con retícula blanca de 1 barra vertical y 2 horizontales (6 cuadros); medidos en la foto rectificada"
+  },
+  "roughness": {"base": 0.3, "grain": 0.1, "note": "esmalte negro aplicado a brocha: brillo con marcas de brocha visibles"},
+  "observed": {
+    "type": "puerta de una hoja con marco de perfil negro; mitad superior con 2 vidrios y retícula, mitad inferior con tablero de lámina acanalada (duela vertical)",
+    "finish": "esmalte negro brillante a brocha, con escurrimientos; retícula y junquillos de los vidrios pintados de blanco, con salpicaduras negras",
+    "ornaments": "4 adornos de fundición (tipo flor) soldados en las barras verticales de la retícula",
+    "hardware": "2 bisagras de munición del lado izquierdo; cerradura de sobreponer con cilindro en el travesaño medio (lado derecho); pasador de sobreponer con llave más abajo; una pieza cilíndrica en la esquina superior derecha (probable tope o pasador)",
+    "glass": "transparente con suciedad y residuos de pintura; se ve el pasillo detrás con poco contraste (no se distingue si es claro sucio o tiene película)",
+    "surroundings": "vano con mochetas de yeso blanco; a la derecha, azulejo blanco brillante con una cenefa de frutas y platos de talavera; piso de loseta igual al del interior hasta la puerta"
+  },
+  "assumptions": [
+    "el conjunto negro ocupa todo el vano de 0.83 × 2.10 m",
+    "muro izquierdo blanco como referencia de color",
+    "profundidad del tablero (3 mm) y de las ranuras (1.5 mm)",
+    "vidrio claro, igual al de las ventanas"
+  ]
+}

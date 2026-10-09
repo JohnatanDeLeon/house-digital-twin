@@ -1,0 +1,67 @@
+{
+ "name": "closet-madera",
+ "applies_to": {
+  "furniture": "puertas de closet de 2 recámaras",
+  "source": "dueño (2026-10-08): puertas de closet de madera; solo dos recámaras tienen puertas en el closet, el de la recámara más grande no tiene; dueño (2026-10-08): el material es melamina"
+ },
+ "size_m": {
+  "width": 0.37,
+  "height": 0.51,
+  "source": "supuesto: el recorte ocupa ≈ 0.82 del ancho de una hoja (760 de 925 px), y la hoja se supone de 0.45 m; pendiente de medir"
+ },
+ "px_per_m": 2000,
+ "size_px": [
+  740,
+  1020
+ ],
+ "tileable": true,
+ "grid": null,
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)"
+ },
+ "glass_material": null,
+ "source": {
+  "photo": "sources/fotos/closet-1.jpg",
+  "photo_meta": {
+   "taken": "2026-10-08T07:45:49",
+   "camera": "Samsung Galaxy S25 Ultra",
+   "focal_35mm": 23,
+   "iso": 1250,
+   "flash": false,
+   "light": "luz interior mezclada con luz de día"
+  },
+  "color": {
+   "gain": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "mean_srgb": [
+    58,
+    47,
+    42
+   ],
+   "note": "las dos fotos no coinciden: corregido con su blanco, el laminado sale #55484d en la foto 1 (cerca, con reflejo) y #272426 en la foto 2 (lejos, en sombra), porque cada blanco recibe otra luz que el closet. Se conserva el tono tal como lo registró la cámara (café cálido) y se fija una luminosidad intermedia supuesta"
+  },
+  "white_balance_gain": [
+   0.5301,
+   0.5301,
+   0.5301
+  ]
+ },
+ "observed": {
+  "composition": "closet empotrado de muro a muro y del piso al techo: 3 módulos, cada uno con 2 hojas altas y 2 puertas de maletero arriba; la hoja izquierda del módulo central se ve sin pareja (el módulo central puede ser de 1 hoja ancha)",
+  "doors": "hojas lisas, sin tableros ni molduras, con canto del mismo acabado",
+  "finish": "melamina (dato del dueño) color chocolate oscuro tipo wengué, con veta vertical impresa fina y uniforme, satinada",
+  "handles": "jaladeras de barra de acero inoxidable, verticales, en pares al centro de cada módulo; en los maleteros, jaladeras más cortas",
+  "condition": "huellas y manchas de grasa en las hojas, un rayón en la hoja derecha; la junta con el muro está sin acabar (relleno de yeso y pintura naranja asomando)",
+  "context": "techo con textura de tirol (rugoso), zoclo de loseta en el muro, piso de loseta del interior y la puerta de la recámara de pino entintado"
+ },
+ "assumptions": [
+  "hoja de 0.45 m de ancho (escala del recorte)",
+  "luminosidad del laminado (sRGB medio 58, 47, 42), intermedia entre las dos fotos",
+  "laminado satinado (rugosidad 0.4)"
+ ]
+}

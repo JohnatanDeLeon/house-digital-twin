@@ -1,189 +1,214 @@
 {
-  "_doc": "Hechos confirmados por el dueño. Coordenadas en el marco del modelo (m; origen en la esquina del terreno a la izquierda de la calle). Las zonas exteriores se recortan contra el exterior real, así que sus polígonos solo marcan la región. Los límites siguen las caras de muro exactas del DXF (data/raw/plano.dxf).",
-  "source": "dueño",
-  "confirmed_on": "2026-10-08",
-  "merge_spaces": [
-    {
-      "name": "Baño",
-      "anchors": [
-        [
-          3.6,
-          11.9
-        ],
-        [
-          3.6,
-          10.7
-        ]
-      ],
-      "note": "El baño es un solo espacio; el murete de 5 cm divide la regadera dentro del baño."
-    }
-  ],
-  "exterior_zones": [
-    {
-      "name": "Lavandería",
-      "region": [
-        [
-          1.205,
-          10.225
-        ],
-        [
-          2.82,
-          10.225
-        ],
-        [
-          2.82,
-          12.625
-        ],
-        [
-          1.205,
-          12.625
-        ]
-      ],
-      "roofed": false,
-      "enclosed": false,
-      "note": "Fuera de la casa, detrás del baño; la ventana del baño da hacia ella. No está techada ni cerrada. Ocupa el recuadro entre el pasillo de servicio y el baño."
-    },
-    {
-      "name": "Patio",
-      "region": [
-        [
-          0.0,
-          12.625
-        ],
-        [
-          10.1,
-          12.625
-        ],
-        [
-          10.1,
-          21.3
-        ],
-        [
-          0.0,
-          21.3
-        ]
-      ],
-      "note": "Área exterior detrás de las recámaras."
-    },
-    {
-      "name": "Cochera",
-      "region": [
-        [
-          0.0,
-          -0.1
-        ],
-        [
-          3.115,
-          -0.1
-        ],
-        [
-          3.115,
-          6.705
-        ],
-        [
-          0.0,
-          6.705
-        ]
-      ],
-      "note": "Área exterior frente a la cocina, hasta donde empieza el muro lateral de la cocina. No tiene techo.",
-      "roofed": false
-    },
-    {
-      "name": "Pasillo de servicio",
-      "region": [
-        [
-          0.0,
-          6.705
-        ],
-        [
-          1.205,
-          6.705
-        ],
-        [
-          1.205,
-          12.625
-        ],
-        [
-          0.0,
-          12.625
-        ]
-      ],
-      "note": "Pasillo lateral junto a la barda que conecta la cochera con el patio, pasando por la puerta de la cocina y la lavandería. Su borde sigue la cara exterior del muro de la cocina (x = 1.205 m); límites trazados por Claude a partir de la descripción del dueño."
-    },
-    {
-      "name": "Pórtico",
-      "region": [
-        [
-          3.115,
-          -0.1
-        ],
-        [
-          8.6,
-          -0.1
-        ],
-        [
-          8.6,
-          3.3
-        ],
-        [
-          3.115,
-          3.3
-        ]
-      ],
-      "roofed": true,
-      "note": "Pórtico techado frente a la sala: acceso principal, puerta peatonal y puerta de la bodega."
-    }
-  ],
-  "rename_spaces": [
-    {
-      "name": "Tragaluz",
-      "anchor": [
-        9.4,
-        7.5
-      ],
-      "note": "Tragaluz que ilumina y ventila la Recámara 3. Lo forman el muro central (diagonal, hacia la sala) y dos muros laterales."
-    }
-  ],
-  "add_openings": [
-    {
-      "kind": "window",
-      "host_wall_anchor": [
-        8.957,
-        7.044
-      ],
-      "connects_anchors": [
-        [
-          9.4,
-          7.5
-        ],
-        [
-          7.0,
-          6.0
-        ]
-      ],
-      "note": "Ventana del tragaluz hacia la sala, en el muro central (diagonal). Los muros laterales no tienen ventana. El plano no la dibuja: medidas desconocidas."
-    }
-  ],
-  "answered_unknowns": [
-    {
-      "id": "U06",
-      "answer": "La cochera no tiene techo."
-    },
-    {
-      "id": "U09",
-      "answer": "La franja frente a la sala es un pórtico techado."
-    },
-    {
-      "id": "U01",
-      "answer": "Del piso al techo hay 2.60 m.",
-      "value": 2.6,
-      "answered_on": "2026-10-07"
-    },
-    {
-      "id": "U04",
-      "answer": "Las puertas miden 2.10 m del piso al vano (al cerramiento de concreto).",
-      "value": 2.1,
-      "answered_on": "2026-10-07"
-    }
-  ]
+ "_doc": "Hechos confirmados por el dueño. Coordenadas en el marco del modelo (m; origen en la esquina del terreno a la izquierda de la calle). Las zonas exteriores se recortan contra el exterior real, así que sus polígonos solo marcan la región. Los límites siguen las caras de muro exactas del DXF (data/raw/plano.dxf).",
+ "source": "dueño",
+ "confirmed_on": "2026-10-08",
+ "merge_spaces": [
+  {
+   "name": "Baño",
+   "anchors": [
+    [
+     3.6,
+     11.9
+    ],
+    [
+     3.6,
+     10.7
+    ]
+   ],
+   "note": "El baño es un solo espacio; el murete de 5 cm divide la regadera dentro del baño."
+  }
+ ],
+ "exterior_zones": [
+  {
+   "name": "Lavandería",
+   "region": [
+    [
+     1.205,
+     10.225
+    ],
+    [
+     2.82,
+     10.225
+    ],
+    [
+     2.82,
+     12.625
+    ],
+    [
+     1.205,
+     12.625
+    ]
+   ],
+   "roofed": false,
+   "enclosed": false,
+   "note": "Fuera de la casa, detrás del baño; la ventana del baño da hacia ella. No está techada ni cerrada. Ocupa el recuadro entre el pasillo de servicio y el baño."
+  },
+  {
+   "name": "Patio",
+   "region": [
+    [
+     0.0,
+     12.625
+    ],
+    [
+     10.1,
+     12.625
+    ],
+    [
+     10.1,
+     21.3
+    ],
+    [
+     0.0,
+     21.3
+    ]
+   ],
+   "note": "Área exterior detrás de las recámaras."
+  },
+  {
+   "name": "Cochera",
+   "region": [
+    [
+     0.0,
+     -0.1
+    ],
+    [
+     3.115,
+     -0.1
+    ],
+    [
+     3.115,
+     6.705
+    ],
+    [
+     0.0,
+     6.705
+    ]
+   ],
+   "note": "Área exterior frente a la cocina, hasta donde empieza el muro lateral de la cocina. No tiene techo.",
+   "roofed": false
+  },
+  {
+   "name": "Pasillo de servicio",
+   "region": [
+    [
+     0.0,
+     6.705
+    ],
+    [
+     1.205,
+     6.705
+    ],
+    [
+     1.205,
+     12.625
+    ],
+    [
+     0.0,
+     12.625
+    ]
+   ],
+   "note": "Pasillo lateral junto a la barda que conecta la cochera con el patio, pasando por la puerta de la cocina y la lavandería. Su borde sigue la cara exterior del muro de la cocina (x = 1.205 m); límites trazados por Claude a partir de la descripción del dueño."
+  },
+  {
+   "name": "Pórtico",
+   "region": [
+    [
+     3.115,
+     -0.1
+    ],
+    [
+     8.6,
+     -0.1
+    ],
+    [
+     8.6,
+     3.3
+    ],
+    [
+     3.115,
+     3.3
+    ]
+   ],
+   "roofed": true,
+   "note": "Pórtico techado frente a la sala: acceso principal, puerta peatonal y puerta de la bodega."
+  }
+ ],
+ "rename_spaces": [
+  {
+   "name": "Tragaluz",
+   "anchor": [
+    9.4,
+    7.5
+   ],
+   "note": "Tragaluz que ilumina y ventila la Recámara 3. Lo forman el muro central (diagonal, hacia la sala) y dos muros laterales. Está abierto al cielo (dato del dueño, 2026-10-08).",
+   "roofed": false
+  }
+ ],
+ "add_openings": [
+  {
+   "kind": "window",
+   "host_wall_anchor": [
+    8.957,
+    7.044
+   ],
+   "connects_anchors": [
+    [
+     9.4,
+     7.5
+    ],
+    [
+     7.0,
+     6.0
+    ]
+   ],
+   "note": "Ventana del tragaluz hacia la sala, en el muro central (diagonal). Los muros laterales no tienen ventana. El plano no la dibuja: medidas desconocidas."
+  }
+ ],
+ "answered_unknowns": [
+  {
+   "id": "U06",
+   "answer": "La cochera no tiene techo."
+  },
+  {
+   "id": "U09",
+   "answer": "La franja frente a la sala es un pórtico techado."
+  },
+  {
+   "id": "U01",
+   "answer": "Del piso al techo hay 2.60 m.",
+   "value": 2.6,
+   "answered_on": "2026-10-07"
+  },
+  {
+   "id": "U04",
+   "answer": "Las puertas miden 2.10 m del piso al vano (al cerramiento de concreto).",
+   "value": 2.1,
+   "answered_on": "2026-10-07"
+  },
+  {
+   "id": "U10",
+   "answer": "El tragaluz está abierto al cielo, sin domo ni vidrio.",
+   "answered_on": "2026-10-08"
+  }
+ ],
+ "measurements": [
+  {
+   "id": "M01",
+   "what": "ancho libre del pasillo de recámaras, de muro a muro",
+   "wall_anchors": [
+    [
+     4.325,
+     11.0
+    ],
+    [
+     5.705,
+     10.0
+    ]
+   ],
+   "value": 1.1,
+   "answered_on": "2026-10-08",
+   "note": "en el pasillo caben 3 losetas enteras de 30 cm; en la foto, el corte queda del lado de la recámara 3"
+  }
+ ]
 }

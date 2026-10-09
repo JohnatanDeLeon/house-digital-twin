@@ -1,0 +1,74 @@
+{
+ "name": "piso-exterior",
+ "applies_to": {
+  "spaces": [
+   "S06",
+   "S09",
+   "S10",
+   "S11",
+   "S12",
+   "S13"
+  ],
+  "surface": "piso",
+  "source": "dueño (2026-10-08): el piso de pórtico, pasillo de servicio, bodega, lavandería, cochera y patio es de concreto gris con algo de rugosidad; dueño (2026-10-08): confirmado, todos los exteriores tienen el mismo piso"
+ },
+ "size_m": {
+  "width": 1.0,
+  "height": 1.0,
+  "source": "supuesto: foto tomada de pie, a ≈ 1.4 m y hacia abajo; con la cámara principal (23 mm) el ancho de la foto cubre ≈ 1.46 m, así que el recorte de 2050 px mide ≈ 1 m; no hay nada de tamaño conocido en la foto"
+ },
+ "px_per_m": 2048,
+ "size_px": [
+  2048,
+  2048
+ ],
+ "tileable": true,
+ "grid": null,
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)"
+ },
+ "glass_material": null,
+ "source": {
+  "photo": "sources/fotos/piso-exterior.jpg",
+  "photo_meta": {
+   "taken": "2026-10-08T07:47:52",
+   "camera": "Samsung Galaxy S25 Ultra",
+   "focal_35mm": 23,
+   "iso": 80,
+   "flash": false,
+   "light": "luz de día"
+  },
+  "color": {
+   "gain": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "mean_srgb": [
+    170,
+    170,
+    169
+   ],
+   "note": "luz de día con el balance de la cámara: el gris sale neutro (#babbbb) y se respeta; la luminosidad media es supuesta (concreto gris, albedo ≈ 0.40), porque la exposición automática no la fija"
+  },
+  "white_balance_gain": [
+   0.8098,
+   0.8098,
+   0.8098
+  ]
+ },
+ "observed": {
+  "type": "firme de concreto gris con acabado escobillado: estrías finas en ondas (antiderrapante)",
+  "texture": "poros pequeños, granos de arena expuestos y algunas piedritas",
+  "stains": "manchas gris azuladas abajo a la derecha que conservan la textura de ondas; el dueño confirma que no son humedad (origen sin identificar: probable sellador, pintura o cemento de otra mezcla); quedan fuera del recorte",
+  "joint": "junta o grieta diagonal en el borde derecho, con una superficie más lisa del otro lado (otro colado o banqueta)",
+  "spots": "salpicaduras claras de pintura o mortero a la izquierda"
+ },
+ "assumptions": [
+  "escala: el recorte mide ≈ 1 × 1 m (foto de pie a ≈ 1.4 m)",
+  "luminosidad media del concreto (albedo ≈ 0.40)",
+  "amplitud del relieve (0.6 mm)"
+ ]
+}

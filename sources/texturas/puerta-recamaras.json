@@ -1,0 +1,151 @@
+{
+  "_doc": "Textura de la hoja de las puertas interiores. Posiciones en fracciones de la hoja (0–1, origen arriba a la izquierda), así no dependen del tamaño supuesto. Regenerar con: python -m house_twin.cli texture sources/texturas/puerta-recamaras.json",
+  "name": "puerta-recamaras",
+  "applies_to": {
+    "openings": [
+      "D02",
+      "D05",
+      "D06",
+      "D07",
+      "D08"
+    ],
+    "source": "dueño (2026-10-07): las tres recámaras y los dos baños tienen exactamente la misma puerta"
+  },
+  "photo": "sources/fotos/puerta-recamaras.jpg",
+  "photo_meta": {
+    "taken": "2026-10-07T23:18:45",
+    "camera": "Samsung Galaxy S25 Ultra",
+    "focal_35mm": 23,
+    "iso": 2500,
+    "flash": false,
+    "light": "artificial cálida, de noche"
+  },
+  "corners_px": {
+    "top_left": [
+      764,
+      214
+    ],
+    "top_right": [
+      2335,
+      278
+    ],
+    "bottom_right": [
+      2115,
+      3719
+    ],
+    "bottom_left": [
+      836,
+      3719
+    ]
+  },
+  "size_m": {
+    "width": 0.8,
+    "height": 2.04,
+    "source": "supuesto: proporción medida en la foto (alto/ancho ≈ 2.52) y vano de 2.10 m menos marco y holgura; pendiente de medir"
+  },
+  "px_per_m": 1800,
+  "color": {
+    "white_reference": {
+      "box_px": [
+        1000,
+        30,
+        2000,
+        120
+      ],
+      "albedo_srgb": [
+        235,
+        235,
+        235
+      ],
+      "note": "muro sobre la puerta, en el mismo plano que la hoja; supuesto: pintura blanca (albedo ≈ 0.83)"
+    }
+  },
+  "patches": [
+    {
+      "note": "perilla: se tapa con madera del mismo larguero; la perilla irá como objeto 3D",
+      "from_frac": [
+        0.0167,
+        0.463,
+        0.1111,
+        0.0436
+      ],
+      "to_frac": [
+        0.0167,
+        0.5294
+      ]
+    }
+  ],
+  "relief": {
+    "type": "panels",
+    "panels": [
+      {
+        "name": "superior izquierdo",
+        "rect_frac": [
+          0.1146,
+          0.0545,
+          0.4444,
+          0.3813
+        ]
+      },
+      {
+        "name": "superior derecho",
+        "rect_frac": [
+          0.566,
+          0.0545,
+          0.8819,
+          0.3813
+        ]
+      },
+      {
+        "name": "central",
+        "rect_frac": [
+          0.1215,
+          0.4289,
+          0.8785,
+          0.5692
+        ]
+      },
+      {
+        "name": "inferior izquierdo",
+        "rect_frac": [
+          0.1215,
+          0.6209,
+          0.4444,
+          0.9382
+        ]
+      },
+      {
+        "name": "inferior derecho",
+        "rect_frac": [
+          0.566,
+          0.6209,
+          0.8785,
+          0.9382
+        ]
+      }
+    ],
+    "groove_depth_mm": 4,
+    "bevel_rise_mm": 3,
+    "bevel_px": 60,
+    "grain_mm": 0.15,
+    "note": "contornos medidos en la foto rectificada; profundidades de ranura y bisel supuestas (típicas de tablero realzado)"
+  },
+  "roughness": {
+    "base": 0.45,
+    "grain": 0.08,
+    "note": "supuesto: barniz satinado (brillo suave sin reflejo de espejo en la foto)"
+  },
+  "observed": {
+    "type": "puerta de tableros de madera maciza, 5 tableros realzados (2 arriba, 1 central horizontal, 2 abajo)",
+    "wood": "pino con nudos, entintado nogal, veta vertical en largueros y tableros verticales, horizontal en travesaños y tablero central",
+    "hardware": "perilla esférica de latón envejecido con seguro de botón; 3 bisagras de libro niqueladas del lado opuesto",
+    "frame": "marco de pino sin chambrana, con escurrimientos de pintura blanca",
+    "defects": "salpicaduras de pintura blanca y una marca naranja cerca del piso; se conservan en la textura"
+  },
+  "assumptions": [
+    "tamaño de la hoja 0.80 × 2.04 m (pendiente de medir)",
+    "muro sobre la puerta pintado de blanco (referencia de color y exposición)",
+    "profundidad de ranura 4 mm y bisel de 3 mm",
+    "barniz satinado (rugosidad 0.45)"
+  ]
+}
