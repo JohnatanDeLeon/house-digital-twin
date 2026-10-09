@@ -232,8 +232,9 @@ function materialFor(name) {
 }
 
 // Ventana corrediza de 2 hojas: marco perimetral y traslape central de aluminio negro; el resto, vidrio.
-function windowMaterial(size) {
-  const [w, h] = size, px = 220 / Math.max(w, h);
+// Con `grid` ([vidrios a lo ancho, a lo alto, perfil en m]) lleva retícula, como en Blender.
+function windowMaterial(size, grid) {
+  const [w, h] = size, px = 512 / Math.max(w, h);  // con retícula hace falta más resolución que 220 px
   const c = document.createElement('canvas');
   c.width = Math.max(8, Math.round(w * px)); c.height = Math.max(8, Math.round(h * px));
   const g = c.getContext('2d'), f = Math.max(2, WINDOW_FRAME * px), m = Math.max(2, WINDOW_MEETING * px);
@@ -242,6 +243,11 @@ function windowMaterial(size) {
   g.fillRect(0, 0, c.width, f); g.fillRect(0, c.height - f, c.width, f);
   g.fillRect(0, 0, f, c.height); g.fillRect(c.width - f, 0, f, c.height);
   g.fillRect(c.width / 2 - m / 2, 0, m, c.height);
+  if (grid) {
+    const [cols, rows, bar] = grid, b = Math.max(1.5, bar * px);
+    for (let i = 1; i < cols; i++) g.fillRect(c.width * i / cols - b / 2, 0, b, c.height);
+    for (let j = 1; j < rows; j++) g.fillRect(0, c.height * j / rows - b / 2, c.width, b);
+  }
   const t = new THREE.CanvasTexture(c);
   t.flipY = false; t.encoding = THREE.sRGBEncoding;
   t.repeat.set(1 / w, 1 / h); t.offset.set(0, 1 - 1 / h);  // UV en metros, v' = 1 − v
@@ -266,7 +272,7 @@ async function loadHouse() {
     if (obj.isCamera && tag.hdt_kind === 'camera') tour.push({ label: tag.hdt_id, camera: obj });
     if (!obj.isMesh) return;
     const name = obj.material && obj.material.name;
-    obj.material = tag.hdt_kind === 'IfcWindow' && tag.hdt_size ? windowMaterial(tag.hdt_size) : materialFor(name);
+    obj.material = tag.hdt_kind === 'IfcWindow' && tag.hdt_size ? windowMaterial(tag.hdt_size, tag.hdt_grid) : materialFor(name);
     obj.castShadow = tag.hdt_kind !== 'IfcWindow';
     if (obj.material.userData.depth) obj.customDepthMaterial = obj.material.userData.depth;
     obj.receiveShadow = true;

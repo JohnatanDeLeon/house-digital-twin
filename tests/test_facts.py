@@ -11,7 +11,7 @@ def _opening_at(facts, x, y):
 
 def test_counts(facts):
     kinds = [o['kind'] for o in facts['openings'] if o['footprint'] and o['host_wall']]
-    assert kinds.count('door') == 9 and kinds.count('window') == 9
+    assert kinds.count('door') == 9 and kinds.count('window') == 10  # 9 del plano + la del tragaluz (dueño)
     gates = [o for o in facts['openings'] if o['footprint'] and not o['host_wall']]  # herrería del pasillo (dueño)
     assert [o['kind'] for o in gates] == ['door', 'door']
     assert sum(not s['is_exterior'] for s in facts['spaces']) == 8
@@ -71,7 +71,7 @@ def test_portico_is_roofed_and_garage_is_not(facts):
 def test_owner_answers_close_unknowns(facts, plan_only_facts):
     assert {'U06', 'U09'} <= {u['id'] for u in plan_only_facts['unknowns']}
     assert not {'U06', 'U09'} & {u['id'] for u in facts['unknowns']}
-    assert {a['id'] for a in facts['answered']} == {'U01', 'U04', 'U06', 'U09', 'U10'}
+    assert {a['id'] for a in facts['answered']} == {'U01', 'U04', 'U06', 'U09', 'U10', 'U11'}
     assert space_named(facts, 'Tragaluz')['roofed']['value'] is False  # U10: abierto al cielo
 
 
@@ -95,14 +95,15 @@ def test_window_labels_attach_to_nearest_window(facts):
     assert bath_window['sill_height']['value'] == 1.28 and bath_window['height']['value'] == 0.60
 
 
-def test_light_well_has_owner_declared_window_without_invented_size(facts):
+def test_light_well_window_carries_its_estimate_and_grid(facts):
     well = space_named(facts, 'Tragaluz')
     living = space_named(facts, 'Cocina + Sala + Comedor')
-    declared = [o for o in facts['openings'] if o['footprint'] is None]
-    assert len(declared) == 1
-    window = declared[0]
-    assert window['kind'] == 'window' and sorted(window['connects']) == sorted([well['id'], living['id']])
-    assert window['width'] is None and window['height']['value'] is None
+    assert not [o for o in facts['openings'] if o['footprint'] is None]
+    window = next(o for o in facts['openings'] if o['kind'] == 'window' and o['detected_by'].startswith('dueño'))
+    assert sorted(window['connects']) == sorted([well['id'], living['id']])
+    assert window['width'] == pytest.approx(1.03) and window['height']['value'] == 1.62
+    assert window['sill_height']['source'].startswith('estimación')  # no lo midió el dueño: se dice de dónde sale
+    assert window['grid']['cols'] == 4 and window['grid']['rows'] == 5
     host = next(w for w in facts['walls'] if w['id'] == window['host_wall'])
     assert host['length'] == pytest.approx(1.11, abs=0.02)  # el muro diagonal, no los laterales
 
@@ -131,7 +132,7 @@ def test_walls_do_not_overlap_and_are_valid(facts):
 
 def test_every_opening_has_a_host_wall_and_connects_spaces(facts):
     for o in facts['openings']:  # incluye la ventana declarada por el dueño
-        if o['footprint'] and o['detected_by'].startswith('dueño'):  # herrería entre dos muros: une dos espacios
+        if o['kind'] == 'door' and o['detected_by'].startswith('dueño'):  # herrería entre dos muros: une dos espacios
             assert o['host_wall'] is None and len(o['connects']) == 2
             continue
         assert o['host_wall'] is not None

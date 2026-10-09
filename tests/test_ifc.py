@@ -1,3 +1,4 @@
+import pytest
 import ifcopenshell.validate
 
 from house_twin.ifc_export import build_ifc
@@ -9,10 +10,10 @@ def test_ifc_is_schema_valid_and_complete(facts):
     ifcopenshell.validate.validate(model, log)
     assert log.statements == []
     assert len(model.by_type('IfcWall')) == len(facts['walls'])
-    # 9 puertas del plano + 2 de herrería del dueño; la ventana del tragaluz no tiene medidas
-    assert len(model.by_type('IfcDoor')) == 11 and len(model.by_type('IfcWindow')) == 9
+    # 9 puertas del plano + 2 de herrería del dueño; 9 ventanas del plano + la del tragaluz (estimada con fotos)
+    assert len(model.by_type('IfcDoor')) == 11 and len(model.by_type('IfcWindow')) == 10
     # la herrería va entre dos muros, sin hueco que cortar
-    assert len(model.by_type('IfcRelVoidsElement')) == 18 and len(model.by_type('IfcRelFillsElement')) == 18
+    assert len(model.by_type('IfcRelVoidsElement')) == 19 and len(model.by_type('IfcRelFillsElement')) == 19
     assert len(model.by_type('IfcSpace')) == len(facts['spaces'])
 
 
@@ -44,3 +45,12 @@ def test_ifc_guids_are_stable_and_unique(facts):
     assert len(guids(first)) == len(first.by_type('IfcRoot'))
     wall = lambda m: next(w for w in m.by_type('IfcWall') if w.Name == 'W01')
     assert wall(first).GlobalId == wall(second).GlobalId
+
+
+def test_opening_void_grows_across_a_diagonal_wall():
+    from house_twin.ifc_export import _grown
+    rect = [(0.0, 0.0), (1.0, -1.0), (1.1, -0.9), (0.1, 0.1)]  # vano a 45°: 1.41 m de largo, 0.14 m de espesor
+    grown = _grown(rect, 0.01)
+    side = lambda p, q: ((q[0]-p[0])**2 + (q[1]-p[1])**2) ** 0.5
+    assert side(grown[0], grown[1]) == pytest.approx(side(rect[0], rect[1]) + 0.02)
+    assert side(grown[0], grown[3]) == pytest.approx(side(rect[0], rect[3]) + 0.02)  # sale del espesor del muro

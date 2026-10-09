@@ -102,9 +102,20 @@ def _panel(footprint, thickness):
 
 
 def _grown(footprint, margin):
-    xs = [p[0] for p in footprint]; ys = [p[1] for p in footprint]
-    cx, cy = sum(xs)/4, sum(ys)/4
-    return [(x + math.copysign(margin, x-cx), y + math.copysign(margin, y-cy)) for x, y in footprint]
+    """El rectángulo del vano, `margin` más grande por lado sobre sus propios ejes.
+
+    Crecer sobre X e Y del mundo solo sirve a escuadra: en un muro diagonal estira el vano a lo largo y no lo hace
+    salir del espesor, sus caras coinciden con las del muro y el corte booleano falla a medias.
+    """
+    p0, p1, _, p3 = footprint
+    a = (p1[0]-p0[0], p1[1]-p0[1])
+    b = (p3[0]-p0[0], p3[1]-p0[1])
+    la, lb = math.hypot(*a), math.hypot(*b)
+    ua, ub = (a[0]/la, a[1]/la), (b[0]/lb, b[1]/lb)
+    centre = (p0[0] + (a[0]+b[0])/2, p0[1] + (a[1]+b[1])/2)
+    ha, hb = la/2 + margin, lb/2 + margin
+    return [(centre[0] + sa*ha*ua[0] + sb*hb*ub[0], centre[1] + sa*ha*ua[1] + sb*hb*ub[1])
+            for sa, sb in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
 
 
 def _add_walls(ctx: _IfcContext, facts, storey, height):

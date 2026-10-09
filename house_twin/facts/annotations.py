@@ -4,7 +4,8 @@
 - rename_spaces: da nombre a un recinto que el plano no rotula (p. ej. el tragaluz).
 - exterior_zones: nombra zonas del exterior abierto (cochera, patio…), que no tienen muros que las separen.
 - add_openings: vanos que existen pero el plano no dibuja; sin medidas inventadas. Con `footprint` (puertas de
-  herrería entre dos muros, que no van dentro de uno) el vano tiene geometría; con `height`, su altura.
+  herrería entre dos muros, que no van dentro de uno) el vano tiene geometría; con `height` y `sill_height`, sus alturas
+  (`measure_source` dice de dónde salen si no las midió el dueño); con `grid`, la retícula de una ventana.
 - answered_unknowns: respuestas del dueño a las incógnitas del modelo (las resuelve el builder).
   Con `value` (m) el builder además lleva la medida al hecho que contesta (U01, U04).
 - measurements: medidas del dueño entre dos muros (anclados por un punto dentro de cada uno). No mueven la
@@ -80,11 +81,17 @@ def owner_openings(walls: list[dict], spaces: list[dict], annotation: dict) -> l
         footprint, width = entry.get('footprint'), entry.get('width')
         if footprint:  # ancho = lado largo del rectángulo
             width = round(max(Point(footprint[0]).distance(Point(footprint[1])), Point(footprint[1]).distance(Point(footprint[2]))), 3)
+        measured = entry.get('measure_source', source)  # p. ej. una estimación con fotos que el dueño aceptó
         sill = {'value': 0.0, 'source': 'definición de puerta'} if entry['kind'] == 'door' and footprint else dict(unknown)
-        height = {'value': entry['height'], 'source': source} if entry.get('height') is not None else dict(unknown)
-        result.append({'kind': entry['kind'], 'footprint': footprint, 'width': width,
-                       'wall_thickness': None, 'detected_by': source, 'sill_height': sill,
-                       'height': height, 'host_wall': host, 'connects': connects, 'owner_note': entry.get('note')})
+        if entry.get('sill_height') is not None:
+            sill = {'value': entry['sill_height'], 'source': measured}
+        height = {'value': entry['height'], 'source': measured} if entry.get('height') is not None else dict(unknown)
+        opening = {'kind': entry['kind'], 'footprint': footprint, 'width': width,
+                   'wall_thickness': None, 'detected_by': source, 'sill_height': sill,
+                   'height': height, 'host_wall': host, 'connects': connects, 'owner_note': entry.get('note')}
+        if 'grid' in entry:  # retícula: vidrios a lo ancho (las dos hojas) y a lo alto, y ancho del perfil
+            opening['grid'] = {**entry['grid'], 'source': source}
+        result.append(opening)
     return result
 
 

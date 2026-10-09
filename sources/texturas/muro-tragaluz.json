@@ -1,0 +1,82 @@
+{
+  "_doc": "Pintura azul turquesa de los muros del tragaluz (S08). Color constante: el tono sale de dos fotos, la saturación y la luminosidad son supuestas. Regenerar con: python -m house_twin.cli texture sources/texturas/muro-tragaluz.json",
+  "name": "muro-tragaluz",
+  "kind": "constant",
+  "applies_to": {
+    "spaces": [
+      "S08"
+    ],
+    "surface": "muros",
+    "source": "dueño (2026-10-08): los muros del tragaluz son azul turquesa"
+  },
+  "photo": "sources/fotos/recamara-a-3.jpg",
+  "photo_meta": {
+    "taken": "2026-10-08T10:12:13",
+    "camera": "Samsung Galaxy S25 Ultra",
+    "focal_35mm": 13,
+    "light": "de día; el tragaluz, abierto al cielo, sale sobreexpuesto a través de V05"
+  },
+  "color": {
+    "note": "no hay blanco de referencia con la misma luz que el tragaluz",
+    "observations": [
+      {
+        "photo": "sources/fotos/recamara-a-3.jpg",
+        "box_px": [
+          600,
+          1480,
+          780,
+          1720
+        ],
+        "median_srgb": [
+          156,
+          237,
+          255
+        ],
+        "hsv": [
+          0.53,
+          0.388,
+          1.0
+        ],
+        "note": "de día, a través de V05; azul recortado en 255: la luminosidad no sirve"
+      },
+      {
+        "photo": "sources/fotos/ventana-tragaluz-cerca.jpg",
+        "box_px": [
+          640,
+          2560,
+          1000,
+          2900
+        ],
+        "corrected_srgb": [
+          53,
+          64,
+          67
+        ],
+        "hsv": [
+          0.536,
+          0.209,
+          0.263
+        ],
+        "note": "de noche, a través de V10, corregido con el muro blanco de la sala; el muro del tragaluz recibe mucha menos luz que esa referencia, y el vidrio y los reflejos lo apagan"
+      }
+    ]
+  },
+  "pbr": {
+    "basecolor_srgb": [
+      146,
+      196,
+      209
+    ],
+    "metallic": 0.0,
+    "roughness": 0.9,
+    "note": "tono (≈ 193°) medido: coincide en las dos fotos. Saturación (0.30) y luminosidad (0.82) supuestas entre las dos observaciones, para un turquesa claro como el que se ve de día"
+  },
+  "observed": {
+    "finish": "pintura vinílica mate azul turquesa claro",
+    "damage": "en la foto de R3, humedad por capilaridad abajo del muro de V05 (el tragaluz está abierto al cielo)"
+  },
+  "assumptions": [
+    "saturación y luminosidad del color (solo el tono está medido)",
+    "mate como el yeso interior (rugosidad 0.9)"
+  ]
+}
