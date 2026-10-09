@@ -74,3 +74,11 @@ def test_ifc_carries_floor_finishes_and_materials(dxf_facts):
     d03 = next(d for d in model.by_type('IfcDoor') if d.Name == 'D03')
     parts = {c.Name: c.Material.Name for c in ue.get_material(d03).MaterialConstituents}
     assert parts == {'Hoja': 'puerta-entrada', 'Vidrio': 'vidrio-polarizado'}
+
+
+def test_opening_remembers_the_side_its_photo_was_taken_from(toy):
+    facts = {'site': {'polygon': [[0, 0], [0, 5], [6, 5], [6, 0]]}, 'spaces': []}
+    materials = {'puerta': _material(openings=['D01'], viewed_from='C'), 'otra': _material(openings=['D02'])}
+    finishes = Finishes(facts, materials)
+    assert finishes.viewed_from('D01') == 'C'
+    assert finishes.viewed_from('D02') is None

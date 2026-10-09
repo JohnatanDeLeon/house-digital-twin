@@ -146,3 +146,33 @@ def test_procedural_stucco_is_tileable_and_reproducible():
     again, _, _ = textures.procedural_stucco(spec, (200, 160))
     assert np.array_equal(np.asarray(base), np.asarray(again))  # misma semilla, mismo resultado
     assert 0 < (height > 0.0015).mean() < 0.8                    # hay placas, pero no cubren todo
+
+
+def test_sheet_door_draws_layout_without_copying_the_photo():
+    spec = {'seed': 2, 'px_per_m': 1000, 'bevel_mm': 0.5,
+            'layout': [
+                {'kind': 'level', 'rect_frac': [0.2, 0.1, 0.8, 0.4], 'height_mm': -4},
+                {'kind': 'joints', 'rect_frac': [0.2, 0.1, 0.8, 0.4], 'x_frac': [0.5],
+                 'profile': [{'offset_frac_w': 0, 'width_frac_w': 0.05, 'height_mm': -2, 'shape': 'v'}]},
+                {'kind': 'ribs', 'rect_frac': [0.2, 0.6, 0.8, 0.9], 'x_frac': [0.5], 'base_frac_w': 0.1, 'top_frac_w': 0.05, 'height_mm': 6},
+                {'kind': 'welds', 'points_frac': [[0.1, 0.95]], 'diameter_frac_w': 0.05, 'height_mm': 2,
+                 'rust_share': 1.0, 'rust_spread': 1.5},
+            ],
+            'paint': {'variation': 0.0, 'orange_peel_mm': 1, 'orange_peel_height_mm': 0},
+            'cavity': {'radius_mm': 5, 'depth_mm': 2, 'darkening': 0.5}, 'dust_opacity': 0.4,
+            'roughness': {'base': 0.4, 'rust': 0.9, 'dust': 0.7}}
+    colors = {'paint': [30, 31, 34], 'rust': [120, 60, 40], 'dust': [90, 90, 90]}
+    base, height, rough = textures.procedural_sheet_door(spec, (200, 400), colors)
+    px = np.asarray(base).astype(int)
+    assert height[100, 60] == pytest.approx(-0.004, abs=1e-4)   # tablero hundido
+    assert height[100, 100] < height[100, 60]                    # ranura de la duela
+    assert height[300, 100] == pytest.approx(0.006, abs=2e-4)    # cresta de la costilla
+    assert np.abs(px[20, 20] - colors['paint']).max() <= 2       # pintura plana: color medido, sin brillos
+    assert px[380, 20, 0] > px[380, 20, 2] + 20 and rough[380, 20] > 0.45  # óxido (con ruido) en la soldadura
+
+
+def test_weld_lines_spread_points_at_pitch():
+    points = textures._weld_points({'lines': [{'from': [0.1, 0.5], 'to': [0.5, 0.5], 'pitch_frac': 0.1}],
+                                    'points_frac': [[0.9, 0.9]]})
+    assert points[0] == (0.9, 0.9) and len(points) == 6
+    assert points[1] == pytest.approx((0.1, 0.5)) and points[-1] == pytest.approx((0.5, 0.5))

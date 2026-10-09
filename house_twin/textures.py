@@ -306,21 +306,152 @@ def procedural_stucco(spec: dict, size_px: tuple[int, int]) -> tuple[Image.Image
     return _to_image(lin), height, roughness
 
 
-def build_procedural(spec: dict, out: Path) -> Path:
+def _blur(field: np.ndarray, sigma_px: float) -> np.ndarray:
+    """Difuminado gaussiano con el borde extendido (la superficie no se repite, a diferencia del estuco)."""
+    if sigma_px <= 0:
+        return field
+    pad = int(3 * sigma_px) + 1
+    padded = np.pad(field, pad, mode='edge')
+    fy, fx = np.fft.fftfreq(padded.shape[0])[:, None], np.fft.fftfreq(padded.shape[1])[None, :]
+    kernel = np.exp(-2 * (np.pi * sigma_px) ** 2 * (fx ** 2 + fy ** 2))
+    return np.real(np.fft.ifft2(np.fft.fft2(padded) * kernel))[pad:-pad, pad:-pad]
+
+
+def measured_colors(spec: dict, photos_root: Path) -> tuple[dict[str, list[int]], list[float]]:
+    """Colores medidos en la foto rectificada y corregida: `darkest` evita brillos y reflejos, `brightest` toma motas."""
+    photo = ImageOps.exif_transpose(Image.open(photos_root / spec['photo'])).convert('RGB')
+    px_per_m = spec['color']['measure_px_per_m']
+    size = (round(spec['size_m']['width'] * px_per_m), round(spec['size_m']['height'] * px_per_m))
+    image, gain = color_correct(photo, rectify(photo, spec['corners_px'], size), spec['color'])
+    px = np.asarray(image).astype(float)
+    colors = {}
+    for name, s in spec['color']['samples'].items():
+        x0, y0, x1, y1 = _rect_px(s['rect_frac'], px.shape[:2])
+        region = px[y0:y1, x0:x1].reshape(-1, 3)
+        lum = region.mean(axis=1)
+        if s['keep'] == 'darkest':
+            region = region[lum <= np.quantile(lum, s['fraction'])]
+        else:
+            region = region[lum >= np.quantile(lum, 1 - s['fraction'])]
+        colors[name] = [int(v) for v in np.median(region, axis=0).round()]
+    return colors, gain
+
+
+def _weld_points(item) -> list[tuple[float, float]]:
+    """Puntos de soldadura: los sueltos de `points_frac` y los repartidos a paso fijo sobre cada `lines`.
+
+    `pitch_frac` va en fracción del eje sobre el que corre la línea (ancho si es horizontal, alto si es vertical).
+    """
+    points = [tuple(p) for p in item.get('points_frac', [])]
+    for line in item.get('lines', []):
+        (x0, y0), (x1, y1) = line['from'], line['to']
+        n = max(1, round(max(abs(x1 - x0), abs(y1 - y0)) / line['pitch_frac']))
+        points += [(x0 + (x1 - x0) * i / n, y0 + (y1 - y0) * i / n) for i in range(n + 1)]
+    return points
+
+
+def procedural_sheet_door(spec: dict, size_px: tuple[int, int], colors: dict[str, list[int]]):
+    """Puerta de lámina pintada, dibujada por código con las medidas tomadas en la foto rectificada.
+
+    No se copia la foto: los brillos del sol, los reflejos y las manchas sueltas no quedan en el color base.
+    Lo que sí sale de la foto es la geometría (`layout`, en fracciones de la cara) y los colores (`colors`); el
+    desgaste (polvo, óxido en las soldaduras) se reparte con ruido donde la foto lo muestra.
+    Devuelve color base, altura (m) y rugosidad.
+    """
+    W, H = size_px
+    px_per_m = spec['px_per_m']
+    rng = np.random.default_rng(spec['seed'])
+    yy, xx = np.mgrid[0:H, 0:W]
+    u, v = (xx + 0.5) / W, (yy + 0.5) / H
+    height = np.zeros((H, W))
+    roughness = np.full((H, W), spec['roughness']['base'])
+    rust = np.zeros((H, W))
+    dust = np.zeros((H, W))
+    for item in spec['layout']:
+        x0, y0, x1, y1 = item.get('rect_frac', (0, 0, 1, 1))
+        inside = (u >= x0) & (u < x1) & (v >= y0) & (v < y1)
+        h = item.get('height_mm', 0) / 1000
+        kind = item['kind']
+        if kind == 'level':  # plano a una altura: marco, hoja, tablero hundido, junta entre marco y hoja
+            height[inside] = h
+        elif kind == 'molding':  # contorno de un tablero en dos escalones: el de afuera a `height_mm`
+            edge = np.minimum.reduce([(u - x0) * W, (x1 - u) * W, (v - y0) * H, (y1 - v) * H])
+            width = item['width_frac_w'] * W
+            height[inside & (edge < width)] = item['inner_height_mm'] / 1000
+            height[inside & (edge < width / 2)] = h
+        elif kind == 'ribs':  # lámina acanalada: costillas trapezoidales verticales
+            half_base, half_top = item['base_frac_w'] * W / 2, item['top_frac_w'] * W / 2
+            for c in item['x_frac']:
+                d = np.abs(u - c) * W
+                height += np.where(inside, h * np.clip((half_base - d) / (half_base - half_top), 0, 1), 0)
+        elif kind == 'joints':  # duela: cada unión es un bordón redondo junto a una ranura en V
+            for c in item['x_frac']:
+                for p in item['profile']:
+                    d = np.abs(u - c - p['offset_frac_w']) * W / (p['width_frac_w'] * W / 2)
+                    shape = np.sqrt(np.clip(1 - d ** 2, 0, 1)) if p['shape'] == 'round' else np.clip(1 - d, 0, 1)
+                    height += np.where(inside, p['height_mm'] / 1000 * shape, 0)
+        elif kind == 'welds':  # puntos de soldadura: gota abultada y óxido alrededor de algunos
+            r_px = item['diameter_frac_w'] * W / 2
+            for px, py in _weld_points(item):
+                r = r_px * rng.uniform(0.75, 1.25)
+                halo = r * item['rust_spread']
+                cx, cy = px * W + rng.normal(0, r / 3), py * H + rng.normal(0, r / 3)
+                xs = slice(max(0, int(cx - halo) - 1), min(W, int(cx + halo) + 2))
+                ys = slice(max(0, int(cy - halo) - 1), min(H, int(cy + halo) + 2))
+                d = np.hypot(xx[ys, xs] - cx, yy[ys, xs] - cy)
+                height[ys, xs] += h * np.sqrt(np.clip(1 - (d / r) ** 2, 0, 1))
+                if rng.random() < item['rust_share']:
+                    rust[ys, xs] = np.maximum(rust[ys, xs], np.clip(1 - d / halo, 0, 1) ** 0.7)
+        elif kind == 'dust':  # polvo pegado abajo: motas cada vez más densas hacia el piso
+            amount = np.clip((v - y0) / (y1 - y0), 0, 1) ** item['ramp_power'] * item['max_cover']
+            speck = _periodic_noise((H, W), item['speck_mm'] / 1000 * px_per_m, rng)
+            rows = np.quantile(speck[::4, ::4], 1 - amount[:, 0])[:, None]
+            dust = np.where(inside, np.clip((speck - rows) / 0.4, 0, 1) * (amount > 0), dust)
+        else:
+            raise ValueError(f'elemento de puerta desconocido: {kind}')
+        if 'roughness' in item:
+            roughness[inside] = item['roughness']
+    height = _blur(height, spec['bevel_mm'] / 1000 * px_per_m)
+    paint = spec['paint']
+    height += _periodic_noise((H, W), paint['orange_peel_mm'] / 1000 * px_per_m, rng) * paint['orange_peel_height_mm'] / 1000
+    # color: pintura medida, apenas variada; se oscurece en lo hundido (juntas, ranuras) y lleva óxido y polvo encima
+    cavity = np.clip((_blur(height, spec['cavity']['radius_mm'] / 1000 * px_per_m) - height) / (spec['cavity']['depth_mm'] / 1000), 0, 1)
+    shade = (1 - spec['cavity']['darkening'] * cavity) * (1 + paint['variation'] * _periodic_noise((H, W), 0.05 * px_per_m, rng))
+    rust *= np.clip(0.6 + 0.4 * _periodic_noise((H, W), 0.003 * px_per_m, rng), 0, 1)
+    lin = _srgb_to_linear(np.array(colors['paint'], float) / 255)[None, None, :] * shade[..., None]
+    lin = lin * (1 - rust[..., None]) + _srgb_to_linear(np.array(colors['rust'], float) / 255) * rust[..., None]
+    dust_amount = dust * spec['dust_opacity']
+    lin = lin * (1 - dust_amount[..., None]) + _srgb_to_linear(np.array(colors['dust'], float) / 255) * dust_amount[..., None]
+    rough = spec['roughness']
+    roughness = roughness + (rough['rust'] - roughness) * rust + (rough['dust'] - roughness) * dust
+    return _to_image(lin), height, np.clip(roughness, 0, 1)
+
+
+def build_procedural(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
     px_per_m = spec['px_per_m']
     size_px = (round(spec['size_m']['width'] * px_per_m), round(spec['size_m']['height'] * px_per_m))
-    base, height, roughness = procedural_stucco(spec, size_px)
+    source = {'method': 'procedural', 'seed': spec['seed'], 'references': spec.get('references', [])}
+    if spec['generator'] == 'stucco':
+        base, height, roughness = procedural_stucco(spec, size_px)
+        parameters = {k: spec[k] for k in ('plates', 'grain', 'color', 'roughness')}
+    elif spec['generator'] == 'sheet_door':
+        colors, gain = measured_colors(spec, photos_root)
+        base, height, roughness = procedural_sheet_door(spec, size_px, colors)
+        parameters = {k: spec[k] for k in ('layout', 'paint', 'cavity', 'bevel_mm', 'dust_opacity', 'roughness')}
+        source.update(photo=spec['photo'], photo_meta=spec.get('photo_meta', {}), color=spec['color'],
+                      white_balance_gain=gain, measured_srgb=colors)
+    else:
+        raise ValueError(f'generador desconocido: {spec["generator"]}')
     out.mkdir(parents=True, exist_ok=True)
     detail_px = (round(size_px[0] * DETAIL_MAP_SCALE), round(size_px[1] * DETAIL_MAP_SCALE))
     base.save(out / 'basecolor.jpg', quality=92)
     Image.fromarray((roughness * 255).round().astype(np.uint8)).resize(detail_px, Image.LANCZOS).save(out / 'roughness.png', optimize=True)
     _normal_map(height, px_per_m).resize(detail_px, Image.LANCZOS).save(out / 'normal.png', optimize=True)
     material = {
-        'name': spec['name'], 'applies_to': spec['applies_to'], 'kind': 'procedural', 'tileable': True,
+        'name': spec['name'], 'applies_to': spec['applies_to'], 'kind': 'procedural', 'tileable': spec['tileable'],
         'size_m': spec['size_m'], 'px_per_m': px_per_m, 'size_px': list(size_px),
         'maps': {'basecolor': 'basecolor.jpg', 'roughness': 'roughness.png', 'normal': 'normal.png (OpenGL)'},
-        'source': {'method': 'procedural', 'seed': spec['seed'], 'references': spec.get('references', [])},
-        'parameters': {k: spec[k] for k in ('plates', 'grain', 'color', 'roughness')},
+        'source': source, 'parameters': parameters,
         'observed': spec.get('observed', {}), 'assumptions': spec.get('assumptions', []),
     }
     (out / 'material.json').write_text(json.dumps(material, ensure_ascii=False, indent=1) + '\n')
@@ -332,7 +463,7 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     if spec.get('kind') == 'constant':
         return build_material(spec, TEXTURES_DIR / spec['name'], photos_root)
     if spec.get('kind') == 'procedural':
-        return build_procedural(spec, TEXTURES_DIR / spec['name'])
+        return build_procedural(spec, TEXTURES_DIR / spec['name'], photos_root)
     px_per_m = spec['px_per_m']
     size_m = (spec['size_m']['width'], spec['size_m']['height'])
     size_px = (round(size_m[0] * px_per_m), round(size_m[1] * px_per_m))

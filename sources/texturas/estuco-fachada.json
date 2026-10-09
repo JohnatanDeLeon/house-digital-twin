@@ -2,6 +2,8 @@
   "_doc": "Estuco de la fachada y el pórtico, SINTÉTICO: no hay foto usable de este acabado. Se genera por código como punto medio entre dos referencias de catálogo que dio el dueño («Lace Trowel» y «Pebbled Dash»): placas aplanadas con borde marcado sobre grano fino. Reemplazar por una textura de foto cuando la haya. Regenerar con: python -m house_twin.cli texture sources/texturas/estuco-fachada.json",
   "name": "estuco-fachada",
   "kind": "procedural",
+  "generator": "stucco",
+  "tileable": true,
   "applies_to": {
     "surface": "muros exteriores",
     "spaces": [

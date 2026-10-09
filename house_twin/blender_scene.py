@@ -27,6 +27,7 @@ FACTS = ROOT / 'data' / 'facts' / 'existing.facts.json'
 # Ventana corrediza de 2 hojas (foto 3): perfil perimetral y el traslape de las hojas al centro. Supuesto: no medido.
 WINDOW_FRAME_M = 0.045
 WINDOW_MEETING_M = 0.06
+VIEW_PROBE_M = 0.3  # más que medio muro (0.17 m): el punto cae en el espacio de ese lado
 CUT_COLOR = (0.18, 0.18, 0.18)       # cabeza de muro cortada: se ve porque el modelo aún no tiene techo
 UNKNOWN_COLOR = (0.55, 0.52, 0.60)   # superficie sin acabado registrado: gris violáceo para que se note
 
@@ -145,20 +146,26 @@ def _face_axis(normal):
     return Vector((-normal.y, normal.x, 0)).normalized()
 
 
-def _main_axis(obj):
-    """Eje a lo ancho de una puerta o ventana: el de su cara vertical más grande."""
+def _main_axis(obj, front=None):
+    """Eje a lo ancho de una puerta o ventana: el de su cara vertical más grande.
+
+    Con `front` (función de la normal), la U crece hacia la derecha visto desde el lado en que `front` es verdadera.
+    """
     face = max((p for p in obj.data.polygons if abs(p.normal.z) < 0.3), key=lambda p: p.area)
-    return _face_axis(obj.matrix_world.to_3x3() @ face.normal)
+    normal = (obj.matrix_world.to_3x3() @ face.normal).normalized()
+    if front is not None and not front(normal):
+        normal = -normal
+    return _face_axis(normal)
 
 
-def write_uvs(obj, fit=None):
+def write_uvs(obj, fit=None, front=None):
     """UV en metros del mundo (muros y pisos). Con `fit`, relativas al objeto: 'unit' 0–1, 'metres' 0–ancho."""
     mw, rot = obj.matrix_world, obj.matrix_world.to_3x3()
     bm = bmesh.new()
     bm.from_mesh(obj.data)
     layer = bm.loops.layers.uv.verify()
     if fit:
-        axis = _main_axis(obj)
+        axis = _main_axis(obj, front)
         pts = [mw @ v.co for v in bm.verts]
         u0, u1 = min(p.dot(axis) for p in pts), max(p.dot(axis) for p in pts)
         z0, z1 = min(p.z for p in pts), max(p.z for p in pts)
@@ -241,6 +248,13 @@ class Scene:
         write_uvs(obj)
         self._set(obj, [self.finishes.floor(space_id) or 'sin-dato'] * len(obj.data.polygons))
 
+    def _front(self, obj, space_id):
+        """¿La normal mira hacia `space_id`? Se prueba un punto a VIEW_PROBE_M del centro del vano."""
+        if space_id is None:
+            return None
+        c = obj.matrix_world @ (sum((v.co for v in obj.data.vertices), Vector()) / len(obj.data.vertices))
+        return lambda n: self.finishes.space_at((c.x + n.x * VIEW_PROBE_M, c.y + n.y * VIEW_PROBE_M)) == space_id
+
     def opening(self, obj, oid):
         parts = self.finishes.opening(oid)
         if 'frame' in parts:  # ventana: marco procedural con las medidas del vano
@@ -250,7 +264,7 @@ class Scene:
             obj.data.materials.clear()
             obj.data.materials.append(mat)
             return
-        write_uvs(obj, fit='unit')
+        write_uvs(obj, fit='unit', front=self._front(obj, self.finishes.viewed_from(oid)))
         if 'leaf' not in parts:
             self.unknown.add(f'{obj.name}: sin textura de hoja')
         self._set(obj, [parts.get('leaf', 'sin-dato')] * len(obj.data.polygons))
