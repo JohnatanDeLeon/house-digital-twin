@@ -1,0 +1,15 @@
+{
+ "_doc": "Variante = propuesta sobre la casa existente. Nunca modifica los hechos ni models/existing.*: cambia acabados por encima. `python -m house_twin.cli build` escribe su IFC en models/variants/<id>.ifc y `scene` la lleva al recorrido, que tiene un selector Actual / propuesta.",
+ "id": "puerta-entrada-renovada",
+ "name": "Puerta de entrada renovada",
+ "kind": "propuesta",
+ "based_on": "existing",
+ "requested": "dueño (2026-10-08): «Retoca la puerta de la entrada. Actualmente se ve oxidada y descuidada» → «Así está; quiero verla renovada»",
+ "author": "Claude",
+ "created_on": "2026-10-08",
+ "description": "La puerta de entrada D03 restaurada: sin óxido, con primario anticorrosivo y esmalte negro satinado nuevo. Misma forma, mismo vidrio polarizado y mismos herrajes.",
+ "changes": [
+  {"opening": "D03", "part": "leaf", "material": "puerta-entrada-renovada", "replaces": "puerta-entrada"}
+ ],
+ "disclaimer": "Propuesta estética: no sustituye la revisión de un herrero sobre el estado del metal."
+}

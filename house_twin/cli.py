@@ -9,6 +9,7 @@ DEFAULT_SOURCE = ROOT / 'data' / 'raw' / 'plano.dxf'
 OWNER_ANNOTATIONS = ROOT / 'sources' / 'owner-annotations.json'
 FACTS_PATH = ROOT / 'data' / 'facts' / 'existing.facts.json'
 IFC_PATH = ROOT / 'models' / 'existing.ifc'
+VARIANTS_IFC_DIR = ROOT / 'models' / 'variants'
 OVERLAY_PATH = ROOT / 'docs' / 'analysis' / '02-hechos-planta-existente.png'
 VIEWER_PATH = ROOT / 'docs' / 'viewer' / 'casa-jonhy-3d.html'
 TEXTURES_DIR = ROOT / 'assets' / 'textures'
@@ -38,16 +39,28 @@ def build(source: Path):
     from house_twin.finishes import Finishes, load_materials
     from house_twin.ifc_export import build_ifc
     from house_twin.render import render_facts
+    from house_twin.variants import apply_variant, load_variants, validate
     from house_twin.viewer import render_viewer
     facts = build_facts(_load_drawing(source), load_annotations(OWNER_ANNOTATIONS))
     FACTS_PATH.parent.mkdir(parents=True, exist_ok=True)
     FACTS_PATH.write_text(json.dumps(facts, ensure_ascii=False, indent=1))
     IFC_PATH.parent.mkdir(parents=True, exist_ok=True)
-    build_ifc(facts, Finishes(facts, load_materials(TEXTURES_DIR))).write(str(IFC_PATH))
+    materials = load_materials(TEXTURES_DIR)
+    finishes = Finishes(facts, materials)
+    build_ifc(facts, finishes).write(str(IFC_PATH))
     render_facts(facts, OVERLAY_PATH)
     render_viewer(facts, VIEWER_PATH)
     print(f"{len(facts['spaces'])} espacios, {len(facts['walls'])} muros, {len(facts['openings'])} vanos")
-    for path in (FACTS_PATH, IFC_PATH, OVERLAY_PATH, VIEWER_PATH):
+    outputs = [FACTS_PATH, IFC_PATH, OVERLAY_PATH, VIEWER_PATH]
+    for variant in load_variants():  # propuestas: su propio IFC, la casa existente no cambia
+        problems = validate(variant, facts, materials)
+        if problems:
+            raise SystemExit('\n'.join(problems))
+        path = VARIANTS_IFC_DIR / f"{variant['id']}.ifc"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        build_ifc(facts, apply_variant(finishes, variant, materials)).write(str(path))
+        outputs.append(path)
+    for path in outputs:
         print(f'→ {path.relative_to(ROOT)}')
 
 
@@ -75,6 +88,7 @@ def scene(render: bool):
     import shutil
     import subprocess
     from house_twin.finishes import load_materials
+    from house_twin.variants import load_variants
     from house_twin.walk import build_walk
     blender = shutil.which('blender')
     if blender is None:
@@ -87,7 +101,8 @@ def scene(render: bool):
     print('\n'.join(report))
     if out.returncode != 0 or not BLEND_PATH.exists():
         raise SystemExit(out.stderr[-2000:] or 'Blender falló')
-    walk = build_walk(json.loads(FACTS_PATH.read_text()), load_materials(TEXTURES_DIR), TEXTURES_DIR, WALK_DIR, GLB_PATH)
+    walk = build_walk(json.loads(FACTS_PATH.read_text()), load_materials(TEXTURES_DIR), TEXTURES_DIR, WALK_DIR, GLB_PATH,
+                      load_variants())
     for path in [BLEND_PATH, GLB_PATH, walk] + (sorted(RENDERS_DIR.glob('*.jpg')) if render else []):
         print(f'→ {path.relative_to(ROOT)}')
 

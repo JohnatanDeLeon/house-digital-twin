@@ -9,7 +9,7 @@ Digital twin of a residential property, combining BIM/IFC, 3D modeling, spatial 
 | 2. Modelo de hechos → IFC → House MCP (solo lectura) | ✅ [informe](docs/analysis/02-modelo-de-hechos.md) |
 | 3. Validación contra el DXF original; el DXF pasa a ser la fuente | ✅ [informe](docs/analysis/03-validacion-dxf.md) |
 | 4. Fidelidad visual: Blender + Bonsai, materiales, texturas e iluminación | en curso: [acabados](docs/analysis/04-acabados.md) |
-| Variantes y propuestas de remodelación (`create_variant`) | sin fecha |
+| Variantes y propuestas de remodelación | iniciadas: cambios de acabado en `variants/` (primera: [puerta de entrada renovada](variants/puerta-entrada-renovada.json)); faltan cambios de geometría y `create_variant` en el MCP |
 
 ## Cómo funciona
 

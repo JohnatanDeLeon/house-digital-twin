@@ -81,6 +81,13 @@ body.touch .here { left: auto; right: 16px; bottom: calc(env(safe-area-inset-bot
   background: var(--accent); opacity: 0.85;
 }
 
+.proposal {
+  position: absolute; left: 16px; right: 16px; z-index: 2; top: 74px;  /* se ajusta bajo la barra, que en el celular ocupa dos renglones */
+  max-width: 560px; margin-inline: auto; padding: 8px 12px; border-radius: 6px;
+  background: var(--surface); border: 1px solid var(--accent); border-left-width: 4px;
+  font-size: 13px; line-height: 1.4; color: var(--ink);
+}
+.proposal strong { font-family: var(--font-display); font-size: 15px; display: block; }
 .hint {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 4;
   width: min(420px, calc(100% - 32px)); background: var(--surface); border: 1px solid var(--rule); border-radius: 8px;
@@ -108,8 +115,13 @@ body.touch .here { left: auto; right: 16px; bottom: calc(env(safe-area-inset-bot
       <label for="room">Ir a</label>
       <select id="room"></select>
     </div>
+    <div class="field" id="variant-field" hidden>
+      <label for="variant">Versión</label>
+      <select id="variant"></select>
+    </div>
     <button class="btn" id="help" type="button" aria-label="Cómo moverse">?</button>
   </header>
+  <div class="proposal" id="proposal" role="note" hidden></div>
   <div class="here" id="here" aria-live="polite"><span class="room" id="here-room">—</span><span class="coords" id="here-coords"></span></div>
   <canvas id="map" tabindex="0" aria-label="Planta: toca un cuarto para ir ahí"></canvas>
   <div class="stick" id="stick" hidden><div class="knob" id="knob"></div></div>
@@ -257,6 +269,7 @@ function windowMaterial(size, grid) {
 // ---------- casa ----------
 const colliders = [];
 const tour = [];
+const byOpening = {};  // id del vano → sus mallas con el material de la casa actual (para volver de una propuesta)
 function tagOf(obj) {
   for (let o = obj; o; o = o.parent) if (o.userData && o.userData.hdt_kind) return o.userData;
   return {};
@@ -273,6 +286,7 @@ async function loadHouse() {
     if (!obj.isMesh) return;
     const name = obj.material && obj.material.name;
     obj.material = tag.hdt_kind === 'IfcWindow' && tag.hdt_size ? windowMaterial(tag.hdt_size, tag.hdt_grid) : materialFor(name);
+    if (tag.hdt_id) (byOpening[tag.hdt_id] = byOpening[tag.hdt_id] || []).push({ mesh: obj, material: obj.material });
     obj.castShadow = tag.hdt_kind !== 'IfcWindow';
     if (obj.material.userData.depth) obj.customDepthMaterial = obj.material.userData.depth;
     obj.receiveShadow = true;
@@ -468,7 +482,36 @@ function frame() {
   requestAnimationFrame(frame);
 }
 
+// ---------- propuestas: cambian materiales por encima de la casa actual ----------
+function useMaterial(mesh, material) {
+  mesh.material = material;
+  mesh.customDepthMaterial = material.userData.depth;  // sin propiedad: la sombra normal
+}
+function setVariant(variant) {
+  for (const meshes of Object.values(byOpening)) for (const m of meshes) useMaterial(m.mesh, m.material);
+  if (variant) for (const [id, name] of Object.entries(variant.overrides))
+    for (const m of byOpening[id] || []) useMaterial(m.mesh, materialFor(name));
+  const note = $('proposal');
+  note.hidden = !variant;
+  placeNote();
+  if (variant) note.innerHTML = `<strong>Propuesta: ${variant.name}</strong>${variant.description}`
+    + (variant.disclaimer ? ` <em>${variant.disclaimer}</em>` : '');
+}
+function placeNote() {
+  $('proposal').style.top = `${document.querySelector('.bar').getBoundingClientRect().bottom + 8}px`;
+}
+addEventListener('resize', placeNote);
+function setupVariants() {
+  const variants = DATA.variants || [];
+  if (!variants.length) return;
+  const select = $('variant');
+  select.innerHTML = '<option value="">Casa actual</option>' + variants.map((v, i) => `<option value="${i}">${v.name}</option>`).join('');
+  select.addEventListener('change', () => { setVariant(variants[select.value] || null); select.blur(); });
+  $('variant-field').hidden = false;
+}
+
 loadHouse().then(() => {
+  setupVariants();
   const select = $('room');
   const entrance = DATA.entrance && { label: `Entrada (${DATA.entrance.door})`, start: DATA.entrance };
   if (entrance) tour.unshift(entrance);

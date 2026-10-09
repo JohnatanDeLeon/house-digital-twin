@@ -12,6 +12,7 @@ from PIL import Image
 
 from house_twin.finishes import _inside
 from house_twin.sunlight import sun_direction
+from house_twin.variants import opening_overrides
 
 TEMPLATE = Path(__file__).with_name('walk_template.html')
 DATA_MARKER = '/*__WALK_DATA__*/null'
@@ -71,8 +72,12 @@ def write_model_script(glb: Path, out: Path):
     out.write_text('window.HDT_GLB = "' + base64.b64encode(glb.read_bytes()).decode('ascii') + '";\n')
 
 
-def build_walk(facts: dict, materials: dict[str, dict], textures_dir: Path, out_dir: Path, glb: Path | None = None):
-    """Escribe `index.html`, `texturas/` y, si se da el GLB que exporta Blender, `casa.js`."""
+def build_walk(facts: dict, materials: dict[str, dict], textures_dir: Path, out_dir: Path, glb: Path | None = None,
+               variants: list[dict] | None = None):
+    """Escribe `index.html`, `texturas/` y, si se da el GLB que exporta Blender, `casa.js`.
+
+    Con `variants`, el recorrido ofrece cada propuesta junto a la casa actual y cambia los materiales que tocan.
+    """
     tex_out = out_dir / 'texturas'
     entries = {name: _material_entry(name, spec, Path(textures_dir) / name, tex_out) for name, spec in materials.items()}
     data = {
@@ -85,6 +90,8 @@ def build_walk(facts: dict, materials: dict[str, dict], textures_dir: Path, out_
         'site': facts['site']['polygon'],
         'sun': [round(c, 4) for c in sun_direction()],
         'entrance': entrance(facts),
+        'variants': [{'id': v['id'], 'name': v['name'], 'description': v['description'], 'disclaimer': v.get('disclaimer'),
+                      'overrides': opening_overrides(v)} for v in variants or []],
     }
     html = TEMPLATE.read_text()
     if DATA_MARKER not in html:
