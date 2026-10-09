@@ -1,0 +1,29 @@
+{
+ "name": "metal-gris",
+ "applies_to": {
+  "furniture": "recámara S03",
+  "source": "fotos de la recámara del closet de 4 módulos (dueño, 2026-10-09)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   100,
+   105,
+   103
+  ],
+  "metallic": 0.6,
+  "roughness": 0.45,
+  "note": "marco metálico gris de los buros; medido contra el muro (235)"
+ },
+ "source": {
+  "photo": "sources/fotos/r1-cama-frente.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "la luz del foco sobre el muro como blanco: aproximado"
+ ]
+}

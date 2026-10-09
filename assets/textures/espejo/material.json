@@ -1,0 +1,29 @@
+{
+ "name": "espejo",
+ "applies_to": {
+  "furniture": "recámara S03",
+  "source": "fotos de la recámara del closet de 4 módulos (dueño, 2026-10-09)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   230,
+   232,
+   233
+  ],
+  "metallic": 1.0,
+  "roughness": 0.03,
+  "note": "espejo de cuerpo entero; reflectancia de un espejo común (supuesto)"
+ },
+ "source": {
+  "photo": "sources/fotos/r1-cama-frente.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "la luz del foco sobre el muro como blanco: aproximado"
+ ]
+}

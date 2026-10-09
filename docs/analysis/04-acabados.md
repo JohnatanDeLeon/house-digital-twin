@@ -417,6 +417,18 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 - **Minisplit:** en el muro oriente, junto a la esquina con el muro del patio y cerca del techo (0.82 × 0.29 × 0.20 m, tamaño común supuesto), como `IfcUnitaryEquipment` SPLITSYSTEM.
 - **Sin modelar:** la ropa, los peluches, el telescopio, la silla, el póster y las cortinas negras.
 
+### 27. Recámara del closet de 4 módulos (S03, 2026-10-09)
+
+- **Qué cuarto es:** el dueño la llama «recámara 1»; el plano la rotula RECAMARA 2 (S03). Las fotos lo confirman: tiene el closet de 4 módulos con puertas (ya modelado), la ventana al patio V08 detrás de la cabecera, la puerta en el entrante y el contacto del plano (C12) bajo el minisplit.
+- **Cama:** la cabecera acolchada negra, con 4 × 2 tableros, va contra el muro del patio, centrada bajo la ventana. Lleva base negra y cobija morada. Mide 1.45 × 1.95 m (supuesto).
+- **Buros:** 2, de cajones de laminado claro dentro de un marco metálico gris.
+- **Baúl:** de tela gris, al pie de la cama.
+- **Espejo:** de cuerpo entero, parado sobre el buro izquierdo y apoyado en el muro.
+- **Televisión (dato del dueño: 85")**: 1.88 × 1.06 m, en el muro de la puerta, con el centro a ≈ 1.68 m.
+- **Minisplit:** en el muro poniente, arriba del contacto.
+- **Colores** (medidos contra el muro, con la luz del foco): cobija (114, 59, 127), cabecera (37, 38, 46), laminado de los buros (178, 150, 106) y marco (100, 105, 103).
+- **Sin modelar:** las cortinas, la ropa y los objetos sueltos.
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.

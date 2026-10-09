@@ -87,6 +87,75 @@ def _bed(bd):
             {'id': f"{bd['id']}-laton", 'ifc': 'IfcFurniture', 'type': 'BED', 'material': 'laton-pulido', 'mesh': merge(brass), 'source': src}]
 
 
+def _upholstered_bed(bd):
+    """Cama con base tapizada, cabecera acolchada por tableros y cobija encima."""
+    frame = _Run(bd['headboard_wall'])
+    w, length = bd['size_m']
+    b0, b1 = bd['base_m']
+    hb, m = bd['headboard'], bd['materials']
+    cols, rows = hb['panels']
+    pw, ph = hb['width_m'] / cols, (hb['height_m'] - b1) / rows
+    head = [frame.box((-hb['width_m'] / 2 + c * pw + 0.004, -hb['width_m'] / 2 + (c + 1) * pw - 0.004),
+                      (b1 + r * ph + 0.004, b1 + (r + 1) * ph - 0.004), (0.0, hb['thickness_m']))
+            for c in range(cols) for r in range(rows)]
+    head.append(frame.box((-hb['width_m'] / 2, hb['width_m'] / 2), (0.0, b1), (0.0, hb['thickness_m'] - 0.01)))
+    t = hb['thickness_m']
+    base = [frame.box((-w / 2, w / 2), (b0, b1), (t, t + length)),
+            *[frame.box((u - 0.04, u + 0.04), (0, b0), (n - 0.04, n + 0.04)) for u in (-w / 2 + 0.08, w / 2 - 0.08)
+              for n in (t + 0.1, t + length - 0.1)]]
+    cover = frame.box((-w / 2 - 0.03, w / 2 + 0.03), (b1, bd['mattress_top_m']), (t + 0.02, t + length + 0.03))
+    src = bd['source']
+    return [{'id': bd['id'], 'ifc': 'IfcFurniture', 'type': 'BED', 'material': m['cover'], 'mesh': cover, 'source': src},
+            {'id': f"{bd['id']}-base", 'ifc': 'IfcFurniture', 'type': 'BED', 'material': m['base'], 'mesh': merge(base), 'source': src},
+            {'id': f"{bd['id']}-cabecera", 'ifc': 'IfcFurniture', 'type': 'BED', 'material': m['headboard'], 'mesh': merge(head), 'source': src}]
+
+
+def _framed_nightstands(ns, bd):
+    """Buros de cajones de laminado dentro de un marco metálico, uno a cada lado de la cama."""
+    frame = _Run(bd['headboard_wall'])
+    w, d, h = ns['size_m']
+    off = bd['size_m'][0] / 2 + ns['gap_m'] + w / 2
+    wood, metal = [], []
+    for side in (-1, 1):
+        u = side * off
+        wood.append(frame.box((u - w / 2 + 0.03, u + w / 2 - 0.03), (h - 0.04, h), (0.0, d)))  # cubierta
+        for k in range(ns['drawers']):
+            z0 = h - 0.04 - (k + 1) * 0.12
+            wood.append(frame.box((u - w / 2 + 0.03, u + w / 2 - 0.03), (z0 + 0.004, z0 + 0.12 - 0.004), (0.02, d)))
+            metal.append(cylinder(frame.point(u - 0.06, d + 0.02, z0 + 0.06), frame.point(u + 0.06, d + 0.02, z0 + 0.06), 0.006, 8))
+        wood.append(frame.box((u - w / 2 + 0.03, u + w / 2 - 0.03), (0.04, 0.06), (0.02, d - 0.02)))  # repisa de abajo
+        for du in (-w / 2, w / 2 - 0.03):  # costados del marco
+            metal.append(frame.box((u + du, u + du + 0.03), (0.0, h), (0.0, d)))
+    return [{'id': ns['id'], 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': 'buros', 'material': ns['material'],
+             'mesh': merge(wood), 'source': ns['source']},
+            {'id': f"{ns['id']}-marco", 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': 'marco de los buros',
+             'material': ns['frame_material'], 'mesh': merge(metal), 'source': ns['source']}]
+
+
+def _ottoman(ot, bd):
+    frame = _Run(bd['headboard_wall'])
+    w, d, h = ot['size_m']
+    n0 = bd['headboard']['thickness_m'] + bd['size_m'][1] + ot['from_foot_m']
+    return [{'id': ot['id'], 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': 'baúl', 'material': ot['material'],
+             'mesh': frame.box((-w / 2, w / 2), (0.0, h), (n0, n0 + d)), 'source': ot['source']}]
+
+
+def _mirror(mi):
+    frame = _Run(mi['wall'])
+    (u0, u1), (z0, z1), lean = mi['u'], mi['z'], mi['lean_m']
+    border = 0.03
+    frame_parts = [frame.box((u0, u1), (z0, z0 + border), (lean, lean + 0.025)), frame.box((u0, u1), (z1 - border, z1), (0.0, 0.025)),
+                   frame.box((u0, u0 + border), (z0, z1), (lean / 2 - 0.0, lean / 2 + 0.025)),
+                   frame.box((u1 - border, u1), (z0, z1), (lean / 2, lean / 2 + 0.025))]
+    glass = frame.box((u0 + border, u1 - border), (z0 + border, z1 - border), (lean / 2 + 0.012, lean / 2 + 0.016))
+    if z0 < 0.3:  # parado en el piso: base hasta el suelo (si está sobre un mueble, no)
+        frame_parts.append(frame.box((u0, u1), (0.0, z0), (lean, lean + 0.02)))
+    return [{'id': mi['id'], 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': 'espejo', 'material': mi['material'],
+             'mesh': glass, 'source': mi['source']},
+            {'id': f"{mi['id']}-marco", 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': 'marco del espejo',
+             'material': mi['frame_material'], 'mesh': merge(frame_parts), 'source': mi['source']}]
+
+
 def _nightstands(ns, bd):
     frame = _Run(bd['headboard_wall'])
     w, d, h = ns['size_m']
@@ -120,10 +189,17 @@ def bedroom_parts(spec: dict) -> list[dict]:
     parts = []
     if spec.get('closet'):
         parts += _closet(spec['closet'])
-    if spec.get('bed'):
-        parts += _bed(spec['bed'])
-        if spec.get('nightstands'):
-            parts += _nightstands(spec['nightstands'], spec['bed'])
+    bd = spec.get('bed')
+    if bd:
+        upholstered = bd.get('style') == 'upholstered'
+        parts += _upholstered_bed(bd) if upholstered else _bed(bd)
+        ns = spec.get('nightstands')
+        if ns:
+            parts += _framed_nightstands(ns, bd) if ns.get('style') == 'framed' else _nightstands(ns, bd)
+        if spec.get('ottoman'):
+            parts += _ottoman(spec['ottoman'], bd)
+    if spec.get('mirror'):
+        parts += _mirror(spec['mirror'])
     if spec.get('desk'):
         parts += _desk(spec['desk'])
     ac = spec.get('minisplit')
