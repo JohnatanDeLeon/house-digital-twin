@@ -4,6 +4,7 @@ Sale en `docs/viewer/recorrido/` y se abre igual en la PC (teclado y mouse) que 
 El GLB trae geometría, UV en metros y el nombre del material de cada cara; aquí se preparan las texturas en un
 tamaño que un celular carga rápido y los datos de cada material (escala real, alineación de juntas, vidrio).
 """
+import base64
 import json
 from pathlib import Path
 
@@ -65,8 +66,13 @@ def entrance(facts: dict) -> dict | None:
             'facing': list(across)}
 
 
-def build_walk(facts: dict, materials: dict[str, dict], textures_dir: Path, out_dir: Path):
-    """Escribe `index.html` y `texturas/`; el GLB (`casa.glb`) lo deja Blender en la misma carpeta."""
+def write_model_script(glb: Path, out: Path):
+    """El GLB va dentro de un .js: así lo carga un <script> (los artifacts no sirven .glb y file:// no deja usar fetch)."""
+    out.write_text('window.HDT_GLB = "' + base64.b64encode(glb.read_bytes()).decode('ascii') + '";\n')
+
+
+def build_walk(facts: dict, materials: dict[str, dict], textures_dir: Path, out_dir: Path, glb: Path | None = None):
+    """Escribe `index.html`, `texturas/` y, si se da el GLB que exporta Blender, `casa.js`."""
     tex_out = out_dir / 'texturas'
     entries = {name: _material_entry(name, spec, Path(textures_dir) / name, tex_out) for name, spec in materials.items()}
     data = {
@@ -84,5 +90,7 @@ def build_walk(facts: dict, materials: dict[str, dict], textures_dir: Path, out_
     if DATA_MARKER not in html:
         raise ValueError(f'La plantilla del recorrido no tiene el marcador {DATA_MARKER}')
     out_dir.mkdir(parents=True, exist_ok=True)
+    if glb is not None:
+        write_model_script(glb, out_dir / 'casa.js')
     (out_dir / 'index.html').write_text(html.replace(DATA_MARKER, json.dumps(data, ensure_ascii=False, separators=(',', ':'))))
     return out_dir / 'index.html'

@@ -124,6 +124,7 @@ body.touch .here { left: auto; right: 16px; bottom: calc(env(safe-area-inset-bot
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="casa.js"></script>
 <script>
 const DATA = /*__WALK_DATA__*/null;
 const EYE = 1.6;              // m, altura de los ojos
@@ -251,9 +252,9 @@ function tagOf(obj) {
   return {};
 }
 async function loadHouse() {
-  const res = await fetch('casa.glb');
-  if (!res.ok) throw new Error(`casa.glb: ${res.status}`);
-  const buffer = await res.arrayBuffer();
+  if (!window.HDT_GLB) throw new Error('falta casa.js junto a esta página');
+  const bytes = Uint8Array.from(atob(window.HDT_GLB), c => c.charCodeAt(0));
+  const buffer = bytes.buffer;
   const gltf = await new Promise((ok, fail) => new THREE.GLTFLoader().parse(buffer, '', ok, fail));
   gltf.scene.updateMatrixWorld(true);
   gltf.scene.traverse(obj => {
@@ -469,8 +470,6 @@ loadHouse().then(() => {
   frame();
 }).catch(err => {
   console.error(err);
-  status('No pude cargar la casa', location.protocol === 'file:'
-    ? 'El navegador no deja leer casa.glb desde un archivo local. Abre el enlace publicado, o sirve la carpeta con: python -m http.server'
-    : `Revisa que casa.glb esté junto a esta página. (${err.message})`);
+  status('No pude cargar la casa', `${err.message}. Abre el enlace publicado, o sirve esta carpeta con: python -m http.server`);
 });
 </script>

@@ -15,6 +15,7 @@ TEXTURES_DIR = ROOT / 'assets' / 'textures'
 BLEND_PATH = ROOT / 'models' / 'existing.blend'
 RENDERS_DIR = ROOT / 'docs' / 'analysis' / '05-renders'
 WALK_DIR = ROOT / 'docs' / 'viewer' / 'recorrido'
+GLB_PATH = ROOT / 'models' / 'existing.glb'
 
 
 def _load_drawing(source: Path):
@@ -79,15 +80,15 @@ def scene(render: bool):
     if blender is None:
         raise SystemExit('No encuentro `blender` en el PATH (ver README: Blender + Bonsai)')
     args = [blender, '--background', '--python', str(ROOT / 'house_twin' / 'blender_scene.py'), '--',
-            str(ROOT), str(IFC_PATH), str(BLEND_PATH), '--glb', str(WALK_DIR / 'casa.glb')]
+            str(ROOT), str(IFC_PATH), str(BLEND_PATH), '--glb', str(GLB_PATH)]
     args += ['--render', str(RENDERS_DIR)] if render else []
     out = subprocess.run(args, capture_output=True, text=True)
     report = [line for line in out.stdout.splitlines() if line.startswith(('materiales:', 'sin acabado:', 'Error'))]
     print('\n'.join(report))
     if out.returncode != 0 or not BLEND_PATH.exists():
         raise SystemExit(out.stderr[-2000:] or 'Blender falló')
-    walk = build_walk(json.loads(FACTS_PATH.read_text()), load_materials(TEXTURES_DIR), TEXTURES_DIR, WALK_DIR)
-    for path in [BLEND_PATH, WALK_DIR / 'casa.glb', walk] + (sorted(RENDERS_DIR.glob('*.jpg')) if render else []):
+    walk = build_walk(json.loads(FACTS_PATH.read_text()), load_materials(TEXTURES_DIR), TEXTURES_DIR, WALK_DIR, GLB_PATH)
+    for path in [BLEND_PATH, GLB_PATH, walk] + (sorted(RENDERS_DIR.glob('*.jpg')) if render else []):
         print(f'→ {path.relative_to(ROOT)}')
 
 

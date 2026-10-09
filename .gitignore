@@ -10,3 +10,4 @@ sources/fotos/
 # Escena de Blender: se regenera con `python -m house_twin.cli scene` (las texturas van por ruta relativa)
 *.blend
 *.blend1
+*.glb
