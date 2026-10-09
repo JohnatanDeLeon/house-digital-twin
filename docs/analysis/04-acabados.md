@@ -395,7 +395,12 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 - **Televisión (dato del dueño: 75")**: pantalla de 1.66 × 0.93 m (`IfcAudioVisualAppliance`).
   - **Posición:** en el muro del fondo (este, x = 9.763 m), centrada a 1.93 m de la esquina con el muro de la entrada (y ≈ 5.35 m), con el borde de abajo a ≈ 1.16 m.
   - **Cómo se midió:** en la foto desde el comedor, ese muro de 3.21 m da ≈ 134 px/m y el de 2.60 m de alto ≈ 131 px/m. Las 2 escalas coinciden.
-- **Pendiente:** la mesa de centro de vidrio, el comedor (mesa y 6 sillas), la cortina gris de la entrada y el contacto bajo la TV (no está en el plano).
+- **Comedor (dato del dueño: mesa de 200 × 110 cm; fotos del 2026-10-09):** una mesa con 6 sillas: 2 por lado y 1 en cada cabecera.
+  - **Posición (fotos):** el lado largo va hacia el muro de la entrada. La silla de la cabecera queda frente a la ventana V01 y las del lado poniente, metidas bajo la mesa, a ≈ 5 cm del muro (x = 3.285 m). Con eso, la mesa queda centrada en x ≈ 4.20 m, y ≈ 5.20 m (± 0.2 m).
+  - **Medidas supuestas:** altura de 0.76 m, 2 pedestales y sillas comunes (asiento de 0.46 m a 0.47 m de alto, respaldo a 1.00 m). El respaldo calado y curvo se simplifica a un marco con tablilla.
+  - **Colores (contra el muro, con la luz de la ventana):** la madera **(60, 44, 37)**, medida en el respaldo y la tablilla de las sillas, y el tapiz de los asientos **(83, 71, 63)**.
+  - **Plano:** el bloque `COMEDOOR` del plano la pone en otro lugar (x = 3.55–6.03, y = 4.41–6.24); manda la foto.
+- **Pendiente:** la mesa de centro de vidrio, las cortinas grises de la entrada y de las ventanas, el perchero de la entrada y el contacto bajo la TV (no está en el plano).
 
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 

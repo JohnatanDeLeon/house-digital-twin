@@ -84,6 +84,50 @@
  "assumptions": [
   "profundidad y alturas del sofá (medidas comunes)",
   "esquina del sofá (± 0.3 m)",
-  "TV montada a 3 cm del muro"
- ]
+  "TV montada a 3 cm del muro",
+  "mesa a 0.76 m y sillas con medidas comunes; posición de la mesa ± 0.2 m"
+ ],
+ "dining": {
+  "id": "comedor",
+  "centre": [
+   4.2,
+   5.2
+  ],
+  "long_axis": [
+   0,
+   1
+  ],
+  "size_m": [
+   2.0,
+   1.1
+  ],
+  "size_source": "dueño (2026-10-09): 200 × 110 cm",
+  "position_source": "fotos: el lado largo va hacia el muro de la entrada; la silla de la cabecera queda frente a la ventana V01 (centro x ≈ 4.10 m; la mesa va en x ≈ 4.20 m para que las sillas del lado poniente, metidas bajo la mesa, queden a ≈ 5 cm del muro como en la foto) y las sillas del lado poniente casi tocan el muro (x = 3.285 m); la cabecera sur, a ≈ 0.75 m del muro del frente (estimado, ± 0.2 m)",
+  "table": {
+   "height_m": 0.76,
+   "top_m": 0.04,
+   "apron_m": 0.08,
+   "pedestals": 2,
+   "pedestal_size_m": [
+    0.14,
+    0.5
+   ],
+   "material": "madera-comedor"
+  },
+  "chairs": {
+   "count_per_side": 2,
+   "heads": true,
+   "seat_m": [
+    0.46,
+    0.46
+   ],
+   "seat_height_m": 0.47,
+   "back_height_m": 1.0,
+   
+   "seat_material": "tapiz-sillas",
+   "material": "madera-comedor",
+   "source": "6 sillas (fotos): 2 por lado y 1 en cada cabecera; respaldo con marco curvo y tablilla calada; medidas comunes (supuesto)",
+   "tuck_m": 0.15
+  }
+ }
 }

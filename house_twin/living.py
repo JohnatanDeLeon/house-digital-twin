@@ -71,4 +71,58 @@ def living_parts(spec: dict) -> list[dict]:
                       'mesh': body, 'source': f"{t['size_source']}; {t['position_source']}"})
         parts.append({'id': f"{t['id']}-pantalla", 'ifc': 'IfcAudioVisualAppliance', 'type': 'DISPLAY',
                       'material': t['screen_material'], 'mesh': screen, 'source': t['size_source']})
+    if spec.get('dining'):
+        parts += dining_parts(spec['dining'])
     return parts
+
+
+def _chair(frame, u, n, facing, c):
+    """Silla en (u, n) del marco de la mesa, mirando hacia `facing` (vector unitario en ese marco)."""
+    sw, sd = c['seat_m']
+    h, top = c['seat_height_m'], c['back_height_m']
+    fu, fn = facing
+    pu, pn = -fn, fu  # a lo ancho de la silla
+    def box(a0, a1, d0, d1, z0, z1):  # a: a lo ancho, d: hacia el frente de la silla (desde el respaldo)
+        corners = [(u + pu * a + fu * dd, n + pn * a + fn * dd) for a in (a0, a1) for dd in (d0, d1)]
+        us, ns = [p[0] for p in corners], [p[1] for p in corners]
+        return frame.box((min(us), max(us)), (z0, z1), (min(ns), max(ns)))
+    wood = [box(-sw / 2 + k * (sw - 0.045), -sw / 2 + k * (sw - 0.045) + 0.045, d, d + 0.045, 0, h - 0.06)
+            for k in (0, 1) for d in (-sd / 2, sd / 2 - 0.045)]
+    wood.append(box(-sw / 2, sw / 2, -sd / 2, sd / 2, h - 0.06, h - 0.03))  # bastidor del asiento
+    for a in (-sw / 2, sw / 2 - 0.045):  # postes del respaldo
+        wood.append(box(a, a + 0.045, -sd / 2, -sd / 2 + 0.045, h - 0.03, top))
+    wood.append(box(-sw / 2, sw / 2, -sd / 2, -sd / 2 + 0.05, top - 0.09, top))  # travesaño de arriba
+    wood.append(box(-0.06, 0.06, -sd / 2 + 0.01, -sd / 2 + 0.035, h, top - 0.09))  # tablilla
+    seat = box(-sw / 2 + 0.01, sw / 2 - 0.01, -sd / 2 + 0.05, sd / 2 - 0.01, h - 0.03, h + 0.03)
+    return wood, seat
+
+
+def dining_parts(d):
+    """Mesa rectangular con 2 pedestales y 6 sillas (2 por lado y las cabeceras)."""
+    (cx, cy), (ax, ay) = d['centre'], d['long_axis']
+    length, width = d['size_m']
+    frame = _Run({'origin': [cx, cy], 'along': [ax, ay], 'into_room': [-ay, ax]})
+    t, c = d['table'], d['chairs']
+    h = t['height_m']
+    table = [frame.box((-length / 2, length / 2), (h - t['top_m'], h), (-width / 2, width / 2)),
+             frame.box((-length / 2 + 0.06, length / 2 - 0.06), (h - t['top_m'] - t['apron_m'], h - t['top_m']),
+                       (-width / 2 + 0.06, width / 2 - 0.06))]
+    pw, pd = t['pedestal_size_m']
+    for k in range(t['pedestals']):
+        u = -length / 2 + length * (k + 1) / (t['pedestals'] + 1)
+        table.append(frame.box((u - pw / 2, u + pw / 2), (0.05, h - t['top_m'] - t['apron_m']), (-pw / 2, pw / 2)))
+        table.append(frame.box((u - 0.08, u + 0.08), (0, 0.05), (-pd / 2, pd / 2)))  # pie
+    woods, seats = [], []
+    out = c['seat_m'][1] / 2 - c['tuck_m']  # el asiento entra un poco bajo la mesa
+    places = [(-length / 2 + length * (k + 1) / (c['count_per_side'] + 1), side * (width / 2 + out), (0, -side))
+              for k in range(c['count_per_side']) for side in (1, -1)]
+    if c['heads']:
+        places += [(side * (length / 2 + out), 0.0, (-side, 0)) for side in (1, -1)]
+    for u, n, facing in places:
+        w, s = _chair(frame, u, n, facing, c)
+        woods += w
+        seats.append(s)
+    src = f"{d['size_source']}; {d['position_source']}"
+    return [{'id': f"{d['id']}-mesa", 'ifc': 'IfcFurniture', 'type': 'TABLE', 'material': t['material'], 'mesh': merge(table), 'source': src},
+            {'id': f"{d['id']}-sillas", 'ifc': 'IfcFurniture', 'type': 'CHAIR', 'material': c['material'], 'mesh': merge(woods), 'source': c['source']},
+            {'id': f"{d['id']}-asientos", 'ifc': 'IfcFurniture', 'type': 'CHAIR', 'material': c['seat_material'], 'mesh': merge(seats), 'source': c['source']}]

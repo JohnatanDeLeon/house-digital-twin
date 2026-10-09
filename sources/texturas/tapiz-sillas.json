@@ -1,0 +1,24 @@
+{
+ "_doc": "tela café grisácea de los asientos; medida en el asiento de la silla más cercana contra el muro (235). Regenerar con: python -m house_twin.cli texture sources/texturas/tapiz-sillas.json",
+ "name": "tapiz-sillas",
+ "kind": "constant",
+ "applies_to": {
+  "furniture": "asientos de las sillas",
+  "source": "foto del comedor (dueño, 2026-10-09)"
+ },
+ "photo": "sources/fotos/comedor-frente.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   83,
+   71,
+   63
+  ],
+  "metallic": 0.0,
+  "roughness": 0.9,
+  "note": "tela café grisácea de los asientos; medida en el asiento de la silla más cercana contra el muro (235)"
+ },
+ "assumptions": [
+  "luz de la ventana: el muro como blanco es aproximado",
+  "sin veta: color liso"
+ ]
+}
