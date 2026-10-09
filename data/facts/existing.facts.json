@@ -5,7 +5,7 @@
  "frame": "origen en la esquina del terreno a la izquierda de la calle; X a lo ancho, Y hacia el fondo",
  "provenance": {
   "source": "dxf:data/raw/plano.dxf",
-  "built_on": "2026-10-08",
+  "built_on": "2026-10-09",
   "precision_m": 0.0,
   "calibration": {},
   "owner_annotations": "2026-10-08"
@@ -222,8 +222,8 @@
     "source": "rótulo \"NPT+0.15\""
    },
    "roofed": {
-    "value": null,
-    "source": "no está en el plano"
+    "value": true,
+    "source": "dueño (2026-10-09)"
    },
    "enclosed": {
     "value": null,
@@ -308,8 +308,8 @@
     "source": "rótulo \"NPT+0.15\""
    },
    "roofed": {
-    "value": null,
-    "source": "no está en el plano"
+    "value": true,
+    "source": "dueño (2026-10-09)"
    },
    "enclosed": {
     "value": null,
@@ -382,8 +382,8 @@
     "source": "rótulo \"NPT+0.15\""
    },
    "roofed": {
-    "value": null,
-    "source": "no está en el plano"
+    "value": true,
+    "source": "dueño (2026-10-09)"
    },
    "enclosed": {
     "value": null,
@@ -456,8 +456,8 @@
     "source": "rótulo \"NPT+0.15\""
    },
    "roofed": {
-    "value": null,
-    "source": "no está en el plano"
+    "value": true,
+    "source": "dueño (2026-10-09)"
    },
    "enclosed": {
     "value": null,
@@ -507,8 +507,8 @@
     "source": "rótulo \"NPT+0.15\""
    },
    "roofed": {
-    "value": null,
-    "source": "no está en el plano"
+    "value": true,
+    "source": "dueño (2026-10-09)"
    },
    "enclosed": {
     "value": null,
@@ -565,8 +565,8 @@
     "source": "rótulo \"NPT+0.00\""
    },
    "roofed": {
-    "value": null,
-    "source": "no está en el plano"
+    "value": true,
+    "source": "dueño (2026-10-09)"
    },
    "enclosed": {
     "value": null,
@@ -624,8 +624,8 @@
     "source": "rótulo \"NPT+0.00\""
    },
    "roofed": {
-    "value": null,
-    "source": "no está en el plano"
+    "value": true,
+    "source": "dueño (2026-10-09)"
    },
    "enclosed": {
     "value": null,
@@ -4073,6 +4073,89 @@
     ]
    ],
    "source": "plano: rótulo CLOSET y frente en la capa de muebles fijos; fondo hasta el muro"
+  }
+ ],
+ "lights": [
+  {
+   "id": "L01",
+   "position": [
+    7.913,
+    5.15
+   ],
+   "space": "S01",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
+  },
+  {
+   "id": "L02",
+   "position": [
+    4.722,
+    5.15
+   ],
+   "space": "S01",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
+  },
+  {
+   "id": "L03",
+   "position": [
+    9.162,
+    2.576
+   ],
+   "space": "S07",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
+  },
+  {
+   "id": "L04",
+   "position": [
+    2.86,
+    8.312
+   ],
+   "space": "S01",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
+  },
+  {
+   "id": "L05",
+   "position": [
+    5.07,
+    12.123
+   ],
+   "space": "S01",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
+  },
+  {
+   "id": "L06",
+   "position": [
+    7.999,
+    9.701
+   ],
+   "space": "S04",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
+  },
+  {
+   "id": "L07",
+   "position": [
+    3.558,
+    11.642
+   ],
+   "space": "S05",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
+  },
+  {
+   "id": "L08",
+   "position": [
+    8.188,
+    14.359
+   ],
+   "space": "S02",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
+  },
+  {
+   "id": "L09",
+   "position": [
+    3.47,
+    14.697
+   ],
+   "space": "S03",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
   }
  ],
  "adjacency": [

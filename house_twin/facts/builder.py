@@ -118,6 +118,28 @@ def _relate_openings(openings, walls, spaces):
         o['connects'] = _touching(rect, space_geoms)
 
 
+def _lights(drawing, spaces) -> list[dict]:
+    """Salidas de foco del plano, con el espacio en el que caen."""
+    geoms = [(s['id'], Polygon(s['polygon'])) for s in spaces]
+    lights = []
+    for x, y in drawing.metadata.get('ceiling_lights', []):
+        space = next((sid for sid, g in geoms if g.contains(Point(x, y))), None)
+        lights.append({'id': f'L{len(lights) + 1:02d}', 'position': [round(x, 3), round(y, 3)], 'space': space,
+                       'source': 'plano: salida de foco en la capa 23- ILUMINACION'})
+    return lights
+
+
+def _interior_roofs(spaces, annotations):
+    """Dato del dueño: los espacios interiores sin dato de techo están techados."""
+    entry = annotations.get('interior_roofed')
+    if not entry:
+        return
+    source = f"{annotations.get('source', 'dueño')} ({entry.get('answered_on', annotations.get('confirmed_on', 's/f'))})"
+    for s in spaces:
+        if not s['is_exterior'] and s['roofed']['value'] is None:
+            s['roofed'] = {'value': entry['value'], 'source': source}
+
+
 CLOSET_MAX_DEPTH_M = 1.0  # del frente dibujado al muro: más que esto no es el fondo de un closet
 
 
@@ -259,6 +281,7 @@ def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
             o['id'] = f'{prefix}{i+1:02d}'
     _relate_openings(doors + windows, walls, spaces)
     _assign_swings(doors, spaces, drawing.metadata.get('door_swings', []))
+    _interior_roofs(spaces, annotations)
     for o in owner_openings(walls, spaces, annotations):
         o['id'] = f"V{len(windows)+1:02d}" if o['kind'] == 'window' else f"D{len(doors)+1:02d}"
         (windows if o['kind'] == 'window' else doors).append(o)
@@ -283,6 +306,7 @@ def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
         'source_warnings': [w for w in [drawing.metadata.get('units_warning')] if w],
         'levels': [{'id': 'L0', 'name': 'Planta baja', 'elevation': 0.0, 'storey_height': dict(UNKNOWN)}],
         'spaces': spaces, 'walls': walls, 'openings': openings, 'fixtures': _closets(drawing, spaces),
+        'lights': _lights(drawing, spaces),
         'adjacency': _adjacency(walls, spaces, openings),
         'measurements': owner_measurements(walls, annotations),
         **_unknowns(annotations),

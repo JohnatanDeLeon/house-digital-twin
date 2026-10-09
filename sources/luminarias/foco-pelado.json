@@ -1,0 +1,19 @@
+{
+ "_doc": "Salida de foco en el techo: portalámparas con foco pelado. Perfiles torneados en mm (radio, distancia hacia abajo desde el techo). `build` lo genera dentro del IFC (IfcLightFixture con su foco) en cada salida del plano de un espacio techado.",
+ "name": "foco-pelado",
+ "applies_to": {"lights": "todas las salidas del plano", "source": "dueño (2026-10-09): en todos los cuartos hay foco pelado de luz blanca fría"},
+ "socket_profile_mm": [[0, 0], [45, 0], [45, 8], [40, 14], [21, 18], [18, 24], [18, 50], [0, 50]],
+ "bulb_profile_mm": [[0, 48], [14, 50], [14, 62], [24, 78], [30, 95], [29, 106], [23, 118], [12, 125], [0, 127]],
+ "segments": 32,
+ "light": {
+  "center_mm": 98,
+  "lumens": 900,
+  "color_temperature_k": 6500,
+  "color_srgb": [255, 249, 253],
+  "power_w": 10,
+  "source": "dueño: luz blanca fría; flujo y potencia de un foco LED común de 10 W (supuesto)"
+ },
+ "materials": {"socket": "portalampara", "bulb": "foco-led"},
+ "observed": {"from_photos": "en la recámara 3, foco al centro del techo en un portalámparas; en la sala, el reflejo del foco en los vidrios de V10"},
+ "assumptions": ["portalámparas redondo de plástico blanco de Ø 9 cm (típico)", "foco A19 (Ø 6 cm)", "900 lm, 6500 K, 10 W"]
+}

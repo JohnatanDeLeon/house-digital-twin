@@ -119,6 +119,7 @@ body.touch .here { left: auto; right: 16px; bottom: calc(env(safe-area-inset-bot
       <label for="variant">Versión</label>
       <select id="variant"></select>
     </div>
+    <button class="btn" id="daynight" type="button" aria-pressed="false">Noche</button>
     <button class="btn" id="help" type="button" aria-label="Cómo moverse">?</button>
   </header>
   <div class="proposal" id="proposal" role="note" hidden></div>
@@ -128,7 +129,7 @@ body.touch .here { left: auto; right: 16px; bottom: calc(env(safe-area-inset-bot
   <div class="hint" id="hint" hidden>
     <h2>Camina por la casa</h2>
     <dl id="hint-keys"></dl>
-    <p>Las puertas no estorban: se pueden atravesar. Toca un cuarto en la planta de la esquina para ir directo. Todavía no hay techo, así que el sol entra por arriba.</p>
+    <p>Las puertas no estorban: se pueden atravesar. Toca un cuarto en la planta de la esquina para ir directo. Con «Noche» se apaga el sol y se encienden los focos de la casa.</p>
     <button class="btn" id="hint-ok" type="button">Empezar</button>
   </div>
   <div class="status" id="status"><div><strong>Cargando la casa…</strong><span id="status-detail">geometría y texturas</span></div></div>
@@ -224,11 +225,17 @@ function metalEnvironment() {
 function constantMaterial(pbr) {
   const glass = (pbr.transmission || 0) > 0;
   const metalness = pbr.metalness ?? pbr.metallic ?? 0;
-  return new THREE.MeshStandardMaterial({
+  const m = new THREE.MeshStandardMaterial({
     color: linearColor(pbr.basecolor_srgb), roughness: pbr.roughness ?? 0.5, metalness,
     envMap: metalness > 0 ? metalEnvironment() : null, envMapIntensity: 0.9,
     transparent: glass, opacity: glass ? 0.28 : 1, side: glass ? THREE.DoubleSide : THREE.FrontSide,
   });
+  if (pbr.emission_srgb) {  // foco: brilla solo de noche (ver setNight)
+    m.emissive = linearColor(pbr.emission_srgb);
+    m.emissiveIntensity = 0;
+    glowing.push(m);
+  }
+  return m;
 }
 function mappedMaterial(spec) {
   const m = new THREE.MeshStandardMaterial({ roughness: 1 });
@@ -279,6 +286,8 @@ function windowMaterial(size, grid) {
 // ---------- casa ----------
 const colliders = [];
 const tour = [];
+const glowing = [];   // materiales que se encienden de noche (focos)
+const bulbs = [];     // luces puntuales, una por foco
 const byOpening = {};  // id del vano → sus mallas con el material de la casa actual (para volver de una propuesta)
 function tagOf(obj) {
   for (let o = obj; o; o = o.parent) if (o.userData && o.userData.hdt_kind) return o.userData;
@@ -297,6 +306,10 @@ async function loadHouse() {
     const name = obj.material && obj.material.name;
     obj.material = tag.hdt_kind === 'IfcWindow' && tag.hdt_size ? windowMaterial(tag.hdt_size, tag.hdt_grid) : materialFor(name);
     if (tag.hdt_id) (byOpening[tag.hdt_id] = byOpening[tag.hdt_id] || []).push({ mesh: obj, material: obj.material });
+    if (tag.hdt_kind === 'IfcDiscreteAccessory' && /-foco$/.test(tag.hdt_id || '')) {
+      obj.castShadow = false;  // el foco envuelve a su luz: si proyectara sombra, la apagaría
+      bulbs.push(obj);
+    }
     obj.castShadow = tag.hdt_kind !== 'IfcWindow';
     if (obj.material.userData.depth) obj.customDepthMaterial = obj.material.userData.depth;
     obj.receiveShadow = true;
@@ -492,6 +505,41 @@ function frame() {
   requestAnimationFrame(frame);
 }
 
+// ---------- día y noche: de noche se apaga el sol y se encienden los focos del plano ----------
+const BULB_COLOR = 0xfff9fd;  // luz blanca fría (6500 K), dato del dueño
+const NIGHT_SKY = new THREE.Color(0x0b1220), DAY_SKY = scene.background.clone();
+const hemisphere = scene.children.find(c => c.isHemisphereLight);
+const dayHemisphere = hemisphere.intensity;
+let night = false;
+function setupBulbs() {
+  for (const bulb of bulbs) {
+    const box = new THREE.Box3().setFromObject(bulb), centre = box.getCenter(new THREE.Vector3());
+    const light = new THREE.PointLight(BULB_COLOR, 1.6, 9, 2);
+    light.position.copy(centre);
+    if (!isTouch) {  // en la PC, sombras para que la luz no pase los muros; en el celular pesan demasiado
+      light.castShadow = true;
+      light.shadow.mapSize.set(512, 512);
+      light.shadow.camera.near = 0.08;
+      light.shadow.bias = -0.002;
+    }
+    light.visible = false;
+    scene.add(light);
+    bulb.userData.light = light;
+  }
+}
+function setNight(on) {
+  night = on;
+  sun.visible = !on;
+  hemisphere.intensity = on ? 0.04 : dayHemisphere;
+  scene.background = on ? NIGHT_SKY : DAY_SKY;
+  for (const bulb of bulbs) bulb.userData.light.visible = on;
+  for (const m of glowing) m.emissiveIntensity = on ? 1 : 0;
+  const button = $('daynight');
+  button.textContent = on ? 'Día' : 'Noche';
+  button.setAttribute('aria-pressed', String(on));
+}
+$('daynight').addEventListener('click', () => setNight(!night));
+
 // ---------- propuestas: cambian materiales por encima de la casa actual ----------
 function useMaterial(mesh, material) {
   mesh.material = material;
@@ -529,6 +577,7 @@ function setupVariants() {
 
 loadHouse().then(() => {
   setupVariants();
+  setupBulbs();
   const select = $('room');
   const entrance = DATA.entrance && { label: `Entrada (${DATA.entrance.door})`, start: DATA.entrance };
   if (entrance) tour.unshift(entrance);

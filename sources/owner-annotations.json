@@ -161,6 +161,11 @@
    "roofed": false
   }
  ],
+ "interior_roofed": {
+  "value": true,
+  "answered_on": "2026-10-09",
+  "note": "Todos los techos de la casa son de tirol, iguales a los de la sala y la recámara 3, incluido el del pórtico (dueño, 2026-10-09): los espacios interiores están techados."
+ },
  "add_openings": [
   {
    "kind": "window",
