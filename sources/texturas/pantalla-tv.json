@@ -1,0 +1,23 @@
+{
+ "_doc": "pantalla apagada: negro brillante. Supuesto: valor común. Regenerar con: python -m house_twin.cli texture sources/texturas/pantalla-tv.json",
+ "name": "pantalla-tv",
+ "kind": "constant",
+ "applies_to": {
+  "appliance": "televisión",
+  "source": "fotos de la sala (dueño)"
+ },
+ "photo": "sources/fotos/sala-tv.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   8,
+   9,
+   11
+  ],
+  "metallic": 0.0,
+  "roughness": 0.08,
+  "note": "pantalla apagada: negro brillante"
+ },
+ "assumptions": [
+  "color y brillo comunes"
+ ]
+}

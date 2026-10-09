@@ -1,0 +1,23 @@
+{
+ "_doc": "marco y respaldo de plástico negro. Supuesto: valor común. Regenerar con: python -m house_twin.cli texture sources/texturas/plastico-negro.json",
+ "name": "plastico-negro",
+ "kind": "constant",
+ "applies_to": {
+  "appliance": "televisión y patas del sofá",
+  "source": "fotos de la sala (dueño)"
+ },
+ "photo": "sources/fotos/sala-tv.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   22,
+   22,
+   24
+  ],
+  "metallic": 0.0,
+  "roughness": 0.45,
+  "note": "marco y respaldo de plástico negro"
+ },
+ "assumptions": [
+  "color y brillo comunes"
+ ]
+}

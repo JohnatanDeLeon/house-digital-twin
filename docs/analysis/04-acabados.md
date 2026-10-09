@@ -383,6 +383,20 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
   - el microondas con su repisa y la cortina;
   - el centro de carga en el costado derecho.
 
+### 25. Sala: sofá en L y televisión (2026-10-09, fotos 13:40:54 y 13:41:14; 2026-10-07, 23:22 y 23:23)
+
+- **Sofá (dato del dueño: 220 × 220 cm):** es modular, en L, con 2 reclinables en las puntas, una cuña en el rincón y 1 asiento más por lado.
+  - **Posición (fotos):** el lado largo tiene el respaldo contra el muro de la recámara 3 (y = 7.93 m) y el brazo derecho junto al escalón del tragaluz (x = 8.45 m), así que su esquina queda en x ≈ 6.23 m (± 0.3 m). El otro lado sale hacia el comedor con el respaldo libre, como en la foto desde la mesa.
+  - **Medidas supuestas:** profundidad 0.95 m, asiento a 0.48 m, respaldo a 1.00 m y brazos de 0.16 m. Son las comunes de un sofá reclinable.
+  - **Modelo:** `IfcFurniture` (`sources/sala/sala.json`, `house_twin/living.py`), con cojines separados por una junta. En el recorrido frena el paso.
+- **Tela (`tela-sofa`):** tejido jaspeado gris. Es el centro del respaldo en la foto de cerca, sin el vivo de arriba ni la sombra de abajo, sin la caída de luz y repetible.
+  - **Escala:** ≈ 5500 px/m (el cojín ocupa el ancho de la foto).
+  - **Color:** **(150, 153, 159)**, medido en la foto de conjunto de día contra el muro de atrás. En la foto de cerca el muro está en sombra y no sirve.
+- **Televisión (dato del dueño: 75")**: pantalla de 1.66 × 0.93 m (`IfcAudioVisualAppliance`).
+  - **Posición:** en el muro del fondo (este, x = 9.763 m), centrada a 1.93 m de la esquina con el muro de la entrada (y ≈ 5.35 m), con el borde de abajo a ≈ 1.16 m.
+  - **Cómo se midió:** en la foto desde el comedor, ese muro de 3.21 m da ≈ 134 px/m y el de 2.60 m de alto ≈ 131 px/m. Las 2 escalas coinciden.
+- **Pendiente:** la mesa de centro de vidrio, el comedor (mesa y 6 sillas), la cortina gris de la entrada y el contacto bajo la TV (no está en el plano).
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.

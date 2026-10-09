@@ -1,0 +1,89 @@
+{
+ "_doc": "Sala: sofá en L y televisión. Cada pieza va en un marco de muro: `origin` (esquina), `along` (a lo largo) e `into_room` (hacia el cuarto); `u` en m a lo largo, `z` desde el piso, profundidad desde el muro. `build` los genera en el IFC (IfcFurniture, IfcAudioVisualAppliance).",
+ "applies_to": {
+  "space": "S01",
+  "source": "fotos de la sala (dueño, 2026-10-07 y 2026-10-09)"
+ },
+ "sofa": {
+  "id": "sala-sofa",
+  "material": "tela-sofa",
+  "feet_material": "plastico-negro",
+  "size_m": [
+   2.2,
+   2.2
+  ],
+  "size_source": "dueño (2026-10-09): 220 × 220 cm",
+  "corner": [
+   6.23,
+   7.92
+  ],
+  "leg_a": {
+   "along": [
+    1,
+    0
+   ],
+   "into_room": [
+    0,
+    -1
+   ]
+  },
+  "leg_b": {
+   "along": [
+    0,
+    -1
+   ],
+   "into_room": [
+    1,
+    0
+   ]
+  },
+  "position_source": "fotos: el lado largo con el respaldo contra el muro de la recámara 3 (y = 7.93 m) y el brazo derecho junto al escalón del tragaluz (x = 8.45 m); el otro lado sale hacia el comedor con el respaldo libre. Esquina estimada: x ≈ 6.23 m (2.20 m antes del escalón; en la foto queda ≈ 0.2–0.6 m al este de la esquina del muro, x = 5.62 m)",
+  "depth_m": 0.95,
+  "seat_m": 0.48,
+  "back_top_m": 1.0,
+  "back_depth_m": 0.24,
+  "arm": {
+   "width_m": 0.16,
+   "top_m": 0.62
+  },
+  "feet_m": 0.03,
+  "seats_per_leg": 2,
+  "seam_m": 0.012,
+  "source": "proporciones de las fotos: 2 reclinables en las puntas, cuña en el rincón y 1 asiento más por lado; profundidad, alturas y brazos, medidas comunes de un sofá reclinable (supuesto)"
+ },
+ "tv": {
+  "id": "sala-tv",
+  "diagonal_in": 75,
+  "aspect": [
+   16,
+   9
+  ],
+  "depth_m": 0.06,
+  "bezel_m": 0.008,
+  "wall": {
+   "origin": [
+    9.763,
+    3.425
+   ],
+   "along": [
+    0,
+    1
+   ],
+   "into_room": [
+    -1,
+    0
+   ]
+  },
+  "u_centre": 1.93,
+  "z_bottom": 1.16,
+  "size_source": "dueño (2026-10-09): 75 pulgadas → pantalla de 1.66 × 0.93 m",
+  "position_source": "foto desde el comedor (2026-10-07 23:23): el muro del fondo (este, x = 9.763 m) mide 3.21 m; la TV queda centrada a 1.93 m de la esquina con el muro de la entrada (y ≈ 5.35 m) y su borde de abajo a ≈ 1.12–1.16 m del piso (≈ 131 px/m con el muro de 2.60 m)",
+  "screen_material": "pantalla-tv",
+  "body_material": "plastico-negro"
+ },
+ "assumptions": [
+  "profundidad y alturas del sofá (medidas comunes)",
+  "esquina del sofá (± 0.3 m)",
+  "TV montada a 3 cm del muro"
+ ]
+}

@@ -1,0 +1,29 @@
+{
+ "name": "plastico-negro",
+ "applies_to": {
+  "appliance": "televisión y patas del sofá",
+  "source": "fotos de la sala (dueño)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   22,
+   22,
+   24
+  ],
+  "metallic": 0.0,
+  "roughness": 0.45,
+  "note": "marco y respaldo de plástico negro"
+ },
+ "source": {
+  "photo": "sources/fotos/sala-tv.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color y brillo comunes"
+ ]
+}
