@@ -1,0 +1,35 @@
+{
+ "_doc": "Frente del closet de la recámara 3 (F03 del plano). Posiciones en fracciones del frente: a lo ancho, de izquierda a derecha visto desde la recámara; a lo alto, desde arriba. Medidas en la foto rectificada a las medidas del plano (2.68 m de muro a muro × 2.60 m de piso a techo). `build` lo genera dentro del IFC (IfcFurniture con sus jaladeras).",
+ "name": "closet-recamara-3",
+ "kind": "closet",
+ "applies_to": {"space": "S04", "source": "dueño (2026-10-08): es el closet de la recámara 3"},
+ "photo": "sources/fotos/closet-recamara-3.jpg",
+ "photo_meta": {"taken": "2026-10-08", "camera": "Samsung Galaxy S25 Ultra", "focal_35mm": 13, "light": "foco de la recámara, de noche"},
+ "corners_px": {"top_left": [392, 885], "top_right": [2445, 832], "bottom_right": [2340, 2585], "bottom_left": [660, 2697]},
+ "size": {"width": "plano (frente F03)", "height": "piso a techo (U01, 2.60 m)", "source": "empotrado de muro a muro y del piso al techo (foto)"},
+ "modules": [[0.008, 0.312], [0.34, 0.657], [0.679, 0.996]],
+ "sections": {"upper": [0.008, 0.228], "lower": [0.246, 0.996]},
+ "leaves_per_section": 2,
+ "gap_mm": 3,
+ "leaf_thickness_mm": 16,
+ "handles": {
+  "length_mm": 230,
+  "diameter_mm": 12,
+  "standoff_mm": 32,
+  "leg_inset_mm": 19,
+  "from_meeting_mm": 55,
+  "center_from_top_frac": {"upper": 0.17, "lower": 0.636},
+  "material": "acero-inoxidable",
+  "note": "jaladeras de barra en pares, junto a la junta central de cada sección"
+ },
+ "materials": {"body": "closet-madera", "leaves": "closet-madera"},
+ "observed": {
+  "type": "closet empotrado de melamina wengué: 3 módulos, cada uno con 2 hojas altas y 2 puertas de maletero arriba, separados por postes de ≈ 6 cm",
+  "widths": "módulos de ≈ 0.81, 0.85 y 0.85 m; hojas altas de ≈ 1.95 m y maleteros de ≈ 0.57 m",
+  "state": "huellas y manchas de grasa en las hojas; junta con el muro sin acabar"
+ },
+ "assumptions": [
+  "el frente de las hojas está en la línea del plano; el cuerpo queda 16 mm atrás",
+  "salida (3.2 cm) y diámetro (12 mm) de las jaladeras: típicos, la foto es de frente"
+ ]
+}

@@ -100,3 +100,39 @@ def knob_mesh(spec: dict, places: list[dict]):
             points += [(ox + x * ax + z * nx, oy + x * ay + z * ny, oz + y) for x, y, z in local]
             faces += [[base + i for i in f] for f in local_faces]
     return points, faces
+
+
+def oriented_box(origin, along, normal, u, z, n):
+    """Caja en un marco (a lo largo, arriba, normal): `u`, `z` y `n` son intervalos (inicio, fin) en metros."""
+    (ox, oy, oz), (ax, ay), (nx, ny) = origin, along, normal
+    corners = [(uu, zz, nn) for nn in n for zz in z for uu in u]
+    points = [(ox + uu * ax + nn * nx, oy + uu * ay + nn * ny, oz + zz) for uu, zz, nn in corners]
+    faces = [[0, 2, 3, 1], [4, 5, 7, 6], [0, 1, 5, 4], [2, 6, 7, 3], [0, 4, 6, 2], [1, 3, 7, 5]]
+    if ay * nx - ax * ny < 0:  # triedro izquierdo: se invierte el orden para que las normales sigan hacia afuera
+        faces = [f[::-1] for f in faces]
+    return points, faces
+
+
+def cylinder(p0, p1, radius: float, segments: int):
+    """Cilindro cerrado de `p0` a `p1` (puntos 3D), con las normales hacia afuera."""
+    axis = [b - a for a, b in zip(p0, p1)]
+    length = math.sqrt(sum(c * c for c in axis))
+    w = [c / length for c in axis]
+    helper = (0.0, 0.0, 1.0) if abs(w[2]) < 0.9 else (1.0, 0.0, 0.0)
+    u = [helper[1] * w[2] - helper[2] * w[1], helper[2] * w[0] - helper[0] * w[2], helper[0] * w[1] - helper[1] * w[0]]
+    norm = math.sqrt(sum(c * c for c in u))
+    u = [c / norm for c in u]
+    v = [w[1] * u[2] - w[2] * u[1], w[2] * u[0] - w[0] * u[2], w[0] * u[1] - w[1] * u[0]]  # (u, v, w) derecho
+    local, faces = lathe([(0, 0), (radius, 0), (radius, length), (0, length)], segments)
+    points = [tuple(p0[i] + x * u[i] + y * v[i] + z * w[i] for i in range(3)) for x, y, z in local]
+    return points, faces
+
+
+def merge(parts):
+    """Junta varias mallas (puntos, caras) en una sola."""
+    points, faces = [], []
+    for p, f in parts:
+        base = len(points)
+        points += list(p)
+        faces += [[base + i for i in face] for face in f]
+    return points, faces

@@ -1,0 +1,11 @@
+{
+ "_doc": "Acero inoxidable satinado de las jaladeras de los closets. Metal: el color base es su reflectancia, medida en la barra corregida con el muro blanco. Regenerar con: python -m house_twin.cli texture sources/texturas/acero-inoxidable.json",
+ "name": "acero-inoxidable",
+ "kind": "constant",
+ "applies_to": {"hardware": "jaladera", "source": "foto del closet de la recámara 3 (dueño, 2026-10-08)"},
+ "photo": "sources/fotos/closet-recamara-3-cerca.jpg",
+ "photo_meta": {"taken": "2026-10-08", "camera": "Samsung Galaxy S25 Ultra"},
+ "color": {"white_reference": {"box_px": [2650, 400, 2950, 1600], "albedo_srgb": [235, 235, 235], "note": "pilar de yeso a la derecha del closet"}},
+ "pbr": {"sample": {"box_px": [1384, 2260, 1396, 2640], "note": "barra de una jaladera baja"}, "metallic": 1.0, "roughness": 0.3, "note": "satinado"},
+ "assumptions": ["reflectancia tomada del color de la barra (aproximación: en un metal depende del entorno)"]
+}

@@ -42,6 +42,9 @@ Gemelo digital de una casa (Casa Jonhy). Código en inglés, comentarios y docum
 - Herrajes (chapas) en `sources/herrajes/<nombre>.json`: perfil torneado, posición en fracciones de la hoja y material.
   `house_twin/hardware.py` (solo stdlib) arma la malla y `ifc_export` la guarda como `IfcDiscreteAccessory`, parte de
   su puerta. Necesitan el abatimiento (`swing`) que sale de los bloques `PUERTA` del DXF.
+- Closets: el plano da dónde (`fixtures` de los hechos); `sources/muebles/<nombre>.json` da su frente (módulos,
+  hojas, jaladeras) en fracciones medidas en una foto. `house_twin/furniture.py` arma la malla e `ifc_export` la
+  guarda como `IfcFurniture` con sus jaladeras. Sin especificación del frente, el closet no se modela.
 
 ## Comandos
 

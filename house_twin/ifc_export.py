@@ -22,6 +22,7 @@ import ifcopenshell.guid
 from ifcopenshell.util.shape_builder import ShapeBuilder
 
 from house_twin.finishes import Finishes
+from house_twin.furniture import closet_meshes
 from house_twin.hardware import for_leaf, knob_mesh, placements
 
 ASSUMED_DEFAULTS = {'storey_height': 2.40, 'door_height': 2.10, 'window_sill': 0.90, 'window_height': 1.20}
@@ -184,6 +185,31 @@ def _add_hardware(ctx: _IfcContext, door, o, spec, height, spaces):
                                            'TurnButtonSide': next((o['swing']['opens_into'] for p in places if p['button']), '')})
 
 
+def _add_furniture(ctx: _IfcContext, facts, storey, height, furniture):
+    """Closets: el plano dice dónde (`fixtures`) y su especificación cómo es el frente. Sin especificación, nada:
+    un closet sin datos de su frente (o sin puertas) no se inventa."""
+    specs = {f['applies_to']['space']: f for f in furniture}
+    for fixture in facts.get('fixtures', []):
+        spec = specs.get(fixture['space'])
+        if fixture['kind'] != 'closet' or spec is None:
+            continue
+        (points, faces), (hpoints, hfaces) = closet_meshes(fixture, spec, height)
+        closet = ctx.element('IfcFurniture', f"{fixture['id']}-closet", 'USERDEFINED')
+        closet.ObjectType = 'closet'
+        ifcopenshell.api.geometry.assign_representation(
+            ctx.model, product=closet, representation=ctx.builder.get_representation(ctx.body, [ctx.builder.polygonal_face_set(points, faces)]))
+        ifcopenshell.api.spatial.assign_container(ctx.model, products=[closet], relating_structure=storey)
+        ifcopenshell.api.material.assign_material(ctx.model, products=[closet], material=ctx.material(spec['materials']['body']))
+        ctx.pset(closet, 'HDT_Provenance', {'FactId': fixture['id'], 'Space': fixture['space'], 'Footprint': fixture['source'],
+                                            'Front': spec['applies_to']['source'], 'Width': fixture['width'], 'Depth': fixture['depth']})
+        handles = ctx.element('IfcDiscreteAccessory', f"{fixture['id']}-jaladeras")
+        handles.ObjectType = 'jaladeras'
+        ifcopenshell.api.geometry.assign_representation(
+            ctx.model, product=handles, representation=ctx.builder.get_representation(ctx.body, [ctx.builder.polygonal_face_set(hpoints, hfaces)]))
+        ifcopenshell.api.aggregate.assign_object(ctx.model, products=[handles], relating_object=closet)
+        ifcopenshell.api.material.assign_material(ctx.model, products=[handles], material=ctx.material(spec['handles']['material']))
+
+
 def _add_spaces(ctx: _IfcContext, facts, storey, height):
     spaces = []
     for s in facts['spaces']:
@@ -245,7 +271,8 @@ def _stabilize_guids(model: ifcopenshell.file):
         entity.GlobalId = ifcopenshell.guid.compress(uuid.uuid5(GUID_NAMESPACE, key).hex)
 
 
-def build_ifc(facts: dict, finishes: Finishes | None = None, hardware: list[dict] | None = None) -> ifcopenshell.file:
+def build_ifc(facts: dict, finishes: Finishes | None = None, hardware: list[dict] | None = None,
+              furniture: list[dict] | None = None) -> ifcopenshell.file:
     ctx = _IfcContext(facts['name'])
     site = ctx.element('IfcSite', 'Terreno')
     building = ctx.element('IfcBuilding', 'Casa')
@@ -258,6 +285,7 @@ def build_ifc(facts: dict, finishes: Finishes | None = None, hardware: list[dict
     walls = _add_walls(ctx, facts, storey, height)
     for o in facts['openings']:
         _add_opening(ctx, o, walls, storey, finishes, hardware, facts['spaces'])
+    _add_furniture(ctx, facts, storey, height, furniture or [])
     _add_spaces(ctx, facts, storey, height)
     if finishes:
         _add_floor_finishes(ctx, facts, storey, finishes)

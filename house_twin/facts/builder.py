@@ -1,3 +1,4 @@
+import math
 """Ensambla `house.facts.json`: la fuente de verdad geométrica de la casa.
 
 Regla del modelo: los hechos vienen del plano (o del usuario) y declaran su fuente;
@@ -6,7 +7,7 @@ lo que el plano no dice queda en `null` y se lista en `unknowns`. Nada se supone
 import re
 from datetime import date
 
-from shapely.geometry import Point, Polygon
+from shapely.geometry import LineString, Point, Polygon
 
 from house_twin.drawing import Drawing
 from house_twin.facts.annotations import (SpacePiece, merge_spaces, owner_measurements, owner_openings, rename_spaces,
@@ -115,6 +116,45 @@ def _relate_openings(openings, walls, spaces):
         hosts = sorted(wall_geoms, key=lambda wg: -wg[1].intersection(rect.buffer(TOUCH)).area)
         o['host_wall'] = hosts[0][0]['id'] if hosts and hosts[0][1].intersects(rect.buffer(TOUCH)) else None
         o['connects'] = _touching(rect, space_geoms)
+
+
+CLOSET_MAX_DEPTH_M = 1.0  # del frente dibujado al muro: más que esto no es el fondo de un closet
+
+
+def _closets(drawing, spaces) -> list[dict]:
+    """Closets del plano: en un espacio rotulado CLOSET, la línea más larga de muebles fijos es el frente y el
+    closet llega de ahí al muro más cercano (el borde del espacio)."""
+    fronts = drawing.segments_for('fixed_furniture')
+    result = []
+    for s in spaces:
+        if 'Closet' not in s['contains']:
+            continue
+        poly = Polygon(s['polygon'])
+        inside = [seg for seg in fronts if poly.buffer(0.01).contains(LineString(seg))]
+        if not inside:
+            continue
+        (x0, y0), (x1, y1) = max(inside, key=lambda seg: LineString(seg).length)
+        length = math.hypot(x1 - x0, y1 - y0)
+        n = (-(y1 - y0) / length, (x1 - x0) / length)
+        mid = ((x0 + x1) / 2, (y0 + y1) / 2)
+        depths = []
+        for sign in (1, -1):
+            ray = LineString([mid, (mid[0] + sign * n[0] * CLOSET_MAX_DEPTH_M, mid[1] + sign * n[1] * CLOSET_MAX_DEPTH_M)])
+            hit = ray.intersection(poly.exterior)
+            if not hit.is_empty:
+                depths.append((Point(mid).distance(hit), sign))
+        if not depths:
+            continue
+        depth, sign = min(depths)
+        back = [(x + sign * n[0] * depth, y + sign * n[1] * depth) for x, y in ((x0, y0), (x1, y1))]
+        result.append({'id': f'F{len(result) + 1:02d}', 'kind': 'closet', 'space': s['id'],
+                       'front': [[round(x0, 3), round(y0, 3)], [round(x1, 3), round(y1, 3)]],
+                       'faces_toward': [round(-sign * n[0], 3), round(-sign * n[1], 3)],
+                       'width': round(length, 3), 'depth': round(depth, 3),
+                       'footprint': [[round(x0, 3), round(y0, 3)], [round(x1, 3), round(y1, 3)],
+                                     [round(back[1][0], 3), round(back[1][1], 3)], [round(back[0][0], 3), round(back[0][1], 3)]],
+                       'source': 'plano: rótulo CLOSET y frente en la capa de muebles fijos; fondo hasta el muro'})
+    return result
 
 
 SWING_MATCH_M = 0.05  # la bisagra del bloque de puerta cae en el vano (o a pocos cm)
@@ -242,7 +282,7 @@ def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
                  'area': round(faces.lot.area, 2), 'labeled_dimensions': [10.00, 21.25]},
         'source_warnings': [w for w in [drawing.metadata.get('units_warning')] if w],
         'levels': [{'id': 'L0', 'name': 'Planta baja', 'elevation': 0.0, 'storey_height': dict(UNKNOWN)}],
-        'spaces': spaces, 'walls': walls, 'openings': openings,
+        'spaces': spaces, 'walls': walls, 'openings': openings, 'fixtures': _closets(drawing, spaces),
         'adjacency': _adjacency(walls, spaces, openings),
         'measurements': owner_measurements(walls, annotations),
         **_unknowns(annotations),

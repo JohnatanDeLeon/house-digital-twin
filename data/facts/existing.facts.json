@@ -3953,6 +3953,128 @@
    "id": "V10"
   }
  ],
+ "fixtures": [
+  {
+   "id": "F01",
+   "kind": "closet",
+   "space": "S02",
+   "front": [
+    [
+     6.42,
+     13.105
+    ],
+    [
+     6.42,
+     16.055
+    ]
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "width": 2.95,
+   "depth": 0.6,
+   "footprint": [
+    [
+     6.42,
+     13.105
+    ],
+    [
+     6.42,
+     16.055
+    ],
+    [
+     5.82,
+     16.055
+    ],
+    [
+     5.82,
+     13.105
+    ]
+   ],
+   "source": "plano: rótulo CLOSET y frente en la capa de muebles fijos; fondo hasta el muro"
+  },
+  {
+   "id": "F02",
+   "kind": "closet",
+   "space": "S03",
+   "front": [
+    [
+     5.02,
+     16.775
+    ],
+    [
+     5.02,
+     13.865
+    ]
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "width": 2.91,
+   "depth": 0.6,
+   "footprint": [
+    [
+     5.02,
+     16.775
+    ],
+    [
+     5.02,
+     13.865
+    ],
+    [
+     5.62,
+     13.865
+    ],
+    [
+     5.62,
+     16.775
+    ]
+   ],
+   "source": "plano: rótulo CLOSET y frente en la capa de muebles fijos; fondo hasta el muro"
+  },
+  {
+   "id": "F03",
+   "kind": "closet",
+   "space": "S04",
+   "front": [
+    [
+     6.39,
+     8.14
+    ],
+    [
+     6.39,
+     10.82
+    ]
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "width": 2.68,
+   "depth": 0.6,
+   "footprint": [
+    [
+     6.39,
+     8.14
+    ],
+    [
+     6.39,
+     10.82
+    ],
+    [
+     5.79,
+     10.82
+    ],
+    [
+     5.79,
+     8.14
+    ]
+   ],
+   "source": "plano: rótulo CLOSET y frente en la capa de muebles fijos; fondo hasta el muro"
+  }
+ ],
  "adjacency": [
   {
    "spaces": [

@@ -20,7 +20,6 @@ ARGS = sys.argv[sys.argv.index('--') + 1:]
 ROOT = Path(ARGS[0])
 sys.path.insert(0, str(ROOT))
 from house_twin.finishes import Finishes, _inside, load_materials  # noqa: E402  (necesita la raíz en sys.path)
-from house_twin.hardware import load_hardware  # noqa: E402
 from house_twin.sunlight import sun_direction  # noqa: E402
 
 TEXTURES = ROOT / 'assets' / 'textures'
@@ -273,11 +272,11 @@ class Scene:
         axis = Vector((hx - lx, hy - ly, 0)).normalized()
         return axis if side == 'left' else -axis
 
-    def accessory(self, obj, hardware):
-        """Herraje (chapa): material de su especificación y sombreado suave salvo en los filos."""
-        name = obj.name.split('/')[-1].split('-', 1)[-1]
-        spec = next((h for h in hardware if h['name'] == name), None)
-        self._set(obj, [spec['material'] if spec else 'sin-dato'] * len(obj.data.polygons))
+    def accessory(self, obj):
+        """Herraje o mueble: el material que le da el IFC y sombreado suave salvo en los filos."""
+        material = _ifc_material(obj)
+        write_uvs(obj)  # melamina: veta en metros del mundo, como los muros
+        self._set(obj, [material if material in self.specs else 'sin-dato'] * len(obj.data.polygons))
         obj.data.shade_smooth()
         obj.data.set_sharp_from_angle(angle=math.radians(35))
 
@@ -306,6 +305,15 @@ class Scene:
         self._set(obj, [parts.get('leaf', 'sin-dato')] * len(obj.data.polygons))
 
 
+def _ifc_material(obj):
+    """Nombre del IfcMaterial del objeto (el de su textura en `assets/textures/`)."""
+    import bonsai.tool as tool
+    import ifcopenshell.util.element as ue
+    entity = tool.Ifc.get_entity(obj)
+    material = ue.get_material(entity) if entity else None
+    return material.Name if material else None
+
+
 def _ifc_name(obj):
     ifc_class, _, name = obj.name.partition('/')
     return ifc_class, name
@@ -318,7 +326,6 @@ def apply_finishes(ifc_path):
     facts = json.loads(FACTS.read_text())
     specs = load_materials(TEXTURES)
     scene = Scene(Finishes(facts, specs), specs, facts['spaces'], {o['id']: o for o in facts['openings']})
-    hardware = load_hardware()
     for obj in [o for o in bpy.data.objects if o.type == 'MESH']:
         ifc_class, name = _ifc_name(obj)
         if obj.data.users > 1:
@@ -329,8 +336,8 @@ def apply_finishes(ifc_path):
             scene.floor(obj, name.removesuffix('-piso'))
         elif ifc_class in ('IfcDoor', 'IfcWindow'):
             scene.opening(obj, name)
-        elif ifc_class == 'IfcDiscreteAccessory':
-            scene.accessory(obj, hardware)
+        elif ifc_class in ('IfcDiscreteAccessory', 'IfcFurniture'):
+            scene.accessory(obj)
         elif ifc_class in ('IfcSpace', 'IfcOpeningElement'):
             obj.hide_render = obj.hide_viewport = True
     return scene

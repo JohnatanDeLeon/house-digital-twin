@@ -300,7 +300,7 @@ async function loadHouse() {
     obj.castShadow = tag.hdt_kind !== 'IfcWindow';
     if (obj.material.userData.depth) obj.customDepthMaterial = obj.material.userData.depth;
     obj.receiveShadow = true;
-    if (tag.hdt_kind === 'IfcWall' || tag.hdt_kind === 'IfcWindow') colliders.push(obj);
+    if (['IfcWall', 'IfcWindow', 'IfcFurniture'].includes(tag.hdt_kind)) colliders.push(obj);
   });
   scene.add(gltf.scene);
   tour.sort((a, b) => a.label.localeCompare(b.label, 'es', { numeric: true }));
