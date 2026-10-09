@@ -1,0 +1,23 @@
+{
+ "_doc": "hierro pintado de negro de los postes y el bastidor de la cama. Supuesto o tono de la foto, sin referencia confiable. Regenerar con: python -m house_twin.cli texture sources/texturas/hierro-negro.json",
+ "name": "hierro-negro",
+ "kind": "constant",
+ "applies_to": {
+  "furniture": "cama",
+  "source": "fotos de la recámara mayor (dueño, 2026-10-09)"
+ },
+ "photo": "sources/fotos/rec-cama-frente.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   20,
+   20,
+   22
+  ],
+  "metallic": 0.3,
+  "roughness": 0.4,
+  "note": "hierro pintado de negro de los postes y el bastidor de la cama"
+ },
+ "assumptions": [
+  "color y acabado aproximados"
+ ]
+}

@@ -1,0 +1,23 @@
+{
+ "_doc": "latón pulido de la cama (barrotes, perillas y arillos); reflectancia de tabla del latón. Supuesto o tono de la foto, sin referencia confiable. Regenerar con: python -m house_twin.cli texture sources/texturas/laton-pulido.json",
+ "name": "laton-pulido",
+ "kind": "constant",
+ "applies_to": {
+  "furniture": "cama",
+  "source": "fotos de la recámara mayor (dueño, 2026-10-09)"
+ },
+ "photo": "sources/fotos/rec-cama-frente.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   222,
+   184,
+   110
+  ],
+  "metallic": 1.0,
+  "roughness": 0.18,
+  "note": "latón pulido de la cama (barrotes, perillas y arillos); reflectancia de tabla del latón"
+ },
+ "assumptions": [
+  "color y acabado aproximados"
+ ]
+}

@@ -402,6 +402,20 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
   - **Plano:** el bloque `COMEDOOR` del plano la pone en otro lugar (x = 3.55–6.03, y = 4.41–6.24); manda la foto.
 - **Pendiente:** la mesa de centro de vidrio, las cortinas grises de la entrada y de las ventanas, el perchero de la entrada y el contacto bajo la TV (no está en el plano).
 
+### 26. Recámara mayor: closet abierto, cama, buros, escritorio y televisión (2026-10-09)
+
+- **Qué cuarto es:** el dueño la llama «recámara 2», pero por las fotos es la que el plano rotula RECAMARA 1 (S02): tiene 2 ventanas al patio (V06 y V07) detrás de la cabecera y el closet junto a la puerta. En el modelo, S03 (la del closet de 4 módulos con puertas) sigue siendo «Recámara 2». **Falta confirmarlo con el dueño.**
+- **Closet abierto** (`pino-closet`): ocupa todo el frente del plano (F01, 2.95 m) y no tiene puertas, lo que confirma la nota de que «R1 no tiene puertas».
+  - **Medidas:** con el frente del plano, la foto da ≈ 800 px/m. De ahí salen la cajonera de 5 cajones con 2 repisas, un colgador doble, una torre de 7 repisas, un colgador abierto y el entrepaño corrido a 1.90 m (± 3 cm).
+  - **Textura:** la cara de un cajón, rectificada. Medida contra el pilar pintado.
+- **Cama de latón:** la cabecera va contra el muro del patio, entre las ventanas (centro x ≈ 8.20 m).
+  - **Forma:** postes negros con perillas y anillos de latón; barrotes, travesaños y arillos de latón.
+  - **Supuestos:** el tamaño matrimonial (1.37 × 1.90 m) y las alturas comunes.
+- **Buros:** 2, negros, de 2 cajones con jaladeras de latón, a los lados de la cabecera (medidas comunes).
+- **Escritorio:** en la esquina del muro de la TV con el muro oriente, con pedestal blanco (1.20 × 0.60 m, supuesto).
+- **Televisión:** ≈ **85" (estimada)**, porque en la foto ocupa 1.10 m de alto sobre el muro de 2.60 m. Va centrada en el muro de la puerta, con el borde de arriba a ≈ 2.50 m.
+- **Sin modelar:** la ropa, los peluches, el minisplit, el telescopio, la silla, el póster y las cortinas negras.
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.

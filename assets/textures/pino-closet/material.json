@@ -1,0 +1,62 @@
+{
+ "name": "pino-closet",
+ "applies_to": {
+  "furniture": "closet abierto de la recámara mayor",
+  "source": "foto del closet (dueño, 2026-10-09)"
+ },
+ "size_m": {
+  "width": 0.54,
+  "height": 0.16,
+  "source": "el frente del closet (2.95 m del plano) da ≈ 800 px/m en la foto"
+ },
+ "px_per_m": 1500,
+ "size_px": [
+  810,
+  240
+ ],
+ "tileable": true,
+ "grid": null,
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)"
+ },
+ "glass_material": null,
+ "latch_side": null,
+ "source": {
+  "photo": "sources/fotos/rec-closet.jpg",
+  "photo_meta": {
+   "camera": "Samsung Galaxy S25 Ultra",
+   "focal_35mm": 13,
+   "light": "luz de día y foco"
+  },
+  "color": {
+   "white_reference": {
+    "box_px": [
+     830,
+     1300,
+     960,
+     2000
+    ],
+    "albedo_srgb": [
+     235,
+     235,
+     233
+    ],
+    "note": "pilar pintado junto al closet, en el mismo plano y con la misma luz"
+   }
+  },
+  "white_balance_gain": [
+   1.5399,
+   1.6325,
+   1.7853
+  ]
+ },
+ "observed": {
+  "finish": "pino macizo con barniz miel, cantos despostillados y manchas de pintura blanca",
+  "composition": "cajonera de 5 cajones con repisas, colgador doble, torre de repisas y colgador abierto; entrepaño corrido arriba"
+ },
+ "assumptions": [
+  "el pilar pintado como blanco (235)"
+ ]
+}

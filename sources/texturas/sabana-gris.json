@@ -1,0 +1,23 @@
+{
+ "_doc": "sábana gris oscura sobre el colchón; tono de la foto. Supuesto o tono de la foto, sin referencia confiable. Regenerar con: python -m house_twin.cli texture sources/texturas/sabana-gris.json",
+ "name": "sabana-gris",
+ "kind": "constant",
+ "applies_to": {
+  "furniture": "cama",
+  "source": "fotos de la recámara mayor (dueño, 2026-10-09)"
+ },
+ "photo": "sources/fotos/rec-cama-frente.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   92,
+   97,
+   103
+  ],
+  "metallic": 0.0,
+  "roughness": 0.95,
+  "note": "sábana gris oscura sobre el colchón; tono de la foto"
+ },
+ "assumptions": [
+  "color y acabado aproximados"
+ ]
+}

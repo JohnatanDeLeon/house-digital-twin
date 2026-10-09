@@ -1,0 +1,23 @@
+{
+ "_doc": "buros de madera pintada de negro con jaladeras de latón. Supuesto o tono de la foto, sin referencia confiable. Regenerar con: python -m house_twin.cli texture sources/texturas/madera-negra.json",
+ "name": "madera-negra",
+ "kind": "constant",
+ "applies_to": {
+  "furniture": "buros",
+  "source": "fotos de la recámara mayor (dueño, 2026-10-09)"
+ },
+ "photo": "sources/fotos/rec-cama-frente.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   26,
+   25,
+   27
+  ],
+  "metallic": 0.0,
+  "roughness": 0.35,
+  "note": "buros de madera pintada de negro con jaladeras de latón"
+ },
+ "assumptions": [
+  "color y acabado aproximados"
+ ]
+}
