@@ -153,7 +153,7 @@
  },
  "tv": {
   "id": "recamara-tv",
-  "diagonal_in": 85,
+  "diagonal_in": 75,
   "aspect": [
    16,
    9
@@ -175,15 +175,14 @@
    ]
   },
   "u_centre": 2.06,
-  "z_bottom": 1.44,
-  "size_source": "estimado con la foto: la TV ocupa 1.10 m de alto sobre el muro de 2.60 m (con la fuga de las verticales) → ≈ 85\" (pendiente de confirmar)",
-  "position_source": "foto frente a la TV: centrada en el muro de la puerta (x ≈ 7.85 m), con el borde de arriba a ≈ 2.50 m",
+  "z_bottom": 1.5,
+  "size_source": "dueño (2026-10-09): 75 pulgadas → pantalla de 1.66 × 0.93 m (la foto había hecho estimar 85\")",
+  "position_source": "foto frente a la TV: centrada en el muro de la puerta (x ≈ 7.85 m), con el centro a ≈ 1.97 m del piso (el mismo que en la estimación)",
   "screen_material": "pantalla-tv",
   "body_material": "plastico-negro"
  },
  "assumptions": [
   "cama matrimonial de 1.37 × 1.90 m",
-  "TV de 85\" (estimada)",
   "buros y escritorio con medidas comunes",
   "no se modelan la ropa, los peluches, el minisplit, el telescopio, la silla ni el póster"
  ]

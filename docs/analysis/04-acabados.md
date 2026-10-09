@@ -413,7 +413,7 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
   - **Supuestos:** el tamaño matrimonial (1.37 × 1.90 m) y las alturas comunes.
 - **Buros:** 2, negros, de 2 cajones con jaladeras de latón, a los lados de la cabecera (medidas comunes).
 - **Escritorio:** en la esquina del muro de la TV con el muro oriente, con pedestal blanco (1.20 × 0.60 m, supuesto).
-- **Televisión:** ≈ **85" (estimada)**, porque en la foto ocupa 1.10 m de alto sobre el muro de 2.60 m. Va centrada en el muro de la puerta, con el borde de arriba a ≈ 2.50 m.
+- **Televisión (dato del dueño: 75")**: pantalla de 1.66 × 0.93 m, centrada en el muro de la puerta, con el centro a ≈ 1.97 m del piso. La foto había hecho estimar 85" por la perspectiva del gran angular.
 - **Sin modelar:** la ropa, los peluches, el minisplit, el telescopio, la silla, el póster y las cortinas negras.
 
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
