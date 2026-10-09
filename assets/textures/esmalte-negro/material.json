@@ -1,0 +1,29 @@
+{
+ "name": "esmalte-negro",
+ "applies_to": {
+  "appliance": "estufa y zoclo",
+  "source": "fotos de la cocina (dueño, 2026-10-09)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   24,
+   24,
+   26
+  ],
+  "metallic": 0.0,
+  "roughness": 0.3,
+  "note": "esmalte negro de la estufa y zoclo negro de los muebles"
+ },
+ "source": {
+  "photo": "sources/fotos/cocina-frente.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color y acabado: negro común de ese material"
+ ]
+}

@@ -1,0 +1,63 @@
+{
+ "name": "laminado-cubierta",
+ "applies_to": {
+  "furniture": "cubiertas de la cocina (barra y mueble junto al refrigerador)",
+  "source": "fotos de la cocina (dueño, 2026-10-09)"
+ },
+ "size_m": {
+  "width": 0.24,
+  "height": 0.43,
+  "source": "lo que dan los trozos a 5800 px/m (4 hileras), menos los empalmes"
+ },
+ "px_per_m": 2400,
+ "size_px": [
+  576,
+  1032
+ ],
+ "tileable": true,
+ "grid": null,
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)"
+ },
+ "glass_material": null,
+ "latch_side": null,
+ "source": {
+  "photo": "sources/fotos/cocina-cubierta.jpg",
+  "photo_meta": {
+   "taken": "2026-10-09T13:12:33",
+   "camera": "Samsung Galaxy S25 Ultra",
+   "focal_35mm": 23,
+   "light": "luz de día de la ventana, que se refleja en la cubierta"
+  },
+  "color": {
+   "gain": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "mean_srgb": [
+    74,
+    74,
+    77
+   ],
+   "note": "tono como lo registró la cámara (gris neutro). Luminosidad: la franja sin reflejo de esta foto contra la puerta del mueble de la otra foto, tomada 16 s después con la misma luz (cubierta ≈ 0.45 de la melamina en lineal); estimación"
+  },
+  "white_balance_gain": [
+   0.7337,
+   0.7337,
+   0.7337
+  ]
+ },
+ "observed": {
+  "finish": "laminado plástico negro carbón con fibras grises finas a lo largo de la cubierta, brillante, con rayones finos",
+  "profile": "postformado: canto frontal redondeado y zoclo curvo contra el muro (≈ 8 cm)",
+  "reflections": "la ventana y la silueta del dueño se reflejan en casi toda la foto; no van en la textura"
+ },
+ "assumptions": [
+  "escala de la foto (≈ 5800 px/m)",
+  "luminosidad, relativa a la melamina",
+  "rugosidad"
+ ]
+}

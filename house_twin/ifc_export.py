@@ -27,6 +27,7 @@ from house_twin.electrical import device_height, device_mesh
 from house_twin.finishes import Finishes
 from house_twin.furniture import closet_meshes
 from house_twin.hardware import for_leaf, knob_mesh, placements
+from house_twin.kitchen import kitchen_parts
 from house_twin.lighting import luminaire_meshes
 from house_twin.plumbing import (faucet_mesh, lever_mesh, material_of, sanitary_mesh, shower_mesh, spec_for,
                                  valve_meshes)
@@ -359,6 +360,24 @@ def _add_sanitary(ctx: _IfcContext, facts, storey, specs):
                                                  'Position': fixture['source'], 'Shape': source})
 
 
+def _add_kitchen(ctx: _IfcContext, storey, spec):
+    """Cocineta: muebles (IfcFurniture), estufa y refrigerador (IfcElectricAppliance), tarja (IfcSanitaryTerminal),
+    llave (IfcValve) y jaladeras (IfcDiscreteAccessory), con la fuente de sus medidas."""
+    if not spec:
+        return
+    for part in kitchen_parts(spec):
+        element = ctx.element(part['ifc'], part['id'], part['type'])
+        if part['type'] == 'USERDEFINED':
+            element.ObjectType = part.get('object_type') or 'mueble de cocina'
+        points, faces = part['mesh']
+        ifcopenshell.api.geometry.assign_representation(
+            ctx.model, product=element, representation=ctx.builder.get_representation(ctx.body, [ctx.builder.polygonal_face_set(points, faces)]))
+        ifcopenshell.api.spatial.assign_container(ctx.model, products=[element], relating_structure=storey)
+        ifcopenshell.api.material.assign_material(ctx.model, products=[element], material=ctx.material(part['material']))
+        ctx.pset(element, 'HDT_Provenance', {'Space': spec['applies_to']['space'], 'Source': spec['applies_to']['source'],
+                                             'Measures': part.get('source') or spec['measure_source']})
+
+
 def _add_spaces(ctx: _IfcContext, facts, storey, height):
     spaces = []
     for s in facts['spaces']:
@@ -435,7 +454,8 @@ def _stabilize_guids(model: ifcopenshell.file):
 
 def build_ifc(facts: dict, finishes: Finishes | None = None, hardware: list[dict] | None = None,
               furniture: list[dict] | None = None, luminaires: list[dict] | None = None,
-              devices: dict | None = None, shower: dict | None = None, sanitary: list[dict] | None = None) -> ifcopenshell.file:
+              devices: dict | None = None, shower: dict | None = None, sanitary: list[dict] | None = None,
+              kitchen: dict | None = None) -> ifcopenshell.file:
     ctx = _IfcContext(facts['name'])
     site = ctx.element('IfcSite', 'Terreno')
     building = ctx.element('IfcBuilding', 'Casa')
@@ -455,6 +475,7 @@ def build_ifc(facts: dict, finishes: Finishes | None = None, hardware: list[dict
     _add_devices(ctx, facts, storey, devices)
     _add_shower_fittings(ctx, facts, storey, shower)
     _add_sanitary(ctx, facts, storey, sanitary)
+    _add_kitchen(ctx, storey, kitchen)
     _add_spaces(ctx, facts, storey, height)
     if finishes:
         _add_floor_finishes(ctx, facts, storey, finishes)

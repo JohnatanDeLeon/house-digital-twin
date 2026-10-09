@@ -1,0 +1,418 @@
+{
+ "_doc": "Cocineta: muebles bajos y altos, cubiertas, tarja, estufa y refrigerador. Cada tramo va contra un muro: `origin` es la esquina, `along` la dirección del muro y `into_room` hacia el cuarto; las posiciones `u` van en m a lo largo del muro desde la esquina, `z` desde el piso y la profundidad desde el muro. `build` lo genera en el IFC (IfcFurniture, IfcElectricAppliance, IfcSanitaryTerminal).",
+ "applies_to": {
+  "space": "S01",
+  "source": "fotos de la cocina (dueño, 2026-10-09)"
+ },
+ "measure_source": "foto de frente de la barra (2026-10-09 13:13:13, 23 mm): la barra va de muro a muro en el nicho de 2.85 m del plano (x = 1.375–4.225 m) y la estufa mide 0.78 m en la foto (estufa de 30\" ≈ 0.76 m), lo que confirma la escala; las alturas salen de la misma foto con la cámara a ≈ 1.10 m (cubierta 0.89–0.90, muebles altos de 1.54 a 2.35 m). Profundidades y espesores: medidas comunes (supuesto)",
+ "materials": {
+  "body": "melamina-cocina",
+  "counter": "laminado-cubierta",
+  "plinth": "esmalte-negro",
+  "handles": "acero-inoxidable"
+ },
+ "gap_m": 0.003,
+ "front_thickness_m": 0.018,
+ "handle": {
+  "length_m": 0.128,
+  "radius_m": 0.006,
+  "standoff_m": 0.03,
+  "post_radius_m": 0.005
+ },
+ "runs": [
+  {
+   "id": "barra",
+   "note": "barra contra el muro norte de la cocina, de muro a muro: tarja, estufa y 2 muebles con cajón",
+   "origin": [
+    1.375,
+    10.055
+   ],
+   "along": [
+    1,
+    0
+   ],
+   "into_room": [
+    0,
+    -1
+   ],
+   "base": {
+    "depth_m": 0.56,
+    "plinth_m": 0.1,
+    "plinth_setback_m": 0.05,
+    "top_m": 0.86,
+    "modules": [
+     {
+      "u": [
+       0.0,
+       1.065
+      ],
+      "fronts": [
+       {
+        "u": [
+         0.025,
+         1.065
+        ],
+        "z": [
+         0.665,
+         0.845
+        ],
+        "kind": "panel",
+        "note": "frente falso de la tarja"
+       },
+       {
+        "u": [
+         0.025,
+         0.365
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "right"
+       },
+       {
+        "u": [
+         0.365,
+         0.725
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "left"
+       },
+       {
+        "u": [
+         0.725,
+         1.065
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "left"
+       }
+      ]
+     },
+     {
+      "u": [
+       1.845,
+       2.335
+      ],
+      "fronts": [
+       {
+        "u": [
+         1.845,
+         2.335
+        ],
+        "z": [
+         0.665,
+         0.845
+        ],
+        "kind": "drawer"
+       },
+       {
+        "u": [
+         1.845,
+         2.09
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "right"
+       },
+       {
+        "u": [
+         2.09,
+         2.335
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "left"
+       }
+      ]
+     },
+     {
+      "u": [
+       2.335,
+       2.85
+      ],
+      "fronts": [
+       {
+        "u": [
+         2.335,
+         2.825
+        ],
+        "z": [
+         0.665,
+         0.845
+        ],
+        "kind": "drawer"
+       },
+       {
+        "u": [
+         2.335,
+         2.58
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "right"
+       },
+       {
+        "u": [
+         2.58,
+         2.825
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "left"
+       },
+       {
+        "u": [
+         2.825,
+         2.85
+        ],
+        "z": [
+         0.1,
+         0.845
+        ],
+        "kind": "panel",
+        "note": "relleno contra el muro"
+       }
+      ]
+     }
+    ]
+   },
+   "counters": [
+    {
+     "u": [
+      0.0,
+      1.065
+     ]
+    },
+    {
+     "u": [
+      1.845,
+      2.85
+     ]
+    }
+   ],
+   "counter": {
+    "z": [
+     0.86,
+     0.9
+    ],
+    "depth_m": 0.6,
+    "backsplash_m": [
+     0.08,
+     0.012
+    ]
+   },
+   "sink": {
+    "u_centre": 0.595,
+    "size_m": [
+     0.55,
+     0.42
+    ],
+    "from_wall_m": 0.07,
+    "faucet": {
+     "from_wall_m": 0.05,
+     "height_m": 0.38,
+     "reach_m": 0.2,
+     "radius_m": 0.013
+    }
+   },
+   "uppers": {
+    "depth_m": 0.33,
+    "modules": [
+     {
+      "u": [
+       0.475,
+       1.075
+      ],
+      "z": [
+       1.54,
+       2.35
+      ],
+      "doors": 2
+     },
+     {
+      "u": [
+       1.075,
+       1.855
+      ],
+      "z": [
+       1.72,
+       2.35
+      ],
+      "doors": 2,
+      "note": "sobre la estufa, más corto"
+     },
+     {
+      "u": [
+       1.855,
+       2.635
+      ],
+      "z": [
+       1.54,
+       2.35
+      ],
+      "doors": 2
+     }
+    ]
+   },
+   "appliances": [
+    {
+     "id": "estufa",
+     "kind": "stove",
+     "u": [
+      1.075,
+      1.835
+     ],
+     "depth_m": 0.64,
+     "height_m": 0.9,
+     "grates_m": 0.03,
+     "material": "esmalte-negro",
+     "source": "foto: estufa Mabe de 30\" de 4 quemadores y comal; medidas comunes"
+    }
+   ]
+  },
+  {
+   "id": "refrigerador",
+   "note": "muro oeste, entre la esquina y la puerta al pasillo: mueble chico con cajón y refrigerador, con alacena encima",
+   "origin": [
+    1.375,
+    6.875
+   ],
+   "along": [
+    0,
+    1
+   ],
+   "into_room": [
+    1,
+    0
+   ],
+   "base": {
+    "depth_m": 0.56,
+    "plinth_m": 0.1,
+    "plinth_setback_m": 0.05,
+    "top_m": 0.86,
+    "modules": [
+     {
+      "u": [
+       0.0,
+       0.6
+      ],
+      "fronts": [
+       {
+        "u": [
+         0.0,
+         0.6
+        ],
+        "z": [
+         0.665,
+         0.845
+        ],
+        "kind": "drawer"
+       },
+       {
+        "u": [
+         0.0,
+         0.3
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "right"
+       },
+       {
+        "u": [
+         0.3,
+         0.6
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "left"
+       }
+      ]
+     }
+    ]
+   },
+   "counters": [
+    {
+     "u": [
+      0.0,
+      0.6
+     ]
+    }
+   ],
+   "counter": {
+    "z": [
+     0.86,
+     0.9
+    ],
+    "depth_m": 0.6,
+    "backsplash_m": [
+     0.0,
+     0.0
+    ]
+   },
+   "uppers": {
+    "depth_m": 0.36,
+    "modules": [
+     {
+      "u": [
+       0.62,
+       1.34
+      ],
+      "z": [
+       1.82,
+       2.35
+      ],
+      "doors": 2,
+      "note": "alacena sobre el refrigerador"
+     }
+    ]
+   },
+   "appliances": [
+    {
+     "id": "refrigerador",
+     "kind": "fridge",
+     "u": [
+      0.63,
+      1.33
+     ],
+     "depth_m": 0.7,
+     "height_m": 1.75,
+     "material": "acero-negro",
+     "source": "foto: refrigerador Mabe de 2 puertas, negro; medidas comunes"
+    }
+   ]
+  }
+ ],
+ "assumptions": [
+  "profundidades (bajos 0.56 + frente, cubierta 0.60, altos 0.33, alacena 0.36), zoclo de 0.10 m y espesores: medidas comunes",
+  "mueble chico junto al refrigerador de 0.60 m y refrigerador de 0.70 × 0.70 × 1.75 m: medidas comunes; la foto de conjunto es de gran angular y no da escala fiable",
+  "estufa de 0.76 × 0.64 × 0.90 m (30\"); tarja de 0.55 × 0.42 m",
+  "no se modelan el horno de microondas, la repisa, la freidora ni los objetos sueltos"
+ ]
+}

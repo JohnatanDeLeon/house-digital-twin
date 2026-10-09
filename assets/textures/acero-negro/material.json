@@ -1,0 +1,29 @@
+{
+ "name": "acero-negro",
+ "applies_to": {
+  "appliance": "refrigerador y llave de la tarja",
+  "source": "fotos de la cocina (dueño, 2026-10-09)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   46,
+   46,
+   49
+  ],
+  "metallic": 0.7,
+  "roughness": 0.32,
+  "note": "acero inoxidable negro cepillado del refrigerador y la llave de la tarja"
+ },
+ "source": {
+  "photo": "sources/fotos/cocina-frente.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color y acabado: negro común de ese material"
+ ]
+}

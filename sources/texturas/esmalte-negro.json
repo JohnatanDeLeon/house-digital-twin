@@ -1,0 +1,23 @@
+{
+ "_doc": "esmalte negro de la estufa y zoclo negro de los muebles. Supuesto: en las fotos se ve negro; sin referencia para medirlo. Regenerar con: python -m house_twin.cli texture sources/texturas/esmalte-negro.json",
+ "name": "esmalte-negro",
+ "kind": "constant",
+ "applies_to": {
+  "appliance": "estufa y zoclo",
+  "source": "fotos de la cocina (dueño, 2026-10-09)"
+ },
+ "photo": "sources/fotos/cocina-frente.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   24,
+   24,
+   26
+  ],
+  "metallic": 0.0,
+  "roughness": 0.3,
+  "note": "esmalte negro de la estufa y zoclo negro de los muebles"
+ },
+ "assumptions": [
+  "color y acabado: negro común de ese material"
+ ]
+}

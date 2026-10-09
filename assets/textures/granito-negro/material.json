@@ -1,0 +1,29 @@
+{
+ "name": "granito-negro",
+ "applies_to": {
+  "appliance": "tarja",
+  "source": "fotos de la cocina (dueño, 2026-10-09)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   26,
+   26,
+   28
+  ],
+  "metallic": 0.0,
+  "roughness": 0.45,
+  "note": "tarja de granito sintético negro"
+ },
+ "source": {
+  "photo": "sources/fotos/cocina-frente.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color y acabado: negro común de ese material"
+ ]
+}

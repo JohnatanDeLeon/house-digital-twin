@@ -402,7 +402,7 @@ def apply_finishes(ifc_path):
         elif ifc_class in ('IfcDoor', 'IfcWindow'):
             scene.opening(obj, name)
         elif ifc_class in ('IfcDiscreteAccessory', 'IfcFurniture', 'IfcOutlet', 'IfcSwitchingDevice', 'IfcValve',
-                           'IfcSanitaryTerminal'):
+                           'IfcSanitaryTerminal', 'IfcElectricAppliance'):
             scene.accessory(obj)
         elif ifc_class in ('IfcSpace', 'IfcOpeningElement'):
             obj.hide_render = obj.hide_viewport = True

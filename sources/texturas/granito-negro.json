@@ -1,0 +1,23 @@
+{
+ "_doc": "tarja de granito sintético negro. Supuesto: en las fotos se ve negro; sin referencia para medirlo. Regenerar con: python -m house_twin.cli texture sources/texturas/granito-negro.json",
+ "name": "granito-negro",
+ "kind": "constant",
+ "applies_to": {
+  "appliance": "tarja",
+  "source": "fotos de la cocina (dueño, 2026-10-09)"
+ },
+ "photo": "sources/fotos/cocina-frente.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   26,
+   26,
+   28
+  ],
+  "metallic": 0.0,
+  "roughness": 0.45,
+  "note": "tarja de granito sintético negro"
+ },
+ "assumptions": [
+  "color y acabado: negro común de ese material"
+ ]
+}
