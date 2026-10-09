@@ -1,0 +1,29 @@
+{
+ "name": "placa-negra",
+ "applies_to": {
+  "devices": "contactos y apagadores",
+  "source": "dueño (2026-10-09): placa negra"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   40,
+   41,
+   44
+  ],
+  "metallic": 0.0,
+  "roughness": 0.35,
+  "note": "negro satinado: en la foto la placa sale gris carbón (83, 93, 109 con el pilar como blanco) porque refleja la luz fría del foco; ese reflejo lo da el render"
+ },
+ "source": {
+  "photo": "sources/fotos/closet-recamara-3-cerca.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color base de un plástico negro satinado; no se puede medir sin separar el reflejo"
+ ]
+}

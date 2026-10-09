@@ -21,6 +21,7 @@ UNIT_GUESSES = ((6, 1, 100), (5, 100, 10_000), (4, 1_000, 100_000))
 PLAUSIBLE_HALF_EXTENT_M = (1.0, 100.0)  # mitad del lado mayor de una casa, en metros
 DOOR_BLOCK = 'PUERTA'  # bloque de puerta del CAD: su arco mayor es el abatimiento, con centro en la bisagra
 LIGHT_BLOCK = 'salidaaaaaaaaaa spot'  # salida de foco en el techo (capa 23- ILUMINACION): el centro de su círculo
+DEVICE_BLOCKS = {'CONTACTO': 'outlet', 'APAGADOR SIMPLE': 'switch'}  # en la capa 5 CORTES, pero dibujados en planta
 
 
 def _effective_layer(entity, parent_layer):
@@ -103,7 +104,32 @@ def load_dxf_drawing(dxf_path: str) -> Drawing:
     drawing.texts = [Text(layer, value, to_m(pos)) for layer, value, pos in raw_texts]
     drawing.metadata['door_swings'] = _door_swings(doc, to_m)
     drawing.metadata['ceiling_lights'] = _ceiling_lights(doc, to_m)
+    drawing.metadata['devices'] = _devices(doc, to_m)
     return drawing
+
+
+def _block_centre(block):
+    """Centro de un bloque: promedio de los centros de sus círculos y de los extremos de sus líneas."""
+    pts = []
+    for e in block:
+        if e.dxftype() in ('CIRCLE', 'ARC'):
+            pts.append((e.dxf.center.x, e.dxf.center.y))
+        elif e.dxftype() == 'LINE':
+            pts += [(e.dxf.start.x, e.dxf.start.y), (e.dxf.end.x, e.dxf.end.y)]
+    return (sum(x for x, _ in pts) / len(pts), sum(y for _, y in pts) / len(pts)) if pts else None
+
+
+def _devices(doc, to_m) -> list[dict]:
+    """Contactos y apagadores del CAD: tipo y centro de cada inserción, en metros del modelo."""
+    devices = []
+    for name, kind in DEVICE_BLOCKS.items():
+        centre = _block_centre(doc.blocks[name]) if name in doc.blocks else None
+        if centre is None:
+            continue
+        for ins in doc.modelspace().query(f'INSERT[name=="{name}"]'):
+            c = ins.matrix44().transform((*centre, 0))
+            devices.append({'kind': kind, 'position': list(to_m((c.x, c.y)))})
+    return devices
 
 
 def _ceiling_lights(doc, to_m) -> list[list[float]]:

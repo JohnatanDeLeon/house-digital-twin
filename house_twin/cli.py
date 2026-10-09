@@ -35,6 +35,7 @@ def _load_drawing(source: Path):
 
 def build(source: Path):
     from house_twin.facts.annotations import load_annotations
+    from house_twin.electrical import load_device_spec
     from house_twin.facts.builder import build_facts
     from house_twin.finishes import Finishes, load_materials
     from house_twin.ifc_export import build_ifc
@@ -50,8 +51,8 @@ def build(source: Path):
     IFC_PATH.parent.mkdir(parents=True, exist_ok=True)
     materials = load_materials(TEXTURES_DIR)
     finishes = Finishes(facts, materials)
-    hardware, furniture, luminaires = load_hardware(), load_furniture(), load_luminaires()
-    build_ifc(facts, finishes, hardware, furniture, luminaires).write(str(IFC_PATH))
+    hardware, furniture, luminaires, devices = load_hardware(), load_furniture(), load_luminaires(), load_device_spec()
+    build_ifc(facts, finishes, hardware, furniture, luminaires, devices).write(str(IFC_PATH))
     render_facts(facts, OVERLAY_PATH)
     render_viewer(facts, VIEWER_PATH)
     print(f"{len(facts['spaces'])} espacios, {len(facts['walls'])} muros, {len(facts['openings'])} vanos")
@@ -62,7 +63,7 @@ def build(source: Path):
             raise SystemExit('\n'.join(problems))
         path = VARIANTS_IFC_DIR / f"{variant['id']}.ifc"
         path.parent.mkdir(parents=True, exist_ok=True)
-        build_ifc(facts, apply_variant(finishes, variant, materials), hardware, furniture, luminaires).write(str(path))
+        build_ifc(facts, apply_variant(finishes, variant, materials), hardware, furniture, luminaires, devices).write(str(path))
         outputs.append(path)
     for path in outputs:
         print(f'→ {path.relative_to(ROOT)}')

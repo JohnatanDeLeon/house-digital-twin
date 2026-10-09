@@ -129,6 +129,38 @@ def _lights(drawing, spaces) -> list[dict]:
     return lights
 
 
+def _devices(drawing, spaces) -> list[dict]:
+    """Contactos y apagadores del plano, llevados a la cara de muro más cercana de su espacio.
+
+    Se guarda el punto sobre la cara y la normal hacia el cuarto; la altura no está en el plano.
+    """
+    geoms = [(s['id'], Polygon(s['polygon'])) for s in spaces]
+    result = []
+    for d in drawing.metadata.get('devices', []):
+        p = Point(d['position'])
+        space = next(((sid, g) for sid, g in geoms if g.contains(p)), None)
+        if space is None:
+            continue
+        sid, poly = space
+        ring = list(poly.exterior.coords)
+        edges = [LineString([a, b]) for a, b in zip(ring, ring[1:]) if a != b]
+        edge = min(edges, key=lambda e: e.distance(p))
+        on = edge.interpolate(edge.project(p))
+        (x0, y0), (x1, y1) = edge.coords
+        length = math.hypot(x1 - x0, y1 - y0)
+        n = (-(y1 - y0) / length, (x1 - x0) / length)
+        if not poly.contains(Point(on.x + n[0] * 0.05, on.y + n[1] * 0.05)):
+            n = (-n[0], -n[1])
+        prefix = 'C' if d['kind'] == 'outlet' else 'A'
+        count = sum(1 for r in result if r['kind'] == d['kind'])
+        result.append({'id': f'{prefix}{count + 1:02d}', 'kind': d['kind'], 'space': sid,
+                       'position': [round(on.x, 3), round(on.y, 3)], 'faces_toward': [round(n[0], 3), round(n[1], 3)],
+                       'from_plan_m': round(p.distance(on), 3),
+                       'height': {'value': None, 'source': 'no está en el plano (vista en planta)'},
+                       'source': 'plano: bloque ' + ('CONTACTO' if d['kind'] == 'outlet' else 'APAGADOR SIMPLE')})
+    return result
+
+
 def _interior_roofs(spaces, annotations):
     """Dato del dueño: los espacios interiores sin dato de techo están techados."""
     entry = annotations.get('interior_roofed')
@@ -306,7 +338,7 @@ def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
         'source_warnings': [w for w in [drawing.metadata.get('units_warning')] if w],
         'levels': [{'id': 'L0', 'name': 'Planta baja', 'elevation': 0.0, 'storey_height': dict(UNKNOWN)}],
         'spaces': spaces, 'walls': walls, 'openings': openings, 'fixtures': _closets(drawing, spaces),
-        'lights': _lights(drawing, spaces),
+        'lights': _lights(drawing, spaces), 'devices': _devices(drawing, spaces),
         'adjacency': _adjacency(walls, spaces, openings),
         'measurements': owner_measurements(walls, annotations),
         **_unknowns(annotations),

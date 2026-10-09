@@ -390,7 +390,7 @@ def apply_finishes(ifc_path):
             add_point_light(obj)
         elif ifc_class in ('IfcDoor', 'IfcWindow'):
             scene.opening(obj, name)
-        elif ifc_class in ('IfcDiscreteAccessory', 'IfcFurniture'):
+        elif ifc_class in ('IfcDiscreteAccessory', 'IfcFurniture', 'IfcOutlet', 'IfcSwitchingDevice'):
             scene.accessory(obj)
         elif ifc_class in ('IfcSpace', 'IfcOpeningElement'):
             obj.hide_render = obj.hide_viewport = True
