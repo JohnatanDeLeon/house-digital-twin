@@ -267,6 +267,19 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 - **IFC:** `IfcOutlet` (POWEROUTLET) e `IfcSwitchingDevice` (TOGGLESWITCH), con material `placa-negra` y la fuente de su altura en `HDT_Provenance`.
 - **Color:** negro satinado (supuesto). En la foto, la placa sale gris carbón por el reflejo del foco, y ese reflejo no se puede separar del color con una sola foto.
 
+### 20. Portón de la cochera (2026-10-09, foto 08:47:26)
+
+- **Dónde (dato del plano):** el plano dibuja el portón en la capa `PUERTAS`, pero con líneas sueltas y no con un bloque `PUERTA`; por eso no salía como vano. Son 2 hojas de 1.52 m con bisagras en la barda (x = 0.20 m) y en el muro del pórtico (x = 3.24 m), y abren hacia la cochera. Se agrega como D12 en `add_openings`, sin muro anfitrión, con `detected_by` apuntando al plano.
+- **Alto (estimación):** **≈ 2.23 m (±5 cm)**. La foto rectificada da una proporción de 1.365. Sale por homografía y por la focal de la cámara (13 mm equivalentes); el coseno entre ejes da −0.007 y casi no depende de la focal. Ese 1.365 se aplica sobre los 3.04 m del plano.
+- **Dibujo (`porton-cochera`, `sheet_door`):** la textura no copia la foto, que en los huecos tenía la calle, los coches y el poste. Se dibuja con medidas de la foto, y por hoja lleva:
+  - 9 barrotes a ≈ 14 cm entre ejes: 5 torcidos y 4 lisos, con 4 adornos cada liso;
+  - 5 arillos de ≈ 12 cm sobre un travesaño de solera;
+  - una varilla a la altura del pasador;
+  - lámina lisa abajo, desde 1.72 m medidos desde arriba.
+  - Las hojas son espejo una de la otra y entre ellas queda una rendija.
+- **Color:** la cámara expuso para la calle y la lámina salió saturada a negro (valores crudos de 2 a 8 sobre 255); cualquier blanco de referencia la deja azulada. Se usa el negro medido en la herrería del pasillo (31, 30, 37), y la misma pintura es un supuesto.
+- **Fuera de la textura:** el pasador con candado, que va de un solo lado, como el portacandado de D10. Tampoco se modela la caída de ≈ 1 cm de la hoja izquierda en su punta.
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.
@@ -399,7 +412,7 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 2. **Medidas:** ancho y alto de la hoja de una puerta de recámara y de una de baño. Para saber qué muro del pasillo está corrido: ancho interior del baño (el plano da 1.25 m) y de la recámara 3 de este a oeste (el plano da 4.07 m).
 3. **Puerta D04:** ¿aluminio o acero? ¿Su vidrio es claro?
 4. **Closets:** foto del de la recámara 1 (sin puertas: ¿entrepaños, tubo?); del de la recámara 2, el ancho de un módulo para confirmar el reparto. Una foto del techo de tirol de cerca.
-5. **Puertas de herrería del pasillo (D10, D11):** alto, del piso a lo más alto del marco (estimado ≈ 1.90 m). La posición ya está.
+5. **Puertas de herrería del pasillo (D10, D11):** alto, del piso a lo más alto del marco (estimado ≈ 1.90 m). La posición ya está. **Portón de la cochera (D12):** alto con cinta (estimado ≈ 2.23 m).
 6. **Baño:** medida del azulejo y hasta qué altura llega (¿al techo o a media altura?), y en qué muros está (¿todo el baño o solo la regadera?). Medida de la loseta antiderrapante y del área de la regadera. ¿El muro de la regadera tiene otro azulejo?
 7. **Puerta D03:** ancho de la hoja (¿hay un marco fijo a la izquierda?) y qué tan oscuro es el polarizado (¿se ve hacia adentro de día?).
 8. **Ventanas:** ¿todas tienen persiana enrollable? ¿La hoja fija tiene vidrio entintado o película?

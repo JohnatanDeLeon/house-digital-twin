@@ -11,7 +11,7 @@ def test_ifc_is_schema_valid_and_complete(facts):
     assert log.statements == []
     assert len(model.by_type('IfcWall')) == len(facts['walls'])
     # 9 puertas del plano + 2 de herrería del dueño; 9 ventanas del plano + la del tragaluz (estimada con fotos)
-    assert len(model.by_type('IfcDoor')) == 11 and len(model.by_type('IfcWindow')) == 10
+    assert len(model.by_type('IfcDoor')) == 12 and len(model.by_type('IfcWindow')) == 10
     # la herrería va entre dos muros, sin hueco que cortar
     assert len(model.by_type('IfcRelVoidsElement')) == 19 and len(model.by_type('IfcRelFillsElement')) == 19
     assert len(model.by_type('IfcSpace')) == len(facts['spaces'])

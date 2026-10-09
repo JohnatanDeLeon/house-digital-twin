@@ -12,8 +12,8 @@ def _opening_at(facts, x, y):
 def test_counts(facts):
     kinds = [o['kind'] for o in facts['openings'] if o['footprint'] and o['host_wall']]
     assert kinds.count('door') == 9 and kinds.count('window') == 10  # 9 del plano + la del tragaluz (dueño)
-    gates = [o for o in facts['openings'] if o['footprint'] and not o['host_wall']]  # herrería del pasillo (dueño)
-    assert [o['kind'] for o in gates] == ['door', 'door']
+    gates = [o for o in facts['openings'] if o['footprint'] and not o['host_wall']]  # herrería: pasillo (dueño) y portón
+    assert [o['kind'] for o in gates] == ['door', 'door', 'door']
     assert sum(not s['is_exterior'] for s in facts['spaces']) == 8
     assert sorted(s['name'] for s in facts['spaces'] if s['is_exterior']) == ['Cochera', 'Lavandería', 'Pasillo de servicio', 'Patio', 'Pórtico']
 
@@ -120,7 +120,9 @@ def test_owner_heights_reach_the_facts(facts):
     doors = [o for o in facts['openings'] if o['kind'] == 'door' and o['host_wall']]
     assert len(doors) == 9 and all(o['height']['value'] == 2.10 for o in doors)
     gates = [o for o in facts['openings'] if o['kind'] == 'door' and not o['host_wall']]
-    assert gates and all(o['height']['value'] is None for o in gates)  # U04 habla de vanos: la herrería espera su medida
+    by_id = {o['id']: o for o in gates}
+    assert by_id['D10']['height']['value'] is None and by_id['D11']['height']['value'] is None  # U04 no llega a la herrería
+    assert by_id['D12']['height']['value'] == 2.23 and 'foto' in by_id['D12']['height']['source']  # estimación aceptada
     assert all(w['height']['value'] is None for w in facts['walls'])  # no todos los muros llegan a la losa
 
 
@@ -134,6 +136,9 @@ def test_every_opening_has_a_host_wall_and_connects_spaces(facts):
     for o in facts['openings']:  # incluye la ventana declarada por el dueño
         if o['kind'] == 'door' and o['detected_by'].startswith('dueño'):  # herrería entre dos muros: une dos espacios
             assert o['host_wall'] is None and len(o['connects']) == 2
+            continue
+        if o['id'] == 'D12':  # portón: dibujado en el plano sin bloque, entre dos muros y hacia la calle
+            assert o['host_wall'] is None and o['connects'] == ['S10'] and o['width'] == 3.04
             continue
         assert o['host_wall'] is not None
         assert 1 <= len(o['connects']) <= 2

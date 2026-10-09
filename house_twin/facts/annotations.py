@@ -87,7 +87,7 @@ def owner_openings(walls: list[dict], spaces: list[dict], annotation: dict) -> l
             sill = {'value': entry['sill_height'], 'source': measured}
         height = {'value': entry['height'], 'source': measured} if entry.get('height') is not None else dict(unknown)
         opening = {'kind': entry['kind'], 'footprint': footprint, 'width': width,
-                   'wall_thickness': None, 'detected_by': source, 'sill_height': sill,
+                   'wall_thickness': None, 'detected_by': entry.get('detected_by', source), 'sill_height': sill,
                    'height': height, 'host_wall': host, 'connects': connects, 'owner_note': entry.get('note')}
         if 'grid' in entry:  # retícula: vidrios a lo ancho (las dos hojas) y a lo alto, y ancho del perfil
             opening['grid'] = {**entry['grid'], 'source': source}
