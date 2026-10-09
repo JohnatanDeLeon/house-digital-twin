@@ -13,7 +13,23 @@ HANDLE_SEGMENTS = 16
 
 
 def load_furniture(folder: Path = FURNITURE_DIR) -> list[dict]:
-    return [json.loads(p.read_text()) for p in sorted(Path(folder).glob('*.json'))]
+    """Especificaciones de muebles; `based_on` toma otra como base y la pisa con lo que declara."""
+    specs = {p.stem: json.loads(p.read_text()) for p in sorted(Path(folder).glob('*.json'))}
+    resolved = []
+    for spec in specs.values():
+        base = specs[spec['based_on']] if 'based_on' in spec else {}
+        resolved.append({**base, **spec})
+    return resolved
+
+
+def module_fracs(spec: dict, width: float) -> list[list[float]]:
+    """Módulos en fracciones del frente: medidos (lista) o repartidos iguales entre orillas y postes."""
+    modules = spec['modules']
+    if isinstance(modules, list):
+        return modules
+    n, margin, post = modules['count'], modules['margin_m'], modules['post_m']
+    each = (width - 2 * margin - (n - 1) * post) / n
+    return [[(margin + i * (each + post)) / width, (margin + i * (each + post) + each) / width] for i in range(n)]
 
 
 def front_frame(fixture: dict):
@@ -36,7 +52,7 @@ def closet_meshes(fixture: dict, spec: dict, height: float):
     handles = []
     h = spec['handles']
     r, length, standoff = h['diameter_mm'] / 2000, h['length_mm'] / 1000, h['standoff_mm'] / 1000
-    for m0, m1 in spec['modules']:
+    for m0, m1 in module_fracs(spec, width):
         u0, u1 = m0 * width, m1 * width
         meeting = (u0 + u1) / 2
         for section, (t0, t1) in spec['sections'].items():

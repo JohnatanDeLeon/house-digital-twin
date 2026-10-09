@@ -1,0 +1,14 @@
+{
+ "_doc": "Closet de la recámara 2 (F02 del plano): igual al de la recámara 3 pero con 4 módulos (dato del dueño). Sin foto: los módulos se reparten iguales con las orillas y los postes medidos en el de la recámara 3; el resto (secciones, hojas, jaladeras, materiales) sale de closet-recamara-3.json.",
+ "name": "closet-recamara-2",
+ "based_on": "closet-recamara-3",
+ "applies_to": {"space": "S03", "source": "dueño (2026-10-08): el closet de la recámara 2 es igual al de la 3, pero con 4 módulos"},
+ "photo": null,
+ "corners_px": null,
+ "modules": {"count": 4, "margin_m": 0.016, "post_m": 0.067, "note": "orillas y postes: promedio de los medidos en el de la recámara 3 (2.1 y 1.1 cm; 7.5 y 5.9 cm)"},
+ "observed": {"type": "igual al de la recámara 3 (dueño): melamina wengué, cada módulo con 2 hojas altas y 2 maleteros, jaladeras de barra"},
+ "assumptions": [
+  "los 4 módulos miden lo mismo (≈ 0.66 m): no hay foto para medirlos",
+  "orillas, postes, alturas de las secciones y jaladeras iguales a los del de la recámara 3"
+ ]
+}

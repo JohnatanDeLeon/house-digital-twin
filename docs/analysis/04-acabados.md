@@ -229,7 +229,8 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 
 ### 17. Closet de la recámara 3 (fotos `closet-recamara-3`)
 
-- **Es el de la recámara 3** (dato del dueño). El de la recámara 2 es distinto y el de la recámara 1 no tiene puertas: quedan sin modelar hasta tener sus datos.
+- **Es el de la recámara 3** (dato del dueño). El de la recámara 1 no tiene puertas y queda sin modelar hasta tener sus datos.
+- **Recámara 2 (dato del dueño):** igual al de la recámara 3, pero con 4 módulos. `closet-recamara-2.json` se basa en el de R3 (`based_on`) y solo cambia los módulos: sin foto, se reparten iguales en los 2.91 m del plano, con las orillas (1.6 cm) y los postes (6.7 cm) promedio de R3. Quedan módulos de ≈ 0.67 m (supuesto).
 - **Dónde (dato del plano):** cada recámara tiene el rótulo CLOSET y una línea de frente en la capa `9-MUEBLES FIJOS`. Los hechos tienen ahora `fixtures`: frente, fondo hasta el muro (0.60 m en las tres) y hacia dónde mira. R3: frente en x = 6.39 m, de y = 8.14 a 10.82 m (2.68 m).
 - **Frente (`sources/muebles/closet-recamara-3.json`):** medido en la foto rectificada a 2.68 × 2.60 m, porque va de muro a muro y del piso al techo.
   - **Módulos:** 3 desiguales, de ≈ 0.81, 0.85 y 0.85 m, separados por postes de ≈ 6 cm.
@@ -360,7 +361,7 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 
 **Con textura, pero sin geometría en el modelo:**
 - `piso-regadera`: falta el área de la regadera.
-- `closet-madera`: faltan los closets de R1 (sin puertas) y R2 (distinto del de R3).
+- `closet-madera`: falta el closet de R1 (sin puertas).
 
 **Falta para un render fiel:**
 - Techo (losa y tirol).
@@ -372,7 +373,7 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 1. **Aplanados exteriores:** foto de cerca del estuco de la fachada y el pórtico, con luz rasante y algo de tamaño conocido, para reemplazar la textura sintética. ¿Dónde se tomó la foto 07:47:26 (aplanado de grano fino con estrías)?
 2. **Medidas:** ancho y alto de la hoja de una puerta de recámara y de una de baño. Para saber qué muro del pasillo está corrido: ancho interior del baño (el plano da 1.25 m) y de la recámara 3 de este a oeste (el plano da 4.07 m).
 3. **Puerta D04:** ¿aluminio o acero? ¿Su vidrio es claro?
-4. **Closets:** fotos del de la recámara 2 y del de la recámara 1 (sin puertas: ¿entrepaños, tubo?). Una foto del techo de tirol de cerca.
+4. **Closets:** foto del de la recámara 1 (sin puertas: ¿entrepaños, tubo?); del de la recámara 2, el ancho de un módulo para confirmar el reparto. Una foto del techo de tirol de cerca.
 5. **Puertas de herrería del pasillo (D10, D11):** alto, del piso a lo más alto del marco (estimado ≈ 1.90 m). La posición ya está.
 6. **Baño:** medida del azulejo y hasta qué altura llega (¿al techo o a media altura?), y en qué muros está (¿todo el baño o solo la regadera?). Medida de la loseta antiderrapante y del área de la regadera. ¿El muro de la regadera tiene otro azulejo?
 7. **Puerta D03:** ancho de la hoja (¿hay un marco fijo a la izquierda?) y qué tan oscuro es el polarizado (¿se ve hacia adentro de día?).

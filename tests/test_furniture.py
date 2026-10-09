@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from house_twin.furniture import closet_meshes, front_frame, load_furniture
+from house_twin.furniture import closet_meshes, front_frame, load_furniture, module_fracs
 from house_twin.hardware import cylinder, oriented_box
 from tests.test_hardware import _volume
 
@@ -27,10 +27,10 @@ def test_primitives_face_outward(along, normal):
 
 
 def test_closet_front_follows_its_spec(dxf_facts):
-    spec = load_furniture()[0]
+    spec = next(f for f in load_furniture() if f['name'] == 'closet-recamara-3')
     fixture = next(c for c in dxf_facts['fixtures'] if c['space'] == spec['applies_to']['space'])
     (body, body_faces), (handles, handle_faces) = closet_meshes(fixture, spec, 2.6)
-    leaves = len(spec['modules']) * len(spec['sections']) * spec['leaves_per_section']
+    leaves = len(module_fracs(spec, fixture['width'])) * len(spec['sections']) * spec['leaves_per_section']
     assert len(body_faces) == 6 * (1 + leaves)  # el cuerpo y una caja por hoja
     origin, along, normal = front_frame(fixture)
     out = [(x - origin[0]) * normal[0] + (y - origin[1]) * normal[1] for x, y, _ in handles]
@@ -49,6 +49,16 @@ def test_ifc_carries_the_closet_with_its_handles(dxf_facts):
     ifcopenshell.validate.validate(model, log)
     assert log.statements == []
     closets = model.by_type('IfcFurniture')
-    assert len(closets) == 1  # solo el de la recámara 3 tiene especificación de su frente
-    parts = ue.get_parts(closets[0])
-    assert [ue.get_material(p).Name for p in parts] == ['acero-inoxidable']
+    assert len(closets) == 2  # R2 y R3; el de R1 no tiene puertas ni especificación
+    for closet in closets:
+        assert [ue.get_material(p).Name for p in ue.get_parts(closet)] == ['acero-inoxidable']
+
+
+def test_bedroom_2_closet_is_bedroom_3_with_four_equal_modules():
+    specs = {f['name']: f for f in load_furniture()}
+    r2, r3 = specs['closet-recamara-2'], specs['closet-recamara-3']
+    assert r2['sections'] == r3['sections'] and r2['handles'] == r3['handles']  # sale de la base
+    modules = module_fracs(r2, 2.91)
+    widths = [(b - a) * 2.91 for a, b in modules]
+    assert len(modules) == 4 and max(widths) - min(widths) < 1e-9 and widths[0] == pytest.approx(0.669, abs=0.002)
+    assert modules[0][0] * 2.91 == pytest.approx(0.016) and (1 - modules[-1][1]) * 2.91 == pytest.approx(0.016)
