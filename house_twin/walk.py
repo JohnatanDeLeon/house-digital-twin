@@ -67,6 +67,29 @@ def entrance(facts: dict) -> dict | None:
             'facing': list(across)}
 
 
+FOCUS_DISTANCE_M = 2.3  # al elegir una propuesta, se mira lo que cambia de cuerpo entero, también en el celular
+
+
+def focus(facts: dict, opening_id: str) -> dict | None:
+    """Punto frente a un vano, del lado del espacio interior más grande, mirándolo (para mostrar una propuesta)."""
+    door = next((o for o in facts['openings'] if o['id'] == opening_id and o['footprint']), None)
+    if door is None:
+        return None
+    spaces = {s['id']: s for s in facts['spaces']}
+    p0, p1, _, p3 = door['footprint']
+    a, b = (p1[0] - p0[0], p1[1] - p0[1]), (p3[0] - p0[0], p3[1] - p0[1])
+    across = b if (a[0] ** 2 + a[1] ** 2) >= (b[0] ** 2 + b[1] ** 2) else a  # perpendicular al vano
+    norm = (across[0] ** 2 + across[1] ** 2) ** 0.5
+    across = (across[0] / norm, across[1] / norm)
+    cx, cy = sum(p[0] for p in door['footprint']) / 4, sum(p[1] for p in door['footprint']) / 4
+    sides = sorted((spaces[c] for c in door['connects'] if c in spaces), key=lambda s: (s['is_exterior'], -s['area']))
+    for sign in (1, -1):
+        at = (cx + sign * across[0] * FOCUS_DISTANCE_M, cy + sign * across[1] * FOCUS_DISTANCE_M)
+        if sides and _inside(at, sides[0]['polygon']):
+            return {'at': [round(at[0], 3), round(at[1], 3)], 'facing': [-sign * across[0], -sign * across[1]]}
+    return None
+
+
 def write_model_script(glb: Path, out: Path):
     """El GLB va dentro de un .js: así lo carga un <script> (los artifacts no sirven .glb y file:// no deja usar fetch)."""
     out.write_text('window.HDT_GLB = "' + base64.b64encode(glb.read_bytes()).decode('ascii') + '";\n')
@@ -91,7 +114,8 @@ def build_walk(facts: dict, materials: dict[str, dict], textures_dir: Path, out_
         'sun': [round(c, 4) for c in sun_direction()],
         'entrance': entrance(facts),
         'variants': [{'id': v['id'], 'name': v['name'], 'description': v['description'], 'disclaimer': v.get('disclaimer'),
-                      'overrides': opening_overrides(v)} for v in variants or []],
+                      'overrides': opening_overrides(v), 'focus': focus(facts, v['changes'][0]['opening'])}
+                     for v in variants or []],
     }
     html = TEMPLATE.read_text()
     if DATA_MARKER not in html:

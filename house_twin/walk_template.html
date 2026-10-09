@@ -505,8 +505,15 @@ function setupVariants() {
   const variants = DATA.variants || [];
   if (!variants.length) return;
   const select = $('variant');
-  select.innerHTML = '<option value="">Casa actual</option>' + variants.map((v, i) => `<option value="${i}">${v.name}</option>`).join('');
-  select.addEventListener('change', () => { setVariant(variants[select.value] || null); select.blur(); });
+  // las etiquetas se ocultan en el celular: cada opción dice qué es
+  select.innerHTML = '<option value="">Versión: casa actual</option>'
+    + variants.map((v, i) => `<option value="${i}">Propuesta: ${v.name}</option>`).join('');
+  select.addEventListener('change', () => {
+    const variant = variants[select.value] || null;
+    setVariant(variant);
+    if (variant && variant.focus) goTo({ start: variant.focus });  // frente a lo que cambia
+    select.blur();
+  });
   $('variant-field').hidden = false;
 }
 
