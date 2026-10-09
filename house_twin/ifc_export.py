@@ -296,6 +296,8 @@ def _add_devices(ctx: _IfcContext, facts, storey, spec):
     if not spec:
         return
     for device in facts.get('devices', []):
+        if device.get('exists', {}).get('value') is False:  # el plano lo dibuja, pero el dueño dice que no está
+            continue
         points, faces = device_mesh(spec, device)
         ifc_class, kind = ('IfcOutlet', 'POWEROUTLET') if device['kind'] == 'outlet' else ('IfcSwitchingDevice', 'TOGGLESWITCH')
         element = ctx.element(ifc_class, device['id'], kind)

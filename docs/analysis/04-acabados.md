@@ -336,8 +336,11 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
   - **Inodoro:** **blanco**, de 2 piezas, con taza alargada y palanca cromada en la esquina del tanque. El color es un blanco común **supuesto**: a contraluz de la ventana sale más claro que el azulejo y no se puede medir.
   - **Lavabo:** de pedestal, **beige almendra**, con mezcladora de 4 pulgadas. El tono se midió en el borde; la claridad es la de la porcelana del otro baño (supuesto). Tiene forma de escudo y se modela como un óvalo.
   - **Medidas:** las comunes, supuestas.
+- **Azulejo (dato del dueño):** es el mismo del baño principal, pero solo hasta **2.10 m**; arriba, yeso con pintura blanca.
+  - `azulejo-bano` declara `up_to_m: {"S07": 2.10}`, y `Finishes.wall_face` recibe la altura de la cara: por encima del límite sigue el acabado siguiente (`muro-interior`).
+  - Blender corta las caras de los muros a esa altura.
+- **Contacto (corrección del dueño):** no hay contacto bajo el lavabo. El del plano (C03) queda en los hechos con `exists: false` (`absent_devices` en las anotaciones) y no se modela.
 - **Visto en las fotos, sin modelar todavía (faltan medidas):**
-  - **Azulejo:** cubre los muros hasta cierta altura, con pintura blanca arriba; las piezas se ven casi cuadradas.
   - **Ventana sobre el inodoro:** está en el muro del pórtico (W27) y no aparece en el plano. Tiene vidrio texturizado, marco oscuro y un repisón de azulejo. Desde la calle se ve con protección de herrería; es la «ventana pequeña» que se veía detrás de la abertura del pórtico.
   - **Botiquín:** blanco, con espejo, repisa y toallero, sobre el lavabo.
 

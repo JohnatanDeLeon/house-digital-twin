@@ -2,10 +2,14 @@
  "name": "azulejo-bano",
  "applies_to": {
   "spaces": [
-   "S05"
+   "S05",
+   "S07"
   ],
   "surface": "muros",
-  "source": "dueño (2026-10-08): es el azulejo de las paredes del baño con regadera"
+  "up_to_m": {
+   "S07": 2.1
+  },
+  "source": "dueño (2026-10-08): es el azulejo de las paredes del baño con regadera; dueño (2026-10-09): el medio baño tiene el mismo, hasta 2.10 m (arriba, pintura blanca)"
  },
  "size_m": {
   "width": 0.6,
@@ -32,6 +36,7 @@
   "normal": "normal.png (OpenGL)"
  },
  "glass_material": null,
+ "latch_side": null,
  "source": {
   "photo": "sources/fotos/azulejo-bano-lejos.jpg",
   "photo_meta": {

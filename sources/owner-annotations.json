@@ -455,6 +455,16 @@
    "note": "El plano dibuja el apagador (A05) y el contacto (C10) del baño por separado; en la casa son una sola placa, en el lugar del apagador."
   }
  ],
+ "absent_devices": [
+  {
+   "anchor": [
+    8.563,
+    3.139
+   ],
+   "source": "dueño (2026-10-09): el medio baño no tiene contacto bajo el lavabo",
+   "note": "El plano dibuja un contacto (C03) en el muro del lavabo del medio baño; no existe."
+  }
+ ],
  "answered_unknowns": [
   {
    "id": "U06",

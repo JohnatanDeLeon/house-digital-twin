@@ -202,12 +202,13 @@ def write_uvs(obj, fit=None, front=None, axis=None):
     return (u1 - u0, z1 - z0) if fit else None
 
 
-def split_at_boundaries(obj, boundaries):
-    """Corta la malla con planos verticales en cada X e Y de los vértices de los espacios."""
+def split_at_boundaries(obj, boundaries, heights=()):
+    """Corta la malla con planos verticales en cada X e Y de los vértices de los espacios, y con planos
+    horizontales en las alturas donde cambia un acabado (lambrines)."""
     inv, to_local = obj.matrix_world.inverted(), obj.matrix_world.to_3x3().transposed()
     bm = bmesh.new()
     bm.from_mesh(obj.data)
-    for axis, values in zip(((1, 0, 0), (0, 1, 0)), boundaries):
+    for axis, values in zip(((1, 0, 0), (0, 1, 0), (0, 0, 1)), (*boundaries, heights)):
         for v in values:
             point = Vector(axis) * v
             bmesh.ops.bisect_plane(bm, geom=bm.verts[:] + bm.edges[:] + bm.faces[:], dist=1e-4,
@@ -246,7 +247,7 @@ class Scene:
             poly.material_index = slots.index(n)
 
     def wall(self, obj):
-        split_at_boundaries(obj, self.boundaries)
+        split_at_boundaries(obj, self.boundaries, self.finishes.wall_split_heights())
         write_uvs(obj)
         rot, mw = obj.matrix_world.to_3x3(), obj.matrix_world
         names = []
@@ -254,12 +255,12 @@ class Scene:
             n = (rot @ poly.normal).normalized()
             c = mw @ poly.center
             if n.z > 0.7 and c.z < LOW_WALL_MAX_M:  # tope de un muro bajo (sardinel): lleva el acabado de su espacio
-                names.append(self.finishes.wall_finish(self.finishes.space_at((c.x, c.y))) or 'sin-dato')
+                names.append(self.finishes.wall_finish(self.finishes.space_at((c.x, c.y)), c.z) or 'sin-dato')
                 continue
             if abs(n.z) > 0.7:
                 names.append('corte')
                 continue
-            finish, where = self.finishes.wall_face((c.x, c.y), Vector((n.x, n.y)).normalized())
+            finish, where = self.finishes.wall_face((c.x, c.y), Vector((n.x, n.y)).normalized(), c.z)
             names.append(finish or 'sin-dato')
             if finish is None and where not in (None, 'colindancia'):
                 self.unknown.add(f'{obj.name}: cara hacia {where}')
