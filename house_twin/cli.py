@@ -42,6 +42,7 @@ def build(source: Path):
     from house_twin.furniture import load_furniture
     from house_twin.hardware import load_hardware
     from house_twin.lighting import load_luminaires
+    from house_twin.plumbing import load_shower_spec
     from house_twin.render import render_facts
     from house_twin.variants import apply_variant, load_variants, validate
     from house_twin.viewer import render_viewer
@@ -52,7 +53,8 @@ def build(source: Path):
     materials = load_materials(TEXTURES_DIR)
     finishes = Finishes(facts, materials)
     hardware, furniture, luminaires, devices = load_hardware(), load_furniture(), load_luminaires(), load_device_spec()
-    build_ifc(facts, finishes, hardware, furniture, luminaires, devices).write(str(IFC_PATH))
+    shower = load_shower_spec()
+    build_ifc(facts, finishes, hardware, furniture, luminaires, devices, shower).write(str(IFC_PATH))
     render_facts(facts, OVERLAY_PATH)
     render_viewer(facts, VIEWER_PATH)
     print(f"{len(facts['spaces'])} espacios, {len(facts['walls'])} muros, {len(facts['openings'])} vanos")
@@ -63,7 +65,8 @@ def build(source: Path):
             raise SystemExit('\n'.join(problems))
         path = VARIANTS_IFC_DIR / f"{variant['id']}.ifc"
         path.parent.mkdir(parents=True, exist_ok=True)
-        build_ifc(facts, apply_variant(finishes, variant, materials), hardware, furniture, luminaires, devices).write(str(path))
+        build_ifc(facts, apply_variant(finishes, variant, materials), hardware, furniture, luminaires, devices,
+                  shower).write(str(path))
         outputs.append(path)
     for path in outputs:
         print(f'→ {path.relative_to(ROOT)}')

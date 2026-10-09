@@ -28,6 +28,7 @@ from house_twin.finishes import Finishes
 from house_twin.furniture import closet_meshes
 from house_twin.hardware import for_leaf, knob_mesh, placements
 from house_twin.lighting import luminaire_meshes
+from house_twin.plumbing import shower_mesh, valve_meshes
 
 ASSUMED_DEFAULTS = {'storey_height': 2.40, 'door_height': 2.10, 'window_sill': 0.90, 'window_height': 1.20,
                     'slab_thickness': 0.10}  # losa: U02 sin respuesta; 10 cm es común en losa maciza de casa
@@ -130,10 +131,13 @@ def _add_walls(ctx: _IfcContext, facts, storey, height):
     walls = {}
     for w in facts['walls']:
         wall = ctx.element('IfcWall', w['id'], 'SOLIDWALL')
-        ctx.extrude_polygon(wall, w['footprint'], height)
+        known = w['height']['value']  # p. ej. el sardinel de la regadera; los demás llegan a la losa (supuesto)
+        ctx.extrude_polygon(wall, w['footprint'], known if known is not None else height)
         ctx.pset(wall, 'Pset_WallCommon', {'IsExternal': w['faces_exterior']})
         ctx.pset(wall, 'HDT_Provenance', {'FactId': w['id'], 'Source': w['source'], 'Thickness': w['thickness'],
-                                          'OnPropertyLine': w['on_property_line'], 'HeightAssumed': True,
+                                          'OnPropertyLine': w['on_property_line'], 'HeightAssumed': known is None,
+                                          'HeightSource': w['height']['source'] if known is not None else None,
+                                          'Role': w.get('role'),
                                           'LoadBearingKnown': w['load_bearing']['value'] is not None})
         walls[w['id']] = wall
     ifcopenshell.api.spatial.assign_container(ctx.model, products=list(walls.values()), relating_structure=storey)
@@ -303,6 +307,24 @@ def _add_devices(ctx: _IfcContext, facts, storey, spec):
                                              'Height': z, 'HeightSource': z_source, 'Finish': spec['applies_to']['source']})
 
 
+def _add_shower_fittings(ctx: _IfcContext, facts, storey, spec):
+    """Llaves (IfcValve) y brazo con regadera (IfcSanitaryTerminal) en el muro de la regadera."""
+    shower = next((f for f in facts.get('fixtures', []) if f['kind'] == 'shower' and spec and f['space'] == spec['applies_to']['space']), None)
+    if shower is None:
+        return
+    parts = [(f"{shower['id']}-llave-{i + 1}", 'IfcValve', 'MIXING', mesh, spec['valves']['source'])
+             for i, mesh in enumerate(valve_meshes(spec))]
+    parts.append((f"{shower['id']}-regadera", 'IfcSanitaryTerminal', 'SHOWER', shower_mesh(spec), spec['shower']['outlet_source']))
+    for name, ifc_class, kind, (points, faces), source in parts:
+        element = ctx.element(ifc_class, name, kind)
+        ifcopenshell.api.geometry.assign_representation(
+            ctx.model, product=element, representation=ctx.builder.get_representation(ctx.body, [ctx.builder.polygonal_face_set(points, faces)]))
+        ifcopenshell.api.spatial.assign_container(ctx.model, products=[element], relating_structure=storey)
+        ifcopenshell.api.material.assign_material(ctx.model, products=[element], material=ctx.material(spec['material']))
+        ctx.pset(element, 'HDT_Provenance', {'FactId': shower['id'], 'Space': shower['space'], 'Height': source,
+                                             'Position': spec['mount']['source']})
+
+
 def _add_spaces(ctx: _IfcContext, facts, storey, height):
     spaces = []
     for s in facts['spaces']:
@@ -318,15 +340,28 @@ def _add_spaces(ctx: _IfcContext, facts, storey, height):
 def _add_floor_finishes(ctx: _IfcContext, facts, storey, finishes: Finishes):
     """Acabado de piso de cada espacio que lo tiene registrado: un IfcCovering delgado bajo el nivel 0."""
     coverings = []
+    showers = {}
+    for f in facts.get('fixtures', []):
+        if f['kind'] == 'shower' and finishes.shower_floor(f['space']):
+            showers.setdefault(f['space'], []).append(f)
     for s in facts['spaces']:
         name = finishes.floor(s['id'])
         if name is None:
             continue
+        floor = Polygon(s['polygon']).difference(unary_union([Polygon(f['polygon']) for f in showers.get(s['id'], [])]))
         covering = ctx.element('IfcCovering', f"{s['id']}-piso", 'FLOORING')
-        ctx.extrude_polygon(covering, s['polygon'], FLOOR_FINISH_THICKNESS, -FLOOR_FINISH_THICKNESS)
+        ctx.extrude_polygon(covering, [list(p) for p in floor.exterior.coords[:-1]], FLOOR_FINISH_THICKNESS, -FLOOR_FINISH_THICKNESS)
         ctx.assign_parts(covering, {'leaf': name})
         ctx.pset(covering, 'HDT_Provenance', {'Space': s['id'], 'Finish': name, 'ThicknessAssumed': True})
         coverings.append(covering)
+        for f in showers.get(s['id'], []):  # su propio piso: el antiderrapante
+            shower_name = finishes.shower_floor(s['id'])
+            covering = ctx.element('IfcCovering', f"{s['id']}-regadera", 'FLOORING')
+            ctx.extrude_polygon(covering, f['polygon'], FLOOR_FINISH_THICKNESS, -FLOOR_FINISH_THICKNESS)
+            ctx.assign_parts(covering, {'leaf': shower_name})
+            ctx.pset(covering, 'HDT_Provenance', {'Space': s['id'], 'FactId': f['id'], 'Finish': shower_name,
+                                                  'Area': f['source'], 'ThicknessAssumed': True})
+            coverings.append(covering)
     if coverings:
         ifcopenshell.api.spatial.assign_container(ctx.model, products=coverings, relating_structure=storey)
 
@@ -366,7 +401,7 @@ def _stabilize_guids(model: ifcopenshell.file):
 
 def build_ifc(facts: dict, finishes: Finishes | None = None, hardware: list[dict] | None = None,
               furniture: list[dict] | None = None, luminaires: list[dict] | None = None,
-              devices: dict | None = None) -> ifcopenshell.file:
+              devices: dict | None = None, shower: dict | None = None) -> ifcopenshell.file:
     ctx = _IfcContext(facts['name'])
     site = ctx.element('IfcSite', 'Terreno')
     building = ctx.element('IfcBuilding', 'Casa')
@@ -384,6 +419,7 @@ def build_ifc(facts: dict, finishes: Finishes | None = None, hardware: list[dict
     _add_ceilings(ctx, facts, storey, height, finishes)
     _add_lights(ctx, facts, storey, height, luminaires or [])
     _add_devices(ctx, facts, storey, devices)
+    _add_shower_fittings(ctx, facts, storey, shower)
     _add_spaces(ctx, facts, storey, height)
     if finishes:
         _add_floor_finishes(ctx, facts, storey, finishes)

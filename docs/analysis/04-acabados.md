@@ -306,6 +306,21 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
   - **Exterior:** pretil con cornisa, número 134, lámpara y banqueta.
   - **Luz del pórtico:** en el techo hay un portalámparas con lo que parece una cámara tipo foco.
 
+### 22. Regadera: piso antiderrapante, sardinel, llaves y regadera (2026-10-09)
+
+- **Datos del dueño:**
+  - Las losetas del antiderrapante miden **20 × 20 cm**; se habían estimado en 17–20 cm.
+  - Un **escalón de 5 cm** separa el baño de la regadera. Es el murete de 5 cm del plano (W26), que hasta ahora se modelaba como un muro hasta el techo. Pasa a ser un **sardinel de 5 cm de alto** (`role: sardinel de la regadera`), y su tope lleva el acabado del baño.
+  - Las **llaves** están a **1.00 m** de alto y **15 cm** entre sí; la **regadera** sale **90 cm** arriba de ellas, es decir, a 1.90 m.
+- **Área de la regadera (hecho `F04`, tipo `shower`):**
+  - Es la parte del baño del lado de la ventana alta V09, del sardinel al fondo: **1.25 × 0.93 m**. La sacan las anotaciones (`showers`) a partir del plano y las fotos.
+  - Lleva su propio `IfcCovering` (`S05-regadera`) con `piso-regadera`; el resto del baño conserva `piso-interior`.
+- **Llaves y regadera** (`sources/sanitarios/regadera.json`, `house_twin/plumbing.py`): las 2 llaves van como `IfcValve` y el brazo con la regadera cuadrada como `IfcSanitaryTerminal`, todo de cromo. Salen del muro del lado del pasillo, junto al fondo.
+  - **Estimado con la foto:** centro de las llaves a ≈ 20 cm del fondo, brazo de ≈ 40 cm con caída de ≈ 8 cm y regadera de 20 × 20 cm.
+  - **Cromo:** su reflectancia es un valor de tabla, no medido; en un metal pulido, la foto solo muestra el reflejo del cuarto.
+  - **Sin modelar:** la regadera de mano con su manguera, la barra y la cortina.
+- **Observación:** en la foto del baño, el apagador con contacto tiene una **placa beige**, no negra. Falta confirmarlo con el dueño.
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.
@@ -426,7 +441,6 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 - **D01** (reja peatonal del pórtico): falta su foto.
 
 **Con textura, pero sin geometría en el modelo:**
-- `piso-regadera`: falta el área de la regadera.
 - `closet-madera`: falta el closet de R1 (sin puertas).
 
 **Falta para un render fiel:**

@@ -2326,8 +2326,8 @@
    "on_property_line": false,
    "faces_exterior": false,
    "height": {
-    "value": null,
-    "source": "no está en el plano"
+    "value": 0.05,
+    "source": "dueño (2026-10-09): un escalón de 5 cm separa el baño de la regadera"
    },
    "load_bearing": {
     "value": null,
@@ -2337,7 +2337,8 @@
     "value": null,
     "source": "no está en el plano"
    },
-   "source": "plano: pares de caras de MUROS"
+   "source": "plano: pares de caras de MUROS",
+   "role": "sardinel de la regadera"
   },
   {
    "id": "W27",
@@ -4207,6 +4208,33 @@
     ]
    ],
    "source": "plano: rótulo CLOSET y frente en la capa de muebles fijos; fondo hasta el muro"
+  },
+  {
+   "id": "F04",
+   "kind": "shower",
+   "space": "S05",
+   "polygon": [
+    [
+     4.24,
+     10.225
+    ],
+    [
+     2.99,
+     10.225
+    ],
+    [
+     2.99,
+     11.155
+    ],
+    [
+     4.24,
+     11.155
+    ]
+   ],
+   "area": 1.16,
+   "curb_wall": "W26",
+   "source": "plano: sardinel W26; lado de la regadera: fotos del baño (2026-10-07): la regadera queda del lado de la ventana alta (V09), frente a la puerta",
+   "owner_note": "Regadera: piso antiderrapante de losetas de 20 × 20 cm (dueño, 2026-10-09), separado del resto del baño por un sardinel de 5 cm (el murete de 5 cm del plano)."
   }
  ],
  "lights": [

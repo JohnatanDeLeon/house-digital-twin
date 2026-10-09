@@ -69,8 +69,11 @@ def test_ifc_carries_floor_finishes_and_materials(dxf_facts):
     ifcopenshell.validate.validate(model, log)
     assert log.statements == []
     floors = {c.Name: ue.get_material(c).Name for c in model.by_type('IfcCovering') if c.PredefinedType == 'FLOORING'}
-    assert len(floors) == len(dxf_facts['spaces'])
+    assert len(floors) == len(dxf_facts['spaces']) + 1  # el baño lleva además el piso de la regadera
+    assert floors.pop('S05-regadera') == 'piso-regadera'
     assert set(floors.values()) == {'piso-interior', 'piso-exterior'}
+    bano = next(c for c in model.by_type('IfcCovering') if c.Name == 'S05-piso')
+    assert ue.get_psets(bano)['HDT_Provenance']['Finish'] == 'piso-interior'
     ceilings = {c.Name: ue.get_material(c).Name for c in model.by_type('IfcCovering') if c.PredefinedType == 'CEILING'}
     roofed = [s for s in dxf_facts['spaces'] if s['roofed']['value'] is True]
     assert len(ceilings) == len(roofed) and set(ceilings.values()) == {'tirol-techo'}

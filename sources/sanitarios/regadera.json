@@ -1,0 +1,36 @@
+{
+ "_doc": "Llaves y regadera del baño. Dónde está el área de la regadera lo dicen el plano (sardinel W26) y las anotaciones del dueño (`showers`); esto dice cómo son las piezas y dónde van en sus muros. Medidas en m. `build` las genera en el IFC (IfcValve e IfcSanitaryTerminal).",
+ "applies_to": {"space": "S05", "source": "dueño (2026-10-09): medidas de las llaves y de la regadera; fotos del baño (2026-10-07)"},
+ "mount": {
+  "corner": [4.24, 10.225],
+  "along": [0, 1],
+  "into_room": [-1, 0],
+  "source": "fotos: las llaves y el brazo salen del muro hacia el pasillo (este, x = 4.24 m), junto al muro del fondo de la regadera (y = 10.225 m)"
+ },
+ "valves": {
+  "height_m": 1.0,
+  "spacing_m": 0.15,
+  "centre_from_corner_m": 0.20,
+  "source": "dueño (2026-10-09): llaves a 1.00 m de alto y 15 cm entre sí",
+  "centre_source": "estimación con la foto de la regadera (≈ 1 azulejo del fondo); ±5 cm",
+  "profile_mm": [[0, 0], [30, 0], [30, 4], [13, 8], [12, 40], [18, 44], [18, 62], [0, 64]],
+  "profile_note": "chapetón de Ø 6 cm, cuerpo y manija redonda (estimado en la foto)",
+  "segments": 24
+ },
+ "shower": {
+  "outlet_height_m": 1.90,
+  "outlet_source": "dueño (2026-10-09): de las llaves a la regadera hay 90 cm",
+  "arm_length_m": 0.40,
+  "drop_m": 0.08,
+  "pipe_radius_m": 0.0095,
+  "head_size_m": [0.20, 0.20, 0.008],
+  "size_source": "estimación con la foto: la regadera cuadrada mide ≈ la mitad del brazo",
+  "segments": 16
+ },
+ "material": "cromo",
+ "assumptions": [
+  "el brazo sale arriba del centro de las llaves",
+  "largo del brazo (≈ 40 cm), caída al codo (≈ 8 cm) y regadera de 20 × 20 cm, estimados en la foto",
+  "no se modelan la regadera de mano con su manguera ni la barra y la cortina"
+ ]
+}

@@ -1,0 +1,31 @@
+from house_twin.plumbing import load_shower_spec, shower_mesh, valve_meshes
+
+
+def _signed_volume(points, faces):
+    v = 0.0
+    for f in faces:
+        a = points[f[0]]
+        for b, c in zip((points[i] for i in f[1:-1]), (points[i] for i in f[2:])):
+            v += (a[0] * (b[1] * c[2] - b[2] * c[1]) - a[1] * (b[0] * c[2] - b[2] * c[0]) + a[2] * (b[0] * c[1] - b[1] * c[0])) / 6
+    return v
+
+
+def test_valves_are_on_the_wall_at_owner_height():
+    spec = load_shower_spec()
+    meshes = valve_meshes(spec)
+    assert len(meshes) == 2
+    centres = []
+    for points, faces in meshes:
+        assert _signed_volume(points, faces) > 0  # normales hacia afuera
+        assert min(p[0] for p in points) < 4.24 <= max(p[0] for p in points) + 1e-9  # del muro hacia el baño
+        centres.append(sum(p[1] for p in points) / len(points))
+        assert abs(sum(p[2] for p in points) / len(points) - 1.0) < 0.01
+    assert abs(abs(centres[0] - centres[1]) - 0.15) < 1e-6  # 15 cm entre llaves (dueño)
+
+
+def test_shower_head_hangs_below_the_outlet_and_inside_the_bathroom():
+    spec = load_shower_spec()
+    points, faces = shower_mesh(spec)
+    assert max(p[2] for p in points) <= 1.90 + spec['shower']['pipe_radius_m'] + 1e-9
+    assert min(p[0] for p in points) > 2.99  # no atraviesa el muro de enfrente
+    assert _signed_volume(points, faces) > 0

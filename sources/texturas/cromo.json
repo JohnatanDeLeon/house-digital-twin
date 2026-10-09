@@ -1,0 +1,9 @@
+{
+ "_doc": "Cromo pulido de las llaves, el brazo y la regadera del baño. No se mide en la foto: en un metal pulido el color que se ve es el reflejo del cuarto. Regenerar con: python -m house_twin.cli texture sources/texturas/cromo.json",
+ "name": "cromo",
+ "kind": "constant",
+ "applies_to": {"fitting": "regadera", "source": "fotos del baño (dueño, 2026-10-07): llaves, brazo y regadera cromados"},
+ "photo": "sources/fotos/bano-regadera.jpg",
+ "pbr": {"basecolor_srgb": [196, 197, 196], "metallic": 1.0, "roughness": 0.12, "note": "reflectancia del cromo de tablas de materiales (≈ 0.55 lineal); pulido"},
+ "assumptions": ["reflectancia y rugosidad del cromo: valores de tabla, no medidos"]
+}

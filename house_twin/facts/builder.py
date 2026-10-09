@@ -211,6 +211,26 @@ def _closets(drawing, spaces) -> list[dict]:
     return result
 
 
+def _showers(spaces, walls, annotations, first_id: int) -> list[dict]:
+    """Regaderas: el dueño dice en qué lado del sardinel está (un punto adentro) y el plano da el sardinel (un
+    muro de 5 cm que cruza el baño). El área es la parte del espacio de ese lado; el sardinel toma su altura."""
+    source = f"{annotations.get('source', 'dueño')} ({annotations.get('confirmed_on', 's/f')})"
+    result = []
+    for entry in annotations.get('showers', []):
+        space = next(s for s in spaces if Polygon(s['polygon']).contains(Point(entry['space_anchor'])))
+        curb = next(w for w in walls if Polygon(w['footprint']).buffer(0.01).contains(Point(entry['curb_anchor'])))
+        pieces = Polygon(space['polygon']).difference(Polygon(curb['footprint']))
+        area = next(g for g in getattr(pieces, 'geoms', [pieces]) if g.contains(Point(entry['space_anchor'])))
+        curb['height'] = {'value': entry['curb_height'], 'source': entry.get('curb_source', source)}
+        curb['role'] = 'sardinel de la regadera'
+        result.append({'id': f'F{first_id + len(result):02d}', 'kind': 'shower', 'space': space['id'],
+                       'polygon': [[round(x, 3), round(y, 3)] for x, y in list(area.exterior.coords)[:-1]],
+                       'area': round(area.area, 2), 'curb_wall': curb['id'],
+                       'source': f"plano: sardinel {curb['id']}; lado de la regadera: {entry.get('side_source', source)}",
+                       'owner_note': entry.get('note')})
+    return result
+
+
 SWING_MATCH_M = 0.05  # la bisagra del bloque de puerta cae en el vano (o a pocos cm)
 
 
@@ -320,6 +340,9 @@ def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
     openings = doors + windows
     correct_openings(openings, annotations)
 
+    closets = _closets(drawing, spaces)
+    fixtures = closets + _showers(spaces, walls, annotations, len(closets) + 1)
+
     cal = drawing.metadata.get('calibration', {})
     lot_w = faces.lot.bounds[2] - faces.lot.bounds[0]
     lot_d = faces.lot.bounds[3] - faces.lot.bounds[1]
@@ -338,7 +361,7 @@ def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
                  'area': round(faces.lot.area, 2), 'labeled_dimensions': [10.00, 21.25]},
         'source_warnings': [w for w in [drawing.metadata.get('units_warning')] if w],
         'levels': [{'id': 'L0', 'name': 'Planta baja', 'elevation': 0.0, 'storey_height': dict(UNKNOWN)}],
-        'spaces': spaces, 'walls': walls, 'openings': openings, 'fixtures': _closets(drawing, spaces),
+        'spaces': spaces, 'walls': walls, 'openings': openings, 'fixtures': fixtures,
         'lights': _lights(drawing, spaces), 'devices': _devices(drawing, spaces),
         'adjacency': _adjacency(walls, spaces, openings),
         'measurements': owner_measurements(walls, annotations),

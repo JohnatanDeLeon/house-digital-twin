@@ -28,6 +28,7 @@ FACTS = ROOT / 'data' / 'facts' / 'existing.facts.json'
 WINDOW_FRAME_M = 0.045
 WINDOW_MEETING_M = 0.06
 VIEW_PROBE_M = 0.3  # más que medio muro (0.17 m): el punto cae en el espacio de ese lado
+LOW_WALL_MAX_M = 1.5  # un muro más bajo que esto no llega a la losa: su tope se ve y lleva acabado
 CUT_COLOR = (0.18, 0.18, 0.18)       # cabeza de muro cortada: se ve porque el modelo aún no tiene techo
 UNKNOWN_COLOR = (0.55, 0.52, 0.60)   # superficie sin acabado registrado: gris violáceo para que se note
 
@@ -251,10 +252,13 @@ class Scene:
         names = []
         for poly in obj.data.polygons:
             n = (rot @ poly.normal).normalized()
+            c = mw @ poly.center
+            if n.z > 0.7 and c.z < LOW_WALL_MAX_M:  # tope de un muro bajo (sardinel): lleva el acabado de su espacio
+                names.append(self.finishes.wall_finish(self.finishes.space_at((c.x, c.y))) or 'sin-dato')
+                continue
             if abs(n.z) > 0.7:
                 names.append('corte')
                 continue
-            c = mw @ poly.center
             finish, where = self.finishes.wall_face((c.x, c.y), Vector((n.x, n.y)).normalized())
             names.append(finish or 'sin-dato')
             if finish is None and where not in (None, 'colindancia'):
@@ -268,6 +272,10 @@ class Scene:
     def floor(self, obj, space_id):
         write_uvs(obj)
         self._set(obj, [self.finishes.floor(space_id) or 'sin-dato'] * len(obj.data.polygons))
+
+    def shower_floor(self, obj, space_id):
+        write_uvs(obj)
+        self._set(obj, [self.finishes.shower_floor(space_id) or 'sin-dato'] * len(obj.data.polygons))
 
     def _latch_axis(self, oid, parts):
         """Si la textura de la hoja dice de qué lado tiene la chapa, la U arranca en el canto de la chapa del plano."""
@@ -381,6 +389,8 @@ def apply_finishes(ifc_path):
             scene.wall(obj)
         elif ifc_class == 'IfcCovering' and name.endswith('-techo'):
             scene.ceiling(obj, name.removesuffix('-techo'))
+        elif ifc_class == 'IfcCovering' and name.endswith('-regadera'):
+            scene.shower_floor(obj, name.removesuffix('-regadera'))
         elif ifc_class == 'IfcCovering':
             scene.floor(obj, name.removesuffix('-piso'))
         elif ifc_class == 'IfcSlab':
@@ -390,7 +400,8 @@ def apply_finishes(ifc_path):
             add_point_light(obj)
         elif ifc_class in ('IfcDoor', 'IfcWindow'):
             scene.opening(obj, name)
-        elif ifc_class in ('IfcDiscreteAccessory', 'IfcFurniture', 'IfcOutlet', 'IfcSwitchingDevice'):
+        elif ifc_class in ('IfcDiscreteAccessory', 'IfcFurniture', 'IfcOutlet', 'IfcSwitchingDevice', 'IfcValve',
+                           'IfcSanitaryTerminal'):
             scene.accessory(obj)
         elif ifc_class in ('IfcSpace', 'IfcOpeningElement'):
             obj.hide_render = obj.hide_viewport = True

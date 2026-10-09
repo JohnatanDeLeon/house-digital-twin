@@ -124,7 +124,10 @@ def test_owner_heights_reach_the_facts(facts):
     by_id = {o['id']: o for o in gates}
     assert by_id['D10']['height']['value'] is None and by_id['D11']['height']['value'] is None  # U04 no llega a la herrería
     assert by_id['D12']['height']['value'] == 2.23 and 'foto' in by_id['D12']['height']['source']  # estimación aceptada
-    assert all(w['height']['value'] is None for w in facts['walls'])  # no todos los muros llegan a la losa
+    curb = [w for w in facts['walls'] if w['height']['value'] is not None]
+    assert [(w['role'], w['height']['value']) for w in curb] == [('sardinel de la regadera', 0.05)]
+    assert curb[0]['thickness'] == pytest.approx(0.05, abs=0.005)
+    assert all(w['height']['value'] is None for w in facts['walls'] if w not in curb)  # no todos los muros llegan a la losa
 
 
 def test_walls_do_not_overlap_and_are_valid(facts):
@@ -198,3 +201,12 @@ def test_portico_windows_are_measured_by_owner(facts):
     assert (by_id['V12']['width'], by_id['V12']['height']['value']) == (1.5, 1.3)
     assert by_id['V11']['host_wall'] == by_id['V12']['host_wall'] == 'W03'
     assert 'estimación' in by_id['V11']['sill_height']['source'] and 'cinta' in by_id['V11']['height']['source']
+
+
+def test_shower_area_is_the_bathroom_beyond_the_curb(facts):
+    shower = next(f for f in facts['fixtures'] if f['kind'] == 'shower')
+    curb = next(w for w in facts['walls'] if w['id'] == shower['curb_wall'])
+    assert shower['space'] == 'S05' and curb['role'] == 'sardinel de la regadera'
+    xs, ys = [p[0] for p in shower['polygon']], [p[1] for p in shower['polygon']]
+    assert (min(xs), max(xs)) == pytest.approx((2.99, 4.24), abs=0.01)  # el PDF de validación difiere en mm
+    assert (min(ys), max(ys)) == pytest.approx((10.225, 11.155), abs=0.01)

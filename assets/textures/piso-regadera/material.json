@@ -10,7 +10,7 @@
  "size_m": {
   "width": 0.4,
   "height": 0.4,
-  "source": "supuesto: loseta de 20 × 20 cm; estimada en 17–20 cm porque mide ≈ 1.55 veces la tapa de la coladera (≈ 11 cm, medida comercial común); pendiente de medir"
+  "source": "dueño (2026-10-09): losetas de 20 × 20 cm; la textura abarca 2 × 2 (en la foto se habían estimado 17–20 cm con la tapa de la coladera)"
  },
  "px_per_m": 3000,
  "size_px": [
@@ -37,6 +37,7 @@
   "normal": "normal.png (OpenGL)"
  },
  "glass_material": null,
+ "latch_side": null,
  "source": {
   "photo": "sources/fotos/piso-regadera.jpg",
   "photo_meta": {
@@ -78,7 +79,6 @@
   "wall": "el muro de la regadera arriba de este piso se ve con piezas grises mate, más grandes que el azulejo del resto del baño (por confirmar)"
  },
  "assumptions": [
-  "loseta de 20 × 20 cm (estimada 17–20 cm con la coladera)",
   "canales blancos del diseño como referencia de color (albedo 230)",
   "profundidades de junta (2 mm) y canales (0.8 mm)"
  ]
