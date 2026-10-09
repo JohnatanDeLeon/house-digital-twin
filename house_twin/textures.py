@@ -458,6 +458,11 @@ def build_procedural(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
     return out
 
 
+def _glass_pbr(name: str) -> dict:
+    """PBR del vidrio de una hoja: sale de su `material.json`, así que el vidrio se genera antes que la puerta."""
+    return json.loads((TEXTURES_DIR / name / 'material.json').read_text())['pbr']
+
+
 def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     spec = json.loads(spec_path.read_text())
     if spec.get('kind') == 'constant':
@@ -476,9 +481,23 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     base = apply_patches(base, spec.get('patches', []))
     if spec.get('seamless'):
         base = make_seamless(base)
+    W, H = size_px
+    glass = None
+    if 'opacity' in spec:
+        alpha = _opacity((H, W), spec['opacity'], base)
+        px = np.asarray(base).copy()
+        fill = spec['opacity'].get('fill_pieces_srgb')
+        if fill:  # en los huecos, las piezas finas toman el color de la pintura: su borde en la foto es cielo o fondo
+            holes = _opacity((H, W), {'holes': spec['opacity']['holes']}) == 0
+            px[holes & (alpha > 0)] = fill
+        if spec['opacity'].get('glass_material'):
+            # en el vidrio la foto muestra reflejos (el fotógrafo, la sala) o lo de atrás, no la superficie:
+            # se pinta con el color del material del vidrio y queda liso
+            glass = _glass_pbr(spec['opacity']['glass_material'])
+            px[alpha == 0] = glass['basecolor_srgb']
+        base = Image.fromarray(px)
 
     relief = spec['relief']
-    W, H = size_px
     grain = _grain(base, relief.get('grain_blur_px', GRAIN_BLUR_PX))
     rough = spec['roughness']
     roughness = rough['base'] - grain * rough['grain']
@@ -502,6 +521,8 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
             roughness = np.where(channel, rough['channel'], roughness)
         roughness = np.where(grout, rough['grout'], roughness)
     height = shape_height + grain * relief['grain_mm'] / 1000
+    if glass is not None:
+        roughness = np.where(alpha == 0, glass['roughness'], roughness)
     roughness = np.clip(roughness, 0, 1)
 
     out = TEXTURES_DIR / spec['name']
@@ -512,14 +533,6 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     _normal_map(height, px_per_m).resize(detail_px, Image.LANCZOS).save(out / 'normal.png', optimize=True)
     maps = {'basecolor': 'basecolor.jpg', 'roughness': 'roughness.png', 'normal': 'normal.png (OpenGL)'}
     if 'opacity' in spec:
-        alpha = _opacity(grain.shape, spec['opacity'], base)
-        fill = spec['opacity'].get('fill_pieces_srgb')
-        if fill:  # en los huecos, las piezas finas toman el color de la pintura: su borde en la foto es cielo o fondo
-            holes = _opacity(grain.shape, {'holes': spec['opacity']['holes']}) == 0
-            px = np.asarray(base).copy()
-            px[holes & (alpha > 0)] = fill
-            base = Image.fromarray(px)
-            base.save(out / 'basecolor.jpg', quality=92)
         Image.fromarray((alpha * 255).astype(np.uint8)).save(out / 'opacity.png', optimize=True)
         maps['opacity'] = 'opacity.png (0 = vidrio)'
     material = {
