@@ -330,6 +330,17 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
   - **Medio baño:** el plano también tiene inodoro y lavabo (`WC01` y `LV01`), pero sin foto no se modelan.
   - **Recorrido:** el inodoro y el lavabo frenan el paso, como los muebles.
 
+### 23. Medio baño de la entrada (2026-10-09, fotos 11:31:40 y 11:31:58)
+
+- **Inodoro y lavabo:** su posición sale del plano (bloques `WC` y `LAVABO`, hechos `WC01` y `LV01`): los 2 están contra el muro del pórtico (W27), con el inodoro del lado sur. Las fotos lo confirman. Son otros modelos que los del baño principal, con su propia especificación (`sources/sanitarios/muebles-medio-bano.json`).
+  - **Inodoro:** **blanco**, de 2 piezas, con taza alargada y palanca cromada en la esquina del tanque. El color es un blanco común **supuesto**: a contraluz de la ventana sale más claro que el azulejo y no se puede medir.
+  - **Lavabo:** de pedestal, **beige almendra**, con mezcladora de 4 pulgadas. El tono se midió en el borde; la claridad es la de la porcelana del otro baño (supuesto). Tiene forma de escudo y se modela como un óvalo.
+  - **Medidas:** las comunes, supuestas.
+- **Visto en las fotos, sin modelar todavía (faltan medidas):**
+  - **Azulejo:** cubre los muros hasta cierta altura, con pintura blanca arriba; las piezas se ven casi cuadradas.
+  - **Ventana sobre el inodoro:** está en el muro del pórtico (W27) y no aparece en el plano. Tiene vidrio texturizado, marco oscuro y un repisón de azulejo. Desde la calle se ve con protección de herrería; es la «ventana pequeña» que se veía detrás de la abertura del pórtico.
+  - **Botiquín:** blanco, con espejo, repisa y toallero, sobre el lavabo.
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.

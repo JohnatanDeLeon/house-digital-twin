@@ -36,8 +36,8 @@ def _fixture(kind):
 
 
 def test_toilet_and_basin_stand_in_front_of_their_wall():
-    from house_twin.plumbing import faucet_mesh, load_sanitary_spec, sanitary_mesh
-    spec = load_sanitary_spec()
+    from house_twin.plumbing import faucet_mesh, load_sanitary_specs, sanitary_mesh, spec_for
+    spec = spec_for(load_sanitary_specs(), 'S05')
     for kind, top in (('toilet', 0.775), ('basin', 0.835)):
         points, faces = sanitary_mesh(spec, _fixture(kind))
         assert min(p[0] for p in points) >= 2.99 - 1e-9  # no se mete en el muro
@@ -45,3 +45,16 @@ def test_toilet_and_basin_stand_in_front_of_their_wall():
         assert _signed_volume(points, faces) > 0
     points, faces = faucet_mesh(spec, _fixture('basin'))
     assert _signed_volume(points, faces) > 0
+
+
+def test_half_bath_has_its_own_fixtures():
+    from house_twin.plumbing import lever_mesh, load_sanitary_specs, material_of, spec_for
+    specs = load_sanitary_specs()
+    half, main = spec_for(specs, 'S07'), spec_for(specs, 'S05')
+    assert half is not main
+    assert (material_of(half, 'toilet'), material_of(half, 'basin')) == ('porcelana-blanca', 'porcelana-almendra')
+    assert material_of(main, 'toilet') == material_of(main, 'basin') == 'porcelana-hueso'
+    fixture = {'id': 'X', 'kind': 'toilet', 'space': 'S07', 'back_centre': [8.563, 2.325], 'facing': [1, 0]}
+    points, faces = lever_mesh(half, fixture)
+    assert _signed_volume(points, faces) > 0 and min(p[1] for p in points) < 2.325  # del lado sur (izquierda de frente)
+    assert lever_mesh(main, fixture) is None
