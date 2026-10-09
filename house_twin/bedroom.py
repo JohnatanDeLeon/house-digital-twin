@@ -126,6 +126,17 @@ def bedroom_parts(spec: dict) -> list[dict]:
             parts += _nightstands(spec['nightstands'], spec['bed'])
     if spec.get('desk'):
         parts += _desk(spec['desk'])
+    ac = spec.get('minisplit')
+    if ac:  # unidad interior: cuerpo con el frente redondeado abajo (2 escalones) y la rejilla de salida
+        frame = _Run(ac['wall'])
+        (u0, u1), (z0, z1), d = ac['u'], ac['z'], ac['depth_m']
+        body = merge([frame.box((u0, u1), (z0 + 0.06, z1), (0.0, d)), frame.box((u0, u1), (z0 + 0.02, z0 + 0.06), (0.0, d - 0.03)),
+                      frame.box((u0, u1), (z0, z0 + 0.02), (0.0, d - 0.08))])
+        louver = frame.box((u0 + 0.05, u1 - 0.05), (z0 + 0.025, z0 + 0.055), (d - 0.031, d - 0.029))
+        parts += [{'id': ac['id'], 'ifc': 'IfcUnitaryEquipment', 'type': 'SPLITSYSTEM', 'material': ac['material'], 'mesh': body,
+                   'source': ac['source']},
+                  {'id': f"{ac['id']}-rejilla", 'ifc': 'IfcUnitaryEquipment', 'type': 'SPLITSYSTEM', 'material': ac['louver_material'],
+                   'mesh': louver, 'source': ac['source']}]
     t = spec.get('tv')
     if t:
         body, screen, _ = _tv(t)

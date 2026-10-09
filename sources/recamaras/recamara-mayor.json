@@ -184,6 +184,35 @@
  "assumptions": [
   "cama matrimonial de 1.37 × 1.90 m",
   "buros y escritorio con medidas comunes",
-  "no se modelan la ropa, los peluches, el minisplit, el telescopio, la silla ni el póster"
- ]
+  "no se modelan la ropa, los peluches, el telescopio, la silla ni el póster"
+ ],
+ "minisplit": {
+  "id": "recamara-minisplit",
+  "wall": {
+   "origin": [
+    9.86,
+    16.055
+   ],
+   "along": [
+    0,
+    -1
+   ],
+   "into_room": [
+    -1,
+    0
+   ]
+  },
+  "u": [
+   0.15,
+   0.97
+  ],
+  "z": [
+   2.17,
+   2.46
+  ],
+  "depth_m": 0.2,
+  "material": "plastico-blanco",
+  "louver_material": "plastico-negro",
+  "source": "fotos: unidad interior en el muro oriente, junto a la esquina con el muro del patio y cerca del techo; tamaño común de un minisplit de 1 t (0.82 × 0.29 × 0.20 m, supuesto)"
+ }
 }

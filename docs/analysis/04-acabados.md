@@ -414,7 +414,8 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 - **Buros:** 2, negros, de 2 cajones con jaladeras de latón, a los lados de la cabecera (medidas comunes).
 - **Escritorio:** en la esquina del muro de la TV con el muro oriente, con pedestal blanco (1.20 × 0.60 m, supuesto).
 - **Televisión (dato del dueño: 75")**: pantalla de 1.66 × 0.93 m, centrada en el muro de la puerta, con el centro a ≈ 1.97 m del piso. La foto había hecho estimar 85" por la perspectiva del gran angular.
-- **Sin modelar:** la ropa, los peluches, el minisplit, el telescopio, la silla, el póster y las cortinas negras.
+- **Minisplit:** en el muro oriente, junto a la esquina con el muro del patio y cerca del techo (0.82 × 0.29 × 0.20 m, tamaño común supuesto), como `IfcUnitaryEquipment` SPLITSYSTEM.
+- **Sin modelar:** la ropa, los peluches, el telescopio, la silla, el póster y las cortinas negras.
 
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 

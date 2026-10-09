@@ -1,0 +1,29 @@
+{
+ "name": "plastico-blanco",
+ "applies_to": {
+  "appliance": "minisplit",
+  "source": "fotos de la recámara mayor (dueño, 2026-10-09)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   232,
+   233,
+   230
+  ],
+  "metallic": 0.0,
+  "roughness": 0.3,
+  "note": "plástico blanco satinado"
+ },
+ "source": {
+  "photo": "sources/fotos/rec-cama-lado.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color y brillo comunes"
+ ]
+}
