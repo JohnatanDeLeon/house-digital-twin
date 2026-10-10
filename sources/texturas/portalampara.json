@@ -1,0 +1,9 @@
+{
+ "_doc": "Plástico blanco del portalámparas del techo. Supuesto: es el típico; ninguna foto lo muestra de cerca. Regenerar con: python -m house_twin.cli texture sources/texturas/portalampara.json",
+ "name": "portalampara",
+ "kind": "constant",
+ "applies_to": {"luminaire": "foco-pelado", "source": "supuesto (portalámparas común)"},
+ "photo": "sources/fotos/recamara-a-1.jpg",
+ "pbr": {"basecolor_srgb": [236, 234, 228], "metallic": 0.0, "roughness": 0.45, "note": "plástico blanco satinado (supuesto)"},
+ "assumptions": ["color y acabado del portalámparas"]
+}

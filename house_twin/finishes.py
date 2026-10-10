@@ -14,6 +14,7 @@ from pathlib import Path
 PROBE_M = 0.05      # distancia a la que se mira, desde una cara, en qué espacio cae
 JAMB_PROBE_M = 0.3  # una mocheta mira a lo largo del muro: se prueba a los lados para hallar su espacio
 FLOOR_SURFACE = 'piso'
+CEILING_SURFACE = 'techo'
 STREET = 'calle'
 NEIGHBOUR = 'colindancia'
 
@@ -47,6 +48,7 @@ class Finishes:
         self.street_y = min(p[1] for p in self.site)  # el marco de los hechos pone la calle en Y < 0
         self.floors = _by_space(materials, lambda a: a.get('surface') == FLOOR_SURFACE)
         self.walls = _by_space(materials, lambda a: 'muro' in a.get('surface', ''))
+        self.ceilings = _by_space(materials, lambda a: a.get('surface') == CEILING_SURFACE)
         self.street = next((n for n, m in materials.items() if m['applies_to'].get('street_facade')), None)
         self.openings: dict[str, dict[str, str]] = {}
         self.viewpoints: dict[str, str] = {}
@@ -73,6 +75,9 @@ class Finishes:
 
     def floor(self, space_id: str) -> str | None:
         return self.floors.get(space_id)
+
+    def ceiling(self, space_id: str) -> str | None:
+        return self.ceilings.get(space_id)
 
     def wall_face(self, centre, normal) -> tuple[str | None, str | None]:
         """(acabado, lugar al que mira) de una cara vertical de muro: centro y normal en planta."""

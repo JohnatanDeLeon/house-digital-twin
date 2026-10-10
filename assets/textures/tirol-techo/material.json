@@ -1,0 +1,81 @@
+{
+ "name": "tirol-techo",
+ "applies_to": {
+  "surface": "techo",
+  "spaces": [
+   "S01",
+   "S02",
+   "S03",
+   "S04",
+   "S05",
+   "S06",
+   "S07",
+   "S11"
+  ],
+  "source": "dueño (2026-10-09): todos los techos son rugosos y blancos como los de la sala y la recámara 3, también el del pórtico"
+ },
+ "kind": "procedural",
+ "tileable": true,
+ "size_m": {
+  "width": 0.5,
+  "height": 0.5,
+  "source": "tamaño de repetición para que el grano (≈ 8 mm) no se note repetido"
+ },
+ "px_per_m": 2000,
+ "size_px": [
+  1000,
+  1000
+ ],
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)"
+ },
+ "glass_material": null,
+ "source": {
+  "method": "procedural",
+  "seed": 77,
+  "references": [
+   {
+    "name": "closet-recamara-3.jpg",
+    "use": "escala del grano: grumos de 0.5 a 1 cm, relieve bajo y ondas suaves de llana",
+    "note": "foto del dueño, fuera de git"
+   }
+  ]
+ },
+ "parameters": {
+  "plates": {
+   "size_m": 0.008,
+   "coverage": 0.5,
+   "edge_softness": 0.3,
+   "height_mm": 1.2,
+   "note": "grumos de la pasta"
+  },
+  "grain": {
+   "size_m": 0.0012,
+   "height_mm": 0.15,
+   "note": "arena fina de la pasta"
+  },
+  "color": {
+   "albedo_srgb": [
+    232,
+    231,
+    228
+   ],
+   "crevice_darkening": 0.06,
+   "note": "pintura blanca (dueño); luminosidad supuesta, un poco por debajo del yeso de los muros"
+  },
+  "roughness": {
+   "base": 0.92,
+   "note": "pintura mate sobre pasta"
+  }
+ },
+ "observed": {
+  "from_photos": "techo de la sala y de la recámara 3: grano fino y parejo, sin las placas del estuco de la fachada",
+  "owner": "todos los techos iguales, rugosos y blancos"
+ },
+ "assumptions": [
+  "textura sintética: tamaño y relieve del grano estimados en una foto oblicua",
+  "blanco supuesto (232)"
+ ]
+}

@@ -68,9 +68,12 @@ def test_ifc_carries_floor_finishes_and_materials(dxf_facts):
     log = ifcopenshell.validate.json_logger()
     ifcopenshell.validate.validate(model, log)
     assert log.statements == []
-    floors = {c.Name: ue.get_material(c).Name for c in model.by_type('IfcCovering')}
+    floors = {c.Name: ue.get_material(c).Name for c in model.by_type('IfcCovering') if c.PredefinedType == 'FLOORING'}
     assert len(floors) == len(dxf_facts['spaces'])
     assert set(floors.values()) == {'piso-interior', 'piso-exterior'}
+    ceilings = {c.Name: ue.get_material(c).Name for c in model.by_type('IfcCovering') if c.PredefinedType == 'CEILING'}
+    roofed = [s for s in dxf_facts['spaces'] if s['roofed']['value'] is True]
+    assert len(ceilings) == len(roofed) and set(ceilings.values()) == {'tirol-techo'}
     d03 = next(d for d in model.by_type('IfcDoor') if d.Name == 'D03')
     parts = {c.Name: c.Material.Name for c in ue.get_material(d03).MaterialConstituents}
     assert parts == {'Hoja': 'puerta-entrada', 'Vidrio': 'vidrio-polarizado'}

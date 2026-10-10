@@ -20,12 +20,17 @@ import ifcopenshell.api.spatial
 import ifcopenshell.api.unit
 import ifcopenshell.guid
 from ifcopenshell.util.shape_builder import ShapeBuilder
+from shapely.geometry import Polygon
+from shapely.ops import unary_union
 
 from house_twin.finishes import Finishes
 from house_twin.furniture import closet_meshes
 from house_twin.hardware import for_leaf, knob_mesh, placements
+from house_twin.lighting import luminaire_meshes
 
-ASSUMED_DEFAULTS = {'storey_height': 2.40, 'door_height': 2.10, 'window_sill': 0.90, 'window_height': 1.20}
+ASSUMED_DEFAULTS = {'storey_height': 2.40, 'door_height': 2.10, 'window_sill': 0.90, 'window_height': 1.20,
+                    'slab_thickness': 0.10}  # losa: U02 sin respuesta; 10 cm es común en losa maciza de casa
+CEILING_FINISH_M = 0.01  # capa de tirol bajo la losa
 PANEL_THICKNESS = 0.05
 FLOOR_FINISH_THICKNESS = 0.01  # la loseta o el firme: su cara de arriba es el nivel 0 de piso terminado
 PART_NAMES = {'leaf': 'Hoja', 'frame': 'Marco', 'glass': 'Vidrio'}
@@ -210,6 +215,76 @@ def _add_furniture(ctx: _IfcContext, facts, storey, height, furniture):
         ifcopenshell.api.material.assign_material(ctx.model, products=[handles], material=ctx.material(spec['handles']['material']))
 
 
+def _roofed(facts):
+    return [s for s in facts['spaces'] if (s.get('roofed') or {}).get('value') is True]
+
+
+def _add_roof(ctx: _IfcContext, facts, storey, height):
+    """Losa sobre los espacios techados y los muros que los rodean; deja abierto lo que no está techado (tragaluz).
+
+    El espesor es un supuesto (U02 sin respuesta) y queda marcado en HDT_Provenance.
+    """
+    roofed = _roofed(facts)
+    if not roofed:
+        return
+    rooms = unary_union([Polygon(s['polygon']) for s in roofed])
+    walls = unary_union([Polygon(w['footprint']) for w in facts['walls']])
+    reach = max(w['thickness'] for w in facts['walls']) + 0.02
+    footprint = rooms.union(rooms.buffer(reach, join_style='mitre').intersection(walls)).buffer(0.005).buffer(-0.005)
+    thickness = ASSUMED_DEFAULTS['slab_thickness']
+    solids = []
+    for poly in getattr(footprint, 'geoms', [footprint]):
+        outer = ctx.builder.polyline([tuple(p) for p in poly.exterior.coords[:-1]], closed=True)
+        inner = [ctx.builder.polyline([tuple(p) for p in ring.coords[:-1]], closed=True) for ring in poly.interiors]
+        solids.append(ctx.builder.extrude(ctx.builder.profile(outer, inner_curves=inner), magnitude=thickness,
+                                          position=(0.0, 0.0, height)))
+    slab = ctx.element('IfcSlab', 'losa', 'ROOF')
+    ifcopenshell.api.geometry.assign_representation(ctx.model, product=slab, representation=ctx.builder.get_representation(ctx.body, solids))
+    ifcopenshell.api.spatial.assign_container(ctx.model, products=[slab], relating_structure=storey)
+    ctx.pset(slab, 'HDT_Provenance', {'Spaces': ','.join(s['id'] for s in roofed), 'Thickness': thickness, 'ThicknessAssumed': True,
+                                      'Unknown': 'U02', 'Roofed': 'dueño: espacios interiores y pórtico techados'})
+
+
+def _add_ceilings(ctx: _IfcContext, facts, storey, height, finishes: Finishes | None):
+    """Plafón (capa de tirol) de cada espacio techado, justo bajo la losa."""
+    for s in _roofed(facts):
+        ceiling = ctx.element('IfcCovering', f"{s['id']}-techo", 'CEILING')
+        ctx.extrude_polygon(ceiling, s['polygon'], CEILING_FINISH_M, height - CEILING_FINISH_M)
+        ifcopenshell.api.spatial.assign_container(ctx.model, products=[ceiling], relating_structure=storey)
+        finish = finishes.ceiling(s['id']) if finishes else None
+        if finish:
+            ifcopenshell.api.material.assign_material(ctx.model, products=[ceiling], material=ctx.material(finish))
+        ctx.pset(ceiling, 'HDT_Provenance', {'Space': s['id'], 'Finish': finish or 'sin dato', 'Roofed': s['roofed']['source']})
+
+
+def _add_lights(ctx: _IfcContext, facts, storey, height, luminaires):
+    """Portalámparas con su foco en cada salida del plano que cae en un espacio techado."""
+    if not luminaires:
+        return
+    spec = luminaires[0]
+    roofed = {s['id'] for s in _roofed(facts)}
+    for light in facts.get('lights', []):
+        if light['space'] not in roofed:
+            continue
+        (sp, sf), (bp, bf), centre = luminaire_meshes(spec, light['position'], height - CEILING_FINISH_M)
+        fixture = ctx.element('IfcLightFixture', light['id'], 'POINTSOURCE')
+        ifcopenshell.api.geometry.assign_representation(
+            ctx.model, product=fixture, representation=ctx.builder.get_representation(ctx.body, [ctx.builder.polygonal_face_set(sp, sf)]))
+        ifcopenshell.api.spatial.assign_container(ctx.model, products=[fixture], relating_structure=storey)
+        ifcopenshell.api.material.assign_material(ctx.model, products=[fixture], material=ctx.material(spec['materials']['socket']))
+        bulb = ctx.element('IfcDiscreteAccessory', f"{light['id']}-foco")
+        bulb.ObjectType = 'foco'
+        ifcopenshell.api.geometry.assign_representation(
+            ctx.model, product=bulb, representation=ctx.builder.get_representation(ctx.body, [ctx.builder.polygonal_face_set(bp, bf)]))
+        ifcopenshell.api.aggregate.assign_object(ctx.model, products=[bulb], relating_object=fixture)
+        ifcopenshell.api.material.assign_material(ctx.model, products=[bulb], material=ctx.material(spec['materials']['bulb']))
+        lit = spec['light']
+        ctx.pset(fixture, 'HDT_Provenance', {'FactId': light['id'], 'Space': light['space'], 'Position': light['source'],
+                                             'Fixture': spec['applies_to']['source']})
+        ctx.pset(fixture, 'HDT_Light', {'Lumens': lit['lumens'], 'ColorTemperature': lit['color_temperature_k'], 'PowerW': lit['power_w'],
+                                        'CentreZ': round(centre[2], 3), 'Source': lit['source']})
+
+
 def _add_spaces(ctx: _IfcContext, facts, storey, height):
     spaces = []
     for s in facts['spaces']:
@@ -272,7 +347,7 @@ def _stabilize_guids(model: ifcopenshell.file):
 
 
 def build_ifc(facts: dict, finishes: Finishes | None = None, hardware: list[dict] | None = None,
-              furniture: list[dict] | None = None) -> ifcopenshell.file:
+              furniture: list[dict] | None = None, luminaires: list[dict] | None = None) -> ifcopenshell.file:
     ctx = _IfcContext(facts['name'])
     site = ctx.element('IfcSite', 'Terreno')
     building = ctx.element('IfcBuilding', 'Casa')
@@ -286,6 +361,9 @@ def build_ifc(facts: dict, finishes: Finishes | None = None, hardware: list[dict
     for o in facts['openings']:
         _add_opening(ctx, o, walls, storey, finishes, hardware, facts['spaces'])
     _add_furniture(ctx, facts, storey, height, furniture or [])
+    _add_roof(ctx, facts, storey, height)
+    _add_ceilings(ctx, facts, storey, height, finishes)
+    _add_lights(ctx, facts, storey, height, luminaires or [])
     _add_spaces(ctx, facts, storey, height)
     if finishes:
         _add_floor_finishes(ctx, facts, storey, finishes)

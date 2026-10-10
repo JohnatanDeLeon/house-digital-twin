@@ -240,6 +240,23 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 - **Color:** con el pilar blanco como referencia, las hojas bajas dan (64, 53, 42). Cuadra con la textura `closet-madera` (56, 47, 44), que se conserva.
 - **Límite del recorrido web:** no oscurece las ranuras (no hay oclusión ambiental), así que las juntas y los postes se notan menos que en Blender.
 
+### 18. Techo de tirol, losa y focos (2026-10-09)
+
+- **Qué está techado (dato del dueño):** todos los techos de la casa son rugosos y blancos (tirol), como los de la sala y la recámara 3, incluido el del pórtico. Con eso, los espacios interiores pasan a `roofed: true` (`interior_roofed` en las anotaciones). El tragaluz, la cochera y la lavandería siguen abiertos; el patio y el pasillo de servicio, sin dato.
+- **Losa (`IfcSlab` ROOF):** cubre los espacios techados y los muros que los rodean, y deja abierto el tragaluz. Su espesor es un **supuesto**: 10 cm, porque U02 sigue sin respuesta, y queda marcado en `HDT_Provenance`. El acabado de la azotea no tiene dato y sale en gris violáceo desde arriba.
+- **Tirol (`tirol-techo`, sintético):** grano fino de ≈ 8 mm y 1.2 mm de relieve, estimado en la foto del closet de la recámara 3, donde el techo se ve de cerca. Va en un `IfcCovering` CEILING de 1 cm bajo la losa en cada espacio techado.
+- **Focos (dato del plano):** 9 salidas en la capa `23- ILUMINACION`:
+  - 2 en la sala, 1 en la cocina y 1 en el pasillo de recámaras;
+  - 1 en cada recámara, 1 en el baño y 1 en el medio baño.
+  - La bodega y el pórtico no tienen salida dibujada.
+  - Los hechos tienen `lights` con su espacio.
+- **Luminaria (`sources/luminarias/foco-pelado.json`):** portalámparas con foco pelado de luz blanca fría (dato del dueño), torneados. En el IFC es un `IfcLightFixture` con su foco (`IfcDiscreteAccessory`) y `HDT_Light`. Son supuestos:
+  - flujo y potencia: 900 lm y 10 W;
+  - temperatura de color: 6500 K;
+  - el portalámparas, blanco de Ø 9 cm.
+- **Blender:** una luz puntual en cada foco, con el flujo real (900 lm ≈ 1.3 W en Blender). El foco no proyecta sombra, porque envuelve a su luz. EEVEE corta cada luz cuando su intensidad baja de un umbral, y una luz real tan débil quedaba con un alcance de pocos centímetros: se le fija un alcance de 10 m. De noche hace falta subir la exposición ≈ +6.5, como lo hace un celular.
+- **Recorrido:** botón **Noche/Día**. De noche se apaga el sol, el cielo queda oscuro y se encienden los 9 focos. En la PC tienen sombras, para que la luz no atraviese los muros; en el celular no, porque pesan demasiado. De día, la losa da sombra adentro y el sol solo entra por las ventanas. Eso explicaba que el closet de R2 (de cara al sol) se viera mejor que el de R3 (de espaldas).
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.
@@ -364,9 +381,7 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 - `closet-madera`: falta el closet de R1 (sin puertas).
 
 **Falta para un render fiel:**
-- Techo (losa y tirol).
 - Zoclo, persianas y cortinas.
-- Luz artificial: los focos.
 
 ## Pendientes del dueño
 

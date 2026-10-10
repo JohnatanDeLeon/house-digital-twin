@@ -46,6 +46,9 @@ def _principled(nt, pbr):
     if pbr.get('transmission'):
         bsdf.inputs['Transmission Weight'].default_value = pbr['transmission']
         bsdf.inputs['IOR'].default_value = pbr.get('ior', 1.5)
+    if pbr.get('emission_srgb'):  # foco encendido
+        bsdf.inputs['Emission Color'].default_value = (*[srgb_to_linear(c) for c in pbr['emission_srgb']], 1)
+        bsdf.inputs['Emission Strength'].default_value = pbr.get('emission_strength', 1.0)
     return bsdf
 
 
@@ -258,6 +261,10 @@ class Scene:
                 self.unknown.add(f'{obj.name}: cara hacia {where}')
         self._set(obj, names)
 
+    def ceiling(self, obj, space_id):
+        write_uvs(obj)
+        self._set(obj, [self.finishes.ceiling(space_id) or 'sin-dato'] * len(obj.data.polygons))
+
     def floor(self, obj, space_id):
         write_uvs(obj)
         self._set(obj, [self.finishes.floor(space_id) or 'sin-dato'] * len(obj.data.polygons))
@@ -277,6 +284,8 @@ class Scene:
         material = _ifc_material(obj)
         write_uvs(obj)  # melamina: veta en metros del mundo, como los muros
         self._set(obj, [material if material in self.specs else 'sin-dato'] * len(obj.data.polygons))
+        if material and self.specs.get(material, {}).get('pbr', {}).get('emission_srgb'):
+            obj.visible_shadow = False  # el foco envuelve a su luz: si proyectara sombra, la apagaría
         obj.data.shade_smooth()
         obj.data.set_sharp_from_angle(angle=math.radians(35))
 
@@ -303,6 +312,44 @@ class Scene:
         if 'leaf' not in parts:
             self.unknown.add(f'{obj.name}: sin textura de hoja')
         self._set(obj, [parts.get('leaf', 'sin-dato')] * len(obj.data.polygons))
+
+
+LUMENS_PER_WATT = 683  # Blender: 1 W de luz equivale a 683 lm
+LIGHT_REACH_M = 10.0
+
+
+def add_point_light(fixture):
+    """Luz puntual en el centro del foco, con el flujo y el color de su luminaria (Pset HDT_Light del IFC)."""
+    import bonsai.tool as tool
+    import ifcopenshell.util.element as ue
+    data = ue.get_pset(tool.Ifc.get_entity(fixture), 'HDT_Light') or {}
+    if not data:
+        return None
+    corners = [fixture.matrix_world @ Vector(c) for c in fixture.bound_box]
+    centre = Vector((sum(c.x for c in corners) / 8, sum(c.y for c in corners) / 8, data['CentreZ']))
+    light = bpy.data.lights.new(f"luz-{fixture.name.split('/')[-1]}", 'POINT')
+    light.energy = data['Lumens'] / LUMENS_PER_WATT
+    light.shadow_soft_size = 0.03
+    # EEVEE corta cada luz donde su intensidad cae bajo un umbral: con el flujo real de un foco, a pocos cm
+    light.use_custom_distance = True
+    light.cutoff_distance = LIGHT_REACH_M
+    light.color = _kelvin_rgb(data['ColorTemperature'])
+    obj = bpy.data.objects.new(light.name, light)
+    obj.location = centre
+    collection = bpy.data.collections.get('Luces') or bpy.data.collections.new('Luces')
+    if collection.name not in bpy.context.scene.collection.children:
+        bpy.context.scene.collection.children.link(collection)
+    collection.objects.link(obj)
+    return obj
+
+
+def _kelvin_rgb(kelvin):
+    """Color aproximado de una temperatura de color (Tanner Helland), en lineal 0–1."""
+    t = kelvin / 100
+    r = 255 if t <= 66 else 329.698727446 * (t - 60) ** -0.1332047592
+    g = 99.4708025861 * math.log(t) - 161.1195681661 if t <= 66 else 288.1221695283 * (t - 60) ** -0.0755148492
+    b = 255 if t >= 66 else (0 if t <= 19 else 138.5177312231 * math.log(t - 10) - 305.0447927307)
+    return tuple(srgb_to_linear(max(0, min(255, c))) for c in (r, g, b))
 
 
 def _ifc_material(obj):
@@ -332,8 +379,15 @@ def apply_finishes(ifc_path):
             obj.data = obj.data.copy()  # cada muro necesita sus propias UV y materiales por cara
         if ifc_class == 'IfcWall':
             scene.wall(obj)
+        elif ifc_class == 'IfcCovering' and name.endswith('-techo'):
+            scene.ceiling(obj, name.removesuffix('-techo'))
         elif ifc_class == 'IfcCovering':
             scene.floor(obj, name.removesuffix('-piso'))
+        elif ifc_class == 'IfcSlab':
+            scene._set(obj, ['sin-dato'] * len(obj.data.polygons))  # acabado de la azotea: sin dato
+        elif ifc_class == 'IfcLightFixture':
+            scene.accessory(obj)
+            add_point_light(obj)
         elif ifc_class in ('IfcDoor', 'IfcWindow'):
             scene.opening(obj, name)
         elif ifc_class in ('IfcDiscreteAccessory', 'IfcFurniture'):

@@ -1,0 +1,10 @@
+{
+ "_doc": "Vidrio esmerilado del foco LED. Encendido emite la luz blanca fría que dijo el dueño. Regenerar con: python -m house_twin.cli texture sources/texturas/foco-led.json",
+ "name": "foco-led",
+ "kind": "constant",
+ "applies_to": {"luminaire": "foco-pelado", "source": "dueño (2026-10-09): foco pelado de luz blanca fría"},
+ "photo": "sources/fotos/recamara-a-1.jpg",
+ "pbr": {"basecolor_srgb": [245, 245, 245], "metallic": 0.0, "roughness": 0.6, "emission_srgb": [255, 249, 253], "emission_strength": 30,
+         "note": "esmerilado blanco; la emisión solo para que el foco se vea encendido, la luz de la escena la da una luz puntual"},
+ "assumptions": ["foco esmerilado (no transparente)"]
+}

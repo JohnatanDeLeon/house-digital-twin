@@ -1,0 +1,29 @@
+{
+ "name": "portalampara",
+ "applies_to": {
+  "luminaire": "foco-pelado",
+  "source": "supuesto (portalámparas común)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   236,
+   234,
+   228
+  ],
+  "metallic": 0.0,
+  "roughness": 0.45,
+  "note": "plástico blanco satinado (supuesto)"
+ },
+ "source": {
+  "photo": "sources/fotos/recamara-a-1.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color y acabado del portalámparas"
+ ]
+}

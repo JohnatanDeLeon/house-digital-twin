@@ -20,6 +20,7 @@ TEXT_TYPES = {'TEXT', 'MTEXT', 'ATTRIB'}
 UNIT_GUESSES = ((6, 1, 100), (5, 100, 10_000), (4, 1_000, 100_000))
 PLAUSIBLE_HALF_EXTENT_M = (1.0, 100.0)  # mitad del lado mayor de una casa, en metros
 DOOR_BLOCK = 'PUERTA'  # bloque de puerta del CAD: su arco mayor es el abatimiento, con centro en la bisagra
+LIGHT_BLOCK = 'salidaaaaaaaaaa spot'  # salida de foco en el techo (capa 23- ILUMINACION): el centro de su círculo
 
 
 def _effective_layer(entity, parent_layer):
@@ -101,7 +102,23 @@ def load_dxf_drawing(dxf_path: str) -> Drawing:
             drawing.segments.setdefault(layer, []).extend((a, b) for a, b in zip(pts, pts[1:]) if a != b)
     drawing.texts = [Text(layer, value, to_m(pos)) for layer, value, pos in raw_texts]
     drawing.metadata['door_swings'] = _door_swings(doc, to_m)
+    drawing.metadata['ceiling_lights'] = _ceiling_lights(doc, to_m)
     return drawing
+
+
+def _ceiling_lights(doc, to_m) -> list[list[float]]:
+    """Centro de cada salida de foco del CAD, en metros del modelo (transformado con la matriz de cada inserción)."""
+    if LIGHT_BLOCK not in doc.blocks:
+        return []
+    circles = [e for e in doc.blocks[LIGHT_BLOCK] if e.dxftype() == 'CIRCLE']
+    if not circles:
+        return []
+    centre = max(circles, key=lambda c: c.dxf.radius).dxf.center
+    lights = []
+    for ins in doc.modelspace().query(f'INSERT[name=="{LIGHT_BLOCK}"]'):
+        c = ins.matrix44().transform(centre)
+        lights.append(list(to_m((c.x, c.y))))
+    return lights
 
 
 def _door_swings(doc, to_m) -> list[dict]:
