@@ -5,7 +5,8 @@
   "spaces": [
    "S12",
    "S09",
-   "S10"
+   "S10",
+   "S13"
   ],
   "zones": [
    "pasillo de servicio",
@@ -32,6 +33,7 @@
   "normal": "normal.png (OpenGL)"
  },
  "glass_material": null,
+ "latch_side": null,
  "source": {
   "photo": "sources/fotos/aplanado-exterior.jpg",
   "photo_meta": {

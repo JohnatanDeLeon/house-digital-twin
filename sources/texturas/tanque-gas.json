@@ -1,0 +1,23 @@
+{
+ "_doc": "cilindro de gas pintado de blanco hueso. Tono de la foto; color supuesto (sin blanco de referencia confiable: los muros están manchados). Regenerar con: python -m house_twin.cli texture sources/texturas/tanque-gas.json",
+ "name": "tanque-gas",
+ "kind": "constant",
+ "applies_to": {
+  "furniture": "lavandería",
+  "source": "fotos de la lavandería (dueño, 2026-10-10)"
+ },
+ "photo": "sources/fotos/lavanderia-frente.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   214,
+   210,
+   196
+  ],
+  "metallic": 0.3,
+  "roughness": 0.45,
+  "note": "cilindro de gas pintado de blanco hueso"
+ },
+ "assumptions": [
+  "color aproximado"
+ ]
+}

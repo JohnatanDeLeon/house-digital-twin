@@ -1,0 +1,29 @@
+{
+ "name": "esmalte-blanco",
+ "applies_to": {
+  "furniture": "lavandería",
+  "source": "fotos de la lavandería (dueño, 2026-10-10)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   226,
+   226,
+   220
+  ],
+  "metallic": 0.0,
+  "roughness": 0.35,
+  "note": "lámina esmaltada blanca de la secadora y del boiler"
+ },
+ "source": {
+  "photo": "sources/fotos/lavanderia-frente.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color aproximado"
+ ]
+}

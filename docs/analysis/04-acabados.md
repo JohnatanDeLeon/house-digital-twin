@@ -429,6 +429,26 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 - **Colores** (medidos contra el muro, con la luz del foco): cobija (114, 59, 127), cabecera (37, 38, 46), laminado de los buros (178, 150, 106) y marco (100, 105, 103).
 - **Sin modelar:** las cortinas, la ropa y los objetos sueltos.
 
+### 28. Lavandería (2026-10-10, fotos 09:04:27 y 09:10:20) — primer espacio a remodelar
+
+Las medidas importan más aquí. Cada dato lleva su fuente en `sources/lavanderia/lavanderia.json` y en el IFC (`HDT_Provenance`).
+
+- **Medido por el dueño (cinta):**
+  - **Lavadora de 2 tinas (LG):** **95 × 50 cm**.
+  - **Secadora (Whirlpool):** **75 × 65 cm**.
+  - **Boiler (Cinsa):** **Ø 30 × 100 cm**, sobre una base de **60 cm**.
+- **Escala de la foto:** ≈ 449 px/m en el plano del muro del fondo. Sale de la ventana V09 (0.78 m en el plano) y la confirman la lavadora (453 px/m) y el boiler (440 px/m).
+- **Posición (foto, ± 5 cm):** todo va contra el muro del fondo, el del baño (x = 2.82 m).
+  - **Lavadora:** bajo la ventana, pegada al muro de la cocina (y = 10.225–11.175).
+  - **Secadora:** junto a la lavadora (y = 11.185–11.935).
+  - **Boiler:** centrado a 2.08 m del muro de la cocina, en la esquina con el muro de la recámara 2, sobre una base metálica de 4 patas.
+  - **Cilindro de gas:** al pie del boiler, hacia el pasillo.
+- **Alturas (foto, ± 3 cm):** la secadora, cubierta a 0.92 m y tablero a 1.04 m. La lavadora, tapa a 0.90 m y tablero a 0.97 m. Las 2 placas de contacto y el apagador están a 1.29 m (marfil).
+- **Supuesto:** el cilindro de gas (20 kg común), el largo y el fondo de la repisa (madera, en el muro de la cocina, a 1.78 m) y la separación del boiler al muro (5 cm).
+- **Muros:** se agregan al `aplanado-exterior` (supuesto). En la foto se ven pintados de blanco y con manchas de humedad, que no se modelan.
+- **Sin modelar:** el tendedero, las cubetas, el cesto, la ropa y la herrería de V09 del lado de la lavandería.
+- **Por confirmar con cinta:** las medidas libres del espacio (el plano da 1.62 × 2.40 m), la altura real de los aparatos, la posición del boiler y si la lavandería tiene techo (el modelo dice que no).
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.

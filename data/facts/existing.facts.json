@@ -5,7 +5,7 @@
  "frame": "origen en la esquina del terreno a la izquierda de la calle; X a lo ancho, Y hacia el fondo",
  "provenance": {
   "source": "dxf:data/raw/plano.dxf",
-  "built_on": "2026-10-09",
+  "built_on": "2026-10-10",
   "precision_m": 0.0,
   "calibration": {},
   "owner_annotations": "2026-10-08"

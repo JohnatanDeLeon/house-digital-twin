@@ -1,0 +1,110 @@
+{
+ "_doc": "Lavandería (S13): lavadora, secadora, boiler sobre su base, cilindro de gas, repisa y placas eléctricas. Muro del fondo = muro del baño (x = 2.82 m); `y` a lo largo del muro. Medidas en m. Marcadas por fuente: dueño (cinta), foto (estimación) o supuesto.",
+ "applies_to": {
+  "space": "S13",
+  "source": "fotos de la lavandería y medidas del dueño (2026-10-10)"
+ },
+ "scale_source": "foto de frente (2026-10-10 09:04): la ventana V09 (0.78 m de ancho en el plano) da ≈ 449 px/m en el plano del muro del fondo, y la lavadora (95 cm, dueño) da lo mismo (453 px/m); el boiler (1.00 m sobre su base de 0.60 m, dueño) también (440 px/m)",
+ "back_wall_x": 2.82,
+ "washer": {
+  "id": "lavanderia-lavadora",
+  "y": [
+   10.225,
+   11.175
+  ],
+  "depth_m": 0.5,
+  "body_m": 0.9,
+  "panel_m": 0.97,
+  "materials": {
+   "body": "esmalte-blanco",
+   "lid": "plastico-gris"
+  },
+  "size_source": "dueño: 95 × 50 cm (lavadora LG de 2 tinas)",
+  "position_source": "foto: contra el muro del fondo, bajo la ventana, pegada al muro de la cocina (y = 10.225 m)",
+  "height_source": "foto: tablero a ≈ 0.97 m (escala del boiler); supuesto ± 3 cm"
+ },
+ "dryer": {
+  "id": "lavanderia-secadora",
+  "y": [
+   11.185,
+   11.935
+  ],
+  "depth_m": 0.65,
+  "body_m": 0.92,
+  "console_m": 1.04,
+  "material": "esmalte-blanco",
+  "size_source": "dueño: 75 × 65 cm (secadora Whirlpool)",
+  "position_source": "foto: contra el muro del fondo, junto a la lavadora (≈ 1 cm)",
+  "height_source": "foto: cubierta a ≈ 0.92 m y tablero a ≈ 1.04 m (escala del boiler); ± 3 cm"
+ },
+ "boiler": {
+  "id": "lavanderia-boiler",
+  "centre": [
+   2.62,
+   12.305
+  ],
+  "diameter_m": 0.3,
+  "height_m": 1.0,
+  "stand_m": 0.6,
+  "stand_size_m": [
+   0.4,
+   0.4
+  ],
+  "flue_m": 0.25,
+  "material": "esmalte-blanco",
+  "stand_material": "metal-gris",
+  "size_source": "dueño: 30 cm de diámetro × 100 cm de alto, sobre una base de 60 cm",
+  "position_source": "foto: en la esquina del muro del fondo con el de la recámara 2, centro a ≈ 2.08 m del muro de la cocina (± 5 cm) y a ≈ 5 cm del muro del fondo (supuesto)"
+ },
+ "gas": {
+  "id": "lavanderia-gas",
+  "centre": [
+   2.24,
+   12.33
+  ],
+  "diameter_m": 0.31,
+  "height_m": 0.62,
+  "material": "tanque-gas",
+  "source": "foto: cilindro de gas al pie del boiler, hacia el pasillo; cilindro de 20 kg común (31 × 62 cm, supuesto)"
+ },
+ "shelf": {
+  "id": "lavanderia-repisa",
+  "x": [
+   1.65,
+   2.82
+  ],
+  "y_wall": 10.225,
+  "z": 1.78,
+  "depth_m": 0.25,
+  "thickness_m": 0.02,
+  "material": "madera-repisa",
+  "source": "foto: repisa de tabla con ménsulas en el muro de la cocina, desde el muro del fondo; altura por la escala del boiler, largo y fondo estimados"
+ },
+ "devices": [
+  {
+   "id": "lavanderia-contacto-1",
+   "kind": "outlet",
+   "y": 11.16,
+   "z": 1.29
+  },
+  {
+   "id": "lavanderia-apagador",
+   "kind": "switch",
+   "y": 11.31,
+   "z": 1.29
+  },
+  {
+   "id": "lavanderia-contacto-2",
+   "kind": "outlet",
+   "y": 11.46,
+   "z": 1.29
+  }
+ ],
+ "devices_source": "foto: 2 contactos y un apagador entre ellos en el muro del fondo, placas color marfil; posición y altura por la escala de la ventana (± 3 cm)",
+ "assumptions": [
+  "alturas de la lavadora y la secadora (± 3 cm, foto)",
+  "separación del boiler al muro",
+  "cilindro de gas, repisa y placas: tamaño común o estimado",
+  "no se modelan el tendedero, las cubetas, el cesto ni la ropa; la herrería de V09 tampoco"
+ ]
+}
