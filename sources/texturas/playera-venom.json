@@ -75,5 +75,12 @@
  "back": {
   "name": "playera-venom-espalda",
   "note": "espalda lisa (sin foto): la tela del frente sin el estampado"
+ },
+ "hanging": {
+  "name": "playera-venom-colgada",
+  "back_name": "playera-venom-colgada-espalda",
+  "drop_deg": 90,
+  "note": "colgada: las mangas caen 72° sobre el hombro (supuesto: así cae una playera de algodón en un gancho)",
+  "pivot_up_px": 260
  }
 }

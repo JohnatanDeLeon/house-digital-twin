@@ -1,0 +1,53 @@
+{
+ "name": "playera-venom-colgada-espalda",
+ "applies_to": {
+  "garment": "playera negra de Venom",
+  "source": "foto del dueño (2026-10-10)"
+ },
+ "source": {
+  "photo": "sources/fotos/playera-venom.jpg",
+  "photo_meta": {
+   "camera": "Samsung Galaxy S25 Ultra",
+   "focal_35mm": 23,
+   "light": "foco del cuarto; la playera extendida sobre la sábana gris"
+  },
+  "perspective": "la foto se tomó inclinada (abajo la playera se ve 20 % más ancha). Los costados del cuerpo, rectos en una playera, se ajustaron con una recta cada uno (filas 2200–3850 de la foto); con la focal (23 mm) ese trapecio es un rectángulo de ancho/alto 1.378 (coseno 0.023). Con el ancho de pecho supuesto se fija la escala",
+  "fabric_srgb": [
+   34,
+   37,
+   43
+  ],
+  "print_coverage": 0.0286
+ },
+ "observed": {
+  "type": "playera de algodón negra de manga corta, cuello redondo con vivo, etiqueta blanca en el cuello",
+  "print": "cara de Venom: ojos formados por la palabra VENOM dos veces, dientes, lengua y mandíbula, en foil plateado tipo espejo (refleja la luz rosa/gris)",
+  "condition": "tela con pelusa y pliegues de estar extendida"
+ },
+ "size_m": {
+  "width": 0.6512,
+  "height": 0.7212,
+  "source": "la prenda extendida con las mangas giradas 90° hacia abajo sobre el hombro"
+ },
+ "px_per_m": 1600,
+ "size_px": [
+  1042,
+  1154
+ ],
+ "tileable": false,
+ "grid": null,
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)",
+  "opacity": "opacity.png (0 = fuera de la prenda)"
+ },
+ "glass_material": null,
+ "assumptions": [
+  "ancho de pecho 0.52 m (talla M): falta medirlo",
+  "la orilla de abajo queda en el borde de la foto: el largo puede ser 1–3 cm mayor",
+  "el estampado es plano (foil), su color plateado es supuesto",
+  "colgada: las mangas caen 72° sobre el hombro (supuesto: así cae una playera de algodón en un gancho)",
+  "espalda lisa (sin foto): la tela del frente sin el estampado"
+ ]
+}

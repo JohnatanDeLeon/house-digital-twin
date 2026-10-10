@@ -658,42 +658,108 @@ def build_garment(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
     roughness = np.where(printed, pr['roughness'], g['fabric_roughness'])
     grain = _grain(_to_image(np.where(printed[..., None], lin, lin)), 1.5)
     height = grain * g.get('weave_mm', 0.15) / 1000 + printed * pr.get('thickness_mm', 0.1) / 1000
-    out.mkdir(parents=True, exist_ok=True)
-    detail_px = (round(W * DETAIL_MAP_SCALE), round(H * DETAIL_MAP_SCALE))
-    _to_image(lin).save(out / 'basecolor.jpg', quality=92)
-    Image.fromarray((roughness * 255).round().astype(np.uint8)).resize(detail_px, Image.LANCZOS).save(out / 'roughness.png', optimize=True)
-    _normal_map(height, px_per_m).resize(detail_px, Image.LANCZOS).save(out / 'normal.png', optimize=True)
-    Image.fromarray((garment * 255).astype(np.uint8)).save(out / 'opacity.png', optimize=True)
-    Image.fromarray((metallic * 255).round().astype(np.uint8)).resize(detail_px, Image.LANCZOS).save(out / 'metallic.png', optimize=True)
-    material = {
-        'name': spec['name'], 'applies_to': spec['applies_to'], 'size_m': spec['size_m'], 'px_per_m': px_per_m,
-        'size_px': list(size_px), 'tileable': False, 'grid': None,
-        'maps': {'basecolor': 'basecolor.jpg', 'roughness': 'roughness.png', 'normal': 'normal.png (OpenGL)',
-                 'opacity': 'opacity.png (0 = fuera de la prenda)', 'metallic': 'metallic.png (estampado de foil)'},
-        'glass_material': None,
-        'source': {'photo': spec['photo'], 'photo_meta': spec.get('photo_meta', {}), 'perspective': spec.get('perspective'),
-                   'fabric_srgb': [int(v) for v in np.round(_linear_to_srgb(fabric_color) * 255)],
-                   'print_coverage': round(float(printed.sum() / garment.sum()), 4)},
-        'observed': spec.get('observed', {}), 'assumptions': spec.get('assumptions', []),
-    }
-    (out / 'material.json').write_text(json.dumps(material, ensure_ascii=False, indent=1) + '\n')
-    if spec.get('back'):  # espalda: la misma silueta y la tela de la foto, sin el estampado (la espalda es lisa)
-        back = TEXTURES_DIR / spec['back']['name']
-        back.mkdir(parents=True, exist_ok=True)
-        plain = lin.copy()
-        hole = _blur(printed.astype(float), 4.0) > 0.02  # el estampado y su orilla suavizada
-        keep = (garment & ~hole).astype(float)
-        local = np.stack([_blur(lin[..., c] * keep, 30) for c in range(3)], -1) / np.maximum(_blur(keep, 30), 1e-3)[..., None]
-        plain[hole] = local[hole]  # el color de la tela de alrededor, no el promedio de toda la playera
-        _to_image(plain).save(back / 'basecolor.jpg', quality=92)
-        Image.fromarray((np.full(lum.shape, g['fabric_roughness']) * 255).round().astype(np.uint8)).resize(detail_px).save(back / 'roughness.png', optimize=True)
-        _normal_map(grain * g.get('weave_mm', 0.15) / 1000, px_per_m).resize(detail_px, Image.LANCZOS).save(back / 'normal.png', optimize=True)
-        Image.fromarray((garment * 255).astype(np.uint8)).save(back / 'opacity.png', optimize=True)
-        (back / 'material.json').write_text(json.dumps({
-            **material, 'name': spec['back']['name'], 'applies_to': {**spec['applies_to'], 'part': 'espalda'},
-            'maps': {k: v for k, v in material['maps'].items() if k != 'metallic'},
-            'assumptions': spec.get('assumptions', []) + [spec['back']['note']]}, ensure_ascii=False, indent=1) + '\n')
+    hole = _blur(printed.astype(float), 4.0) > 0.02  # la espalda: sin el estampado ni su orilla suavizada
+    keep = (garment & ~hole).astype(float)
+    local = np.stack([_blur(lin[..., c] * keep, 30) for c in range(3)], -1) / np.maximum(_blur(keep, 30), 1e-3)[..., None]
+    plain = lin.copy()
+    plain[hole] = local[hole]  # el color de la tela de alrededor, no el promedio de toda la playera
+    source = {'photo': spec['photo'], 'photo_meta': spec.get('photo_meta', {}), 'perspective': spec.get('perspective'),
+              'fabric_srgb': [int(v) for v in np.round(_linear_to_srgb(fabric_color) * 255)],
+              'print_coverage': round(float(printed.sum() / garment.sum()), 4)}
+    common = {'applies_to': spec['applies_to'], 'source': source, 'observed': spec.get('observed', {})}
+    back_rough = np.full(lum.shape, g['fabric_roughness'])
+    back_height = grain * g.get('weave_mm', 0.15) / 1000
+    _garment_maps(out, spec['name'], spec['size_m'], px_per_m, lin, garment, roughness, height, metallic, common,
+                  spec.get('assumptions', []))
+    if spec.get('back'):
+        _garment_maps(TEXTURES_DIR / spec['back']['name'], spec['back']['name'], spec['size_m'], px_per_m, plain, garment,
+                      back_rough, back_height, None, common, spec.get('assumptions', []) + [spec['back']['note']])
+    hang = spec.get('hanging')
+    if hang:  # la misma prenda colgada: las mangas caen girando sobre el hombro
+        front, back = hang_sleeves([lin, garment, roughness, height, metallic], garment, hang), \
+            hang_sleeves([plain, garment, back_rough, back_height], garment, hang)
+        size = {'width': round(front[1].shape[1] / px_per_m, 4), 'height': round(front[1].shape[0] / px_per_m, 4),
+                'source': f"la prenda extendida con las mangas giradas {hang['drop_deg']}° hacia abajo sobre el hombro"}
+        note = [hang['note']]
+        _garment_maps(TEXTURES_DIR / hang['name'], hang['name'], size, px_per_m, front[0], front[1] > 0.5, front[2], front[3],
+                      front[4], common, spec.get('assumptions', []) + note)
+        if spec.get('back'):
+            _garment_maps(TEXTURES_DIR / hang['back_name'], hang['back_name'], size, px_per_m, back[0], back[1] > 0.5, back[2],
+                          back[3], None, common, spec.get('assumptions', []) + note + [spec['back']['note']])
     return out
+
+
+def hang_sleeves(layers: list, garment: np.ndarray, hang: dict) -> list:
+    """Prenda colgada a partir de la extendida: cada manga gira `drop_deg` hacia abajo sobre su hombro y queda encima
+    del cuerpo. El cuerpo es lo que está entre sus costados (rectos, medidos cerca de la orilla de abajo); el hombro es
+    lo más alto de la prenda en el costado. Se recorta a la nueva silueta."""
+    H, W = garment.shape
+    rows = [y for y in range(int(H * 0.8), int(H * 0.95)) if garment[y].any()]
+    left = int(np.median([np.argmax(garment[y]) for y in rows]))
+    right = int(np.median([W - 1 - np.argmax(garment[y][::-1]) for y in rows]))
+    out = []
+    for layer in layers:
+        arr = layer.astype(float) if layer.ndim == 3 else layer.astype(float)[..., None]
+        body = arr.copy()
+        result = arr.copy()  # las mangas se quitan abajo, con la silueta
+        out.append([result, arr])
+    sleeves = []
+    for side, x_edge in ((-1, left), (1, right)):
+        top = int(np.argmax(garment[:, x_edge]))
+        # axila: la primera fila (bajando) donde la prenda ya no pasa del costado
+        outside = garment[:, :max(0, x_edge - 6)] if side < 0 else garment[:, x_edge + 6:]
+        start = next(y for y in range(top, H) if outside[y].any())  # donde la manga ya sobresale del costado
+        armpit = next(y for y in range(start, H) if not outside[y].any())
+        cols = (np.arange(W) < x_edge - 2) if side < 0 else (np.arange(W) > x_edge + 2)
+        region = cols[None, :] & (np.arange(H) < armpit)[:, None]
+        angle = hang['drop_deg'] * (1 if side < 0 else -1)  # PIL gira en contra de las manecillas: la izquierda baja así
+        sleeves.append((region, (x_edge, armpit - hang.get('pivot_up_px', 0)), angle))  # gira sobre la axila: la manga cae por fuera del cuerpo
+    alpha_body = (garment & ~sleeves[0][0] & ~sleeves[1][0]).astype(float)
+    alpha = alpha_body.copy()
+    rotated_alpha = []
+    for region, pivot, angle in sleeves:
+        a = (garment & region).astype(np.float32)
+        ra = np.asarray(Image.fromarray(a, 'F').rotate(angle, resample=Image.BILINEAR, center=pivot))
+        rotated_alpha.append(ra)
+        alpha = np.maximum(alpha, ra)
+    final = []
+    for (result, arr), layer in zip(out, layers):
+        result = result * alpha_body[..., None]
+        for (region, pivot, angle), ra in zip(sleeves, rotated_alpha):
+            piece = arr * (garment & region)[..., None]
+            rot = np.stack([np.asarray(Image.fromarray(piece[..., c].astype(np.float32), 'F').rotate(angle, resample=Image.BILINEAR, center=pivot))
+                            for c in range(arr.shape[2])], -1)
+            w = ra[..., None]
+            result = np.where(w > 0.5, rot / np.maximum(w, 1e-3), result)  # la manga queda encima del cuerpo
+        final.append(result)
+    ys, xs = np.nonzero(alpha > 0.5)
+    m = hang.get('margin_px', 8)
+    y0, y1, x0, x1 = max(0, ys.min() - m), min(H, ys.max() + m), max(0, xs.min() - m), min(W, xs.max() + m)
+    crop = lambda a: a[y0:y1, x0:x1]
+    res = []
+    for i, f in enumerate(final):
+        f = crop(f)
+        res.append(f if layers[i].ndim == 3 else f[..., 0])
+    res[1] = crop(alpha)
+    return res
+
+
+def _garment_maps(out: Path, name: str, size_m: dict, px_per_m: int, lin, alpha, roughness, height, metallic, common, assumptions):
+    out.mkdir(parents=True, exist_ok=True)
+    H, W = alpha.shape
+    detail_px = (round(W * DETAIL_MAP_SCALE), round(H * DETAIL_MAP_SCALE))
+    _to_image(np.clip(lin, 0, 1)).save(out / 'basecolor.jpg', quality=92)
+    Image.fromarray((np.clip(roughness, 0, 1) * 255).round().astype(np.uint8)).resize(detail_px, Image.LANCZOS).save(out / 'roughness.png', optimize=True)
+    _normal_map(height, px_per_m).resize(detail_px, Image.LANCZOS).save(out / 'normal.png', optimize=True)
+    Image.fromarray((np.asarray(alpha) > 0.5).astype(np.uint8) * 255).save(out / 'opacity.png', optimize=True)
+    maps = {'basecolor': 'basecolor.jpg', 'roughness': 'roughness.png', 'normal': 'normal.png (OpenGL)',
+            'opacity': 'opacity.png (0 = fuera de la prenda)'}
+    if metallic is not None:
+        Image.fromarray((np.clip(metallic, 0, 1) * 255).round().astype(np.uint8)).resize(detail_px, Image.LANCZOS).save(out / 'metallic.png', optimize=True)
+        maps['metallic'] = 'metallic.png (estampado de foil)'
+    material = {'name': name, **common, 'size_m': size_m, 'px_per_m': px_per_m, 'size_px': [W, H], 'tileable': False,
+                'grid': None, 'maps': maps, 'glass_material': None, 'assumptions': assumptions}
+    (out / 'material.json').write_text(json.dumps(material, ensure_ascii=False, indent=1) + '\n')
 
 
 def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:

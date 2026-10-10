@@ -79,3 +79,18 @@ def test_closet_r3_interior_is_hollow_and_leaves_open():
     leaves, doors = leaf_parts(fx, spec, 2.6)
     assert len(doors) == 3 and all(len(d['leaves']) == 2 for d in doors)
     assert sum(1 for p in leaves if p['ifc'] == 'IfcFurniture') == 6
+
+
+def test_closet_r3_only_hangs_the_venom_tee_and_it_fits():
+    import json
+    from house_twin.closet_interior import display_parts, interior_parts
+    from house_twin.furniture import load_furniture
+    facts = json.loads(open('data/facts/existing.facts.json').read())
+    fx = next(x for x in facts['fixtures'] if x['id'] == 'F03')
+    spec = next(s for s in load_furniture() if s['applies_to']['space'] == 'S04')
+    assert not any(m.startswith(('F03-interior-ropa', 'F03-interior-piel')) for m in (p['id'] for p in interior_parts(fx, spec, 2.6)))
+    parts, items = display_parts(fx, spec)
+    assert [i['label'] for i in items] == ['la playera de Venom']
+    tee = next(p for p in parts if p['id'] == 'F03-playera-venom')
+    xs = [q[0] for q in tee['mesh'][0]]
+    assert 5.79 <= min(xs) and max(xs) <= 6.374  # cabe entre el muro y las hojas

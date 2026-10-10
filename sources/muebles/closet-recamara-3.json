@@ -616,143 +616,32 @@
    "rods": [
     {
      "z": 1.82,
-     "garments": [
-      [
-       0.62,
-       0.03,
-       "ropa-lila"
-      ],
-      [
-       0.55,
-       0.02,
-       "ropa-negra"
-      ],
-      [
-       0.6,
-       0.025,
-       "ropa-blanca"
-      ],
-      [
-       0.55,
-       0.02,
-       "ropa-negra"
-      ],
-      [
-       0.6,
-       0.02,
-       "ropa-gris"
-      ],
-      [
-       0.6,
-       0.02,
-       "ropa-negra"
-      ],
-      [
-       0.58,
-       0.025,
-       "ropa-blanca"
-      ],
-      [
-       0.62,
-       0.02,
-       "ropa-negra"
-      ],
-      [
-       0.75,
-       0.03,
-       "ropa-gris"
-      ],
-      [
-       0.75,
-       0.035,
-       "ropa-negra"
-      ],
-      [
-       0.8,
-       0.05,
-       "ropa-gris"
-      ],
-      [
-       0.85,
-       0.06,
-       "piel-negra"
-      ],
-      [
-       0.8,
-       0.04,
-       "ropa-camuflaje"
-      ],
-      [
-       0.78,
-       0.05,
-       "piel-negra"
-      ]
-     ]
+     "garments": []
     },
     {
      "z": 0.82,
-     "garments": [
-      [
-       0.5,
-       0.03,
-       "ropa-mezclilla"
-      ],
-      [
-       0.5,
-       0.03,
-       "ropa-negra"
-      ],
-      [
-       0.48,
-       0.03,
-       "ropa-gris"
-      ],
-      [
-       0.5,
-       0.03,
-       "ropa-mezclilla"
-      ],
-      [
-       0.52,
-       0.03,
-       "ropa-negra"
-      ],
-      [
-       0.5,
-       0.03,
-       "ropa-gris"
-      ],
-      [
-       0.66,
-       0.025,
-       "ropa-blanca"
-      ],
-      [
-       0.66,
-       0.025,
-       "ropa-azul"
-      ]
-     ],
+     "garments": [],
      "width_m": 0.4
     }
    ],
-   "note": "colgador doble del módulo 3: tubo arriba con camisas, playeras y chamarras; tubo abajo con pantalones y camisas largas (altura ± 10 cm)"
+   "note": "colgador doble del módulo 3: tubo arriba (1.82 m) y abajo (≈ 0.82 m); la ropa genérica se quitó (dueño, 2026-10-10): solo cuelga la playera de Venom"
   },
   "display": [
    {
     "id": "playera-venom",
     "label": "la playera de Venom",
-    "material": "playera-venom",
-    "back_material": "playera-venom-espalda",
+    "material": "playera-venom-colgada",
+    "back_material": "playera-venom-colgada-espalda",
     "u_centre": 2.245,
-    "top_z": 1.76,
-    "n": -0.045,
+    "n": -0.3,
+    "rod_z": 1.82,
     "size_m": [
-     0.96,
-     0.735
+     0.6512,
+     0.7212
     ],
+    "yaw_deg": 30,
     "module": 3,
-    "source": "playera digitalizada de su foto (sources/texturas/playera-venom.json); colgada de frente en el módulo 3, adelante de la ropa (dueño, 2026-10-10: dentro del closet de la recámara 3)"
+    "source": "playera digitalizada de su foto, colgada en su gancho del tubo de arriba del módulo 3, de canto como cualquier prenda y girada 30° hacia el cuarto para caber en el fondo (0.58 m); mangas caídas (dueño, 2026-10-10)"
    }
   ]
  }

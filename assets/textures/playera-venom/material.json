@@ -4,26 +4,6 @@
   "garment": "playera negra de Venom",
   "source": "foto del dueño (2026-10-10)"
  },
- "size_m": {
-  "width": 0.96,
-  "height": 0.735,
-  "source": "recorte de la foto corregida: ancho de pecho supuesto de 0.52 m (talla M) → de manga a manga ≈ 0.78 m y de hombro a la orilla de la foto 0.71 m"
- },
- "px_per_m": 1600,
- "size_px": [
-  1536,
-  1176
- ],
- "tileable": false,
- "grid": null,
- "maps": {
-  "basecolor": "basecolor.jpg",
-  "roughness": "roughness.png",
-  "normal": "normal.png (OpenGL)",
-  "opacity": "opacity.png (0 = fuera de la prenda)",
-  "metallic": "metallic.png (estampado de foil)"
- },
- "glass_material": null,
  "source": {
   "photo": "sources/fotos/playera-venom.jpg",
   "photo_meta": {
@@ -44,6 +24,26 @@
   "print": "cara de Venom: ojos formados por la palabra VENOM dos veces, dientes, lengua y mandíbula, en foil plateado tipo espejo (refleja la luz rosa/gris)",
   "condition": "tela con pelusa y pliegues de estar extendida"
  },
+ "size_m": {
+  "width": 0.96,
+  "height": 0.735,
+  "source": "recorte de la foto corregida: ancho de pecho supuesto de 0.52 m (talla M) → de manga a manga ≈ 0.78 m y de hombro a la orilla de la foto 0.71 m"
+ },
+ "px_per_m": 1600,
+ "size_px": [
+  1536,
+  1176
+ ],
+ "tileable": false,
+ "grid": null,
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)",
+  "opacity": "opacity.png (0 = fuera de la prenda)",
+  "metallic": "metallic.png (estampado de foil)"
+ },
+ "glass_material": null,
  "assumptions": [
   "ancho de pecho 0.52 m (talla M): falta medirlo",
   "la orilla de abajo queda en el borde de la foto: el largo puede ser 1–3 cm mayor",

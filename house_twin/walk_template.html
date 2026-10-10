@@ -465,9 +465,10 @@ function animateDoors(dt) {
 // ---------- cosas que se pueden sacar y ver de cerca (una prenda del closet) ----------
 const items = [];
 let held = null;
-const HELD_AT = new THREE.Vector3(0, -0.04, -0.72);  // frente a los ojos, en el marco de la cámara
+const HELD_AT = new THREE.Vector3(0, -0.04, -0.62);  // frente a los ojos, en el marco de la cámara
 function setupItems() {
   scene.add(camera);  // lo que se sostiene viaja con la cámara
+  scene.traverse(o => { if (o.isLight) o.layers.enable(HELD_LAYER); });  // y lo iluminan las mismas luces
   for (const it of DATA.items || []) {
     const meshes = [];
     scene.traverse(o => { const t = tagOf(o); if (o.isMesh && (t.hdt_id || '').startsWith(it.id) && !t.hdt_id.endsWith('-gancho')) meshes.push(o); });
@@ -492,8 +493,12 @@ function itemAvailable(it) {
   const fx = -Math.sin(player.yaw), fy = Math.cos(player.yaw);
   return dist < 1.9 && (dx * fx + dy * fy) / (dist || 1) > 0.55;
 }
-function takeItem(it) { camera.attach(it.group); it.spin = 0; it.returning = false; held = it; }
-function returnItem() { if (!held) return; scene.attach(held.group); held.returning = true; held = null; }
+// lo que se sostiene va en la capa 1 y se dibuja en un segundo paso, sobre el cuarto ya dibujado y con su propia
+// profundidad: una puerta abierta o el closet no lo cortan, y el frente sigue tapando a la espalda
+const HELD_LAYER = 1;
+function onTop(it, on) { it.group.traverse(o => { if (o.isMesh) o.layers.set(on ? HELD_LAYER : 0); }); }
+function takeItem(it) { camera.attach(it.group); it.spin = 0; it.returning = false; onTop(it, true); held = it; }
+function returnItem() { if (!held) return; onTop(held, false); scene.attach(held.group); held.returning = true; held = null; }
 function flipItem(turn = Math.PI) { if (held) held.spin += turn; }
 const spinQ = new THREE.Quaternion(), yAxis = new THREE.Vector3(0, 1, 0);
 function animateItems(dt) {
@@ -681,6 +686,13 @@ function frame() {
   camera.position.copy(player.pos);
   camera.rotation.set(player.pitch, player.yaw, 0);
   renderer.render(scene, camera);
+  if (held) {
+    const sky = scene.background;
+    scene.background = null;  // un fondo de color borra lo ya dibujado
+    renderer.autoClear = false; renderer.clearDepth();
+    camera.layers.set(HELD_LAYER); renderer.render(scene, camera); camera.layers.set(0);
+    renderer.autoClear = true; scene.background = sky;
+  }
   updateHere();
   requestAnimationFrame(frame);
 }
