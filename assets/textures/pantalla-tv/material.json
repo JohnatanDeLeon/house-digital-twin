@@ -1,0 +1,29 @@
+{
+ "name": "pantalla-tv",
+ "applies_to": {
+  "appliance": "televisión",
+  "source": "fotos de la sala (dueño)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   8,
+   9,
+   11
+  ],
+  "metallic": 0.0,
+  "roughness": 0.08,
+  "note": "pantalla apagada: negro brillante"
+ },
+ "source": {
+  "photo": "sources/fotos/sala-tv.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color y brillo comunes"
+ ]
+}

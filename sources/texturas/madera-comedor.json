@@ -1,0 +1,24 @@
+{
+ "_doc": "madera oscura barnizada (tipo chocolate) del comedor; medida en el respaldo y la tablilla de las sillas contra el muro (235); la cubierta de la mesa es más brillante. Regenerar con: python -m house_twin.cli texture sources/texturas/madera-comedor.json",
+ "name": "madera-comedor",
+ "kind": "constant",
+ "applies_to": {
+  "furniture": "mesa y sillas del comedor",
+  "source": "foto del comedor (dueño, 2026-10-09)"
+ },
+ "photo": "sources/fotos/comedor-frente.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   60,
+   44,
+   37
+  ],
+  "metallic": 0.0,
+  "roughness": 0.3,
+  "note": "madera oscura barnizada (tipo chocolate) del comedor; medida en el respaldo y la tablilla de las sillas contra el muro (235); la cubierta de la mesa es más brillante"
+ },
+ "assumptions": [
+  "luz de la ventana: el muro como blanco es aproximado",
+  "sin veta: color liso"
+ ]
+}

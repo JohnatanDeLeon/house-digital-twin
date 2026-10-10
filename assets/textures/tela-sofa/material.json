@@ -1,0 +1,61 @@
+{
+ "name": "tela-sofa",
+ "applies_to": {
+  "furniture": "sofá de la sala",
+  "source": "fotos de la sala (dueño, 2026-10-09)"
+ },
+ "size_m": {
+  "width": 0.25,
+  "height": 0.215,
+  "source": "el cojín del respaldo (≈ 0.55 m, de un sofá de 2.20 m con 3 asientos por lado y brazos) ocupa el ancho de la foto (3000 px) → ≈ 5500 px/m; estimación"
+ },
+ "px_per_m": 3000,
+ "size_px": [
+  750,
+  645
+ ],
+ "tileable": true,
+ "grid": null,
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)"
+ },
+ "glass_material": null,
+ "latch_side": null,
+ "source": {
+  "photo": "sources/fotos/tela-sofa.jpg",
+  "photo_meta": {
+   "taken": "2026-10-09T13:40:54",
+   "camera": "Samsung Galaxy S25 Ultra",
+   "focal_35mm": 13,
+   "light": "luz de día"
+  },
+  "color": {
+   "gain": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "mean_srgb": [
+    150,
+    153,
+    159
+   ],
+   "note": "tono de la cámara (gris neutro, apenas frío); luminosidad del sofá contra el muro de atrás en la foto de conjunto de día, mismo plano casi y misma luz, con el muro pintado como blanco (235)"
+  },
+  "white_balance_gain": [
+   1.5378,
+   1.5378,
+   1.5378
+  ]
+ },
+ "observed": {
+  "fabric": "tejido tipo chenille/jaspeado gris medio con vivos en las orillas de los cojines",
+  "sofa": "sofá modular en L de 220 × 220 cm (dueño), 2 reclinables en los extremos, rincón en cuña y 3 asientos"
+ },
+ "assumptions": [
+  "escala del tejido",
+  "luminosidad (medida contra el muro, de lejos)"
+ ]
+}
