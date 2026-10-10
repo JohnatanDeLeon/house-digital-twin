@@ -159,6 +159,8 @@ def _adjacency(walls, spaces, openings):
         if len(o['connects']) == 2:
             entry = pairs.setdefault(tuple(sorted(o['connects'])), {'spaces': sorted(o['connects']), 'walls': [], 'doors': [], 'windows': []})
             entry['doors' if o['kind'] == 'door' else 'windows'].append(o['id'])
+            if o['kind'] == 'door' and entry.get('open'):
+                entry['open'] = False  # el paso entre los dos exteriores lo cierra una puerta (p. ej. de herrería)
     return [pairs[k] for k in sorted(pairs)]
 
 
@@ -234,7 +236,8 @@ def _apply_answered_values(facts: dict, annotations: dict):
     """Las respuestas con `value` numérico pasan a los hechos que contestan; sin `value` solo cierran la incógnita.
 
     U01 → altura de piso terminado a lecho bajo de losa del nivel; U04 → altura de vano de las puertas
-    que el plano deja sin altura.
+    que el plano deja sin altura. U04 habla de vanos en muros: no llega a las puertas sin muro (herrería entre
+    dos muros), que esperan su propia medida.
     """
     for answer in annotations.get('answered_unknowns', []):
         if answer.get('value') is None:
@@ -244,7 +247,7 @@ def _apply_answered_values(facts: dict, annotations: dict):
             facts['levels'][0]['storey_height'] = fact
         elif answer['id'] == 'U04':
             for o in facts['openings']:
-                if o['kind'] == 'door' and o['height']['value'] is None:
+                if o['kind'] == 'door' and o['host_wall'] and o['height']['value'] is None:
                     o['height'] = dict(fact)
 
 

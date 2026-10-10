@@ -162,7 +162,8 @@ def test_sheet_door_draws_layout_without_copying_the_photo():
             'cavity': {'radius_mm': 5, 'depth_mm': 2, 'darkening': 0.5}, 'dust_opacity': 0.4,
             'roughness': {'base': 0.4, 'rust': 0.9, 'dust': 0.7}}
     colors = {'paint': [30, 31, 34], 'rust': [120, 60, 40], 'dust': [90, 90, 90]}
-    base, height, rough = textures.procedural_sheet_door(spec, (200, 400), colors)
+    base, height, rough, alpha = textures.procedural_sheet_door(spec, (200, 400), colors)
+    assert alpha is None                                         # toda lámina: sin huecos
     px = np.asarray(base).astype(int)
     assert height[100, 60] == pytest.approx(-0.004, abs=1e-4)   # tablero hundido
     assert height[100, 100] < height[100, 60]                    # ranura de la duela

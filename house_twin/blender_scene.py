@@ -67,7 +67,7 @@ def plain_material(name, color):
 
 
 def texture_material(name, spec, specs):
-    """Material de una textura: constante (solo PBR) o con mapas; con `opacity`, mezcla su vidrio."""
+    """Material de una textura: constante (solo PBR) o con mapas; con `opacity`, mezcla su vidrio o deja ver a través."""
     mat, nt = _new_material(name)
     out = nt.nodes['Material Output']
     if spec.get('kind') == 'constant':
@@ -105,6 +105,8 @@ def texture_material(name, spec, specs):
         nt.links.new(_principled(nt, specs[spec['glass_material']]['pbr']).outputs[0], mix.inputs[1])
         nt.links.new(bsdf.outputs[0], mix.inputs[2])
         surface = mix
+    elif 'opacity' in spec['maps']:  # herrería: los huecos no tienen vidrio, se ve a través
+        nt.links.new(image('opacity.png', 'Non-Color').outputs[0], bsdf.inputs['Alpha'])
     nt.links.new(surface.outputs[0], out.inputs['Surface'])
     return mat
 

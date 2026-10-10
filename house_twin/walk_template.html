@@ -213,7 +213,11 @@ function mappedMaterial(spec) {
   if (spec.maps.basecolor) m.map = texture(spec.maps.basecolor, true, spec);
   if (spec.maps.roughness) m.roughnessMap = texture(spec.maps.roughness, false, spec);
   if (spec.maps.normal) m.normalMap = texture(spec.maps.normal, false, spec);
-  if (spec.maps.opacity) { m.alphaMap = texture(spec.maps.opacity, false, spec); m.transparent = true; }
+  if (spec.maps.opacity && spec.glass) { m.alphaMap = texture(spec.maps.opacity, false, spec); m.transparent = true; }
+  else if (spec.maps.opacity) {  // herrería: recorte nítido, y la sombra sigue los barrotes
+    m.alphaMap = texture(spec.maps.opacity, false, spec); m.alphaTest = 0.5; m.side = THREE.DoubleSide;
+    m.userData.depth = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking, alphaMap: m.alphaMap, alphaTest: 0.5 });
+  }
   return m;
 }
 const materialCache = {};
@@ -264,6 +268,7 @@ async function loadHouse() {
     const name = obj.material && obj.material.name;
     obj.material = tag.hdt_kind === 'IfcWindow' && tag.hdt_size ? windowMaterial(tag.hdt_size) : materialFor(name);
     obj.castShadow = tag.hdt_kind !== 'IfcWindow';
+    if (obj.material.userData.depth) obj.customDepthMaterial = obj.material.userData.depth;
     obj.receiveShadow = true;
     if (tag.hdt_kind === 'IfcWall' || tag.hdt_kind === 'IfcWindow') colliders.push(obj);
   });

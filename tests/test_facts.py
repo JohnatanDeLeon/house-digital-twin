@@ -1,5 +1,5 @@
 import pytest
-from shapely.geometry import Polygon
+from shapely.geometry import LineString, Polygon
 from shapely.ops import unary_union
 
 from tests.conftest import space_named
@@ -10,8 +10,10 @@ def _opening_at(facts, x, y):
 
 
 def test_counts(facts):
-    kinds = [o['kind'] for o in facts['openings'] if o['footprint']]
+    kinds = [o['kind'] for o in facts['openings'] if o['footprint'] and o['host_wall']]
     assert kinds.count('door') == 9 and kinds.count('window') == 9
+    gates = [o for o in facts['openings'] if o['footprint'] and not o['host_wall']]  # herrería del pasillo (dueño)
+    assert [o['kind'] for o in gates] == ['door', 'door']
     assert sum(not s['is_exterior'] for s in facts['spaces']) == 8
     assert sorted(s['name'] for s in facts['spaces'] if s['is_exterior']) == ['Cochera', 'Lavandería', 'Pasillo de servicio', 'Patio', 'Pórtico']
 
@@ -51,8 +53,10 @@ def test_exterior_zones_are_where_the_owner_said(facts):
 def test_laundry_does_not_cut_the_service_passage(facts):
     passage = space_named(facts, 'Pasillo de servicio')
     laundry = space_named(facts, 'Lavandería')
-    assert passage['bbox'][1] == pytest.approx(6.702, abs=0.01) and passage['bbox'][3] == pytest.approx(12.617, abs=0.01)
-    assert laundry['bbox'][0] == pytest.approx(passage['bbox'][2], abs=0.01)  # empieza donde termina el pasillo
+    # va de la cochera hasta la puerta del patio, al final del muro de la recámara 2 (dueño)
+    assert passage['bbox'][1] == pytest.approx(6.702, abs=0.01) and passage['bbox'][3] == pytest.approx(16.945, abs=0.01)
+    beside_laundry = Polygon(passage['polygon']).intersection(LineString([(0, 11), (3, 11)])).bounds
+    assert laundry['bbox'][0] == pytest.approx(beside_laundry[2], abs=0.01)  # empieza donde termina el pasillo
     kitchen_door = _opening_at(facts, 1.29, 8.8)
     assert passage['id'] in kitchen_door['connects']
 
@@ -112,8 +116,10 @@ def test_unknown_heights_are_null_not_guessed(plan_only_facts):
 def test_owner_heights_reach_the_facts(facts):
     storey = facts['levels'][0]['storey_height']
     assert storey['value'] == 2.60 and storey['source'].endswith('U01')
-    doors = [o for o in facts['openings'] if o['kind'] == 'door']
+    doors = [o for o in facts['openings'] if o['kind'] == 'door' and o['host_wall']]
     assert len(doors) == 9 and all(o['height']['value'] == 2.10 for o in doors)
+    gates = [o for o in facts['openings'] if o['kind'] == 'door' and not o['host_wall']]
+    assert gates and all(o['height']['value'] is None for o in gates)  # U04 habla de vanos: la herrería espera su medida
     assert all(w['height']['value'] is None for w in facts['walls'])  # no todos los muros llegan a la losa
 
 
@@ -125,6 +131,9 @@ def test_walls_do_not_overlap_and_are_valid(facts):
 
 def test_every_opening_has_a_host_wall_and_connects_spaces(facts):
     for o in facts['openings']:  # incluye la ventana declarada por el dueño
+        if o['footprint'] and o['detected_by'].startswith('dueño'):  # herrería entre dos muros: une dos espacios
+            assert o['host_wall'] is None and len(o['connects']) == 2
+            continue
         assert o['host_wall'] is not None
         assert 1 <= len(o['connects']) <= 2
 

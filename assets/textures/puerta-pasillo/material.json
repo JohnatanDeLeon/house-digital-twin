@@ -1,45 +1,36 @@
 {
  "name": "puerta-pasillo",
  "applies_to": {
-  "openings": [],
-  "boundaries": [
-   {
-    "between": [
-     "S10",
-     "S12"
-    ],
-    "where": "cochera ↔ pasillo de servicio, límite en y = 6.705 m entre x = 0.20 y 1.205 m"
-   },
-   {
-    "between": [
-     "S12",
-     "S09"
-    ],
-    "where": "pasillo de servicio ↔ patio, límite en y = 12.625 m entre x = 0.20 y 1.205 m"
-   }
+  "openings": [
+   "D10",
+   "D11"
   ],
-  "source": "dueño (2026-10-08): puerta de metal negra entre la cochera y el pasillo de servicio, y otra igual entre el pasillo y el patio; ninguna está en el plano ni en el modelo (las adyacencias S10–S12 y S09–S12 figuran como abiertas)"
+  "viewed_from": "S12",
+  "source": "dueño (2026-10-08): puerta de metal negra entre la cochera y el pasillo de servicio, y otra igual al final del muro de la recámara 2, hacia el patio; la foto es de la de la cochera, desde el pasillo"
  },
+ "kind": "procedural",
+ "tileable": false,
  "size_m": {
   "width": 1.0,
   "height": 2.0,
-  "source": "ancho: los dos límites del pasillo miden 1.005 m en el plano (entre el muro colindante, x = 0.20 m, y la cara del muro de la cocina, x = 1.205 m); alto: supuesto provisional, pendiente de medir"
+  "source": "proporción de la foto; la altura real va en el vano (pendiente de medir). Las piezas están en fracciones, así que solo cambia la densidad de píxeles"
  },
  "px_per_m": 1000,
  "size_px": [
   1000,
   2000
  ],
- "tileable": false,
- "grid": null,
  "maps": {
   "basecolor": "basecolor.jpg",
   "roughness": "roughness.png",
   "normal": "normal.png (OpenGL)",
-  "opacity": "opacity.png (0 = vidrio)"
+  "opacity": "opacity.png (0 = hueco)"
  },
  "glass_material": null,
  "source": {
+  "method": "procedural",
+  "seed": 21,
+  "references": [],
   "photo": "sources/fotos/puerta-pasillo.jpg",
   "photo_meta": {
    "taken": "2026-10-08T07:48:20",
@@ -50,27 +41,388 @@
    "light": "luz de día, tomada desde el pasillo hacia la cochera y la calle"
   },
   "color": {
-   "as_shot": true,
-   "note": "luz de día con el balance de la cámara; no hay blanco en el plano de la puerta (los muros quedan de lado)"
+   "white_reference": {
+    "box_px": [
+     2520,
+     2600,
+     2800,
+     3400
+    ],
+    "albedo_srgb": [
+     222,
+     222,
+     220
+    ],
+    "note": "muro del pasillo a la derecha, a la altura de la lámina; mismo blanco exterior supuesto que los demás aplanados. Sin referencia, la cámara (expuesta para la calle) dejaba la lámina casi negra (8, 8, 11). Con ella, la pintura da como el negro de la bodega, que sí está en el plano de su muro"
+   },
+   "measure_px_per_m": 500,
+   "samples": {
+    "paint": {
+     "rect_frac": [
+      0.1,
+      0.78,
+      0.9,
+      0.97
+     ],
+     "keep": "darkest",
+     "fraction": 0.3,
+     "note": "lámina de abajo, sin las marcas claras de la brocha"
+    }
+   }
   },
   "white_balance_gain": [
-   1.0,
-   1.0,
-   1.0
-  ]
+   5.4976,
+   5.3856,
+   5.4996
+  ],
+  "measured_srgb": {
+   "paint": [
+    31,
+    30,
+    37
+   ]
+  }
+ },
+ "parameters": {
+  "layout": [
+   {
+    "kind": "level",
+    "rect_frac": [
+     0.035,
+     0.745,
+     0.962,
+     0.99
+    ],
+    "height_mm": -3,
+    "note": "lámina lisa, asentada detrás del marco de perfil"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.035,
+     0.076,
+     0.962,
+     0.082
+    ],
+    "height_mm": 6,
+    "note": "travesaño de solera"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.035,
+     0.345,
+     0.962,
+     0.351
+    ],
+    "height_mm": 6,
+    "note": "travesaño de solera"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.035,
+     0.411,
+     0.962,
+     0.417
+    ],
+    "height_mm": 6,
+    "note": "travesaño de solera"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.035,
+     0.669,
+     0.962,
+     0.675
+    ],
+    "height_mm": 6,
+    "note": "travesaño de solera"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.1535,
+     0.02,
+     0.1705,
+     0.74
+    ],
+    "height_mm": 8,
+    "twist_pitch_mm": 50,
+    "note": "barrote cuadrado torcido"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.4125,
+     0.02,
+     0.4295,
+     0.74
+    ],
+    "height_mm": 8,
+    "twist_pitch_mm": 50,
+    "note": "barrote cuadrado torcido"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.6745,
+     0.02,
+     0.6915,
+     0.74
+    ],
+    "height_mm": 8,
+    "twist_pitch_mm": 50,
+    "note": "barrote cuadrado torcido"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.287,
+     0.02,
+     0.297,
+     0.74
+    ],
+    "height_mm": 6,
+    "note": "barrote liso"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.55,
+     0.02,
+     0.56,
+     0.74
+    ],
+    "height_mm": 6,
+    "note": "barrote liso"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.823,
+     0.02,
+     0.833,
+     0.74
+    ],
+    "height_mm": 6,
+    "note": "barrote liso"
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.227,
+     0.052
+    ],
+    "radius_frac_w": 0.062,
+    "thickness_frac_w": 0.009,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.488,
+     0.052
+    ],
+    "radius_frac_w": 0.062,
+    "thickness_frac_w": 0.009,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.76,
+     0.052
+    ],
+    "radius_frac_w": 0.062,
+    "thickness_frac_w": 0.009,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.092,
+     0.382
+    ],
+    "radius_frac_w": 0.062,
+    "thickness_frac_w": 0.009,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.358,
+     0.382
+    ],
+    "radius_frac_w": 0.062,
+    "thickness_frac_w": 0.009,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.62,
+     0.382
+    ],
+    "radius_frac_w": 0.062,
+    "thickness_frac_w": 0.009,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.897,
+     0.382
+    ],
+    "radius_frac_w": 0.062,
+    "thickness_frac_w": 0.009,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.225,
+     0.707
+    ],
+    "radius_frac_w": 0.062,
+    "thickness_frac_w": 0.009,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.492,
+     0.707
+    ],
+    "radius_frac_w": 0.062,
+    "thickness_frac_w": 0.009,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.763,
+     0.707
+    ],
+    "radius_frac_w": 0.062,
+    "thickness_frac_w": 0.009,
+    "height_mm": 4
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.292,
+     0.215
+    ],
+    "size_frac_w": [
+     0.028,
+     0.045
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.292,
+     0.543
+    ],
+    "size_frac_w": [
+     0.028,
+     0.045
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.555,
+     0.215
+    ],
+    "size_frac_w": [
+     0.028,
+     0.045
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.555,
+     0.655
+    ],
+    "size_frac_w": [
+     0.028,
+     0.045
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.828,
+     0.218
+    ],
+    "size_frac_w": [
+     0.028,
+     0.045
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.828,
+     0.545
+    ],
+    "size_frac_w": [
+     0.028,
+     0.045
+    ],
+    "height_mm": 10
+   }
+  ],
+  "paint": {
+   "variation": 0.03,
+   "orange_peel_mm": 1.5,
+   "orange_peel_height_mm": 0.04,
+   "note": "pintura negra a brocha"
+  },
+  "cavity": {
+   "radius_mm": 5,
+   "depth_mm": 3,
+   "darkening": 0.5
+  },
+  "bevel_mm": 1.0,
+  "roughness": {
+   "base": 0.6,
+   "note": "esmalte negro envejecido y con polvo"
+  },
+  "opacity": {
+   "holes": [
+    [
+     0.035,
+     0.02,
+     0.962,
+     0.735
+    ]
+   ],
+   "note": "todo lo de arriba de la lámina es hueco salvo travesaños, barrotes, arillos y adornos"
+  }
  },
  "observed": {
   "type": "puerta de herrería de una hoja: marco de perfil, barrotes cuadrados torcidos y lisos, arillos de solera y lámina lisa en el tercio inferior",
   "finish": "pintura negra a brocha, con polvo y desgaste; la lámina muestra las marcas de la brocha",
   "ornaments": "adornos de fundición en forma de rombo con picos en los barrotes lisos",
-  "hardware": "bisagras de perno con ménsula anclada al muro (lado izquierdo); portacandado de lámina con candado (lado derecho)",
+  "hardware": "bisagras de perno con ménsula anclada al muro (lado izquierdo); portacandado de lámina con candado (lado derecho). No van en la textura: el portacandado va de un solo lado; irán como objetos 3D",
   "temporary": "cinta y trapo en el poste izquierdo; amarres de alambre y cordón",
-  "context": "desde el pasillo se ve la cochera: concreto con un registro cuadrado, el portón de herrería negro hacia la calle, la barda colindante pintada de blanco con remate de tabique rojo y el poste de luz de la calle"
+  "context": "desde el pasillo se ve la cochera: concreto con un registro cuadrado, el portón de herrería negro hacia la calle, la barda colindante pintada de blanco con remate de tabique rojo y el poste de luz de la calle",
+  "measured_from_photo": "4 travesaños, 3 barrotes torcidos, 3 lisos con 2 adornos cada uno y 10 arillos (filas de 3, 4 y 3); la lámina ocupa desde 0.735 de la altura",
+  "proportion": "ancho/alto = 0.530 por la perspectiva de la foto y la focal de la cámara (23 mm equivalentes): con 1.005 m de ancho, ≈ 1.90 m de alto"
  },
  "assumptions": [
-  "alto de 2.00 m (pendiente de medir)",
-  "ancho igual al hueco del plano (1.005 m)",
-  "que cada puerta esté sobre el límite del espacio en el modelo (posición pendiente de confirmar)",
-  "color tal como lo registró la cámara con luz de día"
+  "relieve (barrotes 6–8 mm, arillos 4 mm, adornos 10 mm, lámina hundida 3 mm) y paso del torcido (5 cm) estimados",
+  "D11 (patio) es igual a D10 y se ve igual desde el pasillo: no hay foto",
+  "muro derecho del pasillo como blanco de referencia (albedo 222); está de lado, así que recibe una luz parecida pero no igual a la de la puerta"
  ]
 }

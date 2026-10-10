@@ -9,7 +9,9 @@ def test_ifc_is_schema_valid_and_complete(facts):
     ifcopenshell.validate.validate(model, log)
     assert log.statements == []
     assert len(model.by_type('IfcWall')) == len(facts['walls'])
-    assert len(model.by_type('IfcDoor')) == 9 and len(model.by_type('IfcWindow')) == 9  # la del tragaluz no tiene medidas
+    # 9 puertas del plano + 2 de herrería del dueño; la ventana del tragaluz no tiene medidas
+    assert len(model.by_type('IfcDoor')) == 11 and len(model.by_type('IfcWindow')) == 9
+    # la herrería va entre dos muros, sin hueco que cortar
     assert len(model.by_type('IfcRelVoidsElement')) == 18 and len(model.by_type('IfcRelFillsElement')) == 18
     assert len(model.by_type('IfcSpace')) == len(facts['spaces'])
 
