@@ -103,7 +103,8 @@ Los defectos reales (salpicaduras de pintura, marcas) se conservan.
 - **Textura:**
   - Usa el vano D03 (1.00 × 2.10 m) y su relieve tiene más grano, para reproducir la superficie rugosa.
   - Los herrajes se taparon con el mismo larguero; ese parche repite una mancha verde agua de más arriba.
-  - El cerradero del pasador queda, porque va en el marco.
+  - **Pasador y cerradero (corrección del dueño, 2026-10-08):** van **solo por dentro**. Como la misma textura se ve de los dos lados, el recorrido los mostraba también hacia el pórtico. Se tapan con el mismo larguero y marco de más arriba (antes se tapaban con un trozo del travesaño, que corre en horizontal). Irán como objeto 3D solo en la cara de la sala.
+  - **Vidrio sin foto:** la foto tenía en el vidrio el reflejo del dueño y de la sala, y el recorrido web lo dejaba ver, porque el vidrio de una hoja muestra un 30 % del color base. Ahora, en el hueco de una hoja con `glass_material`, el generador pinta el color de ese vidrio y lo deja liso. Blender no cambia, porque ahí ya usaba el material del vidrio. También aplica a la puerta de la cocina (D04).
 
 ### 7. Azulejo del baño con regadera (23:33:31 y 07:53:10)
 

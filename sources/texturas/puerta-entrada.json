@@ -72,16 +72,16 @@
       ]
     },
     {
-      "note": "pasador con llave: se tapa con el mismo travesaño, más a la izquierda (el cerradero queda en el marco)",
+      "note": "pasador de sobreponer con llave y su cerradero: van solo por dentro (dueño, 2026-10-08), así que se tapan con el mismo larguero y marco de más arriba; irán como objeto 3D en la cara de la sala",
       "from_frac": [
-        0.4,
-        0.728,
-        0.13,
-        0.05
+        0.855,
+        0.62,
+        0.145,
+        0.055
       ],
       "to_frac": [
-        0.84,
-        0.728
+        0.855,
+        0.726
       ]
     },
     {
@@ -172,7 +172,7 @@
     "type": "puerta metálica de una hoja: mitad superior con un vidrio grande enmarcado por una moldura a inglete, mitad inferior con tablero hundido",
     "finish": "pintura negra mate muy envejecida, con textura rugosa y moteado claro; debajo se asoman restos de pintura verde agua (color anterior) y salpicaduras blancas",
     "corrosion": "óxido en todo el contorno del marco (cabezal y jambas), en el travesaño inferior y en manchas del tablero",
-    "hardware": "3 bisagras de munición soldadas del lado izquierdo; del lado derecho, de arriba abajo: aldaba de palanca, cerrojo de seguridad y manija de palanca con seguro (ambos de latón envejecido), y un pasador de sobreponer cromado con llave",
+    "hardware": "3 bisagras de munición soldadas del lado izquierdo; del lado derecho, de arriba abajo: aldaba de palanca, cerrojo de seguridad y manija de palanca con seguro (ambos de latón envejecido), y un pasador de sobreponer cromado con llave. El pasador va solo por dentro (dueño, 2026-10-08)",
     "hinges_position": "las bisagras quedan a unos 14 cm del borde izquierdo del conjunto: probable marco fijo ancho a la izquierda y hoja más angosta que el vano",
     "threshold": "umbral de aluminio atornillado al piso",
     "temporary": "dos cordones amarillos atados en la parte superior (se omiten en la textura)",
@@ -182,6 +182,7 @@
     "el conjunto ocupa todo el vano de 1.00 × 2.10 m",
     "muro izquierdo blanco como referencia de color",
     "profundidad del tablero (4 mm) y del asiento del vidrio (6 mm)",
-    "pintura metálica tratada como dieléctrico mate (rugosidad 0.72)"
+    "pintura metálica tratada como dieléctrico mate (rugosidad 0.72)",
+    "la cara hacia el pórtico usa la misma textura que la de la sala (sin herrajes): no hay foto de afuera"
   ]
 }

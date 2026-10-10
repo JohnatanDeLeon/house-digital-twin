@@ -176,3 +176,26 @@ def test_weld_lines_spread_points_at_pitch():
                                     'points_frac': [[0.9, 0.9]]})
     assert points[0] == (0.9, 0.9) and len(points) == 6
     assert points[1] == pytest.approx((0.1, 0.5)) and points[-1] == pytest.approx((0.5, 0.5))
+
+
+def test_glass_takes_its_material_not_the_photo(tmp_path, monkeypatch):
+    monkeypatch.setattr(textures, 'TEXTURES_DIR', tmp_path / 'out')
+    (tmp_path / 'out' / 'vidrio').mkdir(parents=True)
+    (tmp_path / 'out' / 'vidrio' / 'material.json').write_text(json.dumps({'pbr': {'basecolor_srgb': [70, 72, 76], 'roughness': 0.03}}))
+    photo = np.full((400, 300, 3), 40, np.uint8)
+    photo[150:250, 100:200] = (200, 150, 120)  # «reflejo» en el vidrio
+    Image.fromarray(photo).save(tmp_path / 'foto.jpg')
+    spec = {
+        'name': 'hoja', 'applies_to': {'openings': ['D01'], 'source': 'test'}, 'photo': 'foto.jpg',
+        'corners_px': {'top_left': [0, 0], 'top_right': [300, 0], 'bottom_right': [300, 400], 'bottom_left': [0, 400]},
+        'size_m': {'width': 0.3, 'height': 0.4, 'source': 'test'}, 'px_per_m': 500, 'color': {'as_shot': True},
+        'relief': {'type': 'flat', 'grain_mm': 0.2}, 'roughness': {'base': 0.7, 'grain': 0.1},
+        'opacity': {'holes': [[0.25, 0.25, 0.75, 0.75]], 'glass_material': 'vidrio'},
+    }
+    (tmp_path / 'spec.json').write_text(json.dumps(spec))
+    out = textures.build_texture(tmp_path / 'spec.json', photos_root=tmp_path)
+    base = np.asarray(Image.open(out / 'basecolor.jpg')).astype(int)
+    assert np.abs(base[100, 75] - [70, 72, 76]).max() <= 3       # el vidrio lleva su color, no el reflejo
+    assert np.abs(base[10, 10] - 40).max() <= 3                  # el marco sí sale de la foto
+    rough = np.asarray(Image.open(out / 'roughness.png')).astype(float) / 255
+    assert rough[50, 37] == pytest.approx(0.03, abs=0.01)
