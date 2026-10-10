@@ -18,6 +18,7 @@ def load_furniture(folder: Path = FURNITURE_DIR) -> list[dict]:
     resolved = []
     for spec in specs.values():
         base = specs[spec['based_on']] if 'based_on' in spec else {}
+        base = {k: v for k, v in base.items() if k != 'interior'}  # el interior es de cada closet, no se hereda
         resolved.append({**base, **spec})
     return resolved
 
@@ -48,7 +49,8 @@ def closet_meshes(fixture: dict, spec: dict, height: float):
     gap, leaf = spec['gap_mm'] / 1000, spec['leaf_thickness_mm'] / 1000
     z_of = lambda frac_from_top: (1 - frac_from_top) * height
     box = lambda u, z, n: oriented_box(origin, along, normal, u, z, n)
-    parts = [box((0, width), (0, height), (-depth, -leaf))]  # cuerpo: del muro hasta atrás de las hojas
+    interior = 'interior' in spec  # con interior, el cuerpo y las hojas de abajo los arma closet_interior
+    parts = [] if interior else [box((0, width), (0, height), (-depth, -leaf))]  # cuerpo: del muro hasta atrás de las hojas
     handles = []
     h = spec['handles']
     r, length, standoff = h['diameter_mm'] / 2000, h['length_mm'] / 1000, h['standoff_mm'] / 1000
@@ -56,6 +58,8 @@ def closet_meshes(fixture: dict, spec: dict, height: float):
         u0, u1 = m0 * width, m1 * width
         meeting = (u0 + u1) / 2
         for section, (t0, t1) in spec['sections'].items():
+            if interior and section == 'lower':
+                continue
             z0, z1 = z_of(t1) + gap / 2, z_of(t0) - gap / 2
             for a, b, side in ((u0 + gap / 2, meeting - gap / 2, -1), (meeting + gap / 2, u1 - gap / 2, 1)):
                 parts.append(box((a, b), (z0, z1), (-leaf, 0)))

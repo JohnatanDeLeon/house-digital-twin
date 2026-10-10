@@ -12,7 +12,7 @@ import json
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageFilter, ImageOps
+from PIL import Image, ImageDraw, ImageFilter, ImageOps
 
 ROOT = Path(__file__).resolve().parent.parent
 TEXTURES_DIR = ROOT / 'assets' / 'textures'
@@ -167,6 +167,48 @@ def compose_pieces(photo: Image.Image, compose: dict, size_px: tuple[int, int]) 
     for r in rows[1:]:
         out = join(out, r[:, :width], 0)
     return Image.fromarray(np.clip(out, 0, 255).round().astype(np.uint8)).resize(size_px, Image.LANCZOS)
+
+
+def remove_glare(photo: Image.Image, glare: dict) -> Image.Image:
+    """Quita un reflejo (la lámpara sobre una superficie brillante), que no tiene por qué ser redondo.
+
+    El reflejo se suma a lo que hay debajo. En cada bloque de `block_px` se toma lo más oscuro (`dark_percentile`):
+    donde hay algo negro, eso es puro reflejo. El mapa de bloques se suaviza, se le resta el nivel de afuera (sin
+    reflejo) y se resta en lineal dentro de `radius_px`, con un borde que se desvanece. El núcleo quemado (`core_px`)
+    no tiene información: se rellena difundiendo los colores de su borde hacia adentro.
+    """
+    lin = _srgb_to_linear(np.asarray(photo).astype(float) / 255)
+    h, w, _ = lin.shape
+    cx, cy = glare['centre_px']
+    R, core, bs = glare['radius_px'], glare['core_px'], glare.get('block_px', 32)
+    x0, x1 = max(0, int(cx - R)), min(w, int(cx + R))
+    y0, y1 = max(0, int(cy - R)), min(h, int(cy + R))
+    region = lin[y0:y1, x0:x1]
+    gy, gx = (y1 - y0) // bs, (x1 - x0) // bs
+    grid = np.array([[np.percentile(region[i * bs:(i + 1) * bs, j * bs:(j + 1) * bs].reshape(-1, 3), glare.get('dark_percentile', 5), axis=0)
+                      for j in range(gx)] for i in range(gy)])
+    yy, xx = np.mgrid[0:h, 0:w]
+    r = np.hypot(xx - cx, yy - cy)
+    base = np.percentile(lin[(r > R) & (r < R * 1.3)], glare.get('dark_percentile', 5), axis=0)
+    veil_grid = np.clip(grid - base, 0, None)
+    veil = np.stack([np.asarray(Image.fromarray(_blur(veil_grid[..., c], 1.0).astype(np.float32), 'F')
+                                .resize((x1 - x0, y1 - y0), Image.BILINEAR)) for c in range(3)], -1)
+    fade = np.clip((R - r[y0:y1, x0:x1]) / (R * 0.25), 0, 1)[..., None]
+    out = lin.copy()
+    out[y0:y1, x0:x1] = np.clip(region - veil * fade, 0, None)
+    hole = r <= core
+    if hole.any():  # difusión: cada pasada promedia los 4 vecinos, solo dentro del núcleo
+        a0, a1 = max(0, int(cy - core - 2)), min(h, int(cy + core + 3))
+        b0, b1 = max(0, int(cx - core - 2)), min(w, int(cx + core + 3))
+        sub, m = out[a0:a1, b0:b1].copy(), hole[a0:a1, b0:b1]
+        # lo que hay bajo el núcleo es el fondo oscuro del dibujo: se rellena con lo más oscuro de su borde y la
+        # difusión solo suaviza la orilla (un promedio de todo el borde da una mancha gris)
+        sub[m] = np.percentile(sub[~m], glare.get('fill_percentile', 10), axis=0)
+        for _ in range(glare.get('fill_iterations', 12)):
+            avg = (np.roll(sub, 1, 0) + np.roll(sub, -1, 0) + np.roll(sub, 1, 1) + np.roll(sub, -1, 1)) / 4
+            sub[m] = avg[m]
+        out[a0:a1, b0:b1] = sub
+    return _to_image(out)
 
 
 def _frac_box(frac, size_px):
@@ -564,8 +606,166 @@ def _glass_pbr(name: str) -> dict:
     return json.loads((TEXTURES_DIR / name / 'material.json').read_text())['pbr']
 
 
+def _component(mask: np.ndarray, seed) -> np.ndarray:
+    """La parte de `mask` conectada con `seed` (relleno por inundación de PIL, sin dependencias extra)."""
+    img = Image.fromarray(np.where(mask, 255, 0).astype(np.uint8), 'L').copy()
+    ImageDraw.floodfill(img, tuple(int(v) for v in seed), 128)
+    return np.asarray(img) == 128
+
+
+def build_garment(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
+    """Prenda fotografiada extendida: silueta recortada (opacidad), tela de la foto y estampado metálico.
+
+    - Silueta: la tela oscura sobre la sábana clara. Lo claro que la toca desde el borde de la foto es fondo; lo claro
+      encerrado por la tela (el estampado, la etiqueta) es prenda. Se queda solo la pieza conectada con `seed_frac`.
+    - Estampado (`print`): lo claro dentro de su zona. Si es de foil metálico, en la foto se ve lo que refleja (la
+      sábana, el cuarto), no su color: se pinta con el color del metal y se marca metálico, como el vidrio de D03.
+    """
+    g = spec['garment']
+    px_per_m = spec['px_per_m']
+    size_px = (round(spec['size_m']['width'] * px_per_m), round(spec['size_m']['height'] * px_per_m))
+    photo = ImageOps.exif_transpose(Image.open(photos_root / spec['photo'])).convert('RGB')
+    base = rectify(photo, spec['corners_px'], size_px)
+    lin = _srgb_to_linear(np.asarray(base).astype(float) / 255)
+    lum = np.asarray(base.convert('L')).astype(float)
+    H, W = lum.shape
+    inside_photo = np.asarray(rectify(Image.new('L', photo.size, 255), spec['corners_px'], size_px)) > 128
+    light = (lum >= g['fabric_max_lum']) | ~inside_photo  # lo que cae fuera de la foto también es fondo
+    background = np.zeros_like(light)
+    border = [(x, 0) for x in range(W)] + [(x, H - 1) for x in range(W)] + [(0, y) for y in range(H)] + [(W - 1, y) for y in range(H)]
+    for x, y in border[::4]:  # el fondo es todo lo claro que toca algún borde
+        if light[y, x] and not background[y, x]:
+            background |= _component(light, (x, y))
+    seed = (g['seed_frac'][0] * W, g['seed_frac'][1] * H)
+    # apertura: lo que solo se une a la prenda por una franja fina (la sombra de un pliegue) se suelta
+    core = _blur((~background).astype(float), g.get('open_px', 4)) > 0.97
+    garment = _blur(_component(core, seed).astype(float), g.get('open_px', 4)) > 0.03
+    garment &= ~background
+    pr = g['print']
+    x0, y0, x1, y1 = (round(v * d) for v, d in zip(pr['region_frac'], (W, H, W, H)))
+    in_region = np.zeros_like(garment)
+    in_region[y0:y1, x0:x1] = True
+    printed = garment & in_region & (lum >= pr['min_lum'])
+    # el foil también refleja cosas oscuras: lo que está junto al estampado y es más claro que la tela, también es foil
+    near = _blur(printed.astype(float), pr.get('close_px', 4)) > 0.25
+    printed |= garment & in_region & near & (lum >= pr.get('reflection_min_lum', 50))
+    printed = _blur(printed.astype(float), pr.get('soften_px', 1.0)) > 0.5
+    fabric = garment & ~printed
+    fabric_color = np.median(lin[fabric], axis=0)
+    lin[~garment] = fabric_color  # sin halo claro en la orilla al filtrar la textura
+    lin[printed] = _srgb_to_linear(np.array(pr['basecolor_srgb'], float) / 255)
+    metallic = _blur(printed.astype(float), 0.8)
+    roughness = np.where(printed, pr['roughness'], g['fabric_roughness'])
+    grain = _grain(_to_image(np.where(printed[..., None], lin, lin)), 1.5)
+    height = grain * g.get('weave_mm', 0.15) / 1000 + printed * pr.get('thickness_mm', 0.1) / 1000
+    hole = _blur(printed.astype(float), 4.0) > 0.02  # la espalda: sin el estampado ni su orilla suavizada
+    keep = (garment & ~hole).astype(float)
+    local = np.stack([_blur(lin[..., c] * keep, 30) for c in range(3)], -1) / np.maximum(_blur(keep, 30), 1e-3)[..., None]
+    plain = lin.copy()
+    plain[hole] = local[hole]  # el color de la tela de alrededor, no el promedio de toda la playera
+    source = {'photo': spec['photo'], 'photo_meta': spec.get('photo_meta', {}), 'perspective': spec.get('perspective'),
+              'fabric_srgb': [int(v) for v in np.round(_linear_to_srgb(fabric_color) * 255)],
+              'print_coverage': round(float(printed.sum() / garment.sum()), 4)}
+    common = {'applies_to': spec['applies_to'], 'source': source, 'observed': spec.get('observed', {})}
+    back_rough = np.full(lum.shape, g['fabric_roughness'])
+    back_height = grain * g.get('weave_mm', 0.15) / 1000
+    _garment_maps(out, spec['name'], spec['size_m'], px_per_m, lin, garment, roughness, height, metallic, common,
+                  spec.get('assumptions', []))
+    if spec.get('back'):
+        _garment_maps(TEXTURES_DIR / spec['back']['name'], spec['back']['name'], spec['size_m'], px_per_m, plain, garment,
+                      back_rough, back_height, None, common, spec.get('assumptions', []) + [spec['back']['note']])
+    hang = spec.get('hanging')
+    if hang:  # la misma prenda colgada: las mangas caen girando sobre el hombro
+        front, back = hang_sleeves([lin, garment, roughness, height, metallic], garment, hang), \
+            hang_sleeves([plain, garment, back_rough, back_height], garment, hang)
+        size = {'width': round(front[1].shape[1] / px_per_m, 4), 'height': round(front[1].shape[0] / px_per_m, 4),
+                'source': f"la prenda extendida con las mangas giradas {hang['drop_deg']}° hacia abajo sobre el hombro"}
+        note = [hang['note']]
+        _garment_maps(TEXTURES_DIR / hang['name'], hang['name'], size, px_per_m, front[0], front[1] > 0.5, front[2], front[3],
+                      front[4], common, spec.get('assumptions', []) + note)
+        if spec.get('back'):
+            _garment_maps(TEXTURES_DIR / hang['back_name'], hang['back_name'], size, px_per_m, back[0], back[1] > 0.5, back[2],
+                          back[3], None, common, spec.get('assumptions', []) + note + [spec['back']['note']])
+    return out
+
+
+def hang_sleeves(layers: list, garment: np.ndarray, hang: dict) -> list:
+    """Prenda colgada a partir de la extendida: cada manga gira `drop_deg` hacia abajo sobre su hombro y queda encima
+    del cuerpo. El cuerpo es lo que está entre sus costados (rectos, medidos cerca de la orilla de abajo); el hombro es
+    lo más alto de la prenda en el costado. Se recorta a la nueva silueta."""
+    H, W = garment.shape
+    rows = [y for y in range(int(H * 0.8), int(H * 0.95)) if garment[y].any()]
+    left = int(np.median([np.argmax(garment[y]) for y in rows]))
+    right = int(np.median([W - 1 - np.argmax(garment[y][::-1]) for y in rows]))
+    out = []
+    for layer in layers:
+        arr = layer.astype(float) if layer.ndim == 3 else layer.astype(float)[..., None]
+        body = arr.copy()
+        result = arr.copy()  # las mangas se quitan abajo, con la silueta
+        out.append([result, arr])
+    sleeves = []
+    for side, x_edge in ((-1, left), (1, right)):
+        top = int(np.argmax(garment[:, x_edge]))
+        # axila: la primera fila (bajando) donde la prenda ya no pasa del costado
+        outside = garment[:, :max(0, x_edge - 6)] if side < 0 else garment[:, x_edge + 6:]
+        start = next(y for y in range(top, H) if outside[y].any())  # donde la manga ya sobresale del costado
+        armpit = next(y for y in range(start, H) if not outside[y].any())
+        cols = (np.arange(W) < x_edge - 2) if side < 0 else (np.arange(W) > x_edge + 2)
+        region = cols[None, :] & (np.arange(H) < armpit)[:, None]
+        angle = hang['drop_deg'] * (1 if side < 0 else -1)  # PIL gira en contra de las manecillas: la izquierda baja así
+        sleeves.append((region, (x_edge, armpit - hang.get('pivot_up_px', 0)), angle))  # gira sobre la axila: la manga cae por fuera del cuerpo
+    alpha_body = (garment & ~sleeves[0][0] & ~sleeves[1][0]).astype(float)
+    alpha = alpha_body.copy()
+    rotated_alpha = []
+    for region, pivot, angle in sleeves:
+        a = (garment & region).astype(np.float32)
+        ra = np.asarray(Image.fromarray(a, 'F').rotate(angle, resample=Image.BILINEAR, center=pivot))
+        rotated_alpha.append(ra)
+        alpha = np.maximum(alpha, ra)
+    final = []
+    for (result, arr), layer in zip(out, layers):
+        result = result * alpha_body[..., None]
+        for (region, pivot, angle), ra in zip(sleeves, rotated_alpha):
+            piece = arr * (garment & region)[..., None]
+            rot = np.stack([np.asarray(Image.fromarray(piece[..., c].astype(np.float32), 'F').rotate(angle, resample=Image.BILINEAR, center=pivot))
+                            for c in range(arr.shape[2])], -1)
+            w = ra[..., None]
+            result = np.where(w > 0.5, rot / np.maximum(w, 1e-3), result)  # la manga queda encima del cuerpo
+        final.append(result)
+    ys, xs = np.nonzero(alpha > 0.5)
+    m = hang.get('margin_px', 8)
+    y0, y1, x0, x1 = max(0, ys.min() - m), min(H, ys.max() + m), max(0, xs.min() - m), min(W, xs.max() + m)
+    crop = lambda a: a[y0:y1, x0:x1]
+    res = []
+    for i, f in enumerate(final):
+        f = crop(f)
+        res.append(f if layers[i].ndim == 3 else f[..., 0])
+    res[1] = crop(alpha)
+    return res
+
+
+def _garment_maps(out: Path, name: str, size_m: dict, px_per_m: int, lin, alpha, roughness, height, metallic, common, assumptions):
+    out.mkdir(parents=True, exist_ok=True)
+    H, W = alpha.shape
+    detail_px = (round(W * DETAIL_MAP_SCALE), round(H * DETAIL_MAP_SCALE))
+    _to_image(np.clip(lin, 0, 1)).save(out / 'basecolor.jpg', quality=92)
+    Image.fromarray((np.clip(roughness, 0, 1) * 255).round().astype(np.uint8)).resize(detail_px, Image.LANCZOS).save(out / 'roughness.png', optimize=True)
+    _normal_map(height, px_per_m).resize(detail_px, Image.LANCZOS).save(out / 'normal.png', optimize=True)
+    Image.fromarray((np.asarray(alpha) > 0.5).astype(np.uint8) * 255).save(out / 'opacity.png', optimize=True)
+    maps = {'basecolor': 'basecolor.jpg', 'roughness': 'roughness.png', 'normal': 'normal.png (OpenGL)',
+            'opacity': 'opacity.png (0 = fuera de la prenda)'}
+    if metallic is not None:
+        Image.fromarray((np.clip(metallic, 0, 1) * 255).round().astype(np.uint8)).resize(detail_px, Image.LANCZOS).save(out / 'metallic.png', optimize=True)
+        maps['metallic'] = 'metallic.png (estampado de foil)'
+    material = {'name': name, **common, 'size_m': size_m, 'px_per_m': px_per_m, 'size_px': [W, H], 'tileable': False,
+                'grid': None, 'maps': maps, 'glass_material': None, 'assumptions': assumptions}
+    (out / 'material.json').write_text(json.dumps(material, ensure_ascii=False, indent=1) + '\n')
+
+
 def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     spec = json.loads(spec_path.read_text())
+    if spec.get('garment'):
+        return build_garment(spec, TEXTURES_DIR / spec['name'], photos_root)
     if spec.get('kind') == 'constant':
         return build_material(spec, TEXTURES_DIR / spec['name'], photos_root)
     if spec.get('kind') == 'procedural':
@@ -574,6 +774,8 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     size_m = (spec['size_m']['width'], spec['size_m']['height'])
     size_px = (round(size_m[0] * px_per_m), round(size_m[1] * px_per_m))
     photo = ImageOps.exif_transpose(Image.open(photos_root / spec['photo'])).convert('RGB')
+    if 'glare' in spec:
+        photo = remove_glare(photo, spec['glare'])
 
     base = compose_pieces(photo, spec['compose'], size_px) if 'compose' in spec else rectify(photo, spec['corners_px'], size_px)
     if 'flatten_lighting' in spec:
@@ -641,6 +843,7 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
         'size_m': spec['size_m'], 'px_per_m': px_per_m, 'size_px': list(size_px), 'tileable': relief['type'] == 'grid' or bool(spec.get('seamless')),
         'grid': spec.get('grid'),
         'maps': maps, 'glass_material': spec.get('opacity', {}).get('glass_material'), 'latch_side': spec.get('latch_side'),
+        'emissive': spec.get('emissive'),  # pantalla encendida: la imagen también emite luz
         'source': {'photo': spec['photo'], 'photo_meta': spec.get('photo_meta', {}),
                    'color': spec['color'], 'white_balance_gain': gain},
         'observed': spec.get('observed', {}), 'assumptions': spec.get('assumptions', []),

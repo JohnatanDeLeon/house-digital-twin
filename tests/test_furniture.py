@@ -30,8 +30,8 @@ def test_closet_front_follows_its_spec(dxf_facts):
     spec = next(f for f in load_furniture() if f['name'] == 'closet-recamara-3')
     fixture = next(c for c in dxf_facts['fixtures'] if c['space'] == spec['applies_to']['space'])
     (body, body_faces), (handles, handle_faces) = closet_meshes(fixture, spec, 2.6)
-    leaves = len(module_fracs(spec, fixture['width'])) * len(spec['sections']) * spec['leaves_per_section']
-    assert len(body_faces) == 6 * (1 + leaves)  # el cuerpo y una caja por hoja
+    upper = len(module_fracs(spec, fixture['width'])) * spec['leaves_per_section']
+    assert len(body_faces) == 6 * upper  # con interior: solo las hojas de arriba (el cuerpo y las de abajo van aparte)
     origin, along, normal = front_frame(fixture)
     out = [(x - origin[0]) * normal[0] + (y - origin[1]) * normal[1] for x, y, _ in handles]
     assert min(out) == pytest.approx(0, abs=1e-6) and max(out) == pytest.approx(0.032 + 0.006, abs=1e-3)  # salen de las hojas
@@ -48,7 +48,7 @@ def test_ifc_carries_the_closet_with_its_handles(dxf_facts):
     log = ifcopenshell.validate.json_logger()
     ifcopenshell.validate.validate(model, log)
     assert log.statements == []
-    closets = model.by_type('IfcFurniture')
+    closets = [f for f in model.by_type('IfcFurniture') if f.Name in ('F02-closet', 'F03-closet')]
     assert len(closets) == 2  # R2 y R3; el de R1 no tiene puertas ni especificación
     for closet in closets:
         assert [ue.get_material(p).Name for p in ue.get_parts(closet)] == ['acero-inoxidable']
@@ -62,3 +62,35 @@ def test_bedroom_2_closet_is_bedroom_3_with_four_equal_modules():
     widths = [(b - a) * 2.91 for a, b in modules]
     assert len(modules) == 4 and max(widths) - min(widths) < 1e-9 and widths[0] == pytest.approx(0.669, abs=0.002)
     assert modules[0][0] * 2.91 == pytest.approx(0.016) and (1 - modules[-1][1]) * 2.91 == pytest.approx(0.016)
+
+
+def test_closet_r3_interior_is_hollow_and_leaves_open():
+    import json
+    from house_twin.closet_interior import interior_parts, leaf_parts
+    from house_twin.furniture import closet_meshes, load_furniture
+    from tests.test_kitchen import _signed_volume
+    facts = json.loads(open('data/facts/existing.facts.json').read())
+    fx = next(x for x in facts['fixtures'] if x['id'] == 'F03')
+    spec = next(s for s in load_furniture() if s['applies_to']['space'] == 'S04')
+    body, _ = closet_meshes(fx, spec, 2.6)
+    assert min(p[2] for p in body[0]) > 1.9  # el cuerpo de abajo ya no es un bloque: solo quedan las hojas de arriba
+    parts = interior_parts(fx, spec, 2.6)
+    assert all(_signed_volume(*p['mesh']) > 0 for p in parts)
+    leaves, doors = leaf_parts(fx, spec, 2.6)
+    assert len(doors) == 3 and all(len(d['leaves']) == 2 for d in doors)
+    assert sum(1 for p in leaves if p['ifc'] == 'IfcFurniture') == 6
+
+
+def test_closet_r3_only_hangs_the_venom_tee_and_it_fits():
+    import json
+    from house_twin.closet_interior import display_parts, interior_parts
+    from house_twin.furniture import load_furniture
+    facts = json.loads(open('data/facts/existing.facts.json').read())
+    fx = next(x for x in facts['fixtures'] if x['id'] == 'F03')
+    spec = next(s for s in load_furniture() if s['applies_to']['space'] == 'S04')
+    assert not any(m.startswith(('F03-interior-ropa', 'F03-interior-piel')) for m in (p['id'] for p in interior_parts(fx, spec, 2.6)))
+    parts, items = display_parts(fx, spec)
+    assert [i['label'] for i in items] == ['la playera de Venom']
+    tee = next(p for p in parts if p['id'] == 'F03-playera-venom')
+    xs = [q[0] for q in tee['mesh'][0]]
+    assert 5.79 <= min(xs) and max(xs) <= 6.374  # cabe entre el muro y las hojas

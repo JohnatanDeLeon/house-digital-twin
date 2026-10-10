@@ -1,8 +1,8 @@
 {
  "name": "plastico-blanco",
  "applies_to": {
-  "appliance": "minisplit",
-  "source": "fotos de la recámara mayor (dueño, 2026-10-09)"
+  "furniture": "oficina de la recámara 3",
+  "source": "fotos del dueño (2026-10-10)"
  },
  "kind": "constant",
  "pbr": {
@@ -13,10 +13,10 @@
   ],
   "metallic": 0.0,
   "roughness": 0.3,
-  "note": "plástico blanco satinado"
+  "note": "plástico blanco satinado (minisplit, logotipo de la silla)"
  },
  "source": {
-  "photo": "sources/fotos/rec-cama-lado.jpg",
+  "photo": "sources/fotos/r3-escritorio.jpg",
   "photo_meta": {},
   "color": null,
   "white_balance_gain": null,
@@ -24,6 +24,6 @@
  },
  "observed": {},
  "assumptions": [
-  "color y brillo comunes"
+  "color y brillo aproximados; los negros no son negro puro para que se distingan las formas"
  ]
 }

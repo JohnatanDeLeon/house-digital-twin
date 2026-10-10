@@ -1,0 +1,282 @@
+{
+ "_doc": "Recámara 3 (S04), usada como oficina, con el detalle de las fotos. Coordenadas del modelo en m; cada objeto se arma en su marco local y se coloca con `at` (centro en planta) y `facing` (hacia dónde mira su frente). El código está en house_twin/office.py.",
+ "applies_to": {
+  "space": "S04",
+  "source": "fotos de la recámara 3 (dueño, 2026-10-08 y 2026-10-10)"
+ },
+ "office": {
+  "desk": {
+   "id": "r3-escritorio",
+   "corner": [
+    9.86,
+    11.86
+   ],
+   "main": {
+    "length_m": 1.6,
+    "depth_m": 0.6
+   },
+   "return": {
+    "length_m": 1.0,
+    "depth_m": 0.5
+   },
+   "fillet_m": 0.18,
+   "height_m": 0.75,
+   "top_m": 0.025,
+   "legs_y": [
+    11.52,
+    10.4
+   ],
+   "control": {
+    "y": 10.55
+   },
+   "hook": {
+    "at": [
+     8.95,
+     11.36
+    ]
+   },
+   "top_material": "laminado-negro",
+   "frame_material": "acero-negro-mate",
+   "size_source": "dueño (2026-10-10): escritorio en L de 160 × 100 cm",
+   "position_source": "fotos: lado de 160 contra el muro oriente y lado de 100 contra el norte; patas eléctricas de 2 tramos con pie en T a ≈ 0.34 y 1.46 m de la esquina norte, control de altura en el canto de enfrente, a la derecha; gancho de audífonos bajo el lado corto (escala: el escritorio de 1.60 m mide ≈ 1230 px en la foto de lejos)",
+   "assumptions": "fondos de 0.60 y 0.50 m, altura de 0.75 m (es de altura ajustable) y curva del rincón de 18 cm: supuestos"
+  },
+  "monitors": {
+   "id": "r3-monitores",
+   "diagonal_in": 23,
+   "gap_m": 0.02,
+   "centre_z": 1.1,
+   "toe_in_deg": 12,
+   "reach_m": 0.13,
+   "facing": [
+    -1,
+    0
+   ],
+   "pole_at": [
+    9.78,
+    11.11
+   ],
+   "pole_height_m": 0.56,
+   "tray": {
+    "centre": [
+     9.4,
+     10.9
+    ],
+    "z_above_desk_m": 0.06,
+    "size_m": [
+     0.36,
+     0.28
+    ],
+    "tilt_deg": 12,
+    "laptop_m": [
+     0.32,
+     0.22
+    ],
+    "laptop_screen_m": [
+     0.3,
+     0.17
+    ],
+    "lid_open_deg": 108
+   },
+   "source": "dueño (2026-10-10): 2 monitores de 23\" en un brazo triple con charola para la laptop. Fotos: poste al fondo del escritorio, a ≈ 0.75 m de la esquina norte; monitores Samsung con barbilla y logotipo, centro a ≈ 1.10 m, un poco girados hacia adentro; charola ventilada abajo a la derecha. Lo que muestran las pantallas sale de la foto de cerca"
+  },
+  "desktop": {
+   "keyboard": {
+    "at": [
+     9.12,
+     10.87
+    ],
+    "facing": [
+     -1,
+     0
+    ],
+    "size_m": [
+     0.44,
+     0.14
+    ]
+   },
+   "mouse": {
+    "at": [
+     9.12,
+     11.22
+    ],
+    "facing": [
+     -1,
+     0
+    ]
+   },
+   "mouse_pad": {
+    "at": [
+     9.12,
+     11.22
+    ],
+    "size_m": [
+     0.3,
+     0.24
+    ]
+   },
+   "desk_mat": {
+    "at": [
+     9.14,
+     10.87
+    ],
+    "size_m": [
+     0.56,
+     0.3
+    ]
+   },
+   "dock": {
+    "at": [
+     9.74,
+     10.64
+    ],
+    "facing": [
+     -1,
+     0
+    ]
+   },
+   "closed_laptop": {
+    "at": [
+     9.42,
+     10.43
+    ],
+    "size_m": [
+     0.32,
+     0.24
+    ]
+   },
+   "printer": {
+    "at": [
+     9.3,
+     11.61
+    ],
+    "facing": [
+     -1,
+     0
+    ],
+    "size_m": [
+     0.375,
+     0.347,
+     0.179
+    ],
+    "source": "fotos: impresora Epson de tanques sobre el lado corto, con el bloque de tanques de tinta en la esquina de enfrente; 37.5 × 34.7 × 17.9 cm (modelo común de esa línea, supuesto)"
+   },
+   "source": "fotos: teclado con retroiluminación morada sobre un tapete negro, mouse con logotipo iluminado sobre un tapete azul, dock con LED azul al fondo y una laptop cerrada a la derecha; tamaños comunes (supuesto)"
+  },
+  "treadmill": {
+   "at": [
+    9.53,
+    10.96
+   ],
+   "facing": [
+    0,
+    1
+   ],
+   "size_m": [
+    0.98,
+    0.5,
+    0.12
+   ],
+   "hood_m": 0.16,
+   "source": "foto: caminadora de escritorio bajo el lado largo, entre las patas, con el motor y la pantalla del lado norte y franja verde en el costado; ≈ 0.98 × 0.50 m (cabe entre las patas en la foto; estimado)"
+  },
+  "chair": {
+   "at": [
+    8.78,
+    10.92
+   ],
+   "facing": [
+    1,
+    0
+   ],
+   "seat_z_m": 0.48,
+   "seat_m": [
+    0.52,
+    0.5
+   ],
+   "back_h_m": 0.8,
+   "recline_deg": 10,
+   "source": "foto: silla gamer negra de vinil (marca DUO) acomodada frente al teclado (dueño, 2026-10-10), con cabecera, cojín lumbar, alas, descansabrazos, posapiés guardado y base de 5 rodajas; medidas comunes (supuesto)"
+  },
+  "headphones": {
+   "at": [
+    8.95,
+    11.31
+   ],
+   "facing": [
+    0,
+    -1
+   ],
+   "z": 0.69,
+   "radius_m": 0.085,
+   "source": "foto: audífonos colgados del gancho bajo el lado corto"
+  }
+ },
+ "tv": {
+  "id": "r3-tv",
+  "diagonal_in": 43,
+  "aspect": [
+   16,
+   9
+  ],
+  "depth_m": 0.05,
+  "bezel_m": 0.006,
+  "wall": {
+   "origin": [
+    5.79,
+    11.86
+   ],
+   "along": [
+    1,
+    0
+   ],
+   "into_room": [
+    0,
+    -1
+   ]
+  },
+  "u_centre": 1.85,
+  "z_bottom": 1.27,
+  "size_source": "estimado con las fotos del 2026-10-08 (≈ 43\"; pendiente de confirmar)",
+  "position_source": "fotos del 2026-10-08: en el muro norte, a la derecha de la entrada, con el centro a ≈ 1.55 m",
+  "screen_material": "pantalla-tv",
+  "body_material": "plastico-negro"
+ },
+ "assumptions": [
+  "fondos, altura y curva del escritorio",
+  "impresora, caminadora, silla y accesorios con tamaños comunes o estimados",
+  "TV de ≈ 43\" (estimada)",
+  "no se modelan los cables, los cargadores, los papeles"
+ ],
+ "artworks": [
+  {
+   "id": "r3-cuadro",
+   "material": "cuadro-leon",
+   "edge_material": "madera-repisa",
+   "wall": {
+    "origin": [
+     9.86,
+     10.665
+    ],
+    "along": [
+     0,
+     -1
+    ],
+    "into_room": [
+     -1,
+     0
+    ]
+   },
+   "u": [
+    0.0,
+    0.55
+   ],
+   "z": [
+    1.51,
+    1.966
+   ],
+   "thickness_m": 0.02,
+   "source": "foto del cuadro (2026-10-10): proporción 1.206 por homografía y focal; ancho y posición con la foto del escritorio (2 monitores de 23\" como escala): centrado en y ≈ 10.39 m, a la derecha de los monitores, borde de abajo a ≈ 1.51 m (± 3 cm)"
+  }
+ ]
+}

@@ -1,0 +1,29 @@
+{
+ "name": "piel-negra",
+ "applies_to": {
+  "furniture": "interior del closet de la recámara 3",
+  "source": "fotos del dueño (2026-10-10)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   28,
+   28,
+   30
+  ],
+  "metallic": 0.0,
+  "roughness": 0.35,
+  "note": "chamarra de piel negra, con brillo"
+ },
+ "source": {
+  "photo": "sources/fotos/closet-r3-abierto.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color aproximado"
+ ]
+}

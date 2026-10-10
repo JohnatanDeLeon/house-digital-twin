@@ -1,0 +1,29 @@
+{
+ "name": "ropa-camuflaje",
+ "applies_to": {
+  "furniture": "interior del closet de la recámara 3",
+  "source": "fotos del dueño (2026-10-10)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   110,
+   115,
+   80
+  ],
+  "metallic": 0.0,
+  "roughness": 0.95,
+  "note": "chamarra de camuflaje"
+ },
+ "source": {
+  "photo": "sources/fotos/closet-r3-abierto.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color aproximado"
+ ]
+}

@@ -1,0 +1,23 @@
+{
+ "_doc": "bocina roja de tela. Tono de las fotos del closet de la recámara 3 (supuesto: sin blanco confiable). Regenerar con: python -m house_twin.cli texture sources/texturas/tela-roja.json",
+ "name": "tela-roja",
+ "kind": "constant",
+ "applies_to": {
+  "furniture": "interior del closet de la recámara 3",
+  "source": "fotos del dueño (2026-10-10)"
+ },
+ "photo": "sources/fotos/closet-r3-abierto.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   200,
+   30,
+   45
+  ],
+  "metallic": 0.0,
+  "roughness": 0.9,
+  "note": "bocina roja de tela"
+ },
+ "assumptions": [
+  "color aproximado"
+ ]
+}

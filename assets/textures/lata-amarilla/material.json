@@ -1,0 +1,29 @@
+{
+ "name": "lata-amarilla",
+ "applies_to": {
+  "furniture": "interior del closet de la recámara 3",
+  "source": "fotos del dueño (2026-10-10)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   215,
+   190,
+   60
+  ],
+  "metallic": 0.6,
+  "roughness": 0.3,
+  "note": "lata de bebida amarilla"
+ },
+ "source": {
+  "photo": "sources/fotos/closet-r3-abierto.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color aproximado"
+ ]
+}

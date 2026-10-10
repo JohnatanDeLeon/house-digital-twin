@@ -1,0 +1,23 @@
+{
+ "_doc": "lomo de libro blanco. Tono de las fotos del closet de la recámara 3 (supuesto: sin blanco confiable). Regenerar con: python -m house_twin.cli texture sources/texturas/libro-blanco.json",
+ "name": "libro-blanco",
+ "kind": "constant",
+ "applies_to": {
+  "furniture": "interior del closet de la recámara 3",
+  "source": "fotos del dueño (2026-10-10)"
+ },
+ "photo": "sources/fotos/closet-r3-abierto.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   228,
+   226,
+   220
+  ],
+  "metallic": 0.0,
+  "roughness": 0.6,
+  "note": "lomo de libro blanco"
+ },
+ "assumptions": [
+  "color aproximado"
+ ]
+}

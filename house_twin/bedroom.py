@@ -8,6 +8,7 @@ from pathlib import Path
 from house_twin.hardware import cylinder, lathe, merge
 from house_twin.kitchen import _Run
 from house_twin.living import _tv
+from house_twin.office import office_parts
 
 ROOT = Path(__file__).resolve().parent.parent
 BEDROOMS_DIR = ROOT / 'sources' / 'recamaras'
@@ -202,6 +203,23 @@ def bedroom_parts(spec: dict) -> list[dict]:
         parts += _mirror(spec['mirror'])
     if spec.get('desk'):
         parts += _desk(spec['desk'])
+    if spec.get('office'):
+        parts += office_parts(spec['office'])
+    for item in spec.get('flat_items', []):  # prenda extendida: placa delgada con la silueta recortada de la foto
+        (cx, cy), (rx, ry), (ux, uy) = item['centre'], item['right'], item['up']
+        w, h = item['size_m']
+        frame = _Run({'origin': [cx, cy], 'along': [rx, ry], 'into_room': [ux, uy]})
+        parts.append({'id': item['id'], 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': item['object_type'],
+                      'material': item['material'], 'mesh': frame.box((-w / 2, w / 2), (item['z'], item['z'] + 0.003), (-h / 2, h / 2)),
+                      'source': item['source'], 'image_plane': [[rx, ry], [ux, uy]]})
+    for art in spec.get('artworks', []):  # cuadro: tabla con canto de madera y la imagen de la foto al frente
+        frame = _Run(art['wall'])
+        t = art['thickness_m']
+        parts += [{'id': f"{art['id']}-tabla", 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': 'cuadro',
+                   'material': art['edge_material'], 'mesh': frame.box(art['u'], art['z'], (0.0, t)), 'source': art['source']},
+                  {'id': art['id'], 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': 'cuadro', 'material': art['material'],
+                   'mesh': frame.box((art['u'][0] + 0.004, art['u'][1] - 0.004), (art['z'][0] + 0.004, art['z'][1] - 0.004), (t, t + 0.001)),
+                   'source': art['source'], 'image_facing': list(art['wall']['into_room'])}]
     ac = spec.get('minisplit')
     if ac:  # unidad interior: cuerpo con el frente redondeado abajo (2 escalones) y la rejilla de salida
         frame = _Run(ac['wall'])
@@ -223,3 +241,4 @@ def bedroom_parts(spec: dict) -> list[dict]:
     for p in parts:
         p.setdefault('space', spec['applies_to']['space'])
     return parts
+

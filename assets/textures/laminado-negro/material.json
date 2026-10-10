@@ -1,0 +1,29 @@
+{
+ "name": "laminado-negro",
+ "applies_to": {
+  "furniture": "oficina de la recámara 3",
+  "source": "fotos del dueño (2026-10-10)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   42,
+   42,
+   44
+  ],
+  "metallic": 0.0,
+  "roughness": 0.55,
+  "note": "cubierta de laminado negro mate del escritorio"
+ },
+ "source": {
+  "photo": "sources/fotos/r3-escritorio.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color y brillo aproximados; los negros no son negro puro para que se distingan las formas"
+ ]
+}

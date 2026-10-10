@@ -1,0 +1,57 @@
+{
+ "_doc": "Imagen de la pantalla encendida del monitor derecho (terminal), rectificada de la foto del escritorio. Es lo que muestra la pantalla, no un reflejo: va tal cual, a baja resolución, y emite luz. Regenerar con: python -m house_twin.cli texture sources/texturas/pantalla-monitor-der.json",
+ "name": "pantalla-monitor-der",
+ "kind": "photo",
+ "applies_to": {
+  "display": "monitor derecho (terminal)",
+  "source": "foto del escritorio (dueño, 2026-10-10)"
+ },
+ "photo": "sources/fotos/r3-escritorio-cerca.jpg",
+ "photo_meta": {
+  "camera": "Samsung Galaxy S25 Ultra",
+  "focal_35mm": 23,
+  "light": "pantallas encendidas"
+ },
+ "corners_px": {
+  "top_left": [
+   1992,
+   884
+  ],
+  "top_right": [
+   3060,
+   900
+  ],
+  "bottom_right": [
+   3020,
+   1466
+  ],
+  "bottom_left": [
+   1986,
+   1456
+  ]
+ },
+ "size_m": {
+  "width": 0.509,
+  "height": 0.286,
+  "source": "pantalla de 23\" 16:9 (dueño) o laptop de ≈ 14\" (supuesto)"
+ },
+ "px_per_m": 1500,
+ "color": {
+  "as_shot": true,
+  "note": "luz propia de la pantalla: se respeta lo que registró la cámara"
+ },
+ "emissive": 0.6,
+ "relief": {
+  "type": "flat",
+  "grain_mm": 0.0
+ },
+ "roughness": {
+  "base": 0.15,
+  "grain": 0.0,
+  "note": "pantalla semimate"
+ },
+ "observed": {},
+ "assumptions": [
+  "la imagen es la de ese momento"
+ ]
+}
