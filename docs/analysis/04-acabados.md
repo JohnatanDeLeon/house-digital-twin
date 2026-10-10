@@ -181,7 +181,22 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 - **Cómo se genera:** por código (`kind: procedural`), con ruido periódico, así que se repite sin costura. Lleva placas de ≈ 3 cm que cubren ≈ 45 % de la superficie, con 3 mm de relieve y bordes marcados, sobre grano fino de 0.25 mm. Es más oscuro entre placas por polvo y sombra fina, y la semilla es fija.
 - **Es una aproximación, no una observación:** forma, tamaño y relieve son interpretación. Hay que reemplazarlo por una textura de foto cuando la haya.
 - **Las referencias** son imágenes de catálogo: no se guardan en el repo.
-- **Foto de las 07:49:34 (`20261008_074934.jpg`, sin usar):** muestra una puerta de lámina negra acanalada junto a una ventana con herrería. Los muros de alrededor no tienen placas: uno es de grano rugoso y el otro casi liso con poros. Falta que el dueño diga dónde es.
+- **Foto de las 07:49:34 (`20261008_074934.jpg`):** muestra una puerta de lámina negra acanalada junto a una ventana con herrería. Los muros de alrededor no tienen placas: uno es de grano rugoso y el otro casi liso con poros. El dueño confirma que es la puerta de la bodega (D09): ver la sección 14.
+
+### 14. Puerta de la bodega D09 (07:49:34)
+
+- **Qué es (dato del dueño):** la puerta de la bodega, fotografiada desde el pórtico.
+- **Conjunto:** ocupa el vano de 0.835 × 2.10 m.
+  - **Marco de perfil.**
+  - **Fijo arriba:** lámina acanalada con 9 costillas a ≈ 8.1 cm, soldada a un ángulo con puntos arriba, abajo y a los lados. La mayoría de las soldaduras tiene óxido.
+  - **Hoja:** dos tableros de duela de lámina (8 duelas de ≈ 8 cm, con bordón y ranura en cada unión) con moldura de 2 cm y una solera sobrepuesta a media altura.
+- **Herrajes:** la chapa de cilindro va a la izquierda y la jaladera cromada de asa sobre la solera. Las bisagras van a la derecha. No van en la textura: irán como objetos 3D.
+- **Cómo se genera: dibujada, no copiada.** La textura de D03 pegó la foto y con ella el reflejo del fotógrafo en el vidrio. Aquí el esmalte refleja el cielo como una mancha azulada, así que la foto rectificada solo se usa para medir:
+  - **Geometría:** la posición de cada pieza, en fracciones de la cara.
+  - **Colores:** pintura `#1d1f22` (la parte más oscura de las duelas, que coincide con el fijo en sombra), óxido `#493a37` y polvo `#3c3c3e`. El blanco de referencia es el muro derecho, con albedo supuesto de 222.
+  - El generador `sheet_door` arma el relieve con esas medidas y oscurece lo hundido. Reparte el óxido de las soldaduras y el polvo de la parte baja con ruido, y el brillo lo da el render con la rugosidad (esmalte satinado, 0.4).
+- **Lado de la foto (`viewed_from`):** la textura declara desde qué espacio se fotografió, y la escena orienta la UV para que de ese lado no salga espejada. Aquí la chapa queda a la izquierda vista desde el pórtico. D03 también lo declara: su foto es desde la sala.
+- **Supuestos:** las profundidades del relieve, que la cara hacia la bodega es igual y que el conjunto llena el vano.
 
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
@@ -301,7 +316,7 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 
 **Sin acabado todavía** (salen en gris violáceo para que se noten):
 - **Muros de la lavandería S13:** ninguna textura la incluye. ¿Llevan el mismo aplanado que el pasillo y el patio?
-- **D01** (reja peatonal del pórtico) y **D09** (puerta de la bodega): falta su foto. La de lámina acanalada (07:49:34) podría ser D09.
+- **D01** (reja peatonal del pórtico): falta su foto.
 
 **Con textura, pero sin geometría en el modelo:**
 - `piso-regadera`: falta el área de la regadera.
@@ -316,7 +331,7 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 
 ## Pendientes del dueño
 
-1. **Aplanados exteriores:** foto de cerca del estuco de la fachada y el pórtico, con luz rasante y algo de tamaño conocido, para reemplazar la textura sintética. ¿Dónde se tomaron las fotos 07:47:26 (aplanado de grano fino con estrías) y 07:49:34 (puerta de lámina acanalada)?
+1. **Aplanados exteriores:** foto de cerca del estuco de la fachada y el pórtico, con luz rasante y algo de tamaño conocido, para reemplazar la textura sintética. ¿Dónde se tomó la foto 07:47:26 (aplanado de grano fino con estrías)?
 2. **Medidas:** ancho y alto de la hoja de una puerta de recámara y de una de baño. Para saber qué muro del pasillo está corrido: ancho interior del baño (el plano da 1.25 m) y de la recámara 3 de este a oeste (el plano da 4.07 m).
 3. **Puerta D04:** ¿aluminio o acero? ¿Su vidrio es claro?
 4. **Closets:** ¿de qué recámara es cada foto? Medidas de un módulo (ancho de hoja y alto total). Una foto del techo de tirol de cerca.

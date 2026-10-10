@@ -1,0 +1,396 @@
+{
+  "_doc": "Puerta de la bodega (D09, pórtico → bodega): marco de perfil, fijo de lámina acanalada arriba y hoja de duela de lámina con travesaño, todo pintado de negro. Se DIBUJA por código con las medidas tomadas en la foto rectificada (no se pega la foto): así los brillos del sol y el cielo reflejado en el esmalte no quedan en el color. Posiciones en fracciones de la cara (0–1, origen arriba a la izquierda, vista desde el pórtico). Regenerar con: python -m house_twin.cli texture sources/texturas/puerta-bodega.json",
+  "name": "puerta-bodega",
+  "kind": "procedural",
+  "generator": "sheet_door",
+  "tileable": false,
+  "applies_to": {
+    "openings": [
+      "D09"
+    ],
+    "viewed_from": "S11",
+    "source": "dueño (2026-10-08): es la puerta de la bodega; la foto se tomó desde el pórtico"
+  },
+  "photo": "sources/fotos/puerta-bodega.jpg",
+  "photo_meta": {
+    "taken": "2026-10-08T07:49:34",
+    "camera": "Samsung Galaxy S25 Ultra",
+    "focal_35mm": 23,
+    "iso": 100,
+    "flash": false,
+    "light": "luz de día nublada bajo el techo del pórtico; el esmalte refleja el cielo (brillo azulado en la mitad de arriba)"
+  },
+  "corners_px": {
+    "top_left": [
+      624,
+      28
+    ],
+    "top_right": [
+      1967,
+      30
+    ],
+    "bottom_right": [
+      2120,
+      3790
+    ],
+    "bottom_left": [
+      940,
+      3835
+    ]
+  },
+  "size_m": {
+    "width": 0.835,
+    "height": 2.1,
+    "source": "vano D09 del plano (0.835 m) y altura de vano del dueño (U04, 2.10 m); supuesto: el conjunto (marco, fijo y hoja) ocupa todo el vano"
+  },
+  "px_per_m": 1600,
+  "seed": 9,
+  "color": {
+    "white_reference": {
+      "box_px": [
+        2300,
+        1200,
+        2700,
+        2400
+      ],
+      "albedo_srgb": [
+        222,
+        222,
+        220
+      ],
+      "note": "muro blanco a la derecha de la puerta, en el mismo plano y con la misma luz; albedo supuesto, el mismo blanco exterior que el estuco"
+    },
+    "measure_px_per_m": 1000,
+    "samples": {
+      "paint": {
+        "rect_frac": [
+          0.14,
+          0.62,
+          0.86,
+          0.85
+        ],
+        "keep": "darkest",
+        "fraction": 0.3,
+        "note": "duelas del tablero de abajo, sin el reflejo azulado del cielo; coincide con la lámina del fijo, en sombra (30, 31, 33)"
+      },
+      "rust": {
+        "rect_frac": [
+          0.045,
+          0.03,
+          0.07,
+          0.11
+        ],
+        "keep": "brightest",
+        "fraction": 0.05,
+        "note": "soldaduras oxidadas del lado izquierdo del fijo"
+      },
+      "dust": {
+        "rect_frac": [
+          0.15,
+          0.9,
+          0.85,
+          0.96
+        ],
+        "keep": "brightest",
+        "fraction": 0.03,
+        "note": "motas de polvo pegadas en la parte baja de la hoja"
+      }
+    }
+  },
+  "layout": [
+    {
+      "kind": "level",
+      "rect_frac": [
+        0.051,
+        0.021,
+        0.958,
+        0.17
+      ],
+      "height_mm": -10,
+      "roughness": 0.55,
+      "note": "lámina del fijo, asentada detrás del ángulo del marco; pintura más vieja y mate"
+    },
+    {
+      "kind": "ribs",
+      "rect_frac": [
+        0.051,
+        0.021,
+        0.958,
+        0.17
+      ],
+      "x_frac": [
+        0.114,
+        0.213,
+        0.308,
+        0.407,
+        0.503,
+        0.602,
+        0.698,
+        0.793,
+        0.892
+      ],
+      "base_frac_w": 0.026,
+      "top_frac_w": 0.014,
+      "height_mm": 6,
+      "note": "9 costillas a ≈ 8.1 cm; salen hacia el pórtico (las soldaduras van sobre ellas)"
+    },
+    {
+      "kind": "level",
+      "rect_frac": [
+        0.042,
+        0.183,
+        0.049,
+        1.0
+      ],
+      "height_mm": -8,
+      "note": "junta entre marco y hoja, lado de la chapa"
+    },
+    {
+      "kind": "level",
+      "rect_frac": [
+        0.946,
+        0.183,
+        0.958,
+        1.0
+      ],
+      "height_mm": -8,
+      "note": "junta entre hoja y marco, lado de las bisagras"
+    },
+    {
+      "kind": "level",
+      "rect_frac": [
+        0.042,
+        0.183,
+        0.958,
+        0.188
+      ],
+      "height_mm": -8,
+      "note": "junta bajo el travesaño del fijo"
+    },
+    {
+      "kind": "level",
+      "rect_frac": [
+        0.105,
+        0.198,
+        0.888,
+        0.563
+      ],
+      "height_mm": -4,
+      "note": "tablero de arriba"
+    },
+    {
+      "kind": "level",
+      "rect_frac": [
+        0.105,
+        0.598,
+        0.888,
+        0.981
+      ],
+      "height_mm": -4,
+      "note": "tablero de abajo"
+    },
+    {
+      "kind": "molding",
+      "rect_frac": [
+        0.105,
+        0.198,
+        0.888,
+        0.563
+      ],
+      "width_frac_w": 0.024,
+      "height_mm": 1.5,
+      "inner_height_mm": -1.5,
+      "note": "moldura de 2 cm en dos escalones alrededor del tablero"
+    },
+    {
+      "kind": "molding",
+      "rect_frac": [
+        0.105,
+        0.598,
+        0.888,
+        0.981
+      ],
+      "width_frac_w": 0.024,
+      "height_mm": 1.5,
+      "inner_height_mm": -1.5
+    },
+    {
+      "kind": "joints",
+      "rect_frac": [
+        0.129,
+        0.2075,
+        0.864,
+        0.5535
+      ],
+      "x_frac": [
+        0.224,
+        0.32,
+        0.419,
+        0.515,
+        0.611,
+        0.707,
+        0.803
+      ],
+      "profile": [
+        {
+          "offset_frac_w": -0.009,
+          "width_frac_w": 0.008,
+          "height_mm": 1.0,
+          "shape": "round"
+        },
+        {
+          "offset_frac_w": 0.009,
+          "width_frac_w": 0.006,
+          "height_mm": -2.0,
+          "shape": "v"
+        }
+      ],
+      "note": "8 duelas de ≈ 8 cm; cada unión: bordón y ranura a ≈ 1.5 cm"
+    },
+    {
+      "kind": "joints",
+      "rect_frac": [
+        0.129,
+        0.6075,
+        0.864,
+        0.9715
+      ],
+      "x_frac": [
+        0.224,
+        0.32,
+        0.419,
+        0.515,
+        0.611,
+        0.707,
+        0.803
+      ],
+      "profile": [
+        {
+          "offset_frac_w": -0.009,
+          "width_frac_w": 0.008,
+          "height_mm": 1.0,
+          "shape": "round"
+        },
+        {
+          "offset_frac_w": 0.009,
+          "width_frac_w": 0.006,
+          "height_mm": -2.0,
+          "shape": "v"
+        }
+      ]
+    },
+    {
+      "kind": "level",
+      "rect_frac": [
+        0.129,
+        0.563,
+        0.892,
+        0.598
+      ],
+      "height_mm": 2,
+      "note": "solera sobrepuesta entre los dos tableros (donde va la jaladera)"
+    },
+    {
+      "kind": "welds",
+      "lines": [
+        {
+          "from": [
+            0.12,
+            0.024
+          ],
+          "to": [
+            0.9,
+            0.024
+          ],
+          "pitch_frac": 0.0487
+        },
+        {
+          "from": [
+            0.1,
+            0.17
+          ],
+          "to": [
+            0.87,
+            0.17
+          ],
+          "pitch_frac": 0.0487
+        },
+        {
+          "from": [
+            0.057,
+            0.033
+          ],
+          "to": [
+            0.057,
+            0.115
+          ],
+          "pitch_frac": 0.02
+        },
+        {
+          "from": [
+            0.95,
+            0.04
+          ],
+          "to": [
+            0.95,
+            0.16
+          ],
+          "pitch_frac": 0.04
+        }
+      ],
+      "diameter_frac_w": 0.014,
+      "height_mm": 2,
+      "rust_share": 0.6,
+      "rust_spread": 1.8,
+      "note": "puntos que fijan la lámina al ángulo: arriba y abajo en cada costilla y entre ellas, y a los lados; en la foto, la mayoría con óxido"
+    },
+    {
+      "kind": "dust",
+      "rect_frac": [
+        0.04,
+        0.8,
+        0.96,
+        1.0
+      ],
+      "speck_mm": 0.8,
+      "max_cover": 0.2,
+      "ramp_power": 1.5,
+      "note": "polvo pegado a la pintura, cada vez más denso hacia el piso"
+    }
+  ],
+  "bevel_mm": 1.0,
+  "paint": {
+    "variation": 0.025,
+    "orange_peel_mm": 1.0,
+    "orange_peel_height_mm": 0.03,
+    "note": "esmalte negro a pistola o brocha, liso"
+  },
+  "cavity": {
+    "radius_mm": 6,
+    "depth_mm": 3,
+    "darkening": 0.6,
+    "note": "juntas y ranuras más oscuras: sombra fina y mugre acumulada"
+  },
+  "dust_opacity": 0.35,
+  "roughness": {
+    "base": 0.4,
+    "rust": 0.85,
+    "dust": 0.75,
+    "note": "esmalte satinado: en la foto refleja el cielo como mancha difusa, no como espejo"
+  },
+  "observed": {
+    "type": "conjunto de herrería: marco de perfil, fijo superior de lámina acanalada soldada a un ángulo y hoja de duela de lámina (dos tableros con moldura) con una solera sobrepuesta a media altura",
+    "finish": "esmalte negro satinado, en buen estado en la hoja; en el fijo, más viejo y con soldaduras oxidadas",
+    "hardware": "chapa de cilindro con escudo cuadrado del lado izquierdo y jaladera cromada de asa sobre la solera; bisagras de libro soldadas del lado derecho (se ven dos). No van en la textura: irán como objetos 3D",
+    "dirt": "polvo pegado en el tercio de abajo de la hoja",
+    "surroundings": "a la izquierda, muro de estuco con una ventana con protección de herrería forjada (arillos); a la derecha, muro blanco más liso; piso de concreto",
+    "not_baked": "el brillo azulado del cielo en el esmalte y las manchas sueltas: los da el render con la rugosidad, no el color"
+  },
+  "assumptions": [
+    "el conjunto ocupa todo el vano de 0.835 × 2.10 m",
+    "muro derecho blanco como referencia de color (albedo 222, como el estuco)",
+    "profundidades del relieve (lámina 10 mm, tablero 4 mm, costillas 6 mm, juntas 8 mm) estimadas, no medidas",
+    "la cara hacia la bodega es igual a la del pórtico (no hay foto)",
+    "polvo y óxido repartidos con ruido donde la foto los muestra, no punto por punto"
+  ]
+}

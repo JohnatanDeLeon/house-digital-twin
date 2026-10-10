@@ -49,8 +49,11 @@ class Finishes:
         self.walls = _by_space(materials, lambda a: 'muro' in a.get('surface', ''))
         self.street = next((n for n, m in materials.items() if m['applies_to'].get('street_facade')), None)
         self.openings: dict[str, dict[str, str]] = {}
+        self.viewpoints: dict[str, str] = {}
         for name, m in sorted(materials.items()):
             for oid in m['applies_to'].get('openings', []):
+                if m['applies_to'].get('viewed_from'):
+                    self.viewpoints[oid] = m['applies_to']['viewed_from']
                 part = {'vidrio': 'glass', 'marcos y hojas': 'frame'}.get(m['applies_to'].get('part'), 'leaf')
                 self.openings.setdefault(oid, {})[part] = name
                 if part == 'leaf' and m.get('glass_material'):
@@ -87,3 +90,7 @@ class Finishes:
     def opening(self, opening_id: str) -> dict[str, str]:
         """Partes del vano → textura: `leaf` (hoja), `frame` (marco) y `glass` (vidrio)."""
         return dict(self.openings.get(opening_id, {}))
+
+    def viewed_from(self, opening_id: str) -> str | None:
+        """Espacio desde el que se fotografió la hoja: de ese lado la textura se ve sin espejar."""
+        return self.viewpoints.get(opening_id)
