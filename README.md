@@ -61,8 +61,9 @@ En el navegador (también en el celular): `docs/viewer/casa-jonhy-3d.html`, gene
 Gira con el dedo, toca un espacio para ver su ficha, cambia a vista en planta o corta los muros a 1 m.
 
 Para caminar adentro, con las texturas: `docs/viewer/recorrido/`, generado por `scene`. En la PC se camina con W A S D
-y el mouse, y en el celular con un joystick táctil. Los muros chocan, las puertas se atraviesan y una planta en
-miniatura muestra dónde estás. Necesita servirse por HTTP (`python -m http.server` en esa carpeta), no como archivo local.
+y el mouse, y en el celular con un joystick táctil. Se empieza en la calle, frente a la reja del pórtico. Los muros y
+las puertas cerradas chocan; cerca de una puerta aparece «Abrir» (tecla E o el botón), y cada hoja gira sobre su
+bisagra hacia el espacio al que abre, como dice el plano o el dueño. Una planta en miniatura muestra dónde estás. Necesita servirse por HTTP (`python -m http.server` en esa carpeta), no como archivo local.
 
 En Blender:
 

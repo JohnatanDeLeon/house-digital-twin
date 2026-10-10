@@ -515,14 +515,46 @@ def show_materials():
                     space.shading.type = 'MATERIAL'
 
 
-def export_glb(path: Path):
-    """Geometría, UV y nombres de material para el recorrido web; las imágenes las pone el visor (versión ligera)."""
+def leaf_copies(obj, leaves):
+    """Una copia del objeto por hoja (portón de 2 hojas): cada una conserva su mitad, cortada donde se juntan las
+    hojas, con la cara del corte tapada. Las UV se interpolan en el corte, así la textura sigue entera."""
+    copies = []
+    for i, leaf in enumerate(leaves):
+        (hx, hy), (lx, ly) = leaf['hinge_end'], leaf['latch_end']
+        to_hinge = Vector((hx - lx, hy - ly, 0)).normalized()
+        copy = obj.copy()
+        copy.data = obj.data.copy()
+        bpy.context.scene.collection.objects.link(copy)
+        inv, to_local = copy.matrix_world.inverted(), copy.matrix_world.to_3x3().transposed()
+        bm = bmesh.new()
+        bm.from_mesh(copy.data)
+        bmesh.ops.bisect_plane(bm, geom=bm.verts[:] + bm.edges[:] + bm.faces[:], dist=1e-5, clear_inner=True,
+                               plane_co=inv @ Vector((lx, ly, 0)), plane_no=(to_local @ to_hinge).normalized())
+        bmesh.ops.holes_fill(bm, edges=[e for e in bm.edges if e.is_boundary], sides=0)
+        bm.to_mesh(copy.data)
+        bm.free()
+        copy['hdt_leaf'] = i
+        copies.append(copy)
+    return copies
+
+
+def export_glb(path: Path, openings: dict | None = None):
+    """Geometría, UV y nombres de material para el recorrido web; las imágenes las pone el visor (versión ligera).
+
+    Una puerta de varias hojas sale partida en una malla por hoja (con `hdt_leaf`), para que el visor las abra
+    por separado; las copias se borran después de exportar, así la escena de Blender no cambia."""
     bpy.ops.object.select_all(action='DESELECT')
-    for obj in bpy.data.objects:
+    temporary = []
+    for obj in list(bpy.data.objects):
         if obj.type == 'MESH' and not obj.hide_render:
             kind, name = _ifc_name(obj)
-            obj['hdt_kind'], obj['hdt_id'] = kind, name  # el glTF limpia los nombres: el id viaja en extras
-            obj.select_set(True)
+            leaves = (openings or {}).get(name, {}).get('leaves') or []
+            parts = leaf_copies(obj, leaves) if kind == 'IfcDoor' and len(leaves) > 1 else [obj]
+            if parts[0] is not obj:
+                temporary += parts
+            for part in parts:
+                part['hdt_kind'], part['hdt_id'] = kind, name  # el glTF limpia los nombres: el id viaja en extras
+                part.select_set(True)
     for cam in bpy.data.collections['Recorrido'].objects:
         cam['hdt_kind'], cam['hdt_id'] = 'camera', cam.name
         cam.select_set(True)
@@ -530,6 +562,8 @@ def export_glb(path: Path):
     bpy.ops.export_scene.gltf(filepath=str(path), export_format='GLB', use_selection=True, export_extras=True,
                               export_cameras=True, export_lights=False, export_materials='EXPORT',
                               export_image_format='NONE', export_apply=False)
+    for obj in temporary:
+        bpy.data.objects.remove(obj)
 
 
 def main():
@@ -552,7 +586,7 @@ def main():
     for line in sorted(scene.unknown):
         print(f'sin acabado: {line}')
     if args.glb:
-        export_glb(args.glb)
+        export_glb(args.glb, {o['id']: o for o in json.loads(FACTS.read_text())['openings']})
     if args.render:
         render_all(args.render)
 
