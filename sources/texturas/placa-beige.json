@@ -1,0 +1,24 @@
+{
+ "_doc": "Plástico beige de la placa del baño (apagador y contacto juntos). Color medido contra el azulejo de al lado, en el mismo muro. Regenerar con: python -m house_twin.cli texture sources/texturas/placa-beige.json",
+ "name": "placa-beige",
+ "kind": "constant",
+ "applies_to": {
+  "device_plate": "baño",
+  "source": "foto del baño (dueño, 2026-10-07)"
+ },
+ "photo": "sources/fotos/bano-regadera.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   170,
+   169,
+   151
+  ],
+  "metallic": 0.0,
+  "roughness": 0.4,
+  "note": "medido: placa / azulejo en el mismo muro (crudos 135,132,117 y 141,137,131) por el albedo del azulejo (177,175,169); plástico satinado"
+ },
+ "assumptions": [
+  "el albedo del azulejo (de su textura) como referencia",
+  "rugosidad del plástico"
+ ]
+}

@@ -1,0 +1,33 @@
+{
+ "name": "porcelana-hueso",
+ "applies_to": {
+  "sanitary": [
+   "toilet",
+   "basin"
+  ],
+  "source": "foto del baño (dueño, 2026-10-07)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   185,
+   183,
+   170
+  ],
+  "metallic": 0.0,
+  "roughness": 0.08,
+  "note": "medido: tanque / azulejo de atrás (crudos 128,129,121 y 122,123,120) por el albedo del azulejo (177,175,169); porcelana vitrificada, brillante"
+ },
+ "source": {
+  "photo": "sources/fotos/bano-general.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "el albedo del azulejo (de su textura) como referencia; la tapa y el pedestal, con otra luz, no sirven para medir",
+  "rugosidad de la porcelana"
+ ]
+}

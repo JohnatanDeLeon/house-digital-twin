@@ -8,6 +8,9 @@
             "note": "tecla plana del tamaño de la placa (se ve una sola superficie lisa)"},
  "outlet": {"height_m": 0.30, "height_source": "supuesto: altura común de un contacto; el plano no da alturas",
             "module": {"width": 0.034, "height": 0.024, "depth": 0.003, "spacing": 0.044, "note": "contacto doble (supuesto)"}},
+ "shared_plate": {"rocker": {"width": 0.04, "height": 0.024, "depth": 0.006, "centre": 0.031},
+                  "outlet": {"width": 0.036, "height": 0.026, "depth": 0.003, "centre": -0.031},
+                  "source": "foto del baño: tecla en el tercio de arriba y contacto sencillo con tierra en el de abajo; tamaños estimados"},
  "assumptions": [
   "contactos a 0.30 m; en la cocina probablemente van arriba de la cubierta y en la recámara 3 hay uno alto, sobre la TV",
   "contacto doble",

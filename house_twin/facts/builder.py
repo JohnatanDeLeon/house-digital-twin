@@ -161,6 +161,50 @@ def _devices(drawing, spaces) -> list[dict]:
     return result
 
 
+PLATE_MATCH_M = 0.05  # el ancla del dueño es el punto del dispositivo sobre la cara del muro
+
+
+def _shared_plates(devices, annotations):
+    """Placas que el dueño dice que son una sola (p. ej. apagador y contacto juntos): el plano las dibuja por
+    separado. Todas quedan en el punto de la primera; la posición del plano se conserva en `plan_position`."""
+    source = f"{annotations.get('source', 'dueño')} ({annotations.get('confirmed_on', 's/f')})"
+    for i, entry in enumerate(annotations.get('shared_plates', [])):
+        found = [min(devices, key=lambda d: Point(d['position']).distance(Point(a)), default=None) for a in entry['anchors']]
+        if any(d is None or Point(d['position']).distance(Point(a)) > PLATE_MATCH_M for d, a in zip(found, entry['anchors'])):
+            continue  # la fuente no trae esos dispositivos (p. ej. el PDF de validación)
+        host = found[0]
+        for d in found:
+            if d is not host:
+                d['plan_position'], d['position'] = d['position'], list(host['position'])
+            d['plate'] = {'id': f'P{i + 1:02d}', 'with': [o['id'] for o in found if o is not d],
+                          'material': entry.get('material'), 'source': entry.get('source', source)}
+
+
+def _sanitary(drawing, spaces) -> list[dict]:
+    """Inodoros y lavabos del plano: el rectángulo del bloque y hacia dónde miran (lejos del muro que tocan)."""
+    geoms = [(s['id'], Polygon(s['polygon'])) for s in spaces]
+    result, counts = [], {}
+    for item in drawing.metadata.get('sanitary', []):
+        x0, y0, x1, y1 = item['bbox']
+        centre = Point((x0 + x1) / 2, (y0 + y1) / 2)
+        space = next(((sid, g) for sid, g in geoms if g.contains(centre)), None)
+        if space is None:
+            continue
+        sid, poly = space
+        sides = {(-1, 0): Point(x0, centre.y), (1, 0): Point(x1, centre.y), (0, -1): Point(centre.x, y0), (0, 1): Point(centre.x, y1)}
+        back = min(sides, key=lambda k: poly.exterior.distance(sides[k]))
+        facing = (-back[0], -back[1])
+        depth, width = (x1 - x0, y1 - y0) if back[0] else (y1 - y0, x1 - x0)
+        wall_point = sides[back]
+        counts[item['kind']] = counts.get(item['kind'], 0) + 1
+        prefix = {'toilet': 'WC', 'basin': 'LV'}[item['kind']]
+        result.append({'id': f"{prefix}{counts[item['kind']]:02d}", 'kind': item['kind'], 'space': sid,
+                       'back_centre': [round(wall_point.x, 3), round(wall_point.y, 3)], 'facing': list(facing),
+                       'width': round(width, 3), 'depth': round(depth, 3),
+                       'source': 'plano: bloque ' + ('WC' if item['kind'] == 'toilet' else 'LAVABO') + ' (capa 9-MUEBLES FIJOS)'})
+    return result
+
+
 def _interior_roofs(spaces, annotations):
     """Dato del dueño: los espacios interiores sin dato de techo están techados."""
     entry = annotations.get('interior_roofed')
@@ -208,6 +252,26 @@ def _closets(drawing, spaces) -> list[dict]:
                        'footprint': [[round(x0, 3), round(y0, 3)], [round(x1, 3), round(y1, 3)],
                                      [round(back[1][0], 3), round(back[1][1], 3)], [round(back[0][0], 3), round(back[0][1], 3)]],
                        'source': 'plano: rótulo CLOSET y frente en la capa de muebles fijos; fondo hasta el muro'})
+    return result
+
+
+def _showers(spaces, walls, annotations, first_id: int) -> list[dict]:
+    """Regaderas: el dueño dice en qué lado del sardinel está (un punto adentro) y el plano da el sardinel (un
+    muro de 5 cm que cruza el baño). El área es la parte del espacio de ese lado; el sardinel toma su altura."""
+    source = f"{annotations.get('source', 'dueño')} ({annotations.get('confirmed_on', 's/f')})"
+    result = []
+    for entry in annotations.get('showers', []):
+        space = next(s for s in spaces if Polygon(s['polygon']).contains(Point(entry['space_anchor'])))
+        curb = next(w for w in walls if Polygon(w['footprint']).buffer(0.01).contains(Point(entry['curb_anchor'])))
+        pieces = Polygon(space['polygon']).difference(Polygon(curb['footprint']))
+        area = next(g for g in getattr(pieces, 'geoms', [pieces]) if g.contains(Point(entry['space_anchor'])))
+        curb['height'] = {'value': entry['curb_height'], 'source': entry.get('curb_source', source)}
+        curb['role'] = 'sardinel de la regadera'
+        result.append({'id': f'F{first_id + len(result):02d}', 'kind': 'shower', 'space': space['id'],
+                       'polygon': [[round(x, 3), round(y, 3)] for x, y in list(area.exterior.coords)[:-1]],
+                       'area': round(area.area, 2), 'curb_wall': curb['id'],
+                       'source': f"plano: sardinel {curb['id']}; lado de la regadera: {entry.get('side_source', source)}",
+                       'owner_note': entry.get('note')})
     return result
 
 
@@ -320,6 +384,11 @@ def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
     openings = doors + windows
     correct_openings(openings, annotations)
 
+    closets = _closets(drawing, spaces)
+    fixtures = closets + _showers(spaces, walls, annotations, len(closets) + 1) + _sanitary(drawing, spaces)
+    devices = _devices(drawing, spaces)
+    _shared_plates(devices, annotations)
+
     cal = drawing.metadata.get('calibration', {})
     lot_w = faces.lot.bounds[2] - faces.lot.bounds[0]
     lot_d = faces.lot.bounds[3] - faces.lot.bounds[1]
@@ -338,8 +407,8 @@ def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
                  'area': round(faces.lot.area, 2), 'labeled_dimensions': [10.00, 21.25]},
         'source_warnings': [w for w in [drawing.metadata.get('units_warning')] if w],
         'levels': [{'id': 'L0', 'name': 'Planta baja', 'elevation': 0.0, 'storey_height': dict(UNKNOWN)}],
-        'spaces': spaces, 'walls': walls, 'openings': openings, 'fixtures': _closets(drawing, spaces),
-        'lights': _lights(drawing, spaces), 'devices': _devices(drawing, spaces),
+        'spaces': spaces, 'walls': walls, 'openings': openings, 'fixtures': fixtures,
+        'lights': _lights(drawing, spaces), 'devices': devices,
         'adjacency': _adjacency(walls, spaces, openings),
         'measurements': owner_measurements(walls, annotations),
         **_unknowns(annotations),

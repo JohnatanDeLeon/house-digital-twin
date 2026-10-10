@@ -422,6 +422,39 @@
    "note": "Reja peatonal del pórtico (D01). El plano la pone en x = 6.17–7.15 m; en las fotos y con las medidas del dueño queda en x = 5.12–6.10 m (≈ 1.05 m hacia la cochera); el camino curvo del piso va de ella a la puerta de entrada (D03). El candado se ve del lado este (hacia la bodega), al revés que la bisagra del plano: sin confirmar."
   }
  ],
+ "showers": [
+  {
+   "space_anchor": [
+    3.6,
+    10.7
+   ],
+   "curb_anchor": [
+    3.6,
+    11.18
+   ],
+   "curb_height": 0.05,
+   "curb_source": "dueño (2026-10-09): un escalón de 5 cm separa el baño de la regadera",
+   "side_source": "fotos del baño (2026-10-07): la regadera queda del lado de la ventana alta (V09), frente a la puerta",
+   "note": "Regadera: piso antiderrapante de losetas de 20 × 20 cm (dueño, 2026-10-09), separado del resto del baño por un sardinel de 5 cm (el murete de 5 cm del plano)."
+  }
+ ],
+ "shared_plates": [
+  {
+   "anchors": [
+    [
+     4.24,
+     11.693
+    ],
+    [
+     4.24,
+     11.459
+    ]
+   ],
+   "material": "placa-beige",
+   "source": "dueño (2026-10-09): el baño no tiene apagador ni contacto abajo; foto del baño (2026-10-07): apagador arriba y contacto abajo en una sola placa beige",
+   "note": "El plano dibuja el apagador (A05) y el contacto (C10) del baño por separado; en la casa son una sola placa, en el lugar del apagador."
+  }
+ ],
  "answered_unknowns": [
   {
    "id": "U06",

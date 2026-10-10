@@ -306,6 +306,30 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
   - **Exterior:** pretil con cornisa, número 134, lámpara y banqueta.
   - **Luz del pórtico:** en el techo hay un portalámparas con lo que parece una cámara tipo foco.
 
+### 22. Regadera: piso antiderrapante, sardinel, llaves y regadera (2026-10-09)
+
+- **Datos del dueño:**
+  - Las losetas del antiderrapante miden **20 × 20 cm**; se habían estimado en 17–20 cm.
+  - Un **escalón de 5 cm** separa el baño de la regadera. Es el murete de 5 cm del plano (W26), que hasta ahora se modelaba como un muro hasta el techo. Pasa a ser un **sardinel de 5 cm de alto** (`role: sardinel de la regadera`), y su tope lleva el acabado del baño.
+  - Las **llaves** están a **1.00 m** de alto y **15 cm** entre sí; la **regadera** sale **90 cm** arriba de ellas, es decir, a 1.90 m.
+- **Área de la regadera (hecho `F04`, tipo `shower`):**
+  - Es la parte del baño del lado de la ventana alta V09, del sardinel al fondo: **1.25 × 0.93 m**. La sacan las anotaciones (`showers`) a partir del plano y las fotos.
+  - Lleva su propio `IfcCovering` (`S05-regadera`) con `piso-regadera`; el resto del baño conserva `piso-interior`.
+- **Llaves y regadera** (`sources/sanitarios/regadera.json`, `house_twin/plumbing.py`): las 2 llaves van como `IfcValve` y el brazo con la regadera cuadrada como `IfcSanitaryTerminal`, todo de cromo. Salen del muro del lado del pasillo, junto al fondo.
+  - **Estimado con la foto:** centro de las llaves a ≈ 20 cm del fondo, brazo de ≈ 40 cm con caída de ≈ 8 cm y regadera de 20 × 20 cm.
+  - **Cromo:** su reflectancia es un valor de tabla, no medido; en un metal pulido, la foto solo muestra el reflejo del cuarto.
+  - **Sin modelar:** la regadera de mano con su manguera, la barra y la cortina.
+- **Placa del baño (corrección del dueño):** el baño no tiene apagador ni contacto abajo. El plano dibuja el apagador (A05) y el contacto (C10) por separado, pero en la casa son **una sola placa**, en el lugar del apagador, con la tecla arriba y el contacto sencillo abajo (foto).
+  - Va en `shared_plates` de las anotaciones. La posición del plano del contacto queda en `plan_position`.
+  - Es **beige**, no negra: **(170, 169, 151)**, medido contra el azulejo del mismo muro (`placa-beige`).
+  - Su altura es la del apagador, 1.22 m; está supuesta, porque viene de la recámara 3.
+- **Inodoro y lavabo:** su posición sale del plano (bloques `WC` y `LAVABO`, hechos `WC02` y `LV02`): los 2 están contra el muro del fondo, con el inodoro del lado de la regadera, igual que en la foto.
+  - **Forma:** inodoro de 2 piezas con la tapa cerrada y lavabo de pedestal con mezcladora cromada, armados con perfiles torneados.
+  - **Medidas:** son las comunes, **supuestas**: taza a 0.38 m, tanque a 0.77 m y borde del lavabo a 0.83 m.
+  - **Color:** hueso, **(185, 183, 170)**, medido en el tanque contra el azulejo de atrás (`porcelana-hueso`).
+  - **Medio baño:** el plano también tiene inodoro y lavabo (`WC01` y `LV01`), pero sin foto no se modelan.
+  - **Recorrido:** el inodoro y el lavabo frenan el paso, como los muebles.
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.
@@ -426,7 +450,6 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 - **D01** (reja peatonal del pórtico): falta su foto.
 
 **Con textura, pero sin geometría en el modelo:**
-- `piso-regadera`: falta el área de la regadera.
 - `closet-madera`: falta el closet de R1 (sin puertas).
 
 **Falta para un render fiel:**

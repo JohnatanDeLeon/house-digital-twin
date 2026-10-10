@@ -14,7 +14,7 @@
     "subgrid": {"per_tile": 6, "line_frac": 0.10, "depth_mm": 0.8, "edge_round_px": 3},
     "note": "esquinas = cruces de junta; la colocación es algo irregular, pero las juntas interiores del bloque coinciden con la cuadrícula; 6 × 6 cuadritos por loseta, canal blanco ≈ 8–10 % del paso"
   },
-  "size_m": {"width": 0.40, "height": 0.40, "source": "supuesto: loseta de 20 × 20 cm; estimada en 17–20 cm porque mide ≈ 1.55 veces la tapa de la coladera (≈ 11 cm, medida comercial común); pendiente de medir"},
+  "size_m": {"width": 0.40, "height": 0.40, "source": "dueño (2026-10-09): losetas de 20 × 20 cm; la textura abarca 2 × 2 (en la foto se habían estimado 17–20 cm con la tapa de la coladera)"},
   "px_per_m": 3000,
   "flatten_lighting": {"exclude_darkest": 0.15, "note": "luz desigual de la lámpara del baño"},
   "color": {"white_reference": {
@@ -31,7 +31,6 @@
     "wall": "el muro de la regadera arriba de este piso se ve con piezas grises mate, más grandes que el azulejo del resto del baño (por confirmar)"
   },
   "assumptions": [
-    "loseta de 20 × 20 cm (estimada 17–20 cm con la coladera)",
     "canales blancos del diseño como referencia de color (albedo 230)",
     "profundidades de junta (2 mm) y canales (0.8 mm)"
   ]

@@ -313,7 +313,7 @@ async function loadHouse() {
     }
     if (obj.material.userData.depth) obj.customDepthMaterial = obj.material.userData.depth;
     obj.receiveShadow = true;
-    if (['IfcWall', 'IfcWindow', 'IfcFurniture'].includes(tag.hdt_kind)) colliders.push(obj);
+    if (['IfcWall', 'IfcWindow', 'IfcFurniture', 'IfcSanitaryTerminal'].includes(tag.hdt_kind)) colliders.push(obj);
   });
   scene.add(gltf.scene);
   tour.sort((a, b) => a.label.localeCompare(b.label, 'es', { numeric: true }));

@@ -14,6 +14,7 @@ from pathlib import Path
 PROBE_M = 0.05      # distancia a la que se mira, desde una cara, en qué espacio cae
 JAMB_PROBE_M = 0.3  # una mocheta mira a lo largo del muro: se prueba a los lados para hallar su espacio
 FLOOR_SURFACE = 'piso'
+SHOWER_FLOOR_SURFACE = 'piso de la regadera'
 CEILING_SURFACE = 'techo'
 STREET = 'calle'
 NEIGHBOUR = 'colindancia'
@@ -47,6 +48,7 @@ class Finishes:
         self.site = facts['site']['polygon']
         self.street_y = min(p[1] for p in self.site)  # el marco de los hechos pone la calle en Y < 0
         self.floors = _by_space(materials, lambda a: a.get('surface') == FLOOR_SURFACE)
+        self.shower_floors = _by_space(materials, lambda a: a.get('surface') == SHOWER_FLOOR_SURFACE)
         self.walls = _by_space(materials, lambda a: 'muro' in a.get('surface', ''))
         self.ceilings = _by_space(materials, lambda a: a.get('surface') == CEILING_SURFACE)
         self.street = next((n for n, m in materials.items() if m['applies_to'].get('street_facade')), None)
@@ -70,11 +72,14 @@ class Finishes:
             return None
         return STREET if point[1] < self.street_y else NEIGHBOUR
 
-    def _wall_finish(self, where):
+    def wall_finish(self, where):
         return self.street if where == STREET else self.walls.get(where)
 
     def floor(self, space_id: str) -> str | None:
         return self.floors.get(space_id)
+
+    def shower_floor(self, space_id: str) -> str | None:
+        return self.shower_floors.get(space_id)
 
     def ceiling(self, space_id: str) -> str | None:
         return self.ceilings.get(space_id)
@@ -90,7 +95,7 @@ class Finishes:
             sides = [s for s in sides if s not in (None, NEIGHBOUR)]
             sides.sort(key=lambda s: s in self.exterior)
             where = sides[0] if sides else None
-        return self._wall_finish(where), where
+        return self.wall_finish(where), where
 
     def opening(self, opening_id: str) -> dict[str, str]:
         """Partes del vano → textura: `leaf` (hoja), `frame` (marco) y `glass` (vidrio)."""

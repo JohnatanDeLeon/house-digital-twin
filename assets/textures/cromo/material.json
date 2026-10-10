@@ -1,0 +1,29 @@
+{
+ "name": "cromo",
+ "applies_to": {
+  "fitting": "regadera",
+  "source": "fotos del baño (dueño, 2026-10-07): llaves, brazo y regadera cromados"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   196,
+   197,
+   196
+  ],
+  "metallic": 1.0,
+  "roughness": 0.12,
+  "note": "reflectancia del cromo de tablas de materiales (≈ 0.55 lineal); pulido"
+ },
+ "source": {
+  "photo": "sources/fotos/bano-regadera.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "reflectancia y rugosidad del cromo: valores de tabla, no medidos"
+ ]
+}

@@ -2326,8 +2326,8 @@
    "on_property_line": false,
    "faces_exterior": false,
    "height": {
-    "value": null,
-    "source": "no está en el plano"
+    "value": 0.05,
+    "source": "dueño (2026-10-09): un escalón de 5 cm separa el baño de la regadera"
    },
    "load_bearing": {
     "value": null,
@@ -2337,7 +2337,8 @@
     "value": null,
     "source": "no está en el plano"
    },
-   "source": "plano: pares de caras de MUROS"
+   "source": "plano: pares de caras de MUROS",
+   "role": "sardinel de la regadera"
   },
   {
    "id": "W27",
@@ -4207,6 +4208,97 @@
     ]
    ],
    "source": "plano: rótulo CLOSET y frente en la capa de muebles fijos; fondo hasta el muro"
+  },
+  {
+   "id": "F04",
+   "kind": "shower",
+   "space": "S05",
+   "polygon": [
+    [
+     4.24,
+     10.225
+    ],
+    [
+     2.99,
+     10.225
+    ],
+    [
+     2.99,
+     11.155
+    ],
+    [
+     4.24,
+     11.155
+    ]
+   ],
+   "area": 1.16,
+   "curb_wall": "W26",
+   "source": "plano: sardinel W26; lado de la regadera: fotos del baño (2026-10-07): la regadera queda del lado de la ventana alta (V09), frente a la puerta",
+   "owner_note": "Regadera: piso antiderrapante de losetas de 20 × 20 cm (dueño, 2026-10-09), separado del resto del baño por un sardinel de 5 cm (el murete de 5 cm del plano)."
+  },
+  {
+   "id": "WC01",
+   "kind": "toilet",
+   "space": "S07",
+   "back_centre": [
+    8.563,
+    2.325
+   ],
+   "facing": [
+    1,
+    0
+   ],
+   "width": 0.5,
+   "depth": 0.751,
+   "source": "plano: bloque WC (capa 9-MUEBLES FIJOS)"
+  },
+  {
+   "id": "WC02",
+   "kind": "toilet",
+   "space": "S05",
+   "back_centre": [
+    2.99,
+    11.667
+   ],
+   "facing": [
+    1,
+    0
+   ],
+   "width": 0.5,
+   "depth": 0.751,
+   "source": "plano: bloque WC (capa 9-MUEBLES FIJOS)"
+  },
+  {
+   "id": "LV01",
+   "kind": "basin",
+   "space": "S07",
+   "back_centre": [
+    8.563,
+    2.995
+   ],
+   "facing": [
+    1,
+    0
+   ],
+   "width": 0.5,
+   "depth": 0.393,
+   "source": "plano: bloque LAVABO (capa 9-MUEBLES FIJOS)"
+  },
+  {
+   "id": "LV02",
+   "kind": "basin",
+   "space": "S05",
+   "back_centre": [
+    2.99,
+    12.375
+   ],
+   "facing": [
+    1,
+    0
+   ],
+   "width": 0.5,
+   "depth": 0.393,
+   "source": "plano: bloque LAVABO (capa 9-MUEBLES FIJOS)"
   }
  ],
  "lights": [
@@ -4470,7 +4562,7 @@
    "space": "S05",
    "position": [
     4.24,
-    11.459
+    11.693
    ],
    "faces_toward": [
     -1.0,
@@ -4481,7 +4573,19 @@
     "value": null,
     "source": "no está en el plano (vista en planta)"
    },
-   "source": "plano: bloque CONTACTO"
+   "source": "plano: bloque CONTACTO",
+   "plan_position": [
+    4.24,
+    11.459
+   ],
+   "plate": {
+    "id": "P01",
+    "with": [
+     "A05"
+    ],
+    "material": "placa-beige",
+    "source": "dueño (2026-10-09): el baño no tiene apagador ni contacto abajo; foto del baño (2026-10-07): apagador arriba y contacto abajo en una sola placa beige"
+   }
   },
   {
    "id": "C11",
@@ -4614,7 +4718,15 @@
     "value": null,
     "source": "no está en el plano (vista en planta)"
    },
-   "source": "plano: bloque APAGADOR SIMPLE"
+   "source": "plano: bloque APAGADOR SIMPLE",
+   "plate": {
+    "id": "P01",
+    "with": [
+     "C10"
+    ],
+    "material": "placa-beige",
+    "source": "dueño (2026-10-09): el baño no tiene apagador ni contacto abajo; foto del baño (2026-10-07): apagador arriba y contacto abajo en una sola placa beige"
+   }
   },
   {
    "id": "A06",
