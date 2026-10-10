@@ -111,8 +111,11 @@ def texture_material(name, spec, specs):
     return mat
 
 
-def window_material(name, size, frame_spec, glass_spec):
-    """Ventana corrediza: marco perimetral y traslape central de aluminio; el resto, vidrio. UV en metros."""
+def window_material(name, size, frame_spec, glass_spec, grid=None):
+    """Ventana corrediza: marco perimetral y traslape central de aluminio; el resto, vidrio. UV en metros.
+
+    Con `grid` (`cols` vidrios a lo ancho entre las dos hojas, `rows` a lo alto, perfil `bar_m`) lleva retícula.
+    """
     mat, nt = _new_material(name)
     w, h = size
     uv = nt.nodes.new('ShaderNodeSeparateXYZ')
@@ -135,6 +138,11 @@ def window_material(name, size, frame_spec, glass_spec):
     near_v = math_node('LESS_THAN', math_node('MINIMUM', v, math_node('SUBTRACT', h, v)), WINDOW_FRAME_M)
     centre = math_node('LESS_THAN', math_node('ABSOLUTE', math_node('SUBTRACT', u, w / 2)), WINDOW_MEETING_M / 2)
     frame = math_node('MAXIMUM', math_node('MAXIMUM', near_u, near_v), centre)
+    if grid:  # una línea cada `paso`: distancia al múltiplo más cercano menor que medio perfil
+        for coord, step in ((u, w / grid['cols']), (v, h / grid['rows'])):
+            offset = math_node('SUBTRACT', math_node('MODULO', math_node('ADD', coord, step / 2), step), step / 2)
+            bars = math_node('LESS_THAN', math_node('ABSOLUTE', offset), grid['bar_m'] / 2)
+            frame = math_node('MAXIMUM', frame, bars)
     mix = nt.nodes.new('ShaderNodeMixShader')  # 0 = vidrio, 1 = aluminio
     nt.links.new(frame, mix.inputs['Fac'])
     nt.links.new(_principled(nt, glass_spec['pbr']).outputs[0], mix.inputs[1])
@@ -202,8 +210,9 @@ def split_at_boundaries(obj, boundaries):
 
 
 class Scene:
-    def __init__(self, finishes, specs, spaces):
+    def __init__(self, finishes, specs, spaces, openings=None):
         self.finishes, self.specs = finishes, specs
+        self.openings = openings or {}  # hechos de cada vano por id (retícula de las ventanas)
         # una cara de muro puede mirar a dos espacios (sale del baño y sigue en el pasillo): se corta en sus límites
         self.boundaries = (sorted({round(p[0], 3) for s in spaces for p in s['polygon']}),
                            sorted({round(p[1], 3) for s in spaces for p in s['polygon']}))
@@ -262,7 +271,10 @@ class Scene:
         if 'frame' in parts:  # ventana: marco procedural con las medidas del vano
             size = write_uvs(obj, fit='metres')
             obj['hdt_size'] = list(size)  # el visor web dibuja el marco con estas medidas
-            mat = window_material(f'ventana-{oid}', size, self.specs[parts['frame']], self.specs[parts['glass']])
+            grid = self.openings.get(oid, {}).get('grid')
+            if grid:
+                obj['hdt_grid'] = [grid['cols'], grid['rows'], grid['bar_m']]
+            mat = window_material(f'ventana-{oid}', size, self.specs[parts['frame']], self.specs[parts['glass']], grid)
             obj.data.materials.clear()
             obj.data.materials.append(mat)
             return
@@ -283,7 +295,7 @@ def apply_finishes(ifc_path):
     bpy.ops.bim.load_project(filepath=str(ifc_path))
     facts = json.loads(FACTS.read_text())
     specs = load_materials(TEXTURES)
-    scene = Scene(Finishes(facts, specs), specs, facts['spaces'])
+    scene = Scene(Finishes(facts, specs), specs, facts['spaces'], {o['id']: o for o in facts['openings']})
     for obj in [o for o in bpy.data.objects if o.type == 'MESH']:
         ifc_class, name = _ifc_name(obj)
         if obj.data.users > 1:

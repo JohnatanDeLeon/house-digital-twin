@@ -3800,24 +3800,48 @@
   },
   {
    "kind": "window",
-   "footprint": null,
-   "width": null,
+   "footprint": [
+    [
+     8.464,
+     7.412
+    ],
+    [
+     9.205,
+     6.696
+    ],
+    [
+     9.323,
+     6.819
+    ],
+    [
+     8.582,
+     7.534
+    ]
+   ],
+   "width": 1.03,
    "wall_thickness": null,
    "detected_by": "dueño (2026-10-08)",
    "sill_height": {
-    "value": null,
-    "source": "no está en el plano"
+    "value": 0.52,
+    "source": "estimación con 2 fotos desde la sala (2026-10-08 22:37, gran angular de 13 mm) y la altura de piso a techo (2.60 m); el dueño la aceptó (2026-10-08) hasta medirla"
    },
    "height": {
-    "value": null,
-    "source": "no está en el plano"
+    "value": 1.62,
+    "source": "estimación con 2 fotos desde la sala (2026-10-08 22:37, gran angular de 13 mm) y la altura de piso a techo (2.60 m); el dueño la aceptó (2026-10-08) hasta medirla"
    },
    "host_wall": "W32",
    "connects": [
     "S08",
     "S01"
    ],
-   "owner_note": "Ventana del tragaluz hacia la sala, en el muro central (diagonal). Los muros laterales no tienen ventana. El plano no la dibuja: medidas desconocidas.",
+   "owner_note": "Ventana del tragaluz hacia la sala, en el muro central (diagonal). Los muros laterales no tienen ventana. El plano no la dibuja. Corrediza de 2 hojas con retícula, centrada en el muro diagonal W32 (en la foto queda ≈ 3 cm más hacia el sureste, dentro del error); ancho ≈ 1.03 m, alto ≈ 1.62 m, antepecho ≈ 0.52 m (estimación con fotos, ±5 cm).",
+   "grid": {
+    "cols": 4,
+    "rows": 5,
+    "bar_m": 0.03,
+    "note": "2 hojas corredizas de 2 × 5 vidrios cada una; perfil de la retícula ≈ 3 cm (estimado)",
+    "source": "dueño (2026-10-08)"
+   },
    "id": "V10"
   }
  ],
@@ -4227,14 +4251,6 @@
    "topic": "ventanas",
    "question": "Confirmar que en los rótulos de ventana \"a=\" es antepecho y \"h=\" altura de ventana.",
    "blocks": []
-  },
-  {
-   "id": "U11",
-   "topic": "ventana del tragaluz",
-   "question": "¿Ancho, altura de antepecho y altura de la ventana del tragaluz hacia la sala (muro diagonal de 1.11 m)?",
-   "blocks": [
-    "3D"
-   ]
   }
  ],
  "answered": [
@@ -4285,6 +4301,16 @@
     "segunda planta"
    ],
    "answer": "El tragaluz está abierto al cielo, sin domo ni vidrio.",
+   "source": "dueño (2026-10-08)"
+  },
+  {
+   "id": "U11",
+   "topic": "ventana del tragaluz",
+   "question": "¿Ancho, altura de antepecho y altura de la ventana del tragaluz hacia la sala (muro diagonal de 1.11 m)?",
+   "blocks": [
+    "3D"
+   ],
+   "answer": "Estimación con fotos que el dueño aceptó: 1.03 m de ancho, 1.62 m de alto y antepecho de 0.52 m (±5 cm). Falta medirla con cinta; los valores están en add_openings.",
    "source": "dueño (2026-10-08)"
   }
  ]

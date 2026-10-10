@@ -201,6 +201,20 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 - **Lado de la foto (`viewed_from`):** la textura declara desde qué espacio se fotografió, y la escena orienta la UV para que de ese lado no salga espejada. Aquí la chapa queda a la izquierda vista desde el pórtico. D03 también lo declara: su foto es desde la sala.
 - **Supuestos:** las profundidades del relieve, que la cara hacia la bodega es igual y que el conjunto llena el vano.
 
+### 15. Ventana del tragaluz V10 y muros del tragaluz (22:37:24 y 22:37:54)
+
+- **Fotos:** dos desde la sala, de noche, con el gran angular (13 mm): una de cerca y otra de contexto, con techo y piso a la vista.
+- **Ventana:** corrediza de **2 hojas con retícula de 2 × 5 vidrios cada una** (4 × 5 en total), de aluminio negro y vidrio claro. Va centrada en el entrante diagonal, en un vano que ocupa casi todo el muro W32.
+- **Medidas: estimadas con las fotos.** El dueño las aceptó hasta medirlas, y quedan en `add_openings` con `measure_source`; la incógnita U11 se cierra con esa aclaración.
+  - **Cómo:** en la foto de contexto, las 4 esquinas del muro diagonal (1.137 m de cara, 2.60 m de piso a techo) dan el plano del muro, y el marco se mide sobre él. Una esquina, detrás del sillón, se extrapoló.
+  - **Resultado:** **ancho 1.03 m, alto ≈ 1.62 m, antepecho ≈ 0.52 m**.
+  - **Comprobación:** la proporción ancho/alto con la focal de la cámara da 0.62 en la foto de contexto y 0.65 en la de cerca. Margen: ±5 cm.
+- **Retícula:** `grid` en el dato del vano (4 vidrios a lo ancho, 5 a lo alto, perfil de ≈ 3 cm estimado). La dibujan Blender y el recorrido.
+- **Hueco en muros diagonales (corrección):** el hueco del IFC se agrandaba sobre X e Y del mundo. En un muro a 45° eso no lo sacaba del espesor y el corte booleano fallaba a medias: la ventana se veía por un hueco de la mitad de ancho. Ahora crece sobre los ejes del propio vano.
+- **Muros del tragaluz (dato del dueño): azul turquesa.** Material `muro-tragaluz`, solo para S08.
+  - **Tono medido:** ≈ 193°, igual en la foto de R3 (de día, a través de V05) y en la de V10 (de noche, a través del vidrio).
+  - **Supuestos:** saturación y luminosidad, a medio camino entre las dos. De día el azul sale recortado en 255; de noche, el muro recibe mucha menos luz que el blanco de referencia.
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.
@@ -230,8 +244,7 @@ Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-rega
   - **Azulejo:** blanco brillante hasta ≈ 2 m (pintura blanca arriba), con **cenefa de frutas** a la altura de la cubierta y **2 paneles de talavera** con frutas sobre ella.
   - **Centro de carga:** en el muro derecho de la cocina. Hay que compararlo con la capa `GAS` del DXF.
 - **Sala:**
-  - **Ventana negra con retícula** de 3 × 5 vidrios, en un **entrante en ángulo**. El dueño confirmó que es la ventana del tragaluz hacia la sala: **V10**, en el muro diagonal W32 (1.12 m), que el plano no dibuja.
-  - Medidas estimadas por proporción, a confirmar: **ancho ≈ 0.8 m y alto ≈ 1.1 m, con antepecho ≈ 0.9 m**.
+  - **Ventana negra con retícula**, en un **entrante en ángulo**. El dueño confirmó que es la ventana del tragaluz hacia la sala: **V10**, en el muro diagonal W32 (1.07 m), que el plano no dibuja. Medidas y retícula: ver la sección 15 (la estimación de esta foto, 0.8 × 1.1 m, quedó corregida).
   - En la sala también se ven la puerta de entrada D03 por dentro y dos cortinas grises a sus lados, que tapan las ventanas V01 y V02.
 - **Cortina negra entre la cocina y el comedor:** cuelga junto al refrigerador. El dueño confirmó que solo tapa la ventana que hay ahí, la de la cocina más cercana al comedor: **V04** (x = 2.30–2.81 m en W21). No es un vano nuevo.
 - **Pasillo de las recámaras:** angosto, con 3 puertas de madera y foco al centro. Coincide con el «pasillo a las recámaras» incluido en S01.
@@ -329,7 +342,6 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 - Techo (losa y tirol).
 - Zoclo, persianas y cortinas.
 - Luz artificial: los focos.
-- Muros del tragaluz: en la foto de R3 se ven **azul claro**, pero por ahora llevan yeso blanco.
 
 ## Pendientes del dueño
 
@@ -342,5 +354,5 @@ Esto es coherente con los 2.60 m de piso a techo más la losa y el pretil.
 7. **Puerta D03:** ancho de la hoja (¿hay un marco fijo a la izquierda?) y qué tan oscuro es el polarizado (¿se ve hacia adentro de día?).
 8. **Ventanas:** ¿todas tienen persiana enrollable? ¿La hoja fija tiene vidrio entintado o película?
 9. **Calibración de color:** una foto de día del piso con una hoja blanca tamaño carta encima.
-10. **Lavandería y tragaluz:** ¿qué acabado tienen los muros de la lavandería? ¿Los del tragaluz están pintados de azul claro?
+10. **Lavandería:** ¿qué acabado tienen sus muros? **V10:** medir ancho, alto y antepecho con cinta (hoy son una estimación con fotos).
 11. **Fotos nuevas:** el azulejo y la cenefa de la cocina de frente, la cara exterior de las puertas y los acabados exteriores (pendientes para mañana).
