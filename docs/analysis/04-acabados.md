@@ -449,6 +449,14 @@ Las medidas importan más aquí. Cada dato lleva su fuente en `sources/lavanderi
 - **Sin modelar:** el tendedero, las cubetas, el cesto, la ropa y la herrería de V09 del lado de la lavandería.
 - **Por confirmar con cinta:** las medidas libres del espacio (el plano da 1.62 × 2.40 m), la altura real de los aparatos, la posición del boiler y si la lavandería tiene techo (el modelo dice que no).
 
+### 29. Recámara 3 como oficina (2026-10-10)
+
+- **Escritorio en L (dato del dueño: 160 × 100 cm):** va en la esquina del muro oriente con el muro norte. El lado de 160 va contra el muro oriente; el de 100, con la impresora, contra el muro norte. Es la misma esquina de las fotos del 2026-10-08 (la ventana V05 a la derecha y la TV en el muro de la izquierda).
+  - **Supuestos:** fondos de 0.60 y 0.50 m, altura de 0.75 m (es de altura ajustable) y patas en T.
+- **Monitores (dato del dueño):** 2 de 23" en un brazo de 3 posiciones, con charola para la laptop abajo al centro. Van a ≈ 1.17 m de altura al centro, un poco girados hacia adentro (foto, ± 5 cm).
+- **Lo demás:** caminadora bajo el escritorio, impresora sobre el lado corto, silla gamer y una TV de ≈ 43" en el muro norte. Los tamaños son comunes y el de la TV está estimado.
+- **Sin modelar:** los objetos sueltos, los audífonos y el cuadro.
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.

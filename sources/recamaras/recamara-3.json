@@ -1,0 +1,163 @@
+{
+ "_doc": "Recámara 3 (S04), usada como oficina: escritorio en L, brazo de 3 posiciones con 2 monitores y charola de laptop, caminadora, silla, impresora y televisión. Coordenadas del modelo en m.",
+ "applies_to": {
+  "space": "S04",
+  "source": "fotos de la recámara 3 (dueño, 2026-10-08 y 2026-10-10)"
+ },
+ "desk_l": {
+  "id": "r3-escritorio",
+  "material": "madera-negra",
+  "legs_material": "plastico-negro",
+  "corner": [
+   9.86,
+   11.86
+  ],
+  "main": {
+   "along": [
+    0,
+    -1
+   ],
+   "length_m": 1.6,
+   "depth_m": 0.6,
+   "into_room": [
+    -1,
+    0
+   ]
+  },
+  "return": {
+   "along": [
+    -1,
+    0
+   ],
+   "length_m": 1.0,
+   "depth_m": 0.5,
+   "into_room": [
+    0,
+    -1
+   ]
+  },
+  "height_m": 0.75,
+  "top_m": 0.025,
+  "size_source": "dueño (2026-10-10): escritorio en L de 160 × 100 cm",
+  "position_source": "fotos: el lado de 160 contra el muro oriente (x = 9.86 m) y el de 100 contra el muro norte (y = 11.86 m), en esa esquina (la ventana V05 queda a la derecha y la TV en el muro de la izquierda, como en las fotos de 2026-10-08)",
+  "assumptions": "fondos de 0.60 (lado largo) y 0.50 m (lado corto), altura de 0.75 m (es de altura ajustable) y patas en T: supuestos"
+ },
+ "monitors": {
+  "id": "r3-monitores",
+  "count": 2,
+  "diagonal_in": 23,
+  "aspect": [
+   16,
+   9
+  ],
+  "gap_m": 0.02,
+  "centre_z": 1.17,
+  "toe_in_deg": 12,
+  "pole_height_m": 0.66,
+  "pole_radius_m": 0.02,
+  "tray": {
+   "size_m": [
+    0.36,
+    0.26
+   ],
+   "z_above_desk_m": 0.16
+  },
+  "screen_material": "pantalla-tv",
+  "body_material": "plastico-negro",
+  "source": "dueño (2026-10-10): 2 monitores de 23\" en un brazo triple con charola para la laptop; alturas por la foto (± 5 cm)"
+ },
+ "extras": [
+  {
+   "id": "r3-caminadora",
+   "object_type": "caminadora",
+   "box": [
+    [
+     9.15,
+     9.65
+    ],
+    [
+     10.5,
+     11.7
+    ],
+    [
+     0,
+     0.12
+    ]
+   ],
+   "material": "plastico-negro",
+   "source": "foto: caminadora de escritorio bajo el lado largo; 1.20 × 0.50 m común (supuesto)"
+  },
+  {
+   "id": "r3-impresora",
+   "object_type": "impresora",
+   "box": [
+    [
+     8.95,
+     9.4
+    ],
+    [
+     11.38,
+     11.76
+    ],
+    [
+     0.75,
+     0.93
+    ]
+   ],
+   "material": "plastico-negro",
+   "source": "foto: impresora Epson sobre el lado corto; tamaño común (supuesto)"
+  },
+  {
+   "id": "r3-silla",
+   "object_type": "silla gamer",
+   "chair": {
+    "centre": [
+     9.0,
+     10.0
+    ],
+    "facing": [
+     1,
+     0
+    ]
+   },
+   "material": "vinil-negro",
+   "source": "foto: silla gamer negra a la derecha del escritorio; tamaño común (supuesto)"
+  }
+ ],
+ "tv": {
+  "id": "r3-tv",
+  "diagonal_in": 43,
+  "aspect": [
+   16,
+   9
+  ],
+  "depth_m": 0.05,
+  "bezel_m": 0.006,
+  "wall": {
+   "origin": [
+    5.79,
+    11.86
+   ],
+   "along": [
+    1,
+    0
+   ],
+   "into_room": [
+    0,
+    -1
+   ]
+  },
+  "u_centre": 1.85,
+  "z_bottom": 1.27,
+  "size_source": "estimado con las fotos del 2026-10-08 (≈ 43\"; pendiente de confirmar)",
+  "position_source": "fotos del 2026-10-08: en el muro norte, a la derecha de la entrada, con el centro a ≈ 1.55 m",
+  "screen_material": "pantalla-tv",
+  "body_material": "plastico-negro"
+ },
+ "assumptions": [
+  "fondos y altura del escritorio",
+  "caminadora, impresora y silla con tamaños comunes",
+  "TV de ≈ 43\" (estimada)",
+  "no se modelan los objetos sueltos, los audífonos ni el cuadro"
+ ]
+}
