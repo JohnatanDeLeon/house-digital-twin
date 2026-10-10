@@ -25,7 +25,7 @@ from shapely.ops import unary_union
 
 from house_twin.electrical import device_height, device_mesh
 from house_twin.finishes import Finishes
-from house_twin.closet_interior import interior_parts, leaf_parts
+from house_twin.closet_interior import display_parts, interior_parts, leaf_parts
 from house_twin.furniture import closet_meshes
 from house_twin.hardware import for_leaf, knob_mesh, placements
 from house_twin.kitchen import kitchen_parts
@@ -225,7 +225,8 @@ def _add_furniture(ctx: _IfcContext, facts, storey, height, furniture):
         ifcopenshell.api.aggregate.assign_object(ctx.model, products=[handles], relating_object=closet)
         ifcopenshell.api.material.assign_material(ctx.model, products=[handles], material=ctx.material(spec['handles']['material']))
         if 'interior' in spec:  # cuerpo hueco, lo de adentro y las hojas de abajo sueltas (se abren en el recorrido)
-            _add_parts(ctx, storey, spec, lambda s, fx=fixture: interior_parts(fx, s, height) + leaf_parts(fx, s, height)[0])
+            _add_parts(ctx, storey, spec, lambda s, fx=fixture: interior_parts(fx, s, height) + leaf_parts(fx, s, height)[0]
+                       + display_parts(fx, s)[0])
 
 
 def _roofed(facts):

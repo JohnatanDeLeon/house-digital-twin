@@ -737,6 +737,23 @@
     }
    ],
    "note": "colgador doble del módulo 3: tubo arriba con camisas, playeras y chamarras; tubo abajo con pantalones y camisas largas (altura ± 10 cm)"
-  }
+  },
+  "display": [
+   {
+    "id": "playera-venom",
+    "label": "la playera de Venom",
+    "material": "playera-venom",
+    "back_material": "playera-venom-espalda",
+    "u_centre": 2.245,
+    "top_z": 1.76,
+    "n": -0.045,
+    "size_m": [
+     0.96,
+     0.735
+    ],
+    "module": 3,
+    "source": "playera digitalizada de su foto (sources/texturas/playera-venom.json); colgada de frente en el módulo 3, adelante de la ropa (dueño, 2026-10-10: dentro del closet de la recámara 3)"
+   }
+  ]
  }
 }

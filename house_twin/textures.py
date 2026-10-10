@@ -677,6 +677,22 @@ def build_garment(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
         'observed': spec.get('observed', {}), 'assumptions': spec.get('assumptions', []),
     }
     (out / 'material.json').write_text(json.dumps(material, ensure_ascii=False, indent=1) + '\n')
+    if spec.get('back'):  # espalda: la misma silueta y la tela de la foto, sin el estampado (la espalda es lisa)
+        back = TEXTURES_DIR / spec['back']['name']
+        back.mkdir(parents=True, exist_ok=True)
+        plain = lin.copy()
+        hole = _blur(printed.astype(float), 4.0) > 0.02  # el estampado y su orilla suavizada
+        keep = (garment & ~hole).astype(float)
+        local = np.stack([_blur(lin[..., c] * keep, 30) for c in range(3)], -1) / np.maximum(_blur(keep, 30), 1e-3)[..., None]
+        plain[hole] = local[hole]  # el color de la tela de alrededor, no el promedio de toda la playera
+        _to_image(plain).save(back / 'basecolor.jpg', quality=92)
+        Image.fromarray((np.full(lum.shape, g['fabric_roughness']) * 255).round().astype(np.uint8)).resize(detail_px).save(back / 'roughness.png', optimize=True)
+        _normal_map(grain * g.get('weave_mm', 0.15) / 1000, px_per_m).resize(detail_px, Image.LANCZOS).save(back / 'normal.png', optimize=True)
+        Image.fromarray((garment * 255).astype(np.uint8)).save(back / 'opacity.png', optimize=True)
+        (back / 'material.json').write_text(json.dumps({
+            **material, 'name': spec['back']['name'], 'applies_to': {**spec['applies_to'], 'part': 'espalda'},
+            'maps': {k: v for k, v in material['maps'].items() if k != 'metallic'},
+            'assumptions': spec.get('assumptions', []) + [spec['back']['note']]}, ensure_ascii=False, indent=1) + '\n')
     return out
 
 

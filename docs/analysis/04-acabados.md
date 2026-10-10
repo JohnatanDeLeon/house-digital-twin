@@ -503,7 +503,11 @@ Las medidas importan más aquí. Cada dato lleva su fuente en `sources/lavanderi
 - **Estampado:** lo claro dentro de su zona, más lo que está junto a él y es más claro que la tela (el foil que reflejaba algo oscuro, como en la lengua).
   - **Color y brillo:** se pinta del color del metal (plata, supuesto) y lleva un mapa `metallic.png`. En Blender y en el recorrido refleja el cuarto solo ahí, con rugosidad 0.32; la tela queda mate (0.95).
   - **Medidas:** cubre el 2.4 % de la prenda. La tela mide (34, 37, 43), tal como la registró la cámara.
-- **Dónde va:** extendida sobre la cama de S03, que es donde se tomó la foto (se ve la cobija morada en la esquina), con el cuello hacia la cabecera. Es una placa de 3 mm con la imagen acostada (`flat_items`; UV con `HDT_Image` Right/Up).
+- **Dónde va (corrección del dueño):** dentro del closet de la recámara 3, colgada de frente en el módulo 3, adelante de la ropa (`interior.display`). Extendida mide ≈ 0.78 m de manga a manga y de lado no cabe en el fondo del closet (0.58 m). Lleva su gancho.
+  - **Frente y espalda:** son 2 placas delgadas con la misma silueta. La espalda (`playera-venom-espalda`, generada en el mismo paso) es la tela sin el estampado, rellenada con el color de la tela de alrededor; no hay foto de la espalda.
+- **Interacción en el recorrido** (`DATA.items`): con el módulo 3 abierto y mirando la playera aparece «Sacar la playera de Venom» (E o el botón).
+  - **Al sacarla:** se sostiene frente a los ojos, de frente y derecha. Se voltea con R, el botón «Voltear» o la rueda del mouse, y se guarda con E: regresa sola a su gancho.
+  - **Las acciones** (puertas, closet y prenda) comparten un solo botón: manda lo que estás mirando.
 - **Límites:**
   - La orilla de abajo queda en el borde de la foto, así que el largo puede ser 1–3 cm mayor.
   - Los pliegues y la pelusa vienen de la foto; la placa es plana.

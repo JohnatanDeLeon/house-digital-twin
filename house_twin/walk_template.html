@@ -88,6 +88,13 @@ body.touch .here { left: auto; right: 16px; bottom: calc(env(safe-area-inset-bot
   max-width: calc(100% - 32px); white-space: nowrap;
 }
 .door-action kbd { font-family: var(--font-data); font-size: 12px; opacity: 0.85; margin-left: 6px; }
+.item-flip {
+  position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 76px); z-index: 3;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--rule); border-radius: 999px;
+  padding: 8px 16px; font-family: var(--font-display); font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.item-flip kbd { font-family: var(--font-data); font-size: 12px; opacity: 0.7; margin-left: 6px; }
+body.touch .item-flip { bottom: calc(env(safe-area-inset-bottom, 0px) + 222px); }
 .door-action.blocked { background: var(--surface); color: var(--ink); border-color: var(--rule); cursor: default; }
 body.touch .door-action { bottom: calc(env(safe-area-inset-bottom, 0px) + 170px); }
 .proposal {
@@ -136,6 +143,7 @@ body.touch .door-action { bottom: calc(env(safe-area-inset-bottom, 0px) + 170px)
   <canvas id="map" tabindex="0" aria-label="Planta: toca un cuarto para ir ahí"></canvas>
   <div class="stick" id="stick" hidden><div class="knob" id="knob"></div></div>
   <button class="door-action" id="door-action" type="button" hidden></button>
+  <button class="item-flip" id="item-flip" type="button" hidden></button>
   <div class="hint" id="hint" hidden>
     <h2>Camina por la casa</h2>
     <dl id="hint-keys"></dl>
@@ -454,30 +462,92 @@ function animateDoors(dt) {
     for (const l of d.leaves) { l.pivot.rotation.y = l.sign * eased; l.pivot.updateMatrixWorld(true); }
   }
 }
-const doorAction = $('door-action');
-let shownDoor = null, shownText = '';
-function updateDoorAction() {
-  const d = nearestDoor();
-  let text = '';
-  if (d) {
-    const verb = d.open ? 'Cerrar' : 'Abrir', what = d.label || (d.leaves.length > 1 ? 'el portón' : 'la puerta');
-    text = inTheWay(d) ? `Hazte a un lado para ${verb.toLowerCase()} ${what}` : `${verb} ${what}${isTouch ? '' : ' <kbd>E</kbd>'}`;
-  }
-  if (d !== shownDoor || text !== shownText) {
-    doorAction.hidden = !d;
-    doorAction.innerHTML = text;
-    doorAction.classList.toggle('blocked', !!d && inTheWay(d));
-    shownDoor = d; shownText = text;
+// ---------- cosas que se pueden sacar y ver de cerca (una prenda del closet) ----------
+const items = [];
+let held = null;
+const HELD_AT = new THREE.Vector3(0, -0.04, -0.72);  // frente a los ojos, en el marco de la cámara
+function setupItems() {
+  scene.add(camera);  // lo que se sostiene viaja con la cámara
+  for (const it of DATA.items || []) {
+    const meshes = [];
+    scene.traverse(o => { const t = tagOf(o); if (o.isMesh && (t.hdt_id || '').startsWith(it.id) && !t.hdt_id.endsWith('-gancho')) meshes.push(o); });
+    if (!meshes.length) continue;
+    for (const m of meshes) { const i = colliders.indexOf(m); if (i >= 0) colliders.splice(i, 1); }
+    const group = new THREE.Group();
+    group.position.copy(toThree(it.centre[0], it.centre[1], it.centre[2]));
+    scene.add(group); group.updateMatrixWorld(true);
+    for (const m of meshes) group.attach(m);
+    // giro que pone el frente de la prenda (hacia `facing`) mirando a la cámara, derecha
+    const front = new THREE.Vector3(it.facing[0], 0, -it.facing[1]).normalize(), up = new THREE.Vector3(0, 1, 0);
+    const local = new THREE.Matrix4().makeBasis(front, up, front.clone().cross(up));
+    const target = new THREE.Matrix4().makeBasis(new THREE.Vector3(0, 0, 1), up, new THREE.Vector3(0, 0, 1).cross(up));
+    const base = new THREE.Quaternion().setFromRotationMatrix(target.multiply(local.transpose()));
+    items.push({ ...it, group, base, homePos: group.position.clone(), homeQuat: group.quaternion.clone(), spin: 0, returning: false });
   }
 }
-doorAction.addEventListener('click', e => { toggleDoor(shownDoor); e.stopPropagation(); doorAction.blur(); });
+function itemAvailable(it) {
+  const door = doors.find(d => d.id === it.door);
+  if (door && (!door.open || door.angle < 1.2)) return false;
+  const p = modelXY(), dx = it.centre[0] - p[0], dy = it.centre[1] - p[1], dist = Math.hypot(dx, dy);
+  const fx = -Math.sin(player.yaw), fy = Math.cos(player.yaw);
+  return dist < 1.9 && (dx * fx + dy * fy) / (dist || 1) > 0.55;
+}
+function takeItem(it) { camera.attach(it.group); it.spin = 0; it.returning = false; held = it; }
+function returnItem() { if (!held) return; scene.attach(held.group); held.returning = true; held = null; }
+function flipItem(turn = Math.PI) { if (held) held.spin += turn; }
+const spinQ = new THREE.Quaternion(), yAxis = new THREE.Vector3(0, 1, 0);
+function animateItems(dt) {
+  const k = 1 - Math.exp(-dt * 9);
+  for (const it of items) {
+    if (it === held) {
+      it.group.position.lerp(HELD_AT, k);
+      it.group.quaternion.slerp(spinQ.setFromAxisAngle(yAxis, it.spin).multiply(it.base), k);
+    } else if (it.returning) {
+      it.group.position.lerp(it.homePos, k);
+      it.group.quaternion.slerp(it.homeQuat, k);
+      if (it.group.position.distanceTo(it.homePos) < 0.002) { it.group.position.copy(it.homePos); it.group.quaternion.copy(it.homeQuat); it.returning = false; }
+    }
+  }
+}
+addEventListener('wheel', e => { if (held) { flipItem(e.deltaY * 0.004); e.preventDefault(); } }, { passive: false });
+
+// ---------- una sola acción a la mano: puerta o prenda ----------
+const doorAction = $('door-action'), itemFlip = $('item-flip');
+let currentAction = null, shownText = '';
+function pickAction() {
+  const key = isTouch ? '' : ' <kbd>E</kbd>';
+  if (held) return { text: `Guardar ${held.label}${key}`, run: returnItem };
+  const it = items.find(i => !i.returning && itemAvailable(i));
+  if (it) return { text: `Sacar ${it.label}${key}`, run: () => takeItem(it) };
+  const d = nearestDoor();
+  if (!d) return null;
+  const verb = d.open ? 'Cerrar' : 'Abrir', what = d.label || (d.leaves.length > 1 ? 'el portón' : 'la puerta');
+  if (inTheWay(d)) return { text: `Hazte a un lado para ${verb.toLowerCase()} ${what}`, run: () => {}, blocked: true };
+  return { text: `${verb} ${what}${key}`, run: () => toggleDoor(d) };
+}
+function updateDoorAction() {
+  currentAction = pickAction();
+  const text = currentAction ? currentAction.text : '';
+  if (text !== shownText) {
+    doorAction.hidden = !currentAction;
+    doorAction.innerHTML = text;
+    doorAction.classList.toggle('blocked', !!(currentAction && currentAction.blocked));
+    shownText = text;
+  }
+  itemFlip.hidden = !held;
+  if (held && !itemFlip.innerHTML) itemFlip.innerHTML = `Voltear${isTouch ? '' : ' <kbd>R</kbd>'}`;
+}
+function runAction() { if (currentAction) currentAction.run(); }
+doorAction.addEventListener('click', e => { runAction(); e.stopPropagation(); doorAction.blur(); });
+itemFlip.addEventListener('click', e => { flipItem(); e.stopPropagation(); itemFlip.blur(); });
 
 // ---------- entradas ----------
 const keys = new Set();
 addEventListener('keydown', e => {
   if (e.target.tagName === 'SELECT') return;
   keys.add(e.code);
-  if (e.code === 'KeyE' && !e.repeat) toggleDoor(nearestDoor());
+  if (e.code === 'KeyE' && !e.repeat) { updateDoorAction(); runAction(); }
+  if (e.code === 'KeyR' && !e.repeat) flipItem();
   if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) e.preventDefault();
 });
 addEventListener('keyup', e => keys.delete(e.code));
@@ -584,7 +654,7 @@ function updateHere() {
 // ---------- ayuda ----------
 const HELP = isTouch
   ? [['Joystick', 'caminar (más lejos del centro, más rápido)'], ['Arrastra', 'mirar alrededor'], ['Puertas', 'acércate y toca «Abrir»'], ['Planta', 'toca un cuarto para ir ahí']]
-  : [['Clic', 'mirar con el mouse (Esc lo suelta)'], ['W A S D', 'caminar; también las flechas'], ['Shift', 'correr'], ['E', 'abrir o cerrar la puerta de enfrente'], ['Planta', 'clic en un cuarto para ir ahí']];
+  : [['Clic', 'mirar con el mouse (Esc lo suelta)'], ['W A S D', 'caminar; también las flechas'], ['Shift', 'correr'], ['E', 'abrir o cerrar la puerta de enfrente; sacar o guardar una prenda'], ['R / rueda', 'voltear la prenda que sostienes'], ['Planta', 'clic en un cuarto para ir ahí']];
 $('hint-keys').innerHTML = HELP.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
 const toggleHint = show => { $('hint').hidden = !show; };
 $('help').addEventListener('click', () => toggleHint($('hint').hidden));
@@ -606,6 +676,7 @@ function frame() {
   const moved = move(kf + joy.f, ks + joy.s, dt, fast || Math.hypot(joy.f, joy.s) > 0.92);
   if (moved && !$('hint').hidden) toggleHint(false);
   animateDoors(dt);
+  animateItems(dt);
   updateDoorAction();
   camera.position.copy(player.pos);
   camera.rotation.set(player.pitch, player.yaw, 0);
@@ -688,6 +759,7 @@ loadHouse().then(() => {
   setupVariants();
   setupBulbs();
   setupDoors();
+  setupItems();
   const select = $('room');
   const entrance = DATA.entrance && { label: `Entrada (${DATA.entrance.door})`, start: DATA.entrance };
   if (entrance) tour.unshift(entrance);

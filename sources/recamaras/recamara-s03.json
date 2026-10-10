@@ -165,30 +165,5 @@
   "buros, baúl y espejo con medidas comunes o estimadas",
   "posición de la TV y del minisplit ± 0.3 m",
   "no se modelan las cortinas, la ropa ni los objetos sueltos"
- ],
- "flat_items": [
-  {
-   "id": "r-s03-playera-venom",
-   "object_type": "playera de Venom",
-   "material": "playera-venom",
-   "centre": [
-    3.13,
-    15.62
-   ],
-   "right": [
-    1,
-    0
-   ],
-   "up": [
-    0,
-    1
-   ],
-   "size_m": [
-    0.96,
-    0.735
-   ],
-   "z": 0.582,
-   "source": "foto del dueño (2026-10-10): la playera extendida sobre esta cama (se ve la cobija morada en la esquina), con el cuello hacia la cabecera; posición sobre la cama aproximada"
-  }
  ]
 }

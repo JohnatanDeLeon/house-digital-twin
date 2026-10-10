@@ -97,14 +97,19 @@ def texture(spec: Path):
         print(f'→ {f.relative_to(ROOT)}')
 
 
-def closet_doors(facts: dict) -> list[dict]:
-    """Hojas de abajo de los closets con interior, para abrirlas en el recorrido."""
-    from house_twin.closet_interior import leaf_parts
+def closet_extras(facts: dict) -> tuple[list[dict], list[dict]]:
+    """De los closets con interior: las hojas de abajo (se abren) y las prendas que se pueden sacar en el recorrido."""
+    from house_twin.closet_interior import display_parts, leaf_parts
     from house_twin.furniture import load_furniture
     specs = {f['applies_to']['space']: f for f in load_furniture()}
     height = facts['levels'][0]['storey_height']['value']
-    return [door for fx in facts.get('fixtures', []) if fx['kind'] == 'closet' and 'interior' in specs.get(fx['space'], {})
-            for door in leaf_parts(fx, specs[fx['space']], height)[1]]
+    doors, items = [], []
+    for fx in facts.get('fixtures', []):
+        spec = specs.get(fx['space'], {})
+        if fx['kind'] == 'closet' and 'interior' in spec:
+            doors += leaf_parts(fx, spec, height)[1]
+            items += display_parts(fx, spec)[1]
+    return doors, items
 
 
 def scene(render: bool):
@@ -126,7 +131,8 @@ def scene(render: bool):
     if out.returncode != 0 or not BLEND_PATH.exists():
         raise SystemExit(out.stderr[-2000:] or 'Blender falló')
     facts = json.loads(FACTS_PATH.read_text())
-    walk = build_walk(facts, load_materials(TEXTURES_DIR), TEXTURES_DIR, WALK_DIR, GLB_PATH, load_variants(), closet_doors(facts))
+    doors, items = closet_extras(facts)
+    walk = build_walk(facts, load_materials(TEXTURES_DIR), TEXTURES_DIR, WALK_DIR, GLB_PATH, load_variants(), doors, items)
     for path in [BLEND_PATH, GLB_PATH, walk] + (sorted(RENDERS_DIR.glob('*.jpg')) if render else []):
         print(f'→ {path.relative_to(ROOT)}')
 

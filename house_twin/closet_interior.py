@@ -158,3 +158,26 @@ def leaf_parts(fixture: dict, spec: dict, height: float) -> tuple[list[dict], li
                            'opens_toward': [round(v, 4) for v in fixture['faces_toward']], 'assumed': False})
         doors.append({'id': did, 'label': 'el closet', 'leaves': leaves})
     return parts, doors
+
+
+def display_parts(fixture: dict, spec: dict) -> tuple[list[dict], list[dict]]:
+    """Prendas colgadas de frente (se pueden sacar en el recorrido): frente con la imagen y espalda lisa, como 2
+    placas delgadas con la silueta recortada. Devuelve las piezas y los datos para el recorrido."""
+    f = _Frame(fixture)
+    parts, items = [], []
+    for d in spec.get('interior', {}).get('display', []):
+        w, h = d['size_m']
+        u, z1, n = d['u_centre'], d['top_z'], d['n']
+        facing = [round(v, 4) for v in fixture['faces_toward']]
+        for pid, mat, (n0, n1) in ((d['id'], d['material'], (n, n + 0.001)), (f"{d['id']}-espalda", d['back_material'], (n - 0.003, n - 0.002))):
+            parts.append({'id': f"{fixture['id']}-{pid}", 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': 'prenda',
+                          'material': mat, 'mesh': f.box((u - w / 2, u + w / 2), (z1 - h, z1), (n0, n1)), 'source': d['source'],
+                          'image_facing': facing})
+        parts.append({'id': f"{fixture['id']}-{d['id']}-gancho", 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': 'gancho',
+                      'material': 'plastico-negro', 'mesh': merge([f.box((u - 0.2, u + 0.2), (z1 - 0.06, z1 - 0.045), (n - 0.006, n - 0.003)),
+                                                                     f.cyl((u, z1 - 0.045, n - 0.0045), (u, z1 + 0.03, n - 0.0045), 0.002, 6)]),
+                      'source': d['source']})
+        centre = f.point(u, z1 - h / 2, n)
+        items.append({'id': f"{fixture['id']}-{d['id']}", 'label': d['label'], 'door': f"{fixture['id']}-m{d['module']}",
+                      'centre': [round(centre[0], 4), round(centre[1], 4), round(centre[2], 4)], 'size_m': [w, h], 'facing': facing})
+    return parts, items
