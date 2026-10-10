@@ -4158,6 +4158,388 @@
    "source": "plano: salida de foco en la capa 23- ILUMINACION"
   }
  ],
+ "devices": [
+  {
+   "id": "C01",
+   "kind": "outlet",
+   "space": "S01",
+   "position": [
+    3.285,
+    5.278
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.096,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C02",
+   "kind": "outlet",
+   "space": "S01",
+   "position": [
+    9.763,
+    4.989
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.097,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C03",
+   "kind": "outlet",
+   "space": "S07",
+   "position": [
+    8.563,
+    3.139
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.1,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C04",
+   "kind": "outlet",
+   "space": "S01",
+   "position": [
+    7.07,
+    7.93
+   ],
+   "faces_toward": [
+    0.0,
+    -1.0
+   ],
+   "from_plan_m": 0.112,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C05",
+   "kind": "outlet",
+   "space": "S01",
+   "position": [
+    1.375,
+    7.572
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.093,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C06",
+   "kind": "outlet",
+   "space": "S01",
+   "position": [
+    2.978,
+    10.055
+   ],
+   "faces_toward": [
+    0.0,
+    -1.0
+   ],
+   "from_plan_m": 0.102,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C07",
+   "kind": "outlet",
+   "space": "S01",
+   "position": [
+    3.493,
+    10.055
+   ],
+   "faces_toward": [
+    0.0,
+    -1.0
+   ],
+   "from_plan_m": 0.102,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C08",
+   "kind": "outlet",
+   "space": "S01",
+   "position": [
+    5.62,
+    8.391
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.074,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C09",
+   "kind": "outlet",
+   "space": "S04",
+   "position": [
+    9.86,
+    10.668
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.087,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C10",
+   "kind": "outlet",
+   "space": "S05",
+   "position": [
+    4.24,
+    11.459
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.092,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C11",
+   "kind": "outlet",
+   "space": "S02",
+   "position": [
+    9.86,
+    14.731
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.1,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C12",
+   "kind": "outlet",
+   "space": "S03",
+   "position": [
+    1.45,
+    14.569
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.093,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "A01",
+   "kind": "switch",
+   "space": "S07",
+   "position": [
+    8.861,
+    3.245
+   ],
+   "faces_toward": [
+    0.0,
+    -1.0
+   ],
+   "from_plan_m": 0.088,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque APAGADOR SIMPLE"
+  },
+  {
+   "id": "A02",
+   "kind": "switch",
+   "space": "S01",
+   "position": [
+    1.375,
+    7.985
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.098,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque APAGADOR SIMPLE"
+  },
+  {
+   "id": "A03",
+   "kind": "switch",
+   "space": "S01",
+   "position": [
+    5.62,
+    9.068
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.092,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque APAGADOR SIMPLE"
+  },
+  {
+   "id": "A04",
+   "kind": "switch",
+   "space": "S04",
+   "position": [
+    6.41,
+    10.902
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.099,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque APAGADOR SIMPLE"
+  },
+  {
+   "id": "A05",
+   "kind": "switch",
+   "space": "S05",
+   "position": [
+    4.24,
+    11.693
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.089,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque APAGADOR SIMPLE"
+  },
+  {
+   "id": "A06",
+   "kind": "switch",
+   "space": "S01",
+   "position": [
+    6.561,
+    3.425
+   ],
+   "faces_toward": [
+    0.0,
+    1.0
+   ],
+   "from_plan_m": 0.121,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque APAGADOR SIMPLE"
+  },
+  {
+   "id": "A07",
+   "kind": "switch",
+   "space": "S02",
+   "position": [
+    6.42,
+    13.02
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.089,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque APAGADOR SIMPLE"
+  },
+  {
+   "id": "A08",
+   "kind": "switch",
+   "space": "S03",
+   "position": [
+    4.43,
+    13.78
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.1,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque APAGADOR SIMPLE"
+  }
+ ],
  "adjacency": [
   {
    "spaces": [

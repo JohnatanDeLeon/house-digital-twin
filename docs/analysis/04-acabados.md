@@ -257,6 +257,16 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 - **Blender:** una luz puntual en cada foco, con el flujo real (900 lm ≈ 1.3 W en Blender). El foco no proyecta sombra, porque envuelve a su luz. EEVEE corta cada luz cuando su intensidad baja de un umbral, y una luz real tan débil quedaba con un alcance de pocos centímetros: se le fija un alcance de 10 m. De noche hace falta subir la exposición ≈ +6.5, como lo hace un celular.
 - **Recorrido:** botón **Noche/Día**. De noche se apaga el sol, el cielo queda oscuro y se encienden los 9 focos. En la PC tienen sombras, para que la luz no atraviese los muros; en el celular no, porque pesan demasiado. De día, la losa da sombra adentro y el sol solo entra por las ventanas. Eso explicaba que el closet de R2 (de cara al sol) se viera mejor que el de R3 (de espaldas).
 
+### 19. Contactos y apagadores (2026-10-09)
+
+- **Dónde (dato del plano):** los bloques `CONTACTO` (12) y `APAGADOR SIMPLE` (8) están en la capa `5 CORTES`, pero dibujados en planta. Cada uno se lleva a la cara de muro más cercana de su espacio; el símbolo está dibujado a ≈ 10 cm de ella. Los hechos tienen `devices`: punto sobre la cara, normal hacia el cuarto y altura `null` (el plano no la da).
+  - **Contactos:** 7 en sala, cocina y comedor; 1 en cada recámara, en el baño y en el medio baño.
+  - **Apagadores:** 3 en sala, cocina y comedor; 1 en cada recámara, en el baño y en el medio baño.
+- **Cómo (`sources/electrico/placas.json`):** placa negra (dato del dueño), de 7.6 × 11.4 cm (proporción medida en la foto del apagador de R3) y 1 cm de salida. El apagador lleva una tecla plana del tamaño de la placa y el contacto, doble (supuesto).
+- **Alturas:** apagadores a **1.22 m**, medidos en la foto del closet de R3 con la altura del closet como escala. Contactos a **0.30 m (supuesto)**. En la cocina probablemente van arriba de la cubierta, y en R3 hay uno alto, sobre la TV.
+- **IFC:** `IfcOutlet` (POWEROUTLET) e `IfcSwitchingDevice` (TOGGLESWITCH), con material `placa-negra` y la fuente de su altura en `HDT_Provenance`.
+- **Color:** negro satinado (supuesto). En la foto, la placa sale gris carbón por el reflejo del foco, y ese reflejo no se puede separar del color con una sola foto.
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.

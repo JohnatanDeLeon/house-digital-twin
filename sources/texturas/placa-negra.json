@@ -1,0 +1,10 @@
+{
+ "_doc": "Plástico negro satinado de las placas de contactos y apagadores. Regenerar con: python -m house_twin.cli texture sources/texturas/placa-negra.json",
+ "name": "placa-negra",
+ "kind": "constant",
+ "applies_to": {"devices": "contactos y apagadores", "source": "dueño (2026-10-09): placa negra"},
+ "photo": "sources/fotos/closet-recamara-3-cerca.jpg",
+ "pbr": {"basecolor_srgb": [40, 41, 44], "metallic": 0.0, "roughness": 0.35,
+         "note": "negro satinado: en la foto la placa sale gris carbón (83, 93, 109 con el pilar como blanco) porque refleja la luz fría del foco; ese reflejo lo da el render"},
+ "assumptions": ["color base de un plástico negro satinado; no se puede medir sin separar el reflejo"]
+}
