@@ -94,3 +94,17 @@ def test_closet_r3_only_hangs_the_venom_tee_and_it_fits():
     tee = next(p for p in parts if p['id'] == 'F03-playera-venom')
     xs = [q[0] for q in tee['mesh'][0]]
     assert 5.79 <= min(xs) and max(xs) <= 6.374  # cabe entre el muro y las hojas
+
+
+def test_closet_r3_tee_hangs_edge_on_and_pressed_to_the_depth():
+    import json
+    from house_twin.closet_interior import display_parts
+    from house_twin.furniture import load_furniture
+    facts = json.loads(open('data/facts/existing.facts.json').read())
+    fx = next(x for x in facts['fixtures'] if x['id'] == 'F03')
+    spec = next(s for s in load_furniture() if s['applies_to']['space'] == 'S04')
+    parts, [item] = display_parts(fx, spec)
+    assert abs(item['facing'][0]) < 1e-6 and abs(abs(item['facing'][1]) - 1) < 1e-6  # mira a lo ancho del closet: de canto
+    assert item['relaxed_width_m'] == 0.6512 and item['size_m'][0] < item['relaxed_width_m']  # apretada en el closet
+    xs = [q[0] for p in parts if p['id'] in ('F03-playera-venom', 'F03-playera-venom-espalda') for q in p['mesh'][0]]
+    assert abs(max(xs) - 6.364) < 1e-6 and min(xs) > 5.79  # 1 cm libre de las hojas, sin entrar al fondo

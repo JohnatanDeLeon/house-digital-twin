@@ -477,13 +477,19 @@ function setupItems() {
     const group = new THREE.Group();
     group.position.copy(toThree(it.centre[0], it.centre[1], it.centre[2]));
     scene.add(group); group.updateMatrixWorld(true);
-    for (const m of meshes) group.attach(m);
+    // en el closet la prenda puede ir apretada contra el fondo y las hojas: `body` corre a lo ancho de la prenda y al
+    // sacarla la estira a su ancho real (`relaxed_width_m`)
+    const body = new THREE.Group();
+    body.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), toThree(-it.facing[1], it.facing[0]).normalize());
+    group.add(body); body.updateMatrixWorld(true);
+    for (const m of meshes) body.attach(m);
+    const relax = (it.relaxed_width_m || it.size_m[0]) / it.size_m[0];
     // giro que pone el frente de la prenda (hacia `facing`) mirando a la cámara, derecha
     const front = new THREE.Vector3(it.facing[0], 0, -it.facing[1]).normalize(), up = new THREE.Vector3(0, 1, 0);
     const local = new THREE.Matrix4().makeBasis(front, up, front.clone().cross(up));
     const target = new THREE.Matrix4().makeBasis(new THREE.Vector3(0, 0, 1), up, new THREE.Vector3(0, 0, 1).cross(up));
     const base = new THREE.Quaternion().setFromRotationMatrix(target.multiply(local.transpose()));
-    items.push({ ...it, group, base, homePos: group.position.clone(), homeQuat: group.quaternion.clone(), spin: 0, returning: false });
+    items.push({ ...it, group, body, relax, base, homePos: group.position.clone(), homeQuat: group.quaternion.clone(), spin: 0, returning: false });
   }
 }
 function itemAvailable(it) {
@@ -507,10 +513,14 @@ function animateItems(dt) {
     if (it === held) {
       it.group.position.lerp(HELD_AT, k);
       it.group.quaternion.slerp(spinQ.setFromAxisAngle(yAxis, it.spin).multiply(it.base), k);
+      it.body.scale.x += (it.relax - it.body.scale.x) * k;
     } else if (it.returning) {
       it.group.position.lerp(it.homePos, k);
       it.group.quaternion.slerp(it.homeQuat, k);
-      if (it.group.position.distanceTo(it.homePos) < 0.002) { it.group.position.copy(it.homePos); it.group.quaternion.copy(it.homeQuat); it.returning = false; }
+      it.body.scale.x += (1 - it.body.scale.x) * k;
+      if (it.group.position.distanceTo(it.homePos) < 0.002) {
+        it.group.position.copy(it.homePos); it.group.quaternion.copy(it.homeQuat); it.body.scale.x = 1; it.returning = false;
+      }
     }
   }
 }
