@@ -66,12 +66,12 @@ hr { border: 0; border-top: 1px solid var(--rule); margin: 0; }
   <header>
     <span class="eyebrow">Traspaso para agentes · house-digital-twin</span>
     <h1>Casa Jonhy: cómo retomar el trabajo</h1>
-    <p class="lede">Estado del gemelo digital de la casa tras el PR #2, con la fase 4 replanteada hacia la fidelidad visual (Blender + Bonsai), y lo necesario para continuar en una sesión nueva desde <code>main</code>.</p>
+    <p class="lede">Estado del gemelo digital tras el PR #7 (acabados, escena de Blender y recorrido web), y lo necesario para continuar en una sesión nueva desde <code>main</code>.</p>
     <div class="meta">
-      <span class="pill">Actualizado: 2026-10-07</span>
+      <span class="pill">Actualizado: 2026-10-08</span>
       <span class="pill">Repo: JohnatanDeLeon/house-digital-twin</span>
-      <span class="pill">Fase 4: fidelidad visual</span>
-      <span class="pill ok">53 tests en verde</span>
+      <span class="pill">Fase 4: fidelidad visual, en curso</span>
+      <span class="pill ok">75 tests en verde</span>
     </div>
   </header>
 
@@ -83,175 +83,241 @@ hr { border: 0; border-top: 1px solid var(--rule); margin: 0; }
     <p>El dueño pega esto como primer mensaje de una sesión con acceso al repo.</p>
 <pre id="prompt-text">Retoma el proyecto house-digital-twin (gemelo digital de Casa Jonhy).
 1. Lee la hoja de traspaso: https://claude.ai/artifact/EpSKtAtmqwJZZwh1cx5L97 (con la herramienta Artifact, action "read").
-2. Lee CLAUDE.md, README.md y docs/analysis/03-validacion-dxf.md del repo en main.
+2. Lee CLAUDE.md, README.md y docs/analysis/04-acabados.md del repo en main.
 3. Prepara el entorno: python -m venv .venv &amp;&amp; .venv/bin/pip install -r requirements.txt,
-   luego .venv/bin/python -m pytest y .venv/bin/python -m house_twin.cli build. Confirma que todo pasa.
-4. Pregúntame los datos pendientes (U02–U11) que tenga a la mano y regístralos en sources/owner-annotations.json.
-5. Siguiente tarea: fase 4 (fidelidad visual con Blender + Bonsai), empezando por el primer pendiente de «Próximo trabajo».
-Trabaja en una rama nueva desde main; no modifiques existing.* para propuestas.</pre>
+   luego .venv/bin/python -m pytest (75 pasan) y .venv/bin/python -m house_twin.cli build.
+   Si estás en mi PC (hay blender en el PATH), corre también .venv/bin/python -m house_twin.cli scene.
+4. Pregúntame qué datos pendientes tengo a la mano (sección «Datos pendientes del dueño») y regístralos.
+5. Siguiente tarea: la primera de «Próximo trabajo», salvo que yo pida otra cosa.
+Trabaja en una rama nueva desde main, con commits convencionales en español y PR.</pre>
   </section>
 
   <section>
     <h2>Qué es el proyecto</h2>
-    <p>El dueño quiere un modelo digital fiel de su casa sobre el que Claude pueda razonar: consultar espacios y áreas, analizar circulación, proponer remodelaciones, compararlas, modificar el modelo y generar visualizaciones.</p>
-    <p><strong>El objetivo es que el modelo sea lo más fiel posible a la casa real</strong>: primero la geometría y las medidas, después materiales, texturas e iluminación en Blender + Bonsai. La segunda planta y el análisis de escaleras fueron solo un ejemplo de uso, no un requisito.</p>
+    <p>Un modelo digital de la casa del dueño en Saltillo sobre el que Claude pueda razonar: consultar espacios y áreas, analizar circulación, proponer remodelaciones y generar visualizaciones.</p>
+    <p><strong>El objetivo es la máxima fidelidad a la casa real</strong>: geometría y medidas, materiales, texturas e iluminación (Blender + Bonsai) y ahora también poder caminarla. La segunda planta y las escaleras fueron solo un ejemplo de uso, no un requisito.</p>
     <p>La regla del modelo: <strong>la IA propone, el modelo contiene la realidad</strong>. Cada dato dice de dónde viene. Lo que no se sabe queda como desconocido y nunca se inventa.</p>
-    <p>El dueño escribe en español y suele trabajar desde el celular.</p>
+    <p>El dueño escribe en español, suele trabajar desde el celular y prefiere respuestas concisas. No le gustan los atajos que degradan la calidad.</p>
   </section>
 
   <section>
     <h2>Estado actual</h2>
     <div class="table-wrap"><table>
-      <thead><tr><th>Fase</th><th>Estado</th><th>Dónde</th></tr></thead>
+      <thead><tr><th>Pieza</th><th>Estado</th><th>Dónde</th></tr></thead>
       <tbody>
-        <tr><td>1. Extracción desde el PDF vectorial</td><td>Hecha</td><td><code>docs/analysis/01-extraccion-pdf.md</code></td></tr>
-        <tr><td>2. Hechos → IFC → House MCP (solo lectura)</td><td>Hecha</td><td><code>docs/analysis/02-modelo-de-hechos.md</code></td></tr>
-        <tr><td>3. DXF como fuente primaria, PDF como validación</td><td>Hecha</td><td><code>docs/analysis/03-validacion-dxf.md</code></td></tr>
-        <tr><td>Visor 3D web para celular</td><td>Hecho y publicado</td><td><code>docs/viewer/casa-jonhy-3d.html</code> · <a href="https://claude.ai/artifact/FPKbkQujoJbiNyD1MZLnJF">artefacto</a></td></tr>
-        <tr><td>4. Fidelidad visual: Blender + Bonsai, materiales, iluminación</td><td><strong>Siguiente</strong></td><td>ver «Próximo trabajo»</td></tr>
+        <tr><td>Fases 1–3: PDF, hechos, IFC, House MCP, DXF como fuente</td><td>Hechas</td><td><code>docs/analysis/01…03</code></td></tr>
+        <tr><td>Visor 3D web (vista de pájaro)</td><td>Publicado</td><td><code>docs/viewer/casa-jonhy-3d.html</code> · <a href="https://claude.ai/artifact/FPKbkQujoJbiNyD1MZLnJF">artefacto</a></td></tr>
+        <tr><td>GUIDs estables, unidades y vanos en su muro</td><td>Hecho (PR #4–#6)</td><td><code>ifc_export.py</code></td></tr>
+        <tr><td>Texturas PBR desde fotos del dueño (15)</td><td>Hecho (PR #7)</td><td><code>sources/texturas/</code> → <code>assets/textures/</code></td></tr>
+        <tr><td>Acabados aplicados al IFC y a Blender</td><td>Hecho (PR #7)</td><td><code>finishes.py</code>, <code>blender_scene.py</code></td></tr>
+        <tr><td>Cámaras por cuarto en Blender</td><td>Hecho; <strong>al dueño no le convencen</strong> (lo dejó para después)</td><td>colección <code>Recorrido</code></td></tr>
+        <tr><td>Recorrido web en primera persona (PC y celular)</td><td>Publicado</td><td><code>docs/viewer/recorrido/</code> · <a href="https://claude.ai/artifact/DCRh3Y7xqzCZZ4yjzQ5bdx">artefacto</a></td></tr>
+        <tr><td>Techo, focos, zoclo, persianas, closets, regadera</td><td><strong>Falta</strong></td><td>ver «Próximo trabajo»</td></tr>
         <tr><td>Variantes y propuestas de remodelación</td><td>Sin fecha</td><td>después de la fase 4</td></tr>
       </tbody>
     </table></div>
+    <p>Todos los PRs (#1–#7) están fusionados en <code>main</code>. Último commit de código: <code>6825d70</code>.</p>
   </section>
 
   <section>
     <h2>Arranque técnico</h2>
     <ol>
-      <li>Clonar y entrar a <code>main</code>, ya con el PR #2 fusionado. Crear una rama nueva para el trabajo.</li>
-      <li>Entorno: <code>python -m venv .venv &amp;&amp; .venv/bin/pip install -r requirements.txt</code>. Probado con Python 3.12 y 3.13. El contenedor de la nube es efímero, así que hay que reinstalar en cada sesión nueva (no hay hook de arranque todavía).</li>
-      <li>Verificar: <code>.venv/bin/python -m pytest</code> debe dar 53 pasados, y <code>.venv/bin/python -m house_twin.cli build</code> debe imprimir «13 espacios, 40 muros, 19 vanos».</li>
-      <li>Artefactos generados (no editar a mano): <code>data/facts/existing.facts.json</code>, <code>models/existing.ifc</code>, <code>docs/analysis/02-hechos-planta-existente.png</code>, <code>docs/viewer/casa-jonhy-3d.html</code>.</li>
-      <li>El visor está publicado como artefacto. Para actualizarlo desde otra sesión, se publica el HTML regenerado pasando su URL como <code>url</code>, tras leerlo con <code>action: "read"</code>.</li>
-      <li>Blender (solo en la PC del dueño, no en la nube): Blender 5.2.2 LTS en <code>~/.local/opt/blender</code>, con el binario en <code>~/.local/bin/blender</code>, y Bonsai 0.9.0 estable como extensión. Bonsai 0.9 exige Blender 5.1 o más nuevo. Se instala con <code>blender --background --command extension install-file -r user_default -e add-on-bonsai-v0.9.0-linux-x64.zip</code>. La GPU es una Intel Iris Xe: EEVEE la usa, Cycles renderiza solo con CPU.</li>
+      <li>Entorno: <code>python -m venv .venv &amp;&amp; .venv/bin/pip install -r requirements.txt</code>. Probado con Python 3.12 y 3.13.</li>
+      <li>Verificar: <code>.venv/bin/python -m pytest</code> da 75 pasados y <code>.venv/bin/python -m house_twin.cli build</code> imprime «13 espacios, 40 muros, 19 vanos».</li>
+      <li>Blender, solo en la PC del dueño: 5.2.2 LTS en <code>~/.local/bin/blender</code> con Bonsai 0.9.0 como extensión <code>user_default</code>. La GPU es una Iris Xe: EEVEE la usa, Cycles renderiza por CPU (~5 min las 5 vistas a 64 muestras).</li>
+      <li>Las fotos originales del dueño están en <code>~/Imágenes/fotos casa/texturas</code>, y las recortadas en <code>sources/fotos/</code>. Ninguna de las dos está en git: en la nube no existen y no se pueden regenerar texturas.</li>
     </ol>
-<pre><code>.venv/bin/python -m house_twin.cli build                     # DXF → hechos → IFC → imagen → visor
-.venv/bin/python -m house_twin.cli build --source sources/casa-jonhy-levantamiento.pdf
-.venv/bin/python -m house_twin.cli compare sources/casa-jonhy-levantamiento.pdf data/raw/plano.dxf
-.venv/bin/python -m house_twin.cli inspect-dxf data/raw/plano.dxf
-.venv/bin/python -m house_twin.mcp_server                    # House MCP por stdio (registrado en .mcp.json)</code></pre>
+<pre><code>.venv/bin/python -m house_twin.cli build              # DXF → hechos → IFC (con acabados) → imagen → visor
+.venv/bin/python -m house_twin.cli texture sources/texturas/piso-interior.json   # foto → mapas PBR
+.venv/bin/python -m house_twin.cli scene [--render]   # Blender: .blend + GLB + recorrido web (+ renders)
+.venv/bin/python -m house_twin.cli compare A B
+.venv/bin/python -m house_twin.mcp_server             # House MCP por stdio (.mcp.json)
+.venv/bin/python -m pytest</code></pre>
+    <h3>Generados (no editar a mano)</h3>
+    <ul>
+      <li>De <code>build</code>: <code>data/facts/existing.facts.json</code>, <code>models/existing.ifc</code>, <code>docs/analysis/02-*.png</code>, <code>docs/viewer/casa-jonhy-3d.html</code>.</li>
+      <li>De <code>scene</code>: <code>models/existing.blend</code> y <code>models/existing.glb</code> (fuera de git), <code>docs/viewer/recorrido/</code> (<code>index.html</code>, <code>casa.js</code>, <code>texturas/</code>) y, con <code>--render</code>, <code>docs/analysis/05-renders/*.jpg</code>.</li>
+    </ul>
+    <h3>Volver a publicar el recorrido</h3>
+    <p>Tras <code>scene</code>, leer el artefacto con <code>action: "read"</code> y publicar <code>docs/viewer/recorrido/index.html</code> con <code>url</code> = el del recorrido y <code>files</code> = <code>casa.js</code> más cada <code>texturas/&lt;nombre&gt;/&lt;mapa&gt;.jpg</code>. Se omitieron <code>closet-madera</code>, <code>piso-regadera</code> y <code>puerta-pasillo</code> porque todavía no tienen geometría.</p>
   </section>
 
   <section>
     <h2>Reglas que no se negocian</h2>
     <div class="cols">
-      <div class="card"><h3>Hecho</h3><p>Sale del plano o lo confirmó el dueño, y lleva <code>source</code>. Lo del dueño se escribe en <code>sources/owner-annotations.json</code> (entrada editable), nunca en los generados.</p></div>
-      <div class="card"><h3>Desconocido</h3><p><code>value: null</code> más una entrada en <code>unknowns</code>. Cuando el dueño responde, va a <code>answered_unknowns</code> y el builder la cierra.</p></div>
-      <div class="card"><h3>Supuesto</h3><p>Solo donde un formato lo exige: alturas en el IFC y el visor (<code>ASSUMED_DEFAULTS</code>: 2.40 entrepiso, 2.10 puertas). Se marca en <code>HDT_Provenance</code> y jamás vuelve a los hechos.</p></div>
-      <div class="card"><h3>Propuesta</h3><p>Lo que diseña la IA va en archivos de variante y nunca modifica <code>existing.*</code>. No sustituye la validación estructural ni normativa de un profesional.</p></div>
+      <div class="card"><h3>Hecho</h3><p>Sale del plano o lo confirmó el dueño, y lleva <code>source</code>. Lo del dueño va en <code>sources/owner-annotations.json</code> (<code>answered_unknowns</code>, <code>measurements</code>), nunca en los generados.</p></div>
+      <div class="card"><h3>Desconocido</h3><p><code>value: null</code> más una entrada en <code>unknowns</code>. Una superficie sin acabado se pinta gris violáceo (<code>sin-dato</code>), para que se note.</p></div>
+      <div class="card"><h3>Supuesto</h3><p>Solo donde un formato lo exige. Se marca en <code>HDT_Provenance</code>, en <code>assumptions</code> de cada textura o en una constante comentada. Jamás vuelve a los hechos.</p></div>
+      <div class="card"><h3>Propuesta</h3><p>Va en archivos de variante y nunca modifica <code>existing.*</code>. No sustituye la validación de un profesional.</p></div>
     </div>
-    <p>Código en inglés, comentarios y documentación en español. Commits con la forma <code>type(scope): descripción en español</code>.</p>
-  </section>
-
-  <section>
-    <h2>Mapa del código</h2>
-<pre><code>data/raw/plano.dxf ─┐  (primaria)            sources/casa-jonhy-levantamiento.pdf (validación)
-                    ▼                                         │
-house_twin/sources/dxf.py | pdf.py + pdf_content.py ──► Drawing (drawing.py: metros por capa, LAYER_ROLES)
-                    ▼
-house_twin/facts/  openings.py → faces.py → walls.py → naming.py → annotations.py → builder.py
-                    ▼
-data/facts/existing.facts.json  (espacios, muros, vanos, adjacency, unknowns, answered)
-     ├─► ifc_export.py → models/existing.ifc
-     ├─► model.py (HouseModel) → mcp_server.py (MCPServer, 8 herramientas)
-     ├─► render.py → docs/analysis/02-hechos-planta-existente.png
-     ├─► viewer.py + viewer_template.html → docs/viewer/casa-jonhy-3d.html
-     └─► compare.py (hechos de dos fuentes lado a lado)</code></pre>
     <ul>
-      <li><strong>Vanos:</strong> se detectan por pares de líneas en <code>VANOS</code> o por pares de jambas en <code>MUROS</code>, y se parten donde alguna cara del muro está ocupada.</li>
-      <li><strong>Espacios:</strong> salen de poligonizar <code>MUROS</code> con los vanos cerrados. Los recintos se separan de los cuerpos de muro por espesor (2·área/perímetro).</li>
-      <li><strong>Muros:</strong> la masa de muro se descompone en 40 tramos rectos, sin solapes, a partir de pares de caras paralelas. Los encuentros quedan en el tramo más largo.</li>
-      <li><strong>Adyacencias:</strong> dos espacios son vecinos por muro si se enfrentan (buffer redondeado). Dos exteriores contiguos son vecinos «abiertos» si comparten al menos 30 cm de borde. <code>walk_path</code> recorre puertas y límites abiertos.</li>
+      <li>Código en inglés; comentarios y documentación en español, en frases cortas.</li>
+      <li>Git: rama nueva, <code>type(scope): descripción en español</code>, PR aunque trabaje solo. El merge lo hace el dueño.</li>
+      <li>Nada de borrados físicos: siempre lógicos. Antes de un <code>sudo</code>, explicar en un solo mensaje qué, por qué y para qué.</li>
+      <li>Si el dueño corrige un dato, se revierte lo hecho sobre el dato equivocado. Pasó con la loseta: se probó 40 cm y el dueño confirmó 30 × 30.</li>
     </ul>
   </section>
 
   <section>
+    <h2>Mapa del código</h2>
+<pre><code>data/raw/plano.dxf ─► sources/dxf.py ─► Drawing ─► facts/ (openings → faces → walls → naming → annotations → builder)
+                                                       ▼
+sources/owner-annotations.json ─────────────► data/facts/existing.facts.json
+sources/texturas/*.json ─► textures.py ─► assets/textures/&lt;nombre&gt;/{basecolor,normal,roughness,opacity}
+                                   │
+            finishes.py ◄──────────┘   (qué acabado lleva cada cara, piso y vano; solo stdlib)
+               │
+               ├─► ifc_export.py ─► models/existing.ifc  (IfcMaterial, IfcCovering de piso)
+               └─► blender_scene.py (dentro de Blender + Bonsai)
+                      ├─► models/existing.blend  (materiales, sol, cámaras)
+                      ├─► docs/analysis/05-renders/
+                      └─► models/existing.glb ─► walk.py + walk_template.html ─► docs/viewer/recorrido/
+model.py → mcp_server.py · render.py · viewer.py · compare.py · sunlight.py (orientación y sol)</code></pre>
+    <div class="cols">
+      <div class="card">
+        <h3><code>finishes.py</code></h3>
+        <ul>
+          <li>Cada cara de muro toma el acabado del espacio al que mira: prueba a 5 cm (<code>PROBE_M</code>).</li>
+          <li>Las mochetas prueban a 0.3 m de lado (<code>JAMB_PROBE_M</code>) y prefieren el interior.</li>
+          <li>Si dos texturas reclaman un espacio, gana la que lista menos espacios.</li>
+          <li><code>street_facade</code> resuelve la cara que da a la calle (Y &lt; 0).</li>
+          <li>Solo biblioteca estándar, porque también la importa el Python de Blender.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><code>blender_scene.py</code></h3>
+        <ul>
+          <li>Abre el IFC con <code>bpy.ops.bim.load_project</code>.</li>
+          <li>Con bmesh, corta los muros en cada X e Y de los vértices de los espacios: una cara puede dar al baño y al pasillo.</li>
+          <li>UV en metros del mundo, con escala <code>1/size_m</code> y desplazamiento <code>−origin_m</code>. Las puertas usan UV 0–1 y las ventanas son procedurales (perfil de 4.5 cm y traslape de 6 cm, <strong>supuesto</strong>).</li>
+          <li>El sol está a 150° de rumbo y 50° de altura. Cielo con fuerza 0.3 y AgX.</li>
+          <li>Cámaras: <code>CAMERAS</code> fijas, más una por espacio desde la esquina con más alcance (lente de 14 mm, a 1.6 m). El marcador 1 es la aérea y del 2 al 14 van los cuartos.</li>
+          <li>El .blend abre en Material Preview.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Recorrido web</h3>
+        <ul>
+          <li>three r128 (cdnjs) + GLTFLoader 0.128.0 (jsdelivr).</li>
+          <li>El GLB va en base64 dentro de <code>casa.js</code> (<code>window.HDT_GLB</code>), porque los artefactos no sirven <code>.glb</code>.</li>
+          <li>Coordenadas: el punto (x, y, z) del modelo es (x, z, −y) en three. Texturas con <code>flipY = false</code>, repeat de (1/w, 1/h) y offset de (lu, −lv − sv).</li>
+          <li>Colisión por raycast, un eje a la vez, contra IfcWall e IfcWindow. Las puertas se atraviesan.</li>
+          <li>Se arranca 0.9 m adentro de D03, en (7.243, 4.24), mirando hacia +Y.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
     <h2>La casa en datos</h2>
-    <p>Terreno de 10.03 × 21.25 m (213.14 m²), una planta. Coordenadas en metros con origen en la esquina del terreno a la izquierda de la calle; X a lo ancho, Y hacia el fondo.</p>
+    <p>Terreno de 10.03 × 21.25 m, una planta, piso a techo de 2.60 m. Origen en la esquina del terreno a la izquierda de la calle; X a lo ancho, Y hacia el fondo. El fondo (+Y) mira a 207° y la fachada, a 27°, según la brújula del dueño.</p>
     <div class="table-wrap"><table>
-      <thead><tr><th>Espacio</th><th>m²</th><th>Notas</th></tr></thead>
+      <thead><tr><th>Id</th><th>Espacio</th><th>m²</th><th>Acabados y notas</th></tr></thead>
       <tbody>
-        <tr><td>Cocina + Sala + Comedor</td><td class="num">42.89</td><td>Abierto, incluye el pasillo a las recámaras</td></tr>
-        <tr><td>Recámara 1</td><td class="num">16.15</td><td>Con closet, 2 ventanas al patio</td></tr>
-        <tr><td>Recámara 2</td><td class="num">15.26</td><td>Con closet, ventana de 1.50 m al patio</td></tr>
-        <tr><td>Recámara 3</td><td class="num">15.03</td><td>Con closet, ventana al tragaluz</td></tr>
-        <tr><td>Baño</td><td class="num">2.94</td><td>Un solo espacio con la regadera (murete de 5 cm interior). Dato del dueño</td></tr>
-        <tr><td>Bodega</td><td class="num">1.99</td><td></td></tr>
-        <tr><td>1/2 Baño</td><td class="num">1.46</td><td></td></tr>
-        <tr><td>Tragaluz</td><td class="num">1.15</td><td>Ilumina y ventila la R3. Tiene ventana V10 a la sala en el muro diagonal, sin medidas. Dato del dueño</td></tr>
-        <tr><td>Patio (exterior)</td><td class="num">47.25</td><td>Detrás de las recámaras</td></tr>
-        <tr><td>Cochera (exterior)</td><td class="num">19.55</td><td>Sin techo. Dato del dueño</td></tr>
-        <tr><td>Pórtico (exterior)</td><td class="num">16.15</td><td>Techado. Acceso principal, puerta peatonal y bodega. Dato del dueño</td></tr>
-        <tr><td>Pasillo de servicio (exterior)</td><td class="num">5.95</td><td>Va de la cochera al patio. Ahí da la puerta lateral de la cocina</td></tr>
-        <tr><td>Lavandería (exterior)</td><td class="num">3.88</td><td>Sin techo ni cerramiento. Ahí da la ventana alta del baño</td></tr>
+        <tr><td>S01</td><td>Cocina + Sala + Comedor</td><td class="num">42.89</td><td>Loseta de 30 × 30 y yeso blanco. Incluye el pasillo de recámaras. La cortina negra tapa V04, la ventana más cercana al comedor</td></tr>
+        <tr><td>S02</td><td>Recámara 1</td><td class="num">16.15</td><td>Con closet y 2 ventanas al patio</td></tr>
+        <tr><td>S03</td><td>Recámara 2</td><td class="num">15.26</td><td>Con closet</td></tr>
+        <tr><td>S04</td><td>Recámara 3</td><td class="num">15.03</td><td>Con closet y ventana al tragaluz. Plano: 4.07 m de este a oeste</td></tr>
+        <tr><td>S05</td><td>Baño</td><td class="num">2.94</td><td>Azulejo. Plano: 1.25 m de ancho</td></tr>
+        <tr><td>S06</td><td>Bodega</td><td class="num">1.99</td><td>D09 sin acabado</td></tr>
+        <tr><td>S07</td><td>1/2 Baño</td><td class="num">1.46</td><td></td></tr>
+        <tr><td>S08</td><td>Tragaluz</td><td class="num">1.15</td><td>Abierto al cielo. V10 (con retícula) da a la sala, sin medidas. Los muros parecen azul claro en la foto</td></tr>
+        <tr><td>S09</td><td>Patio</td><td class="num">47.25</td><td>Exterior, con aplanado</td></tr>
+        <tr><td>S10</td><td>Cochera</td><td class="num">19.55</td><td>Exterior, sin techo, con aplanado</td></tr>
+        <tr><td>S11</td><td>Pórtico</td><td class="num">16.15</td><td>Techado, con estuco (como la fachada). D01, la reja peatonal, está sin acabado</td></tr>
+        <tr><td>S12</td><td>Pasillo de servicio</td><td class="num">5.95</td><td>Exterior, con aplanado. Tiene 2 puertas de herrería que no están modeladas</td></tr>
+        <tr><td>S13</td><td>Lavandería</td><td class="num">3.88</td><td><strong>Muros sin acabado</strong>: ninguna textura la incluye</td></tr>
       </tbody>
     </table></div>
-    <p>Hay 9 puertas (D01–D09) y 10 ventanas: V01–V09 dibujadas, más V10, declarada por el dueño con <code>footprint: null</code>.</p>
+    <div class="callout">
+      <p><strong>Medida M01, discrepancia abierta:</strong> el pasillo de recámaras mide <strong>1.10 m</strong> según el dueño y 1.21 m según el plano (de W18 a W16). Caben 3 losetas enteras y el corte de ≈ 20 cm queda del lado de R3. La geometría <em>no</em> se movió: para saber qué muro corregir hacen falta el ancho del baño y el de R3. La textura del piso ya se alinea al muro del baño (<code>grid.origin_m.x = 4.41</code>).</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Texturas</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Textura</th><th>Dónde va</th><th>Estado</th></tr></thead>
+      <tbody>
+        <tr><td><code>piso-interior</code></td><td>Pisos interiores</td><td>30 × 30, confirmado. El veteado se repite porque sale de solo 6 losetas</td></tr>
+        <tr><td><code>piso-exterior</code></td><td>Patio, cochera, pórtico</td><td>Aplicada</td></tr>
+        <tr><td><code>muro-interior</code></td><td>Yeso blanco interior</td><td>Aplicada</td></tr>
+        <tr><td><code>azulejo-bano</code></td><td>Muros del baño</td><td>Aplicada. Faltan la medida y la altura del azulejo</td></tr>
+        <tr><td><code>aplanado-exterior</code></td><td>Pasillo de servicio, patio, cochera</td><td>Aplicada</td></tr>
+        <tr><td><code>estuco-fachada</code></td><td>Fachada a la calle y pórtico</td><td>Sintética: falta una foto de cerca</td></tr>
+        <tr><td><code>puerta-recamaras</code>, <code>puerta-cocina</code>, <code>puerta-entrada</code></td><td>Puertas interiores, D04, D03</td><td>Aplicadas</td></tr>
+        <tr><td><code>aluminio-negro</code>, <code>vidrio-claro</code>, <code>vidrio-polarizado</code></td><td>Ventanas y vidrio de puertas</td><td>Aplicadas</td></tr>
+        <tr><td><code>piso-regadera</code>, <code>closet-madera</code>, <code>puerta-pasillo</code></td><td>Regadera, closets y herrería del pasillo</td><td><strong>Sin geometría</strong>: hecha la textura, falta el objeto</td></tr>
+      </tbody>
+    </table></div>
   </section>
 
   <section>
     <h2>Trampas ya resueltas (no volver a caer)</h2>
+    <h3>Plano e IFC</h3>
     <ul>
-      <li><strong>Escala del PDF:</strong> se imprimió «ajustado a hoja» a 1:77.4, aunque el cajetín dice 1:100. La escala sale de las cotas, nunca del rótulo.</li>
-      <li><strong>Unidades del DXF:</strong> declara <code>$INSUNITS = 4</code> (mm) pero está en metros. <code>sources/dxf.py</code> valida por plausibilidad y deja el aviso en <code>source_warnings</code>.</li>
-      <li><strong>Cota forzada:</strong> la cota del frente del DXF dice «10.00» sobre 10.03 m reales. No confiar en textos de cota; usar <code>get_measurement()</code>.</li>
-      <li><strong>Textos MTEXT:</strong> pueden traer varias líneas (<code>"a= 0.86 m\nh= 1.22 m"</code>, <code>"1/2\nBAÑO"</code>). Ya se manejan.</li>
-      <li><strong>Glifos del PDF:</strong> el texto viene con un desplazamiento de 29 en los códigos. La Ñ llega como <code>\x83</code>.</li>
-      <li><strong>Rótulo de la lavandería:</strong> el texto LAVANDERIA cae sobre el pasillo de servicio, no sobre la lavandería. Las zonas exteriores las define el dueño, no los rótulos.</li>
-      <li><strong>Límites del dueño:</strong> siguen caras de muro exactas del DXF (6.705, 10.225, 12.625, x = 1.205, 2.82, 3.115).</li>
-      <li><strong>mcp 2.x:</strong> <code>FastMCP</code> ahora es <code>mcp.server.mcpserver.MCPServer</code>. Los errores para el modelo se lanzan como <code>ToolError</code> y el resultado del cliente usa <code>is_error</code>.</li>
-      <li><strong>IfcOpenShell 0.9:</strong> la API es <code>ifcopenshell.api.&lt;módulo&gt;.&lt;función&gt;(model, …)</code>, sin <code>api.run</code>. IFC no admite Psets vacíos.</li>
-      <li><strong>ezdxf:</strong> <code>ezdxf.new()</code> declara metros por omisión. Para probar «sin unidades» hay que poner <code>$INSUNITS = 0</code>.</li>
-      <li><strong>Unidades del IFC:</strong> <code>ifcopenshell.api.unit.assign_unit()</code> sin argumentos asigna milímetros. Hay que pasarle unidades en metros, o en Bonsai la casa mide 10 × 21 mm.</li>
-      <li><strong>Vanos y muros:</strong> un vano pertenece al muro cuya banda atraviesa (comparte su espesor), no al que solo toca de costado. Si no, el muro se parte en la jamba (pasó con la ventana V03 de la cocina). D06 queda en W24 porque no hay muro alineado con ella.</li>
-      <li><strong>Tests sobre el DXF real:</strong> la fixture <code>facts</code> sale del PDF. Para el plano del que sale el modelo, usar <code>dxf_facts</code>.</li>
-      <li><strong>Recarga en Bonsai:</strong> <em>Incrementally Reload Changes</em> compara por GlobalId y solo redibuja la geometría cuando no cambió ningún atributo. Si cambia, por ejemplo, el <code>OverallHeight</code> de una puerta, no la redibuja: usar <em>File → Revert IFC Project</em>.</li>
-      <li><strong>Geometría:</strong> las uniones con shapely necesitan cierre/apertura morfológica (<code>SNAP = 1 mm</code>) para evitar astillas y espigas de ancho cero.</li>
+      <li>El PDF está a 1:77.4, aunque el cajetín diga 1:100. El DXF declara mm pero está en metros. La cota del frente está forzada a «10.00».</li>
+      <li><code>assign_unit()</code> sin argumentos asigna milímetros. Un vano pertenece al muro cuya banda atraviesa.</li>
+      <li>IfcOpenShell 0.9: <code>ifcopenshell.api.&lt;módulo&gt;.&lt;función&gt;(model, …)</code>. IFC no admite Psets vacíos.</li>
+      <li>La fixture <code>facts</code> de los tests sale del PDF. Para el plano real, usar <code>dxf_facts</code>.</li>
+    </ul>
+    <h3>Blender y Bonsai</h3>
+    <ul>
+      <li>Recargar el IFC dentro de Blender (<em>Revert IFC Project</em>) borra los materiales: volver a correr <code>scene</code>. <em>Incrementally Reload</em> no redibuja si cambia un atributo.</li>
+      <li>Si el dueño «no ve texturas», el viewport está en Solid: el .blend ya abre en Material Preview.</li>
+      <li>Numpad 0 muestra siempre la cámara activa. Para cambiar de cuarto: ← → (un marcador por fotograma), o Walk Navigation (Shift + `).</li>
+      <li><code>render_all</code> limpia <code>marker.camera</code>; si no, los renders salen con la cámara del marcador.</li>
+      <li>Sin cortar los muros en los límites de los espacios, el azulejo del baño se pasa al pasillo.</li>
+    </ul>
+    <h3>Recorrido web y artefactos</h3>
+    <ul>
+      <li>Los artefactos rechazan <code>.glb</code> (<code>model/gltf-binary</code>): por eso el base64 en <code>casa.js</code>.</li>
+      <li><code>.status{display:grid}</code> le ganaba a <code>hidden</code>, y la página se quedaba en «Cargando». La plantilla trae <code>[hidden]{display:none!important}</code>, <code>box-sizing</code>, charset y viewport.</li>
+      <li>Para probar en un navegador sin interfaz: <code>uv run --with playwright</code> con <code>executable_path=/usr/bin/google-chrome</code>.</li>
+      <li>Nunca <code>pkill -f "http.server …"</code>, porque mata el propio shell. Usar <code>kill $(pgrep -f … | head -1)</code>.</li>
     </ul>
   </section>
 
   <section>
     <h2>Datos pendientes del dueño</h2>
     <div class="callout">
-      <p><strong>Lo que más bloquea la fidelidad:</strong> los acabados (con fotos) y la orientación del norte. Las alturas principales ya están confirmadas. El DXF no trae ninguna capa de estructura.</p>
+      <p><strong>Lo que más destraba:</strong> el ancho del baño y el de R3 (para corregir el pasillo), el acabado de la lavandería y la confirmación del azul del tragaluz.</p>
     </div>
     <div class="table-wrap"><table>
-      <thead><tr><th>Id</th><th>Pregunta</th><th>Bloquea</th></tr></thead>
+      <thead><tr><th>Tema</th><th>Pregunta</th></tr></thead>
       <tbody>
-        <tr><td>U02</td><td>Tipo y espesor de losa</td><td>3D (volumen exterior)</td></tr>
-        <tr><td>U03</td><td>Castillos, columnas, trabes y muros de carga</td><td>Remodelaciones</td></tr>
-        <tr><td>U05</td><td>Material de los muros</td><td>Estructura, materiales</td></tr>
-        <tr><td>U07</td><td>Frente real del terreno: 10.00 m (cota) o 10.03 m (dibujo)</td><td>—</td></tr>
-        <tr><td>U08</td><td>Confirmar que «a=» es el antepecho y «h=» la altura de ventana</td><td>—</td></tr>
-        <tr><td>U10</td><td>¿El tragaluz está abierto al cielo o cubierto?</td><td>3D, iluminación natural</td></tr>
-        <tr><td>U11</td><td>Medidas de la ventana V10 del tragaluz a la sala</td><td>3D</td></tr>
+        <tr><td>Pasillo (M01)</td><td>Ancho interior del baño (el plano da 1.25 m) y de R3 de este a oeste (4.07 m)</td></tr>
+        <tr><td>Lavandería y tragaluz</td><td>¿Qué acabado tienen los muros de la lavandería? ¿Los del tragaluz son azul claro?</td></tr>
+        <tr><td>D01, D09</td><td>Fotos. La de lámina acanalada (07:49:34) podría ser D09. ¿Dónde se tomaron 07:47:26 y 07:49:34?</td></tr>
+        <tr><td>V10 (U11)</td><td>Ancho, antepecho y altura</td></tr>
+        <tr><td>Puertas</td><td>Medida de la hoja de recámara y de baño. D03: ¿hay fijo a la izquierda? ¿Qué tan oscuro es el polarizado? D04: ¿aluminio o acero?</td></tr>
+        <tr><td>Baño</td><td>Medida y altura del azulejo, y en qué muros va. Loseta y área de la regadera</td></tr>
+        <tr><td>Closets y techo</td><td>¿De qué recámara es cada foto? Módulo (ancho y alto). Foto del tirol de cerca</td></tr>
+        <tr><td>Herrería del pasillo</td><td>Alto y posición de las 2 puertas</td></tr>
+        <tr><td>Ventanas</td><td>¿Todas con persiana enrollable? ¿El fijo está entintado?</td></tr>
+        <tr><td>Color</td><td>Foto de día del piso con una hoja blanca tamaño carta encima</td></tr>
+        <tr><td>Estructura</td><td>U02 (losa), U03 (castillos y trabes), U05 (material de muros), U07 (frente de 10.00 o 10.03 m), U08 (rótulos a= / h=)</td></tr>
       </tbody>
     </table></div>
-    <p>Por pedir en la fase 4 (todavía no están en <code>unknowns</code>): orientación del norte respecto al terreno, para la luz del sol; acabados de cada espacio (piso, muros, plafón, carpintería, cancelería), mejor con fotos; tipo y temperatura de color de las luminarias.</p>
-    <p>Ya respondidas: U01 (2.60 m de piso a techo), U04 (puertas de 2.10 m del piso al vano), U06 (la cochera no tiene techo) y U09 (el frente de la sala es un pórtico techado). Las respuestas con <code>value</code> pasan a los hechos.</p>
+    <p>La lista completa y razonada está en <code>docs/analysis/04-acabados.md</code>, sección «Pendientes del dueño».</p>
   </section>
 
   <section>
     <h2>Próximo trabajo</h2>
-    <p>Fase 4: que el modelo se vea y se mida como la casa real. Todo dato visual sigue la misma regla: viene de una medición, una foto o una confirmación del dueño, o queda marcado como supuesto.</p>
+    <p>En orden sugerido. El dueño puede elegir otro.</p>
     <ol>
-      <li><strong>GUIDs estables en el IFC.</strong> <em>Hecho.</em> Cada GlobalId es un UUID5 de la identidad del elemento (clase, id del hecho y productos relacionados), así que dos <code>build</code> iguales dan el mismo IFC. El GUID sigue al id del hecho: los muros se numeran por largo, y un cambio del plano que los renumere mueve sus GUIDs.</li>
-      <li><strong>Revisión en Bonsai.</strong> Ya se comprobó que Bonsai abre <code>existing.ifc</code> sin interfaz (40 muros, 9 puertas, 9 ventanas, 13 espacios, 1 nivel). El dueño ya lo revisó con la interfaz abierta, y de ahí salieron la corrección de unidades y la de vanos. La ventana V03 empieza pegada a la esquina interior de la cocina: es correcto, lo confirmó el dueño.</li>
-      <li><strong>Medidas pendientes.</strong> U01 y U04 ya están. Faltan U02 y U11, a registrar en <code>sources/owner-annotations.json</code> y llevarlas al IFC y al visor en lugar de los supuestos.</li>
-      <li><strong>Materiales y acabados.</strong> Agregar acabados por espacio y por elemento a los hechos (con <code>source</code>, o desconocido), exportarlos como <code>IfcMaterial</code> y estilos de superficie, y montar texturas PBR a partir de las fotos del dueño.</li>
-      <li><strong>Iluminación.</strong>
-        <ul>
-          <li>Pasar la instalación eléctrica del DXF al modelo de hechos: 9 spots en <code>23- ILUMINACION</code>, 12 contactos y 8 apagadores en la capa mal nombrada <code>5 CORTES</code>, y el centro de carga en <code>GAS</code>.</li>
-          <li>Colocar las luces del render en la posición de los spots, no inventadas.</li>
-          <li>Luz del sol a partir de la ubicación en Saltillo y la orientación del norte (pendiente del dueño).</li>
-        </ul>
-      </li>
-      <li><strong>Render reproducible.</strong> Un script de Blender (<code>bpy</code>, con Bonsai) que abra el IFC, aplique materiales y luces y genere vistas de cada espacio sin retoques a mano. EEVEE para iterar y Cycles (CPU) para las imágenes finales. El visor web del celular se mantiene para consultas rápidas.</li>
+      <li><strong>Techo con tirol y focos.</strong> Es lo que más cambia cómo se ven los cuartos, en Blender y en el recorrido, donde hoy el sol entra por arriba. Para la losa hace falta U02. Los focos van en la posición de los 9 spots de la capa <code>23- ILUMINACION</code> del DXF; no se inventan.</li>
+      <li><strong>Corregir el pasillo (M01)</strong> en cuanto el dueño dé las medidas del baño y de R3. Hay que mover el muro que esté corrido y revisar que la loseta siga dando 3 enteras.</li>
+      <li><strong>Geometría pendiente:</strong> closets, regadera y las 2 puertas de herrería del pasillo de servicio. Las texturas ya existen.</li>
+      <li><strong>Acabados faltantes:</strong> lavandería, tragaluz, D01 y D09, según lo que responda el dueño.</li>
+      <li><strong>Variar el veteado del piso:</strong> rotar o mezclar losetas para que no se note la repetición.</li>
+      <li><strong>Cámaras de Blender:</strong> al dueño no le convencen y lo pospuso. Preguntarle qué no le gusta antes de tocarlas.</li>
+      <li><strong>Recorrido web:</strong> puertas que se abren, techo y una luz más cercana a la de Blender.</li>
+      <li>Zoclo, persianas y cortinas (la negra de V04).</li>
     </ol>
     <h3>Después de la fase 4</h3>
     <ul>
-      <li><strong>Variantes y propuestas:</strong> <code>create_variant</code>, operaciones sobre la variante (muros, vanos, niveles), comparación contra la casa existente y herramientas de escritura en el House MCP que solo tocan variantes. Una segunda planta o la ubicación de una escalera son ejemplos de uso, no requisitos.</li>
-      <li><strong>Hook de arranque</strong> (SessionStart) para que el entorno se instale solo en sesiones en la nube. El dueño aún no lo ha pedido.</li>
-      <li><strong>Visor:</strong> el encuadre en celular se corrigió después de la última prueba en navegador, que solo pasó un chequeo de sintaxis. Confirmar con el dueño que se ve bien.</li>
+      <li>Variantes y propuestas de remodelación: <code>create_variant</code> y herramientas de escritura en el House MCP que solo tocan variantes.</li>
     </ul>
   </section>
 
@@ -259,10 +325,10 @@ data/facts/existing.facts.json  (espacios, muros, vanos, adjacency, unknowns, an
   <section>
     <h2>Enlaces</h2>
     <ul>
-      <li>Repo: <a href="https://github.com/JohnatanDeLeon/house-digital-twin">github.com/JohnatanDeLeon/house-digital-twin</a></li>
-      <li>PRs anteriores: <a href="https://github.com/JohnatanDeLeon/house-digital-twin/pull/1">#1</a> (DXF) y <a href="https://github.com/JohnatanDeLeon/house-digital-twin/pull/2">#2</a> (DXF como fuente primaria, visor 3D).</li>
+      <li>Repo: <a href="https://github.com/JohnatanDeLeon/house-digital-twin">github.com/JohnatanDeLeon/house-digital-twin</a>. Último PR de código: <a href="https://github.com/JohnatanDeLeon/house-digital-twin/pull/7">#7</a> (acabados, escena, recorrido).</li>
+      <li>Recorrido para caminar: <a href="https://claude.ai/artifact/DCRh3Y7xqzCZZ4yjzQ5bdx">claude.ai/artifact/DCRh3Y7xqzCZZ4yjzQ5bdx</a></li>
       <li>Visor 3D: <a href="https://claude.ai/artifact/FPKbkQujoJbiNyD1MZLnJF">claude.ai/artifact/FPKbkQujoJbiNyD1MZLnJF</a></li>
-      <li>Sesión original: <a href="https://claude.ai/code/session_013E6MqiVMzmu15SMGUbXiYE">claude.ai/code/session_013E6MqiVMzmu15SMGUbXiYE</a></li>
+      <li>Sesiones: <a href="https://claude.ai/code/session_013E6MqiVMzmu15SMGUbXiYE">original</a> · <a href="https://claude.ai/code/session_01SexK3rCH4ET2xfV6w49QNn">acabados y recorrido</a></li>
     </ul>
   </section>
 </main>
