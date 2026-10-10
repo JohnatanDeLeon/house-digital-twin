@@ -28,7 +28,8 @@ from house_twin.finishes import Finishes
 from house_twin.furniture import closet_meshes
 from house_twin.hardware import for_leaf, knob_mesh, placements
 from house_twin.lighting import luminaire_meshes
-from house_twin.plumbing import faucet_mesh, sanitary_mesh, shower_mesh, valve_meshes
+from house_twin.plumbing import (faucet_mesh, lever_mesh, material_of, sanitary_mesh, shower_mesh, spec_for,
+                                 valve_meshes)
 
 ASSUMED_DEFAULTS = {'storey_height': 2.40, 'door_height': 2.10, 'window_sill': 0.90, 'window_height': 1.20,
                     'slab_thickness': 0.10}  # losa: U02 sin respuesta; 10 cm es común en losa maciza de casa
@@ -295,6 +296,8 @@ def _add_devices(ctx: _IfcContext, facts, storey, spec):
     if not spec:
         return
     for device in facts.get('devices', []):
+        if device.get('exists', {}).get('value') is False:  # el plano lo dibuja, pero el dueño dice que no está
+            continue
         points, faces = device_mesh(spec, device)
         ifc_class, kind = ('IfcOutlet', 'POWEROUTLET') if device['kind'] == 'outlet' else ('IfcSwitchingDevice', 'TOGGLESWITCH')
         element = ctx.element(ifc_class, device['id'], kind)
@@ -328,21 +331,24 @@ def _add_shower_fittings(ctx: _IfcContext, facts, storey, spec):
                                              'Position': spec['mount']['source']})
 
 
-def _add_sanitary(ctx: _IfcContext, facts, storey, spec):
-    """Inodoros y lavabos (IfcSanitaryTerminal) donde el plano los dibuja, en los espacios que tiene la especificación;
-    la mezcladora del lavabo va como IfcValve."""
-    if not spec:
-        return
+def _add_sanitary(ctx: _IfcContext, facts, storey, specs):
+    """Inodoros y lavabos (IfcSanitaryTerminal) donde el plano los dibuja, en los baños que tienen especificación;
+    la mezcladora del lavabo va como IfcValve y la palanca del tanque como IfcDiscreteAccessory."""
     for fixture in facts.get('fixtures', []):
-        if fixture['kind'] not in ('toilet', 'basin') or fixture['space'] not in spec['applies_to']['spaces']:
+        spec = spec_for(specs or [], fixture['space']) if fixture['kind'] in ('toilet', 'basin') else None
+        if spec is None:
             continue
         kind = 'TOILETPAN' if fixture['kind'] == 'toilet' else 'WASHHANDBASIN'
-        parts = [(fixture['id'], 'IfcSanitaryTerminal', kind, sanitary_mesh(spec, fixture), spec['material'],
+        parts = [(fixture['id'], 'IfcSanitaryTerminal', kind, sanitary_mesh(spec, fixture), material_of(spec, fixture['kind']),
                   spec[fixture['kind']]['source'])]
         if fixture['kind'] == 'basin':
             faucet = spec['basin']['faucet']
             parts.append((f"{fixture['id']}-mezcladora", 'IfcValve', 'FAUCET', faucet_mesh(spec, fixture), faucet['material'],
                           faucet['note']))
+        lever = lever_mesh(spec, fixture) if fixture['kind'] == 'toilet' else None
+        if lever:
+            parts.append((f"{fixture['id']}-palanca", 'IfcDiscreteAccessory', None, lever, spec['toilet']['lever']['material'],
+                          spec['toilet']['lever']['note']))
         for name, ifc_class, predefined, (points, faces), material, source in parts:
             element = ctx.element(ifc_class, name, predefined)
             ifcopenshell.api.geometry.assign_representation(
@@ -429,7 +435,7 @@ def _stabilize_guids(model: ifcopenshell.file):
 
 def build_ifc(facts: dict, finishes: Finishes | None = None, hardware: list[dict] | None = None,
               furniture: list[dict] | None = None, luminaires: list[dict] | None = None,
-              devices: dict | None = None, shower: dict | None = None, sanitary: dict | None = None) -> ifcopenshell.file:
+              devices: dict | None = None, shower: dict | None = None, sanitary: list[dict] | None = None) -> ifcopenshell.file:
     ctx = _IfcContext(facts['name'])
     site = ctx.element('IfcSite', 'Terreno')
     building = ctx.element('IfcBuilding', 'Casa')

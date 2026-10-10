@@ -2,9 +2,10 @@
   "_doc": "Azulejo de los muros del baño con regadera. Textura repetible de 3 × 2 azulejos verticales, recortada en los ejes de junta. Regenerar con: python -m house_twin.cli texture sources/texturas/azulejo-bano.json",
   "name": "azulejo-bano",
   "applies_to": {
-    "spaces": ["S05"],
+    "spaces": ["S05", "S07"],
     "surface": "muros",
-    "source": "dueño (2026-10-08): es el azulejo de las paredes del baño con regadera"
+    "up_to_m": {"S07": 2.10},
+    "source": "dueño (2026-10-08): es el azulejo de las paredes del baño con regadera; dueño (2026-10-09): el medio baño tiene el mismo, hasta 2.10 m (arriba, pintura blanca)"
   },
   "photo": "sources/fotos/azulejo-bano-lejos.jpg",
   "photo_meta": {"taken": "2026-10-07T23:33:31", "camera": "Samsung Galaxy S25 Ultra", "focal_35mm": 13, "iso": 640, "flash": false, "light": "artificial, de noche; gran angular (13 mm)"},

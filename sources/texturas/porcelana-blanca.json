@@ -1,0 +1,25 @@
+{
+ "_doc": "Porcelana blanca del inodoro del medio baño. Supuesto: en las fotos es claramente más blanca que el azulejo, pero a contraluz de la ventana no se puede medir. Regenerar con: python -m house_twin.cli texture sources/texturas/porcelana-blanca.json",
+ "name": "porcelana-blanca",
+ "kind": "constant",
+ "applies_to": {
+  "sanitary": [
+   "toilet"
+  ],
+  "source": "fotos del medio baño (dueño, 2026-10-09): inodoro blanco"
+ },
+ "photo": "sources/fotos/medio-bano-frente.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   235,
+   235,
+   232
+  ],
+  "metallic": 0.0,
+  "roughness": 0.08,
+  "note": "blanco porcelana común (supuesto); vitrificada, brillante"
+ },
+ "assumptions": [
+  "color: blanco común; con la luz de las fotos sale más claro que el azulejo, fuera de lo que se puede medir con él"
+ ]
+}

@@ -47,11 +47,21 @@ def shower_mesh(spec: dict):
                   cylinder(elbow, end, s['pipe_radius_m'], s['segments']), head])
 
 
-SANITARY_PATH = ROOT / 'sources' / 'sanitarios' / 'muebles-bano.json'
+SANITARY_DIR = ROOT / 'sources' / 'sanitarios'
 
 
-def load_sanitary_spec(path: Path = SANITARY_PATH) -> dict | None:
-    return json.loads(path.read_text()) if path.exists() else None
+def load_sanitary_specs(folder: Path = SANITARY_DIR) -> list[dict]:
+    """Una especificación de muebles por baño (`muebles-*.json`): cada una dice a qué espacios aplica."""
+    return [json.loads(p.read_text()) for p in sorted(Path(folder).glob('muebles-*.json'))]
+
+
+def spec_for(specs: list[dict], space_id: str) -> dict | None:
+    return next((s for s in specs if space_id in s['applies_to']['spaces']), None)
+
+
+def material_of(spec: dict, kind: str) -> str:
+    """El material de la pieza si lo declara (un baño puede tener inodoro blanco y lavabo beige); si no, el común."""
+    return spec[kind].get('material') or spec['material']
 
 
 def _frame(fixture):
@@ -85,6 +95,15 @@ def sanitary_mesh(spec: dict, fixture: dict):
         b = spec['basin']
         parts = [_oval(b['pedestal']), _oval(b['bowl'])]
     points, faces = merge(parts)
+    return _to_world(fixture, points), faces
+
+
+def lever_mesh(spec: dict, fixture: dict):
+    """Palanca del tanque del inodoro, si la especificación la trae."""
+    lever = spec['toilet'].get('lever')
+    if lever is None:
+        return None
+    points, faces = _box(lever)
     return _to_world(fixture, points), faces
 
 

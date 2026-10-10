@@ -1,0 +1,25 @@
+{
+ "_doc": "Porcelana beige (almendra) del lavabo del medio baño. El tono sale de la foto; la claridad es la de la porcelana hueso del otro baño (supuesto). Regenerar con: python -m house_twin.cli texture sources/texturas/porcelana-almendra.json",
+ "name": "porcelana-almendra",
+ "kind": "constant",
+ "applies_to": {
+  "sanitary": [
+   "basin"
+  ],
+  "source": "fotos del medio baño (dueño, 2026-10-09): lavabo de pedestal beige, distinto del inodoro blanco"
+ },
+ "photo": "sources/fotos/medio-bano-frente.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   194,
+   178,
+   156
+  ],
+  "metallic": 0.0,
+  "roughness": 0.08,
+  "note": "tono medido en el borde del lavabo (crudos 122,112,97) y llevado a la luminancia de porcelana-hueso; vitrificada, brillante"
+ },
+ "assumptions": [
+  "claridad: la de la porcelana del baño principal; a contraluz de la ventana solo se puede medir el tono"
+ ]
+}

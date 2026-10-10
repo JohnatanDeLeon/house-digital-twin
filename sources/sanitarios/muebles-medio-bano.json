@@ -1,0 +1,287 @@
+{
+ "_doc": "Inodoro y lavabo del medio baño (el de la entrada). Dónde van y hacia dónde miran lo da el plano (bloques WC y LAVABO, `fixtures` de los hechos); esto dice cómo son. Medidas en m, en el marco de cada mueble: `x` a lo ancho, `y` desde el muro hacia el cuarto, `z` desde el piso. Perfiles torneados con radio normalizado (0–1) y altura en m; `radius` lo vuelve óvalo.",
+ "applies_to": {
+  "spaces": [
+   "S07"
+  ],
+  "source": "fotos del medio baño (dueño, 2026-10-09): inodoro blanco de 2 piezas con taza alargada y palanca cromada, lavabo de pedestal beige con mezcladora; posición del plano"
+ },
+ "toilet": {
+  "bowl": {
+   "centre_y": 0.47,
+   "radius": [
+    0.18,
+    0.27
+   ],
+   "segments": 32,
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.62,
+     0
+    ],
+    [
+     0.56,
+     0.05
+    ],
+    [
+     0.55,
+     0.2
+    ],
+    [
+     0.93,
+     0.33
+    ],
+    [
+     1.0,
+     0.38
+    ],
+    [
+     0.84,
+     0.385
+    ],
+    [
+     0.5,
+     0.3
+    ],
+    [
+     0,
+     0.27
+    ]
+   ]
+  },
+  "seat": {
+   "centre_y": 0.46,
+   "radius": [
+    0.185,
+    0.275
+   ],
+   "segments": 32,
+   "profile": [
+    [
+     0,
+     0.385
+    ],
+    [
+     1.0,
+     0.385
+    ],
+    [
+     1.0,
+     0.415
+    ],
+    [
+     0.92,
+     0.43
+    ],
+    [
+     0,
+     0.435
+    ]
+   ],
+   "note": "asiento común de taza alargada, con la tapa cerrada (así está en las fotos)"
+  },
+  "tank": {
+   "x": [
+    -0.24,
+    0.24
+   ],
+   "y": [
+    0.02,
+    0.2
+   ],
+   "z": [
+    0.4,
+    0.72
+   ]
+  },
+  "tank_lid": {
+   "x": [
+    -0.25,
+    0.25
+   ],
+   "y": [
+    0.012,
+    0.215
+   ],
+   "z": [
+    0.72,
+    0.755
+   ]
+  },
+  "neck": {
+   "x": [
+    -0.11,
+    0.11
+   ],
+   "y": [
+    0.15,
+    0.3
+   ],
+   "z": [
+    0.27,
+    0.42
+   ]
+  },
+  "source": "supuesto: medidas comunes de un inodoro de 2 piezas con taza alargada; proporciones revisadas en las fotos (taza más larga que la del baño principal)",
+  "material": "porcelana-blanca",
+  "lever": {
+   "x": [
+    0.17,
+    0.23
+   ],
+   "y": [
+    0.2,
+    0.225
+   ],
+   "z": [
+    0.655,
+    0.675
+   ],
+   "material": "cromo",
+   "note": "palanca cromada en la esquina del tanque (a la izquierda vista de frente)"
+  }
+ },
+ "basin": {
+  "pedestal": {
+   "centre_y": 0.2,
+   "radius": [
+    1.0,
+    0.8
+   ],
+   "segments": 32,
+   "profile": [
+    [
+     0,
+     0
+    ],
+    [
+     0.13,
+     0
+    ],
+    [
+     0.13,
+     0.03
+    ],
+    [
+     0.09,
+     0.08
+    ],
+    [
+     0.07,
+     0.16
+    ],
+    [
+     0.065,
+     0.55
+    ],
+    [
+     0.09,
+     0.65
+    ],
+    [
+     0,
+     0.66
+    ]
+   ]
+  },
+  "bowl": {
+   "centre_y": 0.2,
+   "radius": [
+    0.25,
+    0.21
+   ],
+   "segments": 40,
+   "profile": [
+    [
+     0,
+     0.64
+    ],
+    [
+     0.55,
+     0.66
+    ],
+    [
+     0.9,
+     0.74
+    ],
+    [
+     1.0,
+     0.8
+    ],
+    [
+     1.0,
+     0.83
+    ],
+    [
+     0.88,
+     0.835
+    ],
+    [
+     0.8,
+     0.8
+    ],
+    [
+     0.5,
+     0.755
+    ],
+    [
+     0,
+     0.745
+    ]
+   ]
+  },
+  "faucet": {
+   "base": {
+    "x": [
+     -0.1,
+     0.1
+    ],
+    "y": [
+     0.03,
+     0.08
+    ],
+    "z": [
+     0.835,
+     0.855
+    ]
+   },
+   "spout": [
+    [
+     0,
+     0.06,
+     0.855
+    ],
+    [
+     0,
+     0.14,
+     0.885
+    ]
+   ],
+   "spout_radius": 0.012,
+   "handles": {
+    "x": [
+     -0.07,
+     0.07
+    ],
+    "y": 0.055,
+    "z": [
+     0.855,
+     0.9
+    ],
+    "radius": 0.013
+   },
+   "material": "cromo",
+   "note": "mezcladora de 4 pulgadas con 2 manijas (foto)"
+  },
+  "source": "supuesto: lavabo de pedestal común, un poco más chico que el del baño principal (en la foto mide casi lo mismo que el tanque); proporciones revisadas en las fotos",
+  "material": "porcelana-almendra"
+ },
+ "assumptions": [
+  "todas las medidas son las comunes de estos muebles; falta medir la altura del borde del lavabo y del tanque",
+  "el lavabo tiene forma de escudo (más ancho atrás); se modela como un óvalo"
+ ]
+}

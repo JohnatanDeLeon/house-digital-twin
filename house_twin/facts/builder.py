@@ -180,6 +180,17 @@ def _shared_plates(devices, annotations):
                           'material': entry.get('material'), 'source': entry.get('source', source)}
 
 
+def _absent_devices(devices, annotations):
+    """Dispositivos que el plano dibuja pero que el dueño dice que no existen: quedan en los hechos marcados como
+    inexistentes (con la fuente), y no se modelan."""
+    source = f"{annotations.get('source', 'dueño')} ({annotations.get('confirmed_on', 's/f')})"
+    for entry in annotations.get('absent_devices', []):
+        device = min(devices, key=lambda d: Point(d['position']).distance(Point(entry['anchor'])), default=None)
+        if device is None or Point(device['position']).distance(Point(entry['anchor'])) > PLATE_MATCH_M:
+            continue  # la fuente no trae ese dispositivo (p. ej. el PDF de validación)
+        device['exists'] = {'value': False, 'source': entry.get('source', source)}
+
+
 def _sanitary(drawing, spaces) -> list[dict]:
     """Inodoros y lavabos del plano: el rectángulo del bloque y hacia dónde miran (lejos del muro que tocan)."""
     geoms = [(s['id'], Polygon(s['polygon'])) for s in spaces]
@@ -388,6 +399,7 @@ def build_facts(drawing: Drawing, annotations: dict | None = None) -> dict:
     fixtures = closets + _showers(spaces, walls, annotations, len(closets) + 1) + _sanitary(drawing, spaces)
     devices = _devices(drawing, spaces)
     _shared_plates(devices, annotations)
+    _absent_devices(devices, annotations)
 
     cal = drawing.metadata.get('calibration', {})
     lot_w = faces.lot.bounds[2] - faces.lot.bounds[0]

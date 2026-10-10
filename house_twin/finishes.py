@@ -33,12 +33,26 @@ def _inside(point, polygon) -> bool:
     return inside
 
 
+def _claims(materials, matches):
+    return sorted(((len(m['applies_to']['spaces']), name, m['applies_to']['spaces'])
+                   for name, m in materials.items() if matches(m['applies_to']) and m['applies_to'].get('spaces')),
+                  reverse=True)
+
+
 def _by_space(materials, matches) -> dict[str, str]:
     """Espacio → textura; si dos lo reclaman, gana la que lista menos espacios."""
-    claims = sorted(((len(m['applies_to']['spaces']), name, m['applies_to']['spaces'])
-                     for name, m in materials.items() if matches(m['applies_to']) and m['applies_to'].get('spaces')),
-                    reverse=True)
-    return {space: name for _, name, spaces in claims for space in spaces}
+    return {space: name for _, name, spaces in _claims(materials, matches) for space in spaces}
+
+
+def _layers_by_space(materials, matches) -> dict[str, list[tuple[str, float | None]]]:
+    """Espacio → [(textura, hasta qué altura)], de la más específica a la más general.
+
+    Un lambrín (azulejo hasta 2.10 m) declara `up_to_m` por espacio; por encima de esa altura sigue la siguiente."""
+    layers = {}
+    for _, name, spaces in reversed(_claims(materials, matches)):
+        for space in spaces:
+            layers.setdefault(space, []).append((name, materials[name]['applies_to'].get('up_to_m', {}).get(space)))
+    return layers
 
 
 class Finishes:
@@ -50,6 +64,7 @@ class Finishes:
         self.floors = _by_space(materials, lambda a: a.get('surface') == FLOOR_SURFACE)
         self.shower_floors = _by_space(materials, lambda a: a.get('surface') == SHOWER_FLOOR_SURFACE)
         self.walls = _by_space(materials, lambda a: 'muro' in a.get('surface', ''))
+        self.wall_layers = _layers_by_space(materials, lambda a: 'muro' in a.get('surface', ''))
         self.ceilings = _by_space(materials, lambda a: a.get('surface') == CEILING_SURFACE)
         self.street = next((n for n, m in materials.items() if m['applies_to'].get('street_facade')), None)
         self.openings: dict[str, dict[str, str]] = {}
@@ -72,8 +87,18 @@ class Finishes:
             return None
         return STREET if point[1] < self.street_y else NEIGHBOUR
 
-    def wall_finish(self, where):
-        return self.street if where == STREET else self.walls.get(where)
+    def wall_finish(self, where, z: float | None = None):
+        """Acabado de muro del lugar; con `z`, respeta los lambrines (el azulejo que llega hasta cierta altura)."""
+        if where == STREET:
+            return self.street
+        for name, top in self.wall_layers.get(where, []):
+            if top is None or z is None or z < top:
+                return name
+        return None
+
+    def wall_split_heights(self) -> list[float]:
+        """Alturas en las que cambia el acabado de algún muro: ahí se cortan las caras."""
+        return sorted({top for layers in self.wall_layers.values() for _, top in layers if top is not None})
 
     def floor(self, space_id: str) -> str | None:
         return self.floors.get(space_id)
@@ -84,8 +109,8 @@ class Finishes:
     def ceiling(self, space_id: str) -> str | None:
         return self.ceilings.get(space_id)
 
-    def wall_face(self, centre, normal) -> tuple[str | None, str | None]:
-        """(acabado, lugar al que mira) de una cara vertical de muro: centro y normal en planta."""
+    def wall_face(self, centre, normal, z: float | None = None) -> tuple[str | None, str | None]:
+        """(acabado, lugar al que mira) de una cara vertical de muro: centro y normal en planta, y altura del centro."""
         nx, ny = normal
         where = self.space_at((centre[0] + nx * PROBE_M, centre[1] + ny * PROBE_M))
         if where is None:
@@ -95,7 +120,7 @@ class Finishes:
             sides = [s for s in sides if s not in (None, NEIGHBOUR)]
             sides.sort(key=lambda s: s in self.exterior)
             where = sides[0] if sides else None
-        return self.wall_finish(where), where
+        return self.wall_finish(where, z), where
 
     def opening(self, opening_id: str) -> dict[str, str]:
         """Partes del vano → textura: `leaf` (hoja), `frame` (marco) y `glass` (vidrio)."""

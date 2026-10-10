@@ -4440,7 +4440,11 @@
     "value": null,
     "source": "no está en el plano (vista en planta)"
    },
-   "source": "plano: bloque CONTACTO"
+   "source": "plano: bloque CONTACTO",
+   "exists": {
+    "value": false,
+    "source": "dueño (2026-10-09): el medio baño no tiene contacto bajo el lavabo"
+   }
   },
   {
    "id": "C04",

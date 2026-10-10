@@ -88,3 +88,12 @@ def test_opening_remembers_the_side_its_photo_was_taken_from(toy):
     finishes = Finishes(facts, materials)
     assert finishes.viewed_from('D01') == 'C'
     assert finishes.viewed_from('D02') is None
+
+
+def test_half_bath_tiles_stop_at_2_10(dxf_facts):
+    finishes = Finishes(dxf_facts, load_materials(TEXTURES))
+    face = ((9.0, 2.03), (0.0, 1.0))  # muro sur del medio baño, mirando hacia adentro
+    assert finishes.wall_face(*face, 1.0)[0] == 'azulejo-bano'
+    assert finishes.wall_face(*face, 2.3)[0] == 'muro-interior'
+    assert finishes.wall_face((3.6, 10.23), (0.0, 1.0), 2.5)[0] == 'azulejo-bano'  # el baño principal, hasta el techo
+    assert finishes.wall_split_heights() == [2.10]
