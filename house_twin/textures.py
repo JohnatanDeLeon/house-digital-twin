@@ -169,6 +169,48 @@ def compose_pieces(photo: Image.Image, compose: dict, size_px: tuple[int, int]) 
     return Image.fromarray(np.clip(out, 0, 255).round().astype(np.uint8)).resize(size_px, Image.LANCZOS)
 
 
+def remove_glare(photo: Image.Image, glare: dict) -> Image.Image:
+    """Quita un reflejo (la lámpara sobre una superficie brillante), que no tiene por qué ser redondo.
+
+    El reflejo se suma a lo que hay debajo. En cada bloque de `block_px` se toma lo más oscuro (`dark_percentile`):
+    donde hay algo negro, eso es puro reflejo. El mapa de bloques se suaviza, se le resta el nivel de afuera (sin
+    reflejo) y se resta en lineal dentro de `radius_px`, con un borde que se desvanece. El núcleo quemado (`core_px`)
+    no tiene información: se rellena difundiendo los colores de su borde hacia adentro.
+    """
+    lin = _srgb_to_linear(np.asarray(photo).astype(float) / 255)
+    h, w, _ = lin.shape
+    cx, cy = glare['centre_px']
+    R, core, bs = glare['radius_px'], glare['core_px'], glare.get('block_px', 32)
+    x0, x1 = max(0, int(cx - R)), min(w, int(cx + R))
+    y0, y1 = max(0, int(cy - R)), min(h, int(cy + R))
+    region = lin[y0:y1, x0:x1]
+    gy, gx = (y1 - y0) // bs, (x1 - x0) // bs
+    grid = np.array([[np.percentile(region[i * bs:(i + 1) * bs, j * bs:(j + 1) * bs].reshape(-1, 3), glare.get('dark_percentile', 5), axis=0)
+                      for j in range(gx)] for i in range(gy)])
+    yy, xx = np.mgrid[0:h, 0:w]
+    r = np.hypot(xx - cx, yy - cy)
+    base = np.percentile(lin[(r > R) & (r < R * 1.3)], glare.get('dark_percentile', 5), axis=0)
+    veil_grid = np.clip(grid - base, 0, None)
+    veil = np.stack([np.asarray(Image.fromarray(_blur(veil_grid[..., c], 1.0).astype(np.float32), 'F')
+                                .resize((x1 - x0, y1 - y0), Image.BILINEAR)) for c in range(3)], -1)
+    fade = np.clip((R - r[y0:y1, x0:x1]) / (R * 0.25), 0, 1)[..., None]
+    out = lin.copy()
+    out[y0:y1, x0:x1] = np.clip(region - veil * fade, 0, None)
+    hole = r <= core
+    if hole.any():  # difusión: cada pasada promedia los 4 vecinos, solo dentro del núcleo
+        a0, a1 = max(0, int(cy - core - 2)), min(h, int(cy + core + 3))
+        b0, b1 = max(0, int(cx - core - 2)), min(w, int(cx + core + 3))
+        sub, m = out[a0:a1, b0:b1].copy(), hole[a0:a1, b0:b1]
+        # lo que hay bajo el núcleo es el fondo oscuro del dibujo: se rellena con lo más oscuro de su borde y la
+        # difusión solo suaviza la orilla (un promedio de todo el borde da una mancha gris)
+        sub[m] = np.percentile(sub[~m], glare.get('fill_percentile', 10), axis=0)
+        for _ in range(glare.get('fill_iterations', 12)):
+            avg = (np.roll(sub, 1, 0) + np.roll(sub, -1, 0) + np.roll(sub, 1, 1) + np.roll(sub, -1, 1)) / 4
+            sub[m] = avg[m]
+        out[a0:a1, b0:b1] = sub
+    return _to_image(out)
+
+
 def _frac_box(frac, size_px):
     """[x, y, ancho, alto] en fracciones de la textura → píxeles."""
     W, H = size_px
@@ -574,6 +616,8 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     size_m = (spec['size_m']['width'], spec['size_m']['height'])
     size_px = (round(size_m[0] * px_per_m), round(size_m[1] * px_per_m))
     photo = ImageOps.exif_transpose(Image.open(photos_root / spec['photo'])).convert('RGB')
+    if 'glare' in spec:
+        photo = remove_glare(photo, spec['glare'])
 
     base = compose_pieces(photo, spec['compose'], size_px) if 'compose' in spec else rectify(photo, spec['corners_px'], size_px)
     if 'flatten_lighting' in spec:

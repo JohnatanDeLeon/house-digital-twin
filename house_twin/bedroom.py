@@ -205,6 +205,14 @@ def bedroom_parts(spec: dict) -> list[dict]:
         parts += _desk(spec['desk'])
     if spec.get('office'):
         parts += office_parts(spec['office'])
+    for art in spec.get('artworks', []):  # cuadro: tabla con canto de madera y la imagen de la foto al frente
+        frame = _Run(art['wall'])
+        t = art['thickness_m']
+        parts += [{'id': f"{art['id']}-tabla", 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': 'cuadro',
+                   'material': art['edge_material'], 'mesh': frame.box(art['u'], art['z'], (0.0, t)), 'source': art['source']},
+                  {'id': art['id'], 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': 'cuadro', 'material': art['material'],
+                   'mesh': frame.box((art['u'][0] + 0.004, art['u'][1] - 0.004), (art['z'][0] + 0.004, art['z'][1] - 0.004), (t, t + 0.001)),
+                   'source': art['source'], 'image_facing': list(art['wall']['into_room'])}]
     ac = spec.get('minisplit')
     if ac:  # unidad interior: cuerpo con el frente redondeado abajo (2 escalones) y la rejilla de salida
         frame = _Run(ac['wall'])

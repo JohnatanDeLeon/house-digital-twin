@@ -246,6 +246,37 @@
   "fondos, altura y curva del escritorio",
   "impresora, caminadora, silla y accesorios con tamaños comunes o estimados",
   "TV de ≈ 43\" (estimada)",
-  "no se modelan los cables, los cargadores, los papeles ni el cuadro (en las fotos sale cortado)"
+  "no se modelan los cables, los cargadores, los papeles"
+ ],
+ "artworks": [
+  {
+   "id": "r3-cuadro",
+   "material": "cuadro-leon",
+   "edge_material": "madera-repisa",
+   "wall": {
+    "origin": [
+     9.86,
+     10.665
+    ],
+    "along": [
+     0,
+     -1
+    ],
+    "into_room": [
+     -1,
+     0
+    ]
+   },
+   "u": [
+    0.0,
+    0.55
+   ],
+   "z": [
+    1.51,
+    1.966
+   ],
+   "thickness_m": 0.02,
+   "source": "foto del cuadro (2026-10-10): proporción 1.206 por homografía y focal; ancho y posición con la foto del escritorio (2 monitores de 23\" como escala): centrado en y ≈ 10.39 m, a la derecha de los monitores, borde de abajo a ≈ 1.51 m (± 3 cm)"
+  }
  ]
 }

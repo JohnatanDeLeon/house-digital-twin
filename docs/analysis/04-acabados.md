@@ -468,7 +468,14 @@ Las medidas importan más aquí. Cada dato lleva su fuente en `sources/lavanderi
 - **Caminadora:** chasis, rieles, banda, capota del motor con pantalla, ruedas y la franja verde del costado, encendida.
 - **Silla gamer:** base de 5 rodajas, pistón, mecanismo, asiento con alas, respaldo reclinado con alas, cabecera, cojín lumbar, descansabrazos, posapiés guardado y el logotipo blanco.
 - **Materiales:** se separan los negros: laminado mate, acero mate, plástico brillante, vinil con brillo y tela. Los LED (teclado, mouse, dock, franja) emiten luz siempre, no solo de noche (`always_on`).
-- **Sin modelar:** los cables, los cargadores, los papeles y el cuadro (sale cortado en las fotos).
+- **Cuadro del león** (`cuadro-leon`, foto de cerca 2026-10-10): impresión sobre tabla con resina brillante y contorno de neón. La imagen se toma tal cual, como los murales de la cocina, y va sobre una tabla con canto de madera.
+  - **Proporción:** 1.206, por homografía y focal.
+  - **Tamaño y lugar (± 3 cm):** ≈ 0.55 × 0.46 m, con los monitores como escala. Va a la derecha de los monitores, con el borde de abajo a ≈ 1.51 m.
+  - **El reflejo del foco** (`remove_glare`, nuevo en `textures.py`) se quitó así:
+    - En la resina, el reflejo se suma a la imagen y no es redondo: se alarga con la curva de la tabla.
+    - En cada bloque de 22 px, lo más oscuro (el negro del dibujo) es puro reflejo; ese mapa se suaviza y se resta en lineal.
+    - El núcleo quemado (Ø ≈ 4 cm sobre el lente derecho) se rellena con el negro de su borde. Esa parte es una reconstrucción.
+- **Sin modelar:** los cables, los cargadores y los papeles.
 
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 

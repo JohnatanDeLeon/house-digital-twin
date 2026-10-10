@@ -1,0 +1,85 @@
+{
+ "_doc": "Cuadro del león con laptop de la oficina (recámara 3): impresión sobre tabla con resina brillante y contorno de neón. Se toma la foto tal cual (es una imagen), rectificada, sin el reflejo de la lámpara. Regenerar con: python -m house_twin.cli texture sources/texturas/cuadro-leon.json",
+ "name": "cuadro-leon",
+ "kind": "photo",
+ "applies_to": {
+  "artwork": "cuadro de la oficina",
+  "source": "foto del dueño (2026-10-10)"
+ },
+ "photo": "sources/fotos/r3-cuadro.jpg",
+ "photo_meta": {
+  "camera": "Samsung Galaxy S25 Ultra",
+  "focal_35mm": 23,
+  "light": "foco del techo, que se refleja en la resina"
+ },
+ "glare": {
+  "centre_px": [
+   2042,
+   1362
+  ],
+  "radius_px": 600,
+  "core_px": 55,
+  "block_px": 22,
+  "dark_percentile": 2,
+  "note": "reflejo del foco sobre la cara del león, alargado hacia la derecha por la curva de la resina: se resta lo más oscuro de cada bloque de 28 px (el negro del dibujo es puro reflejo); el núcleo quemado se rellena desde su borde",
+  "fill_percentile": 5,
+  "fill_iterations": 250
+ },
+ "corners_px": {
+  "top_left": [
+   901,
+   670
+  ],
+  "top_right": [
+   3047,
+   681
+  ],
+  "bottom_right": [
+   3165,
+   2490
+  ],
+  "bottom_left": [
+   812,
+   2580
+  ]
+ },
+ "size_m": {
+  "width": 0.55,
+  "height": 0.456,
+  "source": "proporción 1.206 por homografía y focal (23 mm; coseno −0.012); ancho ≈ 0.55 m con los 2 monitores de 23\" como escala en la foto del escritorio (estimado, ± 3 cm)"
+ },
+ "px_per_m": 2400,
+ "color": {
+  "white_reference": {
+   "box_px": [
+    200,
+    1400,
+    600,
+    2200
+   ],
+   "albedo_srgb": [
+    235,
+    235,
+    233
+   ],
+   "note": "muro pintado alrededor del cuadro, en el mismo plano"
+  }
+ },
+ "relief": {
+  "type": "flat",
+  "grain_mm": 0.0
+ },
+ "roughness": {
+  "base": 0.08,
+  "grain": 0.0,
+  "note": "resina brillante"
+ },
+ "observed": {
+  "design": "león con lentes oscuros y chamarra de cuero tecleando una laptop plateada; fondo negro",
+  "frame": "tabla con canto de madera clara, un poco combada; resina brillante encima; tubo de neón blanco siguiendo la silueta (apagado en la foto)"
+ },
+ "assumptions": [
+  "tamaño (escala de la foto lejana)",
+  "la zona bajo el reflejo es una reconstrucción"
+ ]
+}
