@@ -146,7 +146,7 @@ def write_model_script(glb: Path, out: Path):
 
 
 def build_walk(facts: dict, materials: dict[str, dict], textures_dir: Path, out_dir: Path, glb: Path | None = None,
-               variants: list[dict] | None = None):
+               variants: list[dict] | None = None, extra_doors: list[dict] | None = None):
     """Escribe `index.html`, `texturas/` y, si se da el GLB que exporta Blender, `casa.js`.
 
     Con `variants`, el recorrido ofrece cada propuesta junto a la casa actual y cambia los materiales que tocan.
@@ -164,7 +164,7 @@ def build_walk(facts: dict, materials: dict[str, dict], textures_dir: Path, out_
         'sun': [round(c, 4) for c in sun_direction()],
         'entrance': entrance(facts),
         'start': street_start(facts),
-        'doors': doors(facts),
+        'doors': doors(facts) + (extra_doors or []),  # además de las puertas, las hojas de los closets
         'variants': [{'id': v['id'], 'name': v['name'], 'description': v['description'], 'disclaimer': v.get('disclaimer'),
                       'overrides': opening_overrides(v), 'focus': focus(facts, v['changes'][0]['opening'])}
                      for v in variants or []],

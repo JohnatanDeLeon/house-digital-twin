@@ -1,0 +1,23 @@
+{
+ "_doc": "lata de bebida azul. Tono de las fotos del closet de la recámara 3 (supuesto: sin blanco confiable). Regenerar con: python -m house_twin.cli texture sources/texturas/lata-azul.json",
+ "name": "lata-azul",
+ "kind": "constant",
+ "applies_to": {
+  "furniture": "interior del closet de la recámara 3",
+  "source": "fotos del dueño (2026-10-10)"
+ },
+ "photo": "sources/fotos/closet-r3-abierto.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   60,
+   150,
+   200
+  ],
+  "metallic": 0.6,
+  "roughness": 0.3,
+  "note": "lata de bebida azul"
+ },
+ "assumptions": [
+  "color aproximado"
+ ]
+}

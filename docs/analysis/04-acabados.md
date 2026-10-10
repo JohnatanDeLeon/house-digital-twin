@@ -477,6 +477,19 @@ Las medidas importan más aquí. Cada dato lleva su fuente en `sources/lavanderi
     - El núcleo quemado (Ø ≈ 4 cm sobre el lente derecho) se rellena con el negro de su borde. Esa parte es una reconstrucción.
 - **Sin modelar:** los cables, los cargadores y los papeles.
 
+### 30. Interior del closet de la recámara 3 (2026-10-10, 4 fotos con las puertas abiertas)
+
+- **Cuerpo hueco:** antes era un bloque macizo detrás de las hojas. Ahora es así:
+  - **Estructura:** 2 costados, el maletero de arriba cerrado (desde 1.94 m), los montantes al frente entre módulos, el zoclo negro y el muro del fondo pintado de azul claro.
+  - **Hojas de abajo:** son 6, sueltas (`closet_interior.leaf_parts`), y en el recorrido se abren por módulo («Abrir el closet»). Giran sobre su bisagra del lado de afuera, como las de la foto.
+  - **Hojas de arriba:** siguen cerradas.
+- **Módulo 1:** torre de pino de 0.50 m con 7 niveles y fondo de triplay oscuro. Lleva latas de bebida en 2 filas, productos de aseo, marcos de fotos, cosmetiquera, tenis blancos y zapatos negros.
+- **Hueco entre las torres:** ≈ 0.65 m, con el muro azul a la vista y una mochila en el piso.
+- **Módulo 2:** torre de pino de 0.56 m con 4 cajones, nicho, repisa de libros y hueco de arriba. En el nicho van la bocina roja, cajas blancas, la consola Xbox Series S y un control; en la repisa, 15 libros y carpetas.
+- **Módulo 3:** colgador doble, con tubo a 1.82 m (camisas, playeras y chamarras de piel) y tubo a ≈ 0.82 m (pantalones y camisas largas).
+- **Medidas:** salen de la foto de frente, con los módulos ya medidos como escala (± 3 cm); la altura del tubo de abajo, ± 10 cm. Lo guardado es aproximado.
+- **Pendiente:** el pino de las torres usa la textura del closet de la otra recámara, más rojiza que este. La herencia `based_on` no pasa el interior al closet de R2.
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.

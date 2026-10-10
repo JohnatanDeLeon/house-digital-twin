@@ -1,0 +1,23 @@
+{
+ "_doc": "chamarra de piel negra, con brillo. Tono de las fotos del closet de la recámara 3 (supuesto: sin blanco confiable). Regenerar con: python -m house_twin.cli texture sources/texturas/piel-negra.json",
+ "name": "piel-negra",
+ "kind": "constant",
+ "applies_to": {
+  "furniture": "interior del closet de la recámara 3",
+  "source": "fotos del dueño (2026-10-10)"
+ },
+ "photo": "sources/fotos/closet-r3-abierto.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   28,
+   28,
+   30
+  ],
+  "metallic": 0.0,
+  "roughness": 0.35,
+  "note": "chamarra de piel negra, con brillo"
+ },
+ "assumptions": [
+  "color aproximado"
+ ]
+}

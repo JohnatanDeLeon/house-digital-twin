@@ -334,8 +334,11 @@ async function loadHouse() {
     if (obj.material.userData.depth) obj.customDepthMaterial = obj.material.userData.depth;
     obj.receiveShadow = true;
     if (['IfcWall', 'IfcWindow', 'IfcFurniture', 'IfcSanitaryTerminal', 'IfcDoor', 'IfcElectricAppliance', 'IfcFlowStorageDevice'].includes(tag.hdt_kind)) colliders.push(obj);
-    const doorId = tag.hdt_kind === 'IfcDoor' ? tag.hdt_id : (tag.hdt_kind === 'IfcDiscreteAccessory' && /^D\d+-/.test(tag.hdt_id || '') ? tag.hdt_id.split('-')[0] : null);
-    if (doorId) (doorMeshes[doorId] = doorMeshes[doorId] || []).push({ mesh: obj, leaf: tag.hdt_leaf || 0 });
+    const closetLeaf = /^(F\d+-m\d+)-hoja-(\d)/.exec(tag.hdt_id || '');  // hoja de closet (y su jaladera)
+    const doorId = closetLeaf ? closetLeaf[1] : tag.hdt_kind === 'IfcDoor' ? tag.hdt_id
+      : (tag.hdt_kind === 'IfcDiscreteAccessory' && /^D\d+-/.test(tag.hdt_id || '') ? tag.hdt_id.split('-')[0] : null);
+    const leafIndex = closetLeaf ? Number(closetLeaf[2]) : (tag.hdt_leaf || 0);
+    if (doorId) (doorMeshes[doorId] = doorMeshes[doorId] || []).push({ mesh: obj, leaf: leafIndex });
   });
   scene.add(gltf.scene);
   tour.sort((a, b) => a.label.localeCompare(b.label, 'es', { numeric: true }));
@@ -407,7 +410,7 @@ function setupDoors() {
     });
     const cx = d.leaves.reduce((a, l) => a + l.hinge[0] + l.latch[0], 0) / (2 * d.leaves.length);
     const cy = d.leaves.reduce((a, l) => a + l.hinge[1] + l.latch[1], 0) / (2 * d.leaves.length);
-    doors.push({ id: d.id, leaves, centre: [cx, cy], open: false, angle: 0 });
+    doors.push({ id: d.id, label: d.label, leaves, centre: [cx, cy], open: false, angle: 0 });
   }
 }
 function segmentDistance([px, py], [ax, ay], [bx, by]) {
@@ -454,7 +457,7 @@ function updateDoorAction() {
   const d = nearestDoor();
   let text = '';
   if (d) {
-    const verb = d.open ? 'Cerrar' : 'Abrir', what = d.leaves.length > 1 ? 'el portón' : 'la puerta';
+    const verb = d.open ? 'Cerrar' : 'Abrir', what = d.label || (d.leaves.length > 1 ? 'el portón' : 'la puerta');
     text = inTheWay(d) ? `Hazte a un lado para ${verb.toLowerCase()} ${what}` : `${verb} ${what}${isTouch ? '' : ' <kbd>E</kbd>'}`;
   }
   if (d !== shownDoor || text !== shownText) {

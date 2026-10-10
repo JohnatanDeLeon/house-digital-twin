@@ -1,0 +1,23 @@
+{
+ "_doc": "pintura azul claro del muro dentro del closet. Tono de las fotos del closet de la recámara 3 (supuesto: sin blanco confiable). Regenerar con: python -m house_twin.cli texture sources/texturas/pintura-azul-closet.json",
+ "name": "pintura-azul-closet",
+ "kind": "constant",
+ "applies_to": {
+  "furniture": "interior del closet de la recámara 3",
+  "source": "fotos del dueño (2026-10-10)"
+ },
+ "photo": "sources/fotos/closet-r3-abierto.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   178,
+   198,
+   222
+  ],
+  "metallic": 0.0,
+  "roughness": 0.85,
+  "note": "pintura azul claro del muro dentro del closet"
+ },
+ "assumptions": [
+  "color aproximado"
+ ]
+}

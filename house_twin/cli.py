@@ -97,6 +97,16 @@ def texture(spec: Path):
         print(f'→ {f.relative_to(ROOT)}')
 
 
+def closet_doors(facts: dict) -> list[dict]:
+    """Hojas de abajo de los closets con interior, para abrirlas en el recorrido."""
+    from house_twin.closet_interior import leaf_parts
+    from house_twin.furniture import load_furniture
+    specs = {f['applies_to']['space']: f for f in load_furniture()}
+    height = facts['levels'][0]['storey_height']['value']
+    return [door for fx in facts.get('fixtures', []) if fx['kind'] == 'closet' and 'interior' in specs.get(fx['space'], {})
+            for door in leaf_parts(fx, specs[fx['space']], height)[1]]
+
+
 def scene(render: bool):
     """Escena de Blender con los acabados, recorrido web y (opcional) renders: corre `blender_scene.py` dentro de Blender."""
     import shutil
@@ -115,8 +125,8 @@ def scene(render: bool):
     print('\n'.join(report))
     if out.returncode != 0 or not BLEND_PATH.exists():
         raise SystemExit(out.stderr[-2000:] or 'Blender falló')
-    walk = build_walk(json.loads(FACTS_PATH.read_text()), load_materials(TEXTURES_DIR), TEXTURES_DIR, WALK_DIR, GLB_PATH,
-                      load_variants())
+    facts = json.loads(FACTS_PATH.read_text())
+    walk = build_walk(facts, load_materials(TEXTURES_DIR), TEXTURES_DIR, WALK_DIR, GLB_PATH, load_variants(), closet_doors(facts))
     for path in [BLEND_PATH, GLB_PATH, walk] + (sorted(RENDERS_DIR.glob('*.jpg')) if render else []):
         print(f'→ {path.relative_to(ROOT)}')
 

@@ -2,13 +2,64 @@
  "_doc": "Frente del closet de la recámara 3 (F03 del plano). Posiciones en fracciones del frente: a lo ancho, de izquierda a derecha visto desde la recámara; a lo alto, desde arriba. Medidas en la foto rectificada a las medidas del plano (2.68 m de muro a muro × 2.60 m de piso a techo). `build` lo genera dentro del IFC (IfcFurniture con sus jaladeras).",
  "name": "closet-recamara-3",
  "kind": "closet",
- "applies_to": {"space": "S04", "source": "dueño (2026-10-08): es el closet de la recámara 3"},
+ "applies_to": {
+  "space": "S04",
+  "source": "dueño (2026-10-08): es el closet de la recámara 3"
+ },
  "photo": "sources/fotos/closet-recamara-3.jpg",
- "photo_meta": {"taken": "2026-10-08", "camera": "Samsung Galaxy S25 Ultra", "focal_35mm": 13, "light": "foco de la recámara, de noche"},
- "corners_px": {"top_left": [392, 885], "top_right": [2445, 832], "bottom_right": [2340, 2585], "bottom_left": [660, 2697]},
- "size": {"width": "plano (frente F03)", "height": "piso a techo (U01, 2.60 m)", "source": "empotrado de muro a muro y del piso al techo (foto)"},
- "modules": [[0.008, 0.312], [0.34, 0.657], [0.679, 0.996]],
- "sections": {"upper": [0.008, 0.228], "lower": [0.246, 0.996]},
+ "photo_meta": {
+  "taken": "2026-10-08",
+  "camera": "Samsung Galaxy S25 Ultra",
+  "focal_35mm": 13,
+  "light": "foco de la recámara, de noche"
+ },
+ "corners_px": {
+  "top_left": [
+   392,
+   885
+  ],
+  "top_right": [
+   2445,
+   832
+  ],
+  "bottom_right": [
+   2340,
+   2585
+  ],
+  "bottom_left": [
+   660,
+   2697
+  ]
+ },
+ "size": {
+  "width": "plano (frente F03)",
+  "height": "piso a techo (U01, 2.60 m)",
+  "source": "empotrado de muro a muro y del piso al techo (foto)"
+ },
+ "modules": [
+  [
+   0.008,
+   0.312
+  ],
+  [
+   0.34,
+   0.657
+  ],
+  [
+   0.679,
+   0.996
+  ]
+ ],
+ "sections": {
+  "upper": [
+   0.008,
+   0.228
+  ],
+  "lower": [
+   0.246,
+   0.996
+  ]
+ },
  "leaves_per_section": 2,
  "gap_mm": 3,
  "leaf_thickness_mm": 16,
@@ -18,11 +69,17 @@
   "standoff_mm": 32,
   "leg_inset_mm": 19,
   "from_meeting_mm": 55,
-  "center_from_top_frac": {"upper": 0.17, "lower": 0.636},
+  "center_from_top_frac": {
+   "upper": 0.17,
+   "lower": 0.636
+  },
   "material": "acero-inoxidable",
   "note": "jaladeras de barra en pares, junto a la junta central de cada sección"
  },
- "materials": {"body": "closet-madera", "leaves": "closet-madera"},
+ "materials": {
+  "body": "closet-madera",
+  "leaves": "closet-madera"
+ },
  "observed": {
   "type": "closet empotrado de melamina wengué: 3 módulos, cada uno con 2 hojas altas y 2 puertas de maletero arriba, separados por postes de ≈ 6 cm",
   "widths": "módulos de ≈ 0.81, 0.85 y 0.85 m; hojas altas de ≈ 1.95 m y maleteros de ≈ 0.57 m",
@@ -31,5 +88,655 @@
  "assumptions": [
   "el frente de las hojas está en la línea del plano; el cuerpo queda 16 mm atrás",
   "salida (3.2 cm) y diámetro (12 mm) de las jaladeras: típicos, la foto es de frente"
- ]
+ ],
+ "interior": {
+  "source": "fotos del closet abierto (dueño, 2026-10-10): las medidas salen de la foto de frente con los módulos del plano y del closet ya medidos (0.81, 0.85 y 0.85 m) como escala (± 3 cm); lo guardado, aproximado",
+  "carcass": {
+   "compartment_top_m": 1.94,
+   "plinth_m": 0.06,
+   "stiles_u": [
+    [
+     0.836,
+     0.911
+    ],
+    [
+     1.761,
+     1.82
+    ]
+   ],
+   "wall_material": "pintura-azul-closet"
+  },
+  "wood": "pino-closet",
+  "back": "triplay-oscuro",
+  "towers": [
+   {
+    "u": [
+     0.03,
+     0.53
+    ],
+    "n": [
+     -0.58,
+     -0.06
+    ],
+    "top_m": 1.84,
+    "cap_m": 0.03,
+    "shelves_m": [
+     0.06,
+     0.37,
+     0.62,
+     0.89,
+     1.17,
+     1.44
+    ],
+    "note": "torre de repisas de pino del módulo 1: 7 niveles"
+   },
+   {
+    "u": [
+     1.18,
+     1.74
+    ],
+    "n": [
+     -0.58,
+     -0.06
+    ],
+    "top_m": 1.84,
+    "cap_m": 0.03,
+    "shelves_m": [
+     0.71,
+     1.28,
+     1.68
+    ],
+    "drawers": 4,
+    "drawers_m": [
+     0.04,
+     0.71
+    ],
+    "note": "torre de pino del módulo 2: 4 cajones, nicho, repisa de libros y hueco de arriba"
+   }
+  ],
+  "cans": [
+   {
+    "u0": 0.075,
+    "z": 1.458,
+    "n": -0.13,
+    "colors": [
+     "lata-roja",
+     "lata-negra",
+     "lata-azul",
+     "lata-negra",
+     "lata-roja",
+     "lata-rosa",
+     "lata-verde",
+     "lata-roja",
+     "lata-rosa"
+    ]
+   },
+   {
+    "u0": 0.09,
+    "z": 1.458,
+    "n": -0.21,
+    "colors": [
+     "lata-verde",
+     "lata-rosa",
+     "lata-azul",
+     "lata-negra",
+     "lata-negra",
+     "lata-morada",
+     "lata-morada",
+     "lata-amarilla"
+    ]
+   }
+  ],
+  "books": [
+   {
+    "u0": 1.21,
+    "z": 1.298,
+    "n": -0.1,
+    "depth_m": 0.19,
+    "items": [
+     [
+      0.045,
+      0.29,
+      "plastico-negro"
+     ],
+     [
+      0.02,
+      0.27,
+      "libro-amarillo"
+     ],
+     [
+      0.012,
+      0.26,
+      "plastico-negro"
+     ],
+     [
+      0.02,
+      0.24,
+      "libro-blanco"
+     ],
+     [
+      0.03,
+      0.25,
+      "libro-azul"
+     ],
+     [
+      0.03,
+      0.24,
+      "libro-blanco"
+     ],
+     [
+      0.022,
+      0.23,
+      "plastico-negro"
+     ],
+     [
+      0.012,
+      0.21,
+      "libro-rojo"
+     ],
+     [
+      0.015,
+      0.22,
+      "libro-blanco"
+     ],
+     [
+      0.018,
+      0.21,
+      "libro-verde"
+     ],
+     [
+      0.022,
+      0.22,
+      "libro-blanco"
+     ],
+     [
+      0.025,
+      0.21,
+      "plastico-negro"
+     ],
+     [
+      0.02,
+      0.2,
+      "libro-azul"
+     ],
+     [
+      0.03,
+      0.2,
+      "libro-blanco"
+     ],
+     [
+      0.04,
+      0.23,
+      "libro-amarillo"
+     ]
+    ]
+   }
+  ],
+  "objects": [
+   {
+    "u": [
+     0.06,
+     0.12
+    ],
+    "z": [
+     1.188,
+     1.37
+    ],
+    "n": [
+     -0.16,
+     -0.1
+    ],
+    "material": "libro-blanco",
+    "shape": "cylinder",
+    "note": "bloqueador"
+   },
+   {
+    "u": [
+     0.13,
+     0.18
+    ],
+    "z": [
+     1.188,
+     1.35
+    ],
+    "n": [
+     -0.16,
+     -0.1
+    ],
+    "material": "ropa-blanca",
+    "shape": "cylinder"
+   },
+   {
+    "u": [
+     0.24,
+     0.29
+    ],
+    "z": [
+     1.188,
+     1.31
+    ],
+    "n": [
+     -0.2,
+     -0.15
+    ],
+    "material": "lata-roja"
+   },
+   {
+    "u": [
+     0.32,
+     0.38
+    ],
+    "z": [
+     1.188,
+     1.37
+    ],
+    "n": [
+     -0.2,
+     -0.14
+    ],
+    "material": "lata-roja",
+    "shape": "cylinder",
+    "note": "botella roja con dosificador"
+   },
+   {
+    "u": [
+     0.4,
+     0.43
+    ],
+    "z": [
+     1.188,
+     1.36
+    ],
+    "n": [
+     -0.2,
+     -0.17
+    ],
+    "material": "lata-azul",
+    "shape": "cylinder"
+   },
+   {
+    "u": [
+     0.44,
+     0.5
+    ],
+    "z": [
+     1.188,
+     1.33
+    ],
+    "n": [
+     -0.2,
+     -0.14
+    ],
+    "material": "plastico-negro"
+   },
+   {
+    "u": [
+     0.06,
+     0.18
+    ],
+    "z": [
+     0.908,
+     1.06
+    ],
+    "n": [
+     -0.2,
+     -0.18
+    ],
+    "material": "libro-blanco",
+    "note": "marco de fotos"
+   },
+   {
+    "u": [
+     0.19,
+     0.27
+    ],
+    "z": [
+     0.908,
+     1.05
+    ],
+    "n": [
+     -0.22,
+     -0.2
+    ],
+    "material": "plastico-negro",
+    "note": "marco de fotos"
+   },
+   {
+    "u": [
+     0.06,
+     0.16
+    ],
+    "z": [
+     0.908,
+     0.95
+    ],
+    "n": [
+     -0.14,
+     -0.07
+    ],
+    "material": "plastico-negro"
+   },
+   {
+    "u": [
+     0.38,
+     0.46
+    ],
+    "z": [
+     0.908,
+     1.02
+    ],
+    "n": [
+     -0.3,
+     -0.2
+    ],
+    "material": "libro-blanco"
+   },
+   {
+    "u": [
+     0.06,
+     0.14
+    ],
+    "z": [
+     0.638,
+     0.8
+    ],
+    "n": [
+     -0.25,
+     -0.08
+    ],
+    "material": "ropa-blanca",
+    "note": "bolsa transparente"
+   },
+   {
+    "u": [
+     0.15,
+     0.3
+    ],
+    "z": [
+     0.638,
+     0.78
+    ],
+    "n": [
+     -0.3,
+     -0.08
+    ],
+    "material": "tapete-azul",
+    "note": "cosmetiquera azul"
+   },
+   {
+    "u": [
+     0.36,
+     0.5
+    ],
+    "z": [
+     0.638,
+     0.73
+    ],
+    "n": [
+     -0.2,
+     -0.1
+    ],
+    "material": "libro-blanco"
+   },
+   {
+    "u": [
+     1.23,
+     1.35
+    ],
+    "z": [
+     0.728,
+     0.89
+    ],
+    "n": [
+     -0.2,
+     -0.08
+    ],
+    "material": "tela-roja",
+    "shape": "cylinder",
+    "note": "bocina roja"
+   },
+   {
+    "u": [
+     1.37,
+     1.46
+    ],
+    "z": [
+     0.728,
+     0.86
+    ],
+    "n": [
+     -0.22,
+     -0.1
+    ],
+    "material": "plastico-blanco",
+    "note": "caja blanca"
+   },
+   {
+    "u": [
+     1.48,
+     1.72
+    ],
+    "z": [
+     0.728,
+     0.78
+    ],
+    "n": [
+     -0.3,
+     -0.08
+    ],
+    "material": "plastico-blanco",
+    "note": "caja de Apple"
+   },
+   {
+    "u": [
+     1.5,
+     1.7
+    ],
+    "z": [
+     0.78,
+     0.93
+    ],
+    "n": [
+     -0.32,
+     -0.08
+    ],
+    "material": "plastico-blanco",
+    "note": "consola Xbox Series S",
+    "disc": {
+     "u": 1.55,
+     "z": 0.855,
+     "r": 0.05,
+     "material": "plastico-negro"
+    }
+   },
+   {
+    "u": [
+     1.22,
+     1.3
+    ],
+    "z": [
+     0.728,
+     0.84
+    ],
+    "n": [
+     -0.45,
+     -0.35
+    ],
+    "material": "plastico-negro",
+    "note": "control y base"
+   },
+   {
+    "u": [
+     0.62,
+     0.9
+    ],
+    "z": [
+     0.0,
+     0.32
+    ],
+    "n": [
+     -0.5,
+     -0.3
+    ],
+    "material": "plastico-negro",
+    "note": "mochila negra en el piso del hueco"
+   }
+  ],
+  "shoes": [
+   {
+    "u": [
+     0.12,
+     0.27,
+     0.42
+    ],
+    "z": 0.388,
+    "n": -0.08,
+    "sole": "tenis-blanco",
+    "upper": "tenis-blanco",
+    "note": "tenis blancos"
+   },
+   {
+    "u": [
+     0.16,
+     0.39
+    ],
+    "z": 0.078,
+    "n": -0.08,
+    "sole": "plastico-negro",
+    "upper": "plastico-negro",
+    "note": "zapatos negros"
+   }
+  ],
+  "hanging": {
+   "u": [
+    1.83,
+    2.66
+   ],
+   "n": -0.3,
+   "rods": [
+    {
+     "z": 1.82,
+     "garments": [
+      [
+       0.62,
+       0.03,
+       "ropa-lila"
+      ],
+      [
+       0.55,
+       0.02,
+       "ropa-negra"
+      ],
+      [
+       0.6,
+       0.025,
+       "ropa-blanca"
+      ],
+      [
+       0.55,
+       0.02,
+       "ropa-negra"
+      ],
+      [
+       0.6,
+       0.02,
+       "ropa-gris"
+      ],
+      [
+       0.6,
+       0.02,
+       "ropa-negra"
+      ],
+      [
+       0.58,
+       0.025,
+       "ropa-blanca"
+      ],
+      [
+       0.62,
+       0.02,
+       "ropa-negra"
+      ],
+      [
+       0.75,
+       0.03,
+       "ropa-gris"
+      ],
+      [
+       0.75,
+       0.035,
+       "ropa-negra"
+      ],
+      [
+       0.8,
+       0.05,
+       "ropa-gris"
+      ],
+      [
+       0.85,
+       0.06,
+       "piel-negra"
+      ],
+      [
+       0.8,
+       0.04,
+       "ropa-camuflaje"
+      ],
+      [
+       0.78,
+       0.05,
+       "piel-negra"
+      ]
+     ]
+    },
+    {
+     "z": 0.82,
+     "garments": [
+      [
+       0.5,
+       0.03,
+       "ropa-mezclilla"
+      ],
+      [
+       0.5,
+       0.03,
+       "ropa-negra"
+      ],
+      [
+       0.48,
+       0.03,
+       "ropa-gris"
+      ],
+      [
+       0.5,
+       0.03,
+       "ropa-mezclilla"
+      ],
+      [
+       0.52,
+       0.03,
+       "ropa-negra"
+      ],
+      [
+       0.5,
+       0.03,
+       "ropa-gris"
+      ],
+      [
+       0.66,
+       0.025,
+       "ropa-blanca"
+      ],
+      [
+       0.66,
+       0.025,
+       "ropa-azul"
+      ]
+     ],
+     "width_m": 0.4
+    }
+   ],
+   "note": "colgador doble del módulo 3: tubo arriba con camisas, playeras y chamarras; tubo abajo con pantalones y camisas largas (altura ± 10 cm)"
+  }
+ }
 }
