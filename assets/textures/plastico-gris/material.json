@@ -1,0 +1,29 @@
+{
+ "name": "plastico-gris",
+ "applies_to": {
+  "furniture": "lavandería",
+  "source": "fotos de la lavandería (dueño, 2026-10-10)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   110,
+   112,
+   110
+  ],
+  "metallic": 0.0,
+  "roughness": 0.4,
+  "note": "tapa y tablero de plástico gris de la lavadora de 2 tinas"
+ },
+ "source": {
+  "photo": "sources/fotos/lavanderia-frente.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color aproximado"
+ ]
+}

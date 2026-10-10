@@ -327,7 +327,7 @@ async function loadHouse() {
     }
     if (obj.material.userData.depth) obj.customDepthMaterial = obj.material.userData.depth;
     obj.receiveShadow = true;
-    if (['IfcWall', 'IfcWindow', 'IfcFurniture', 'IfcSanitaryTerminal', 'IfcDoor', 'IfcElectricAppliance'].includes(tag.hdt_kind)) colliders.push(obj);
+    if (['IfcWall', 'IfcWindow', 'IfcFurniture', 'IfcSanitaryTerminal', 'IfcDoor', 'IfcElectricAppliance', 'IfcFlowStorageDevice'].includes(tag.hdt_kind)) colliders.push(obj);
     const doorId = tag.hdt_kind === 'IfcDoor' ? tag.hdt_id : (tag.hdt_kind === 'IfcDiscreteAccessory' && /^D\d+-/.test(tag.hdt_id || '') ? tag.hdt_id.split('-')[0] : null);
     if (doorId) (doorMeshes[doorId] = doorMeshes[doorId] || []).push({ mesh: obj, leaf: tag.hdt_leaf || 0 });
   });

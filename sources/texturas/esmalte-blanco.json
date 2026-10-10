@@ -1,0 +1,23 @@
+{
+ "_doc": "lámina esmaltada blanca de la secadora y del boiler. Tono de la foto; color supuesto (sin blanco de referencia confiable: los muros están manchados). Regenerar con: python -m house_twin.cli texture sources/texturas/esmalte-blanco.json",
+ "name": "esmalte-blanco",
+ "kind": "constant",
+ "applies_to": {
+  "furniture": "lavandería",
+  "source": "fotos de la lavandería (dueño, 2026-10-10)"
+ },
+ "photo": "sources/fotos/lavanderia-frente.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   226,
+   226,
+   220
+  ],
+  "metallic": 0.0,
+  "roughness": 0.35,
+  "note": "lámina esmaltada blanca de la secadora y del boiler"
+ },
+ "assumptions": [
+  "color aproximado"
+ ]
+}

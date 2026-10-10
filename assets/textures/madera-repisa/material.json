@@ -1,0 +1,29 @@
+{
+ "name": "madera-repisa",
+ "applies_to": {
+  "furniture": "lavandería",
+  "source": "fotos de la lavandería (dueño, 2026-10-10)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   190,
+   150,
+   95
+  ],
+  "metallic": 0.0,
+  "roughness": 0.6,
+  "note": "tabla de madera clara de la repisa"
+ },
+ "source": {
+  "photo": "sources/fotos/lavanderia-frente.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color aproximado"
+ ]
+}
