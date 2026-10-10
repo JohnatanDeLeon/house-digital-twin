@@ -1,0 +1,36 @@
+{
+ "name": "rgb-teclado",
+ "applies_to": {
+  "furniture": "oficina de la recámara 3",
+  "source": "fotos del dueño (2026-10-10)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   90,
+   60,
+   140
+  ],
+  "metallic": 0.0,
+  "roughness": 0.4,
+  "note": "retroiluminación morada del teclado",
+  "emission_srgb": [
+   170,
+   110,
+   255
+  ],
+  "always_on": true,
+  "emission_strength": 1.2
+ },
+ "source": {
+  "photo": "sources/fotos/r3-escritorio.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color y brillo aproximados; los negros no son negro puro para que se distingan las formas"
+ ]
+}

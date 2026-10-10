@@ -1,0 +1,29 @@
+{
+ "name": "tapete-azul",
+ "applies_to": {
+  "furniture": "oficina de la recámara 3",
+  "source": "fotos del dueño (2026-10-10)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   24,
+   52,
+   120
+  ],
+  "metallic": 0.0,
+  "roughness": 0.85,
+  "note": "tapete de mouse azul"
+ },
+ "source": {
+  "photo": "sources/fotos/r3-escritorio.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color y brillo aproximados; los negros no son negro puro para que se distingan las formas"
+ ]
+}

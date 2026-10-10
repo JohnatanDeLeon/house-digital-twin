@@ -379,6 +379,8 @@ def _add_parts(ctx: _IfcContext, storey, spec, parts):
             ctx.model, product=element, representation=ctx.builder.get_representation(ctx.body, [ctx.builder.polygonal_face_set(points, faces)]))
         ifcopenshell.api.spatial.assign_container(ctx.model, products=[element], relating_structure=storey)
         ifcopenshell.api.material.assign_material(ctx.model, products=[element], material=ctx.material(part['material']))
+        if part.get('image_facing'):  # imagen (pantalla): Blender encuadra la textura en la cara que mira hacia allá
+            ctx.pset(element, 'HDT_Image', {'FacingX': part['image_facing'][0], 'FacingY': part['image_facing'][1]})
         ctx.pset(element, 'HDT_Provenance', {'Space': spec['applies_to']['space'], 'Source': spec['applies_to']['source'],
                                              'Measures': part.get('source') or spec['measure_source']})
 

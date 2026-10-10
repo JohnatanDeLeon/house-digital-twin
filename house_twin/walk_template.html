@@ -243,7 +243,10 @@ function constantMaterial(pbr) {
     envMap: metalness > 0 ? metalEnvironment() : null, envMapIntensity: 0.9,
     transparent: glass, opacity: glass ? 0.28 : 1, side: glass ? THREE.DoubleSide : THREE.FrontSide,
   });
-  if (pbr.emission_srgb) {  // foco: brilla solo de noche (ver setNight)
+  if (pbr.emission_srgb && pbr.always_on) {  // luz de un aparato (teclado, LED): siempre encendida
+    m.emissive = linearColor(pbr.emission_srgb);
+    m.emissiveIntensity = pbr.emission_strength ?? 1;
+  } else if (pbr.emission_srgb) {  // foco: brilla solo de noche (ver setNight)
     m.emissive = linearColor(pbr.emission_srgb);
     m.emissiveIntensity = 0;
     glowing.push(m);
@@ -253,6 +256,9 @@ function constantMaterial(pbr) {
 function mappedMaterial(spec) {
   const m = new THREE.MeshStandardMaterial({ roughness: 1 });
   if (spec.maps.basecolor) m.map = texture(spec.maps.basecolor, true, spec);
+  if (spec.emissive && m.map) {  // pantalla encendida: de día y de noche
+    m.emissiveMap = m.map; m.emissive = new THREE.Color(0xffffff); m.emissiveIntensity = spec.emissive;
+  }
   if (spec.maps.roughness) m.roughnessMap = texture(spec.maps.roughness, false, spec);
   if (spec.maps.normal) m.normalMap = texture(spec.maps.normal, false, spec);
   if (spec.maps.opacity && spec.glass) { m.alphaMap = texture(spec.maps.opacity, false, spec); m.transparent = true; }

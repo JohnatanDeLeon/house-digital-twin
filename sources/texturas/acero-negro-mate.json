@@ -1,0 +1,23 @@
+{
+ "_doc": "acero con pintura electrostática negra (patas, brazo de monitores). Tono de las fotos de la recámara 3 (supuesto: sin blanco confiable para el negro). Regenerar con: python -m house_twin.cli texture sources/texturas/acero-negro-mate.json",
+ "name": "acero-negro-mate",
+ "kind": "constant",
+ "applies_to": {
+  "furniture": "oficina de la recámara 3",
+  "source": "fotos del dueño (2026-10-10)"
+ },
+ "photo": "sources/fotos/r3-escritorio.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   34,
+   34,
+   36
+  ],
+  "metallic": 0.6,
+  "roughness": 0.45,
+  "note": "acero con pintura electrostática negra (patas, brazo de monitores)"
+ },
+ "assumptions": [
+  "color y brillo aproximados; los negros no son negro puro para que se distingan las formas"
+ ]
+}

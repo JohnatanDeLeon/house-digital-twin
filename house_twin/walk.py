@@ -35,7 +35,8 @@ def _material_entry(name: str, spec: dict, folder: Path, out: Path) -> dict:
         entry['pbr'] = spec['pbr']
         return entry
     entry.update(tileable=bool(spec.get('tileable')), size_m=[spec['size_m']['width'], spec['size_m']['height']],
-                 origin_m=((spec.get('grid') or {}).get('origin_m') or {}), glass=spec.get('glass_material'), maps={})
+                 origin_m=((spec.get('grid') or {}).get('origin_m') or {}), glass=spec.get('glass_material'), maps={},
+                 emissive=spec.get('emissive'))
     (out / name).mkdir(parents=True, exist_ok=True)
     for kind in MAP_SIZES:
         src = next(iter(sorted(folder.glob(f'{kind}.*'))), None)

@@ -43,3 +43,14 @@ def test_r3_l_desk_is_160_by_100_in_the_corner():
         q = p['mesh'][0]
         assert 5.79 - 1e-6 <= min(v[0] for v in q) and max(v[0] for v in q) <= 9.86 + 1e-6, p['id']
         assert 8.14 - 1e-6 <= min(v[1] for v in q) and max(v[1] for v in q) <= 11.86 + 1e-6, p['id']
+
+
+def test_office_objects_are_detailed_and_closed():
+    spec = next(s for s in load_bedrooms() if s['applies_to']['space'] == 'S04')
+    parts = bedroom_parts(spec)
+    ids = {p['id'] for p in parts}
+    assert {'r3-teclado', 'r3-impresora-tinta-cian', 'r3-caminadora-franja', 'r3-silla-base', 'r3-monitores-pantalla-izq', 'r3-audifonos'} <= ids
+    keyboard = next(p for p in parts if p['id'] == 'r3-teclado')
+    assert len(keyboard['mesh'][1]) > 6 * 80  # teclas una por una, no un bloque
+    for p in parts:
+        assert _signed_volume(*p['mesh']) >= 0, p['id']

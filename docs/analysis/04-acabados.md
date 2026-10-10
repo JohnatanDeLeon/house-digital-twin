@@ -449,13 +449,26 @@ Las medidas importan más aquí. Cada dato lleva su fuente en `sources/lavanderi
 - **Sin modelar:** el tendedero, las cubetas, el cesto, la ropa y la herrería de V09 del lado de la lavandería.
 - **Por confirmar con cinta:** las medidas libres del espacio (el plano da 1.62 × 2.40 m), la altura real de los aparatos, la posición del boiler y si la lavandería tiene techo (el modelo dice que no).
 
-### 29. Recámara 3 como oficina (2026-10-10)
+### 29. Recámara 3 como oficina (2026-10-10, rehecha con más detalle)
 
-- **Escritorio en L (dato del dueño: 160 × 100 cm):** va en la esquina del muro oriente con el muro norte. El lado de 160 va contra el muro oriente; el de 100, con la impresora, contra el muro norte. Es la misma esquina de las fotos del 2026-10-08 (la ventana V05 a la derecha y la TV en el muro de la izquierda).
-  - **Supuestos:** fondos de 0.60 y 0.50 m, altura de 0.75 m (es de altura ajustable) y patas en T.
-- **Monitores (dato del dueño):** 2 de 23" en un brazo de 3 posiciones, con charola para la laptop abajo al centro. Van a ≈ 1.17 m de altura al centro, un poco girados hacia adentro (foto, ± 5 cm).
-- **Lo demás:** caminadora bajo el escritorio, impresora sobre el lado corto, silla gamer y una TV de ≈ 43" en el muro norte. Los tamaños son comunes y el de la TV está estimado.
-- **Sin modelar:** los objetos sueltos, los audífonos y el cuadro.
+**Corrección del dueño:** los objetos eran cajas difíciles de distinguir. Desde ahora, cada objeto se analiza en la foto y se modela con sus partes reconocibles y con materiales que se distingan entre sí (`house_twin/office.py`).
+
+- **Escritorio en L (dato del dueño: 160 × 100 cm):** cubierta de laminado negro mate con la curva del rincón.
+  - **Patas:** eléctricas, de 2 tramos telescópicos, con pie en T, niveladores, viga bajo la cubierta y placa.
+  - **Accesorios:** control de altura de 6 botones en el canto y gancho con los audífonos bajo el lado corto.
+  - **Supuestos:** los fondos (0.60 y 0.50 m) y la altura (0.75 m).
+- **Brazo triple:** poste con tapa y abrazadera bajo la cubierta, codos con collares, 2 monitores Samsung de 23" (dato del dueño) y charola ventilada inclinada con la laptop abierta encima.
+  - **Monitores:** bisel delgado, barbilla con logotipo, cuerpo trasero y placa VESA.
+  - **Pantallas encendidas:** muestran lo que tenían en la foto (Blender con el modelo, la terminal y el explorador). La imagen se rectificó de la foto de cerca y emite luz (`emissive`); su UV encuadra la imagen en la cara que mira al cuarto (`HDT_Image`).
+- **Sobre el escritorio:**
+  - **Teclado:** tecla por tecla, con teclado numérico y la retroiluminación morada encendida.
+  - **Mouse y tapetes:** mouse con su logotipo iluminado, tapete azul y tapete negro.
+  - **Dock y laptop:** dock con LED azul y una laptop cerrada.
+  - **Impresora Epson de tanques:** cuerpo, tapa del escáner, soporte de papel, ranura de salida, botones y los 4 tanques de tinta de color.
+- **Caminadora:** chasis, rieles, banda, capota del motor con pantalla, ruedas y la franja verde del costado, encendida.
+- **Silla gamer:** base de 5 rodajas, pistón, mecanismo, asiento con alas, respaldo reclinado con alas, cabecera, cojín lumbar, descansabrazos, posapiés guardado y el logotipo blanco.
+- **Materiales:** se separan los negros: laminado mate, acero mate, plástico brillante, vinil con brillo y tela. Los LED (teclado, mouse, dock, franja) emiten luz siempre, no solo de noche (`always_on`).
+- **Sin modelar:** los cables, los cargadores, los papeles y el cuadro (sale cortado en las fotos).
 
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 

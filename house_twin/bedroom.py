@@ -8,6 +8,7 @@ from pathlib import Path
 from house_twin.hardware import cylinder, lathe, merge
 from house_twin.kitchen import _Run
 from house_twin.living import _tv
+from house_twin.office import office_parts
 
 ROOT = Path(__file__).resolve().parent.parent
 BEDROOMS_DIR = ROOT / 'sources' / 'recamaras'
@@ -202,12 +203,8 @@ def bedroom_parts(spec: dict) -> list[dict]:
         parts += _mirror(spec['mirror'])
     if spec.get('desk'):
         parts += _desk(spec['desk'])
-    if spec.get('desk_l'):
-        parts += _desk_l(spec['desk_l'])
-        if spec.get('monitors'):
-            parts += _monitors(spec['monitors'], spec['desk_l'])
-    for ex in spec.get('extras', []):
-        parts += _extra(ex)
+    if spec.get('office'):
+        parts += office_parts(spec['office'])
     ac = spec.get('minisplit')
     if ac:  # unidad interior: cuerpo con el frente redondeado abajo (2 escalones) y la rejilla de salida
         frame = _Run(ac['wall'])
@@ -230,71 +227,3 @@ def bedroom_parts(spec: dict) -> list[dict]:
         p.setdefault('space', spec['applies_to']['space'])
     return parts
 
-
-def _desk_l(dk):
-    """Escritorio en L: lado largo y lado corto desde la esquina de 2 muros, con patas en T."""
-    cx, cy = dk['corner']
-    m, r, h, t = dk['main'], dk['return'], dk['height_m'], dk['top_m']
-    main = _Run({'origin': [cx, cy], 'along': m['along'], 'into_room': m['into_room']})
-    side = _Run({'origin': [cx, cy], 'along': r['along'], 'into_room': r['into_room']})
-    top = [main.box((0.0, m['length_m']), (h - t, h), (0.0, m['depth_m'])),
-           side.box((m['depth_m'], r['length_m']), (h - t, h), (0.0, r['depth_m']))]
-    legs = []
-    for u in (0.12, m['length_m'] - 0.12):
-        legs += [main.box((u - 0.035, u + 0.035), (0.03, h - t), (m['depth_m'] / 2 - 0.035, m['depth_m'] / 2 + 0.035)),
-                 main.box((u - 0.035, u + 0.035), (0.0, 0.03), (0.04, m['depth_m'] - 0.04))]
-    src = f"{dk['size_source']}; {dk['position_source']}; {dk['assumptions']}"
-    return [{'id': dk['id'], 'ifc': 'IfcFurniture', 'type': 'DESK', 'material': dk['material'], 'mesh': merge(top), 'source': src},
-            {'id': f"{dk['id']}-patas", 'ifc': 'IfcFurniture', 'type': 'DESK', 'material': dk['legs_material'], 'mesh': merge(legs), 'source': src}]
-
-
-def _monitors(mo, dk):
-    """Brazo de 3 posiciones al fondo del lado largo: 2 monitores arriba (un poco girados hacia el centro) y la
-    charola de la laptop abajo, al centro."""
-    import math
-    cx, cy = dk['corner']
-    m = dk['main']
-    ax, ay = m['along']
-    nx, ny = m['into_room']  # los monitores miran hacia el cuarto
-    mid = (cx + ax * m['length_m'] / 2, cy + ay * m['length_m'] / 2)
-    px, py = mid[0] + nx * 0.08, mid[1] + ny * 0.08
-    h = dk['height_m']
-    diag = mo['diagonal_in'] * 0.0254
-    w, hh = diag * mo['aspect'][0] / math.hypot(*mo['aspect']), diag * mo['aspect'][1] / math.hypot(*mo['aspect'])
-    body, screens = [cylinder((px, py, h), (px, py, h + mo['pole_height_m']), mo['pole_radius_m'], 12)], []
-    for side in (-1, 1):
-        u = side * (w / 2 + mo['gap_m'] / 2)
-        ang = math.radians(mo['toe_in_deg']) * side
-        ca, sa = math.cos(ang), math.sin(ang)
-        bx, by = ax * ca - nx * sa, ay * ca - ny * sa  # a lo ancho del monitor, girado
-        fx, fy = nx * ca + ax * sa, ny * ca + ay * sa  # hacia donde mira
-        ox, oy = px + ax * u + nx * 0.05, py + ay * u + ny * 0.05
-        frame = _Run({'origin': [ox, oy], 'along': [bx, by], 'into_room': [fx, fy]})
-        z0 = mo['centre_z'] - hh / 2
-        body.append(frame.box((-w / 2 - 0.008, w / 2 + 0.008), (z0 - 0.008, z0 + hh + 0.008), (0.0, 0.03)))
-        screens.append(frame.box((-w / 2, w / 2), (z0, z0 + hh), (0.03, 0.032)))
-        body.append(cylinder((px, py, mo['centre_z']), (ox, oy, mo['centre_z']), 0.012, 8))
-    tw, td = mo['tray']['size_m']
-    tz = h + mo['tray']['z_above_desk_m']
-    tray = _Run({'origin': [px, py], 'along': [ax, ay], 'into_room': [nx, ny]})
-    body += [tray.box((-tw / 2, tw / 2), (tz, tz + 0.01), (0.02, 0.02 + td)),
-             tray.box((-0.16, 0.16), (tz + 0.01, tz + 0.025), (0.04, 0.26)),
-             tray.box((-0.16, 0.16), (tz + 0.025, tz + 0.235), (0.04, 0.052))]  # laptop abierta
-    return [{'id': mo['id'], 'ifc': 'IfcAudioVisualAppliance', 'type': 'DISPLAY', 'material': mo['body_material'], 'mesh': merge(body), 'source': mo['source']},
-            {'id': f"{mo['id']}-pantallas", 'ifc': 'IfcAudioVisualAppliance', 'type': 'DISPLAY', 'material': mo['screen_material'],
-             'mesh': merge(screens), 'source': mo['source']}]
-
-
-def _extra(ex):
-    if 'chair' in ex:  # silla gamer: base de 5 ruedas simplificada, asiento y respaldo alto
-        (cx, cy), (fx, fy) = ex['chair']['centre'], ex['chair']['facing']
-        f = _Run({'origin': [cx, cy], 'along': [-fy, fx], 'into_room': [fx, fy]})
-        mesh = merge([cylinder((cx, cy, 0.05), (cx, cy, 0.42), 0.03, 10), f.box((-0.33, 0.33), (0.0, 0.05), (-0.33, 0.33)),
-                      f.box((-0.27, 0.27), (0.42, 0.52), (-0.25, 0.27)), f.box((-0.26, 0.26), (0.52, 1.32), (-0.3, -0.2)),
-                      *[f.box((s * 0.3 - 0.04, s * 0.3 + 0.04), (0.6, 0.66), (-0.2, 0.2)) for s in (-1, 1)]])
-    else:
-        (x0, x1), (y0, y1), (z0, z1) = ex['box']
-        from house_twin.hardware import _box
-        mesh = _box(((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2), (x1 - x0, y1 - y0, z1 - z0))
-    return [{'id': ex['id'], 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': ex['object_type'], 'material': ex['material'],
-             'mesh': mesh, 'source': ex['source']}]

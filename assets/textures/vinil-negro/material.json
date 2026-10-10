@@ -1,22 +1,22 @@
 {
  "name": "vinil-negro",
  "applies_to": {
-  "furniture": "recámara S03",
-  "source": "fotos de la recámara del closet de 4 módulos (dueño, 2026-10-09)"
+  "furniture": "oficina de la recámara 3",
+  "source": "fotos del dueño (2026-10-10)"
  },
  "kind": "constant",
  "pbr": {
   "basecolor_srgb": [
-   37,
-   38,
-   46
+   44,
+   44,
+   48
   ],
   "metallic": 0.0,
-  "roughness": 0.45,
-  "note": "vinil negro de la cabecera acolchada; medido contra el muro (235)"
+  "roughness": 0.32,
+  "note": "vinil (piel sintética) negro de la silla, con brillo; también la cabecera de S03"
  },
  "source": {
-  "photo": "sources/fotos/r1-cama-frente.jpg",
+  "photo": "sources/fotos/r3-escritorio.jpg",
   "photo_meta": {},
   "color": null,
   "white_balance_gain": null,
@@ -24,6 +24,6 @@
  },
  "observed": {},
  "assumptions": [
-  "la luz del foco sobre el muro como blanco: aproximado"
+  "color y brillo aproximados; los negros no son negro puro para que se distingan las formas"
  ]
 }

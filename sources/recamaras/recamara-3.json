@@ -1,129 +1,217 @@
 {
- "_doc": "Recámara 3 (S04), usada como oficina: escritorio en L, brazo de 3 posiciones con 2 monitores y charola de laptop, caminadora, silla, impresora y televisión. Coordenadas del modelo en m.",
+ "_doc": "Recámara 3 (S04), usada como oficina, con el detalle de las fotos. Coordenadas del modelo en m; cada objeto se arma en su marco local y se coloca con `at` (centro en planta) y `facing` (hacia dónde mira su frente). El código está en house_twin/office.py.",
  "applies_to": {
   "space": "S04",
   "source": "fotos de la recámara 3 (dueño, 2026-10-08 y 2026-10-10)"
  },
- "desk_l": {
-  "id": "r3-escritorio",
-  "material": "madera-negra",
-  "legs_material": "plastico-negro",
-  "corner": [
-   9.86,
-   11.86
-  ],
-  "main": {
-   "along": [
-    0,
-    -1
+ "office": {
+  "desk": {
+   "id": "r3-escritorio",
+   "corner": [
+    9.86,
+    11.86
    ],
-   "length_m": 1.6,
-   "depth_m": 0.6,
-   "into_room": [
-    -1,
-    0
-   ]
-  },
-  "return": {
-   "along": [
-    -1,
-    0
+   "main": {
+    "length_m": 1.6,
+    "depth_m": 0.6
+   },
+   "return": {
+    "length_m": 1.0,
+    "depth_m": 0.5
+   },
+   "fillet_m": 0.18,
+   "height_m": 0.75,
+   "top_m": 0.025,
+   "legs_y": [
+    11.52,
+    10.4
    ],
-   "length_m": 1.0,
-   "depth_m": 0.5,
-   "into_room": [
-    0,
-    -1
-   ]
-  },
-  "height_m": 0.75,
-  "top_m": 0.025,
-  "size_source": "dueño (2026-10-10): escritorio en L de 160 × 100 cm",
-  "position_source": "fotos: el lado de 160 contra el muro oriente (x = 9.86 m) y el de 100 contra el muro norte (y = 11.86 m), en esa esquina (la ventana V05 queda a la derecha y la TV en el muro de la izquierda, como en las fotos de 2026-10-08)",
-  "assumptions": "fondos de 0.60 (lado largo) y 0.50 m (lado corto), altura de 0.75 m (es de altura ajustable) y patas en T: supuestos"
- },
- "monitors": {
-  "id": "r3-monitores",
-  "count": 2,
-  "diagonal_in": 23,
-  "aspect": [
-   16,
-   9
-  ],
-  "gap_m": 0.02,
-  "centre_z": 1.17,
-  "toe_in_deg": 12,
-  "pole_height_m": 0.66,
-  "pole_radius_m": 0.02,
-  "tray": {
-   "size_m": [
-    0.36,
-    0.26
-   ],
-   "z_above_desk_m": 0.16
-  },
-  "screen_material": "pantalla-tv",
-  "body_material": "plastico-negro",
-  "source": "dueño (2026-10-10): 2 monitores de 23\" en un brazo triple con charola para la laptop; alturas por la foto (± 5 cm)"
- },
- "extras": [
-  {
-   "id": "r3-caminadora",
-   "object_type": "caminadora",
-   "box": [
-    [
-     9.15,
-     9.65
-    ],
-    [
-     10.5,
-     11.7
-    ],
-    [
-     0,
-     0.12
-    ]
-   ],
-   "material": "plastico-negro",
-   "source": "foto: caminadora de escritorio bajo el lado largo; 1.20 × 0.50 m común (supuesto)"
-  },
-  {
-   "id": "r3-impresora",
-   "object_type": "impresora",
-   "box": [
-    [
+   "control": {
+    "y": 10.55
+   },
+   "hook": {
+    "at": [
      8.95,
-     9.4
-    ],
-    [
-     11.38,
-     11.76
-    ],
-    [
-     0.75,
-     0.93
+     11.36
     ]
-   ],
-   "material": "plastico-negro",
-   "source": "foto: impresora Epson sobre el lado corto; tamaño común (supuesto)"
+   },
+   "top_material": "laminado-negro",
+   "frame_material": "acero-negro-mate",
+   "size_source": "dueño (2026-10-10): escritorio en L de 160 × 100 cm",
+   "position_source": "fotos: lado de 160 contra el muro oriente y lado de 100 contra el norte; patas eléctricas de 2 tramos con pie en T a ≈ 0.34 y 1.46 m de la esquina norte, control de altura en el canto de enfrente, a la derecha; gancho de audífonos bajo el lado corto (escala: el escritorio de 1.60 m mide ≈ 1230 px en la foto de lejos)",
+   "assumptions": "fondos de 0.60 y 0.50 m, altura de 0.75 m (es de altura ajustable) y curva del rincón de 18 cm: supuestos"
   },
-  {
-   "id": "r3-silla",
-   "object_type": "silla gamer",
-   "chair": {
+  "monitors": {
+   "id": "r3-monitores",
+   "diagonal_in": 23,
+   "gap_m": 0.02,
+   "centre_z": 1.1,
+   "toe_in_deg": 12,
+   "reach_m": 0.13,
+   "facing": [
+    -1,
+    0
+   ],
+   "pole_at": [
+    9.78,
+    11.11
+   ],
+   "pole_height_m": 0.56,
+   "tray": {
     "centre": [
-     9.0,
-     10.0
+     9.52,
+     10.9
+    ],
+    "z_above_desk_m": 0.07,
+    "size_m": [
+     0.36,
+     0.28
+    ],
+    "tilt_deg": 12,
+    "laptop_m": [
+     0.32,
+     0.22
+    ],
+    "laptop_screen_m": [
+     0.3,
+     0.17
+    ],
+    "lid_open_deg": 108
+   },
+   "source": "dueño (2026-10-10): 2 monitores de 23\" en un brazo triple con charola para la laptop. Fotos: poste al fondo del escritorio, a ≈ 0.75 m de la esquina norte; monitores Samsung con barbilla y logotipo, centro a ≈ 1.10 m, un poco girados hacia adentro; charola ventilada abajo a la derecha. Lo que muestran las pantallas sale de la foto de cerca"
+  },
+  "desktop": {
+   "keyboard": {
+    "at": [
+     9.4,
+     10.87
     ],
     "facing": [
-     1,
+     -1,
+     0
+    ],
+    "size_m": [
+     0.44,
+     0.14
+    ]
+   },
+   "mouse": {
+    "at": [
+     9.4,
+     11.22
+    ],
+    "facing": [
+     -1,
      0
     ]
    },
-   "material": "vinil-negro",
-   "source": "foto: silla gamer negra a la derecha del escritorio; tamaño común (supuesto)"
+   "mouse_pad": {
+    "at": [
+     9.4,
+     11.22
+    ],
+    "size_m": [
+     0.3,
+     0.24
+    ]
+   },
+   "desk_mat": {
+    "at": [
+     9.42,
+     10.87
+    ],
+    "size_m": [
+     0.56,
+     0.3
+    ]
+   },
+   "dock": {
+    "at": [
+     9.74,
+     10.64
+    ],
+    "facing": [
+     -1,
+     0
+    ]
+   },
+   "closed_laptop": {
+    "at": [
+     9.42,
+     10.43
+    ],
+    "size_m": [
+     0.32,
+     0.24
+    ]
+   },
+   "printer": {
+    "at": [
+     9.3,
+     11.61
+    ],
+    "facing": [
+     -1,
+     0
+    ],
+    "size_m": [
+     0.375,
+     0.347,
+     0.179
+    ],
+    "source": "fotos: impresora Epson de tanques sobre el lado corto, con el bloque de tanques de tinta en la esquina de enfrente; 37.5 × 34.7 × 17.9 cm (modelo común de esa línea, supuesto)"
+   },
+   "source": "fotos: teclado con retroiluminación morada sobre un tapete negro, mouse con logotipo iluminado sobre un tapete azul, dock con LED azul al fondo y una laptop cerrada a la derecha; tamaños comunes (supuesto)"
+  },
+  "treadmill": {
+   "at": [
+    9.53,
+    10.96
+   ],
+   "facing": [
+    0,
+    1
+   ],
+   "size_m": [
+    0.98,
+    0.5,
+    0.12
+   ],
+   "hood_m": 0.16,
+   "source": "foto: caminadora de escritorio bajo el lado largo, entre las patas, con el motor y la pantalla del lado norte y franja verde en el costado; ≈ 0.98 × 0.50 m (cabe entre las patas en la foto; estimado)"
+  },
+  "chair": {
+   "at": [
+    9.3,
+    9.85
+   ],
+   "facing": [
+    -0.8,
+    0.6
+   ],
+   "seat_z_m": 0.48,
+   "seat_m": [
+    0.52,
+    0.5
+   ],
+   "back_h_m": 0.8,
+   "recline_deg": 10,
+   "source": "foto: silla gamer negra de vinil (marca DUO) a la derecha del escritorio, con cabecera, cojín lumbar, alas, descansabrazos, posapiés guardado y base de 5 rodajas; medidas comunes (supuesto)"
+  },
+  "headphones": {
+   "at": [
+    8.95,
+    11.31
+   ],
+   "facing": [
+    0,
+    -1
+   ],
+   "z": 0.69,
+   "radius_m": 0.085,
+   "source": "foto: audífonos colgados del gancho bajo el lado corto"
   }
- ],
+ },
  "tv": {
   "id": "r3-tv",
   "diagonal_in": 43,
@@ -155,9 +243,9 @@
   "body_material": "plastico-negro"
  },
  "assumptions": [
-  "fondos y altura del escritorio",
-  "caminadora, impresora y silla con tamaños comunes",
+  "fondos, altura y curva del escritorio",
+  "impresora, caminadora, silla y accesorios con tamaños comunes o estimados",
   "TV de ≈ 43\" (estimada)",
-  "no se modelan los objetos sueltos, los audífonos ni el cuadro"
+  "no se modelan los cables, los cargadores, los papeles ni el cuadro (en las fotos sale cortado)"
  ]
 }

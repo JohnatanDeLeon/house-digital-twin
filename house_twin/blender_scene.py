@@ -102,6 +102,9 @@ def texture_material(name, spec, specs):
     normal = nt.nodes.new('ShaderNodeNormalMap')
     nt.links.new(image('normal.png', 'Non-Color').outputs[0], normal.inputs['Color'])
     nt.links.new(normal.outputs[0], bsdf.inputs['Normal'])
+    if spec.get('emissive'):  # pantalla encendida
+        nt.links.new(image('basecolor.jpg', 'sRGB').outputs[0], bsdf.inputs['Emission Color'])
+        bsdf.inputs['Emission Strength'].default_value = spec['emissive']
     surface = bsdf
     if 'opacity' in spec['maps'] and spec.get('glass_material'):
         mix = nt.nodes.new('ShaderNodeMixShader')  # opacidad 0 = vidrio, 1 = hoja
@@ -300,8 +303,14 @@ class Scene:
 
     def accessory(self, obj):
         """Herraje o mueble: el material que le da el IFC y sombreado suave salvo en los filos."""
+        import bonsai.tool as tool
+        import ifcopenshell.util.element as ue
         material = _ifc_material(obj)
-        write_uvs(obj)  # melamina: veta en metros del mundo, como los muros
+        image = ue.get_psets(tool.Ifc.get_entity(obj)).get('HDT_Image')
+        if image:  # pantalla: la foto entera en su cara, con la U hacia la derecha de quien la mira
+            write_uvs(obj, fit='unit', axis=Vector((-image['FacingY'], image['FacingX'], 0)))
+        else:
+            write_uvs(obj)  # melamina: veta en metros del mundo, como los muros
         self._set(obj, [material if material in self.specs else 'sin-dato'] * len(obj.data.polygons))
         if material and self.specs.get(material, {}).get('pbr', {}).get('emission_srgb'):
             obj.visible_shadow = False  # el foco envuelve a su luz: si proyectara sombra, la apagaría
