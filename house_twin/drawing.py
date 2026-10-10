@@ -18,6 +18,7 @@ LAYER_ROLES = {
     'levels': ('0 NIVELES',),
     'window_labels': ('VENTANAS',),
     'dimensions': ('14-DIM INTERIOR', '23.-COTAS GENERALES'),
+    'fixed_furniture': ('9-MUEBLES FIJOS',),  # frentes de closet
 }
 
 

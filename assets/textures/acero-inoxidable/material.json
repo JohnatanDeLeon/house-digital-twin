@@ -1,0 +1,59 @@
+{
+ "name": "acero-inoxidable",
+ "applies_to": {
+  "hardware": "jaladera",
+  "source": "foto del closet de la recámara 3 (dueño, 2026-10-08)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "metallic": 1.0,
+  "roughness": 0.3,
+  "note": "satinado",
+  "basecolor_srgb": [
+   214,
+   212,
+   215
+  ]
+ },
+ "source": {
+  "photo": "sources/fotos/closet-recamara-3-cerca.jpg",
+  "photo_meta": {
+   "taken": "2026-10-08",
+   "camera": "Samsung Galaxy S25 Ultra"
+  },
+  "color": {
+   "white_reference": {
+    "box_px": [
+     2650,
+     400,
+     2950,
+     1600
+    ],
+    "albedo_srgb": [
+     235,
+     235,
+     235
+    ],
+    "note": "pilar de yeso a la derecha del closet"
+   }
+  },
+  "white_balance_gain": [
+   1.3314,
+   1.3608,
+   1.6134
+  ],
+  "sample": {
+   "box_px": [
+    1384,
+    2260,
+    1396,
+    2640
+   ],
+   "note": "barra de una jaladera baja"
+  }
+ },
+ "observed": {},
+ "assumptions": [
+  "reflectancia tomada del color de la barra (aproximación: en un metal depende del entorno)"
+ ]
+}
