@@ -25,3 +25,17 @@ def test_build_walk_writes_page_and_light_textures(dxf_facts, tmp_path):
     for path in floor['maps'].values():
         assert (tmp_path / path).exists()
     assert data['materials']['puerta-entrada']['glass'] == 'vidrio-polarizado'
+
+
+def test_walk_offers_proposals_next_to_the_current_house(tmp_path, dxf_facts):
+    import json as _json
+    from house_twin.walk import build_walk
+    facts = dxf_facts
+    variant = {'id': 'v', 'name': 'Propuesta', 'description': 'd', 'changes': [
+        {'opening': 'D03', 'part': 'leaf', 'material': 'nueva'}, {'opening': 'V01', 'part': 'glass', 'material': 'otro'}]}
+    page = build_walk(facts, {}, tmp_path, tmp_path / 'out', variants=[variant]).read_text()
+    data = _json.loads(page.split('const DATA = ')[1].split(';\n')[0])
+    focus = data['variants'][0].pop('focus')
+    assert data['variants'] == [{'id': 'v', 'name': 'Propuesta', 'description': 'd', 'disclaimer': None, 'overrides': {'D03': 'nueva'}}]
+    door = next(o for o in facts['openings'] if o['id'] == 'D03')
+    assert focus['at'][1] > max(p[1] for p in door['footprint']) and focus['facing'] == [0.0, -1.0]  # en la sala, mirando la puerta

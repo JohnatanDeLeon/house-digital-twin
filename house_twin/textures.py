@@ -457,6 +457,10 @@ def procedural_sheet_door(spec: dict, size_px: tuple[int, int], colors: dict[str
         for x0, y0, x1, y1 in spec['opacity']['holes']:
             holes |= (u >= x0) & (u < x1) & (v >= y0) & (v < y1)
         alpha = np.where(holes & ~pieces, 0.0, 1.0)
+        if spec['opacity'].get('glass_material'):  # el vidrio lleva su color y queda liso, como en las hojas de foto
+            glass = _glass_pbr(spec['opacity']['glass_material'])
+            lin[alpha == 0] = _srgb_to_linear(np.array(glass['basecolor_srgb'], float) / 255)
+            roughness = np.where(alpha == 0, glass['roughness'], roughness)
     return _to_image(lin), height, np.clip(roughness, 0, 1), alpha
 
 
@@ -469,12 +473,15 @@ def build_procedural(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
         alpha = None
         parameters = {k: spec[k] for k in ('plates', 'grain', 'color', 'roughness')}
     elif spec['generator'] == 'sheet_door':
-        colors, gain = measured_colors(spec, photos_root)
+        if 'srgb' in spec['color']:  # propuesta: colores elegidos, no medidos en una foto
+            colors, gain = spec['color']['srgb'], None
+        else:
+            colors, gain = measured_colors(spec, photos_root)
         base, height, roughness, alpha = procedural_sheet_door(spec, size_px, colors)
         parameters = {k: spec[k] for k in ('layout', 'paint', 'cavity', 'bevel_mm', 'roughness', 'dust_opacity', 'opacity')
                       if k in spec}
-        source.update(photo=spec['photo'], photo_meta=spec.get('photo_meta', {}), color=spec['color'],
-                      white_balance_gain=gain, measured_srgb=colors)
+        source.update(photo=spec.get('photo'), photo_meta=spec.get('photo_meta', {}), color=spec['color'],
+                      white_balance_gain=gain, **({'measured_srgb': colors} if gain is not None else {}))
     else:
         raise ValueError(f'generador desconocido: {spec["generator"]}')
     out.mkdir(parents=True, exist_ok=True)

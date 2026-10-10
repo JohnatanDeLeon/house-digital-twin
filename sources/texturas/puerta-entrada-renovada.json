@@ -1,0 +1,167 @@
+{
+  "_doc": "PROPUESTA (variante `puerta-entrada-renovada`): la puerta de entrada D03 restaurada, es decir, sin óxido, lijada y repintada. Misma geometría que la real, medida en su foto rectificada (sources/texturas/puerta-entrada.json); colores elegidos, no medidos. No la usa el modelo existente: no lista `openings`. Regenerar con: python -m house_twin.cli texture sources/texturas/puerta-entrada-renovada.json",
+  "name": "puerta-entrada-renovada",
+  "kind": "procedural",
+  "generator": "sheet_door",
+  "tileable": false,
+  "applies_to": {
+    "variant": "puerta-entrada-renovada",
+    "replaces": "puerta-entrada",
+    "source": "propuesta de Claude a pedido del dueño (2026-10-08): «quiero verla renovada»"
+  },
+  "size_m": {
+    "width": 1.0,
+    "height": 2.1,
+    "source": "las mismas que puerta-entrada (vano D03 y U04)"
+  },
+  "px_per_m": 1600,
+  "seed": 3,
+  "color": {
+    "srgb": {
+      "paint": [
+        33,
+        34,
+        38
+      ]
+    },
+    "note": "esmalte negro satinado nuevo, el mismo negro que hoy tienen la bodega y la herrería; es una elección, no una medida. Se puede cambiar el color aquí"
+  },
+  "layout": [
+    {
+      "kind": "level",
+      "rect_frac": [
+        0.0275,
+        0.015,
+        0.969,
+        0.991
+      ],
+      "height_mm": -1,
+      "note": "hoja, apenas detrás del marco"
+    },
+    {
+      "kind": "level",
+      "rect_frac": [
+        0.0275,
+        0.015,
+        0.033,
+        0.991
+      ],
+      "height_mm": -6,
+      "note": "junta entre el marco y la hoja, a la izquierda"
+    },
+    {
+      "kind": "level",
+      "rect_frac": [
+        0.964,
+        0.015,
+        0.969,
+        0.991
+      ],
+      "height_mm": -6,
+      "note": "junta, a la derecha"
+    },
+    {
+      "kind": "level",
+      "rect_frac": [
+        0.0275,
+        0.015,
+        0.969,
+        0.018
+      ],
+      "height_mm": -6,
+      "note": "junta, arriba"
+    },
+    {
+      "kind": "molding",
+      "rect_frac": [
+        0.14,
+        0.0565,
+        0.865,
+        0.729
+      ],
+      "width_frac_w": 0.055,
+      "height_mm": 7,
+      "inner_height_mm": 3,
+      "note": "moldura en inglete alrededor del vidrio"
+    },
+    {
+      "kind": "bar",
+      "rect_frac": [
+        0.135,
+        0.732,
+        0.865,
+        0.738
+      ],
+      "height_mm": 2,
+      "note": "filo del travesaño"
+    },
+    {
+      "kind": "level",
+      "rect_frac": [
+        0.135,
+        0.762,
+        0.8625,
+        0.958
+      ],
+      "height_mm": -6,
+      "note": "tablero hundido de abajo"
+    },
+    {
+      "kind": "molding",
+      "rect_frac": [
+        0.135,
+        0.762,
+        0.8625,
+        0.958
+      ],
+      "width_frac_w": 0.012,
+      "height_mm": -2,
+      "inner_height_mm": -3,
+      "note": "bisel del tablero"
+    }
+  ],
+  "opacity": {
+    "holes": [
+      [
+        0.194,
+        0.088,
+        0.806,
+        0.701
+      ]
+    ],
+    "glass_material": "vidrio-polarizado",
+    "note": "el mismo vidrio polarizado de hoy"
+  },
+  "bevel_mm": 1.0,
+  "paint": {
+    "variation": 0.012,
+    "orange_peel_mm": 1.2,
+    "orange_peel_height_mm": 0.02,
+    "note": "pintura nueva a pistola: pareja, sin manchas ni restos de verde agua"
+  },
+  "cavity": {
+    "radius_mm": 8,
+    "depth_mm": 3,
+    "darkening": 0.55
+  },
+  "roughness": {
+    "base": 0.38,
+    "note": "esmalte satinado nuevo"
+  },
+  "proposal": {
+    "steps": [
+      "quitar el óxido del contorno del marco, del travesaño y del tablero (cepillo de alambre o lija)",
+      "tratar lo oxidado con convertidor de óxido",
+      "primario anticorrosivo",
+      "dos manos de esmalte negro satinado"
+    ],
+    "keeps": [
+      "geometría, vidrio polarizado y herrajes de hoy (no se dibujan: irán como objetos 3D)"
+    ],
+    "not_validated": "propuesta estética: no sustituye la revisión de un herrero sobre el estado del metal"
+  },
+  "assumptions": [
+    "la puerta se restaura sin cambiar su forma ni su vidrio",
+    "color negro satinado (elegido)"
+  ]
+}
