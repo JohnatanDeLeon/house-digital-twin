@@ -473,7 +473,7 @@ def build_procedural(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
         alpha = None
         parameters = {k: spec[k] for k in ('plates', 'grain', 'color', 'roughness')}
     elif spec['generator'] == 'sheet_door':
-        if 'srgb' in spec['color']:  # propuesta: colores elegidos, no medidos en una foto
+        if 'srgb' in spec['color']:  # colores declarados (una propuesta, o tomados de otra medición), no medidos en esta foto
             colors, gain = spec['color']['srgb'], None
         else:
             colors, gain = measured_colors(spec, photos_root)

@@ -1,0 +1,870 @@
+{
+ "name": "porton-cochera",
+ "applies_to": {
+  "openings": [
+   "D12"
+  ],
+  "viewed_from": "S10",
+  "source": "plano: portón de 2 hojas dibujado en la capa PUERTAS al frente de la cochera; foto del dueño (2026-10-09) desde la cochera hacia la calle"
+ },
+ "kind": "procedural",
+ "tileable": false,
+ "size_m": {
+  "width": 3.04,
+  "height": 2.23,
+  "source": "ancho: plano (bisagras en x = 0.20 y 3.24 m); alto: proporción de la foto (1.365) por la perspectiva y la focal de la cámara"
+ },
+ "px_per_m": 800,
+ "size_px": [
+  2432,
+  1784
+ ],
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)",
+  "opacity": "opacity.png (0 = hueco)"
+ },
+ "glass_material": null,
+ "source": {
+  "method": "procedural",
+  "seed": 31,
+  "references": [],
+  "photo": "sources/fotos/porton-cochera.jpg",
+  "photo_meta": {
+   "taken": "2026-10-09T08:47:26",
+   "camera": "Samsung Galaxy S25 Ultra",
+   "focal_35mm": 13,
+   "light": "luz de día nublada, tomada desde la cochera hacia la calle"
+  },
+  "color": {
+   "srgb": {
+    "paint": [
+     31,
+     30,
+     37
+    ]
+   },
+   "note": "no se mide en esta foto: la cámara expuso para la calle y la lámina quedó saturada a negro (valores crudos 2–8 de 255), así que cualquier blanco de referencia la deja azulada (5, 5, 22). Se usa el negro medido en la herrería del pasillo (D10, con el muro del pasillo como blanco); misma pintura supuesta"
+  },
+  "white_balance_gain": null
+ },
+ "parameters": {
+  "layout": [
+   {
+    "kind": "level",
+    "rect_frac": [
+     0.0181,
+     0.7749,
+     0.4859,
+     0.991
+    ],
+    "height_mm": -3,
+    "note": "lámina lisa, asentada detrás del marco"
+   },
+   {
+    "kind": "level",
+    "rect_frac": [
+     0.5089,
+     0.7749,
+     0.9819,
+     0.991
+    ],
+    "height_mm": -3,
+    "note": "lámina lisa, asentada detrás del marco"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.0181,
+     0.0744,
+     0.4859,
+     0.0798
+    ],
+    "height_mm": 6,
+    "note": "travesaño de solera bajo los arillos"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.0181,
+     0.4332,
+     0.4859,
+     0.4372
+    ],
+    "height_mm": 5,
+    "note": "varilla redonda a la altura del pasador"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.5089,
+     0.0744,
+     0.9819,
+     0.0798
+    ],
+    "height_mm": 6,
+    "note": "travesaño de solera bajo los arillos"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.5089,
+     0.4332,
+     0.9819,
+     0.4372
+    ],
+    "height_mm": 5,
+    "note": "varilla redonda a la altura del pasador"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.064,
+     0.017,
+     0.0706,
+     0.7655
+    ],
+    "height_mm": 8,
+    "twist_pitch_mm": 60,
+    "note": "barrote cuadrado torcido"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.1122,
+     0.017,
+     0.1171,
+     0.7655
+    ],
+    "height_mm": 6,
+    "note": "barrote liso con 4 adornos"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.1587,
+     0.017,
+     0.1653,
+     0.7655
+    ],
+    "height_mm": 8,
+    "twist_pitch_mm": 60,
+    "note": "barrote cuadrado torcido"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.2058,
+     0.017,
+     0.2107,
+     0.7655
+    ],
+    "height_mm": 6,
+    "note": "barrote liso con 4 adornos"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.2507,
+     0.017,
+     0.2572,
+     0.7655
+    ],
+    "height_mm": 8,
+    "twist_pitch_mm": 60,
+    "note": "barrote cuadrado torcido"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.2967,
+     0.017,
+     0.3016,
+     0.7655
+    ],
+    "height_mm": 6,
+    "note": "barrote liso con 4 adornos"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.3418,
+     0.017,
+     0.3484,
+     0.7655
+    ],
+    "height_mm": 8,
+    "twist_pitch_mm": 60,
+    "note": "barrote cuadrado torcido"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.3887,
+     0.017,
+     0.3936,
+     0.7655
+    ],
+    "height_mm": 6,
+    "note": "barrote liso con 4 adornos"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.4327,
+     0.017,
+     0.4393,
+     0.7655
+    ],
+    "height_mm": 8,
+    "twist_pitch_mm": 60,
+    "note": "barrote cuadrado torcido"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.5563,
+     0.017,
+     0.5628,
+     0.7655
+    ],
+    "height_mm": 8,
+    "twist_pitch_mm": 60,
+    "note": "barrote cuadrado torcido"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.6041,
+     0.017,
+     0.609,
+     0.7655
+    ],
+    "height_mm": 6,
+    "note": "barrote liso con 4 adornos"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.6485,
+     0.017,
+     0.6551,
+     0.7655
+    ],
+    "height_mm": 8,
+    "twist_pitch_mm": 60,
+    "note": "barrote cuadrado torcido"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.6949,
+     0.017,
+     0.6998,
+     0.7655
+    ],
+    "height_mm": 6,
+    "note": "barrote liso con 4 adornos"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.7395,
+     0.017,
+     0.7461,
+     0.7655
+    ],
+    "height_mm": 8,
+    "twist_pitch_mm": 60,
+    "note": "barrote cuadrado torcido"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.7873,
+     0.017,
+     0.7923,
+     0.7655
+    ],
+    "height_mm": 6,
+    "note": "barrote liso con 4 adornos"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.8329,
+     0.017,
+     0.8395,
+     0.7655
+    ],
+    "height_mm": 8,
+    "twist_pitch_mm": 60,
+    "note": "barrote cuadrado torcido"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.8809,
+     0.017,
+     0.8859,
+     0.7655
+    ],
+    "height_mm": 6,
+    "note": "barrote liso con 4 adornos"
+   },
+   {
+    "kind": "bar",
+    "rect_frac": [
+     0.9258,
+     0.017,
+     0.9324,
+     0.7655
+    ],
+    "height_mm": 8,
+    "twist_pitch_mm": 60,
+    "note": "barrote cuadrado torcido"
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.091,
+     0.048
+    ],
+    "radius_frac_w": 0.01875,
+    "thickness_frac_w": 0.00296,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.1851,
+     0.048
+    ],
+    "radius_frac_w": 0.01875,
+    "thickness_frac_w": 0.00296,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.2766,
+     0.048
+    ],
+    "radius_frac_w": 0.01875,
+    "thickness_frac_w": 0.00296,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.3681,
+     0.048
+    ],
+    "radius_frac_w": 0.01875,
+    "thickness_frac_w": 0.00296,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.4609,
+     0.048
+    ],
+    "radius_frac_w": 0.01875,
+    "thickness_frac_w": 0.00296,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.5342,
+     0.048
+    ],
+    "radius_frac_w": 0.01875,
+    "thickness_frac_w": 0.00296,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.6292,
+     0.048
+    ],
+    "radius_frac_w": 0.01875,
+    "thickness_frac_w": 0.00296,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.7201,
+     0.048
+    ],
+    "radius_frac_w": 0.01875,
+    "thickness_frac_w": 0.00296,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.813,
+     0.048
+    ],
+    "radius_frac_w": 0.01875,
+    "thickness_frac_w": 0.00296,
+    "height_mm": 4
+   },
+   {
+    "kind": "ring",
+    "center_frac": [
+     0.9062,
+     0.048
+    ],
+    "radius_frac_w": 0.01875,
+    "thickness_frac_w": 0.00296,
+    "height_mm": 4
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.1146,
+     0.1794
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.1146,
+     0.3274
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.1146,
+     0.5269
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.1146,
+     0.6726
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.2082,
+     0.1794
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.2082,
+     0.3274
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.2082,
+     0.5269
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.2082,
+     0.6726
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.2992,
+     0.1794
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.2992,
+     0.3274
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.2992,
+     0.5269
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.2992,
+     0.6726
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.3911,
+     0.1794
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.3911,
+     0.3274
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.3911,
+     0.5269
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.3911,
+     0.6726
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.6066,
+     0.1794
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.6066,
+     0.3274
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.6066,
+     0.5269
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.6066,
+     0.6726
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.6974,
+     0.1794
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.6974,
+     0.3274
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.6974,
+     0.5269
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.6974,
+     0.6726
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.7898,
+     0.1794
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.7898,
+     0.3274
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.7898,
+     0.5269
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.7898,
+     0.6726
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.8834,
+     0.1794
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.8834,
+     0.3274
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.8834,
+     0.5269
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   },
+   {
+    "kind": "ornament",
+    "center_frac": [
+     0.8834,
+     0.6726
+    ],
+    "size_frac_w": [
+     0.0105,
+     0.0164
+    ],
+    "height_mm": 10
+   }
+  ],
+  "paint": {
+   "variation": 0.03,
+   "orange_peel_mm": 1.5,
+   "orange_peel_height_mm": 0.04,
+   "note": "esmalte negro"
+  },
+  "cavity": {
+   "radius_mm": 5,
+   "depth_mm": 3,
+   "darkening": 0.5
+  },
+  "bevel_mm": 1.0,
+  "roughness": {
+   "base": 0.55,
+   "note": "esmalte negro con algo de polvo"
+  },
+  "opacity": {
+   "holes": [
+    [
+     0.0181,
+     0.0215,
+     0.4859,
+     0.7632
+    ],
+    [
+     0.5089,
+     0.0215,
+     0.9819,
+     0.7632
+    ],
+    [
+     0.4961,
+     0.0,
+     0.499,
+     1.0
+    ]
+   ],
+   "note": "todo lo de arriba de la lámina es hueco salvo travesaños, barrotes, arillos y adornos; entre las 2 hojas queda una rendija"
+  }
+ },
+ "observed": {
+  "type": "portón de herrería de 2 hojas (1.52 m cada una en el plano), que abren hacia la cochera: marco de perfil, banda de arillos arriba, barrotes alternados torcidos y lisos, varilla horizontal y lámina lisa abajo",
+  "finish": "pintura negra, pareja; la lámina tiene polvo abajo",
+  "ornaments": "adornos de fundición (nudos) en los barrotes lisos, 4 por barrote, a 0.40, 0.73, 1.18 y 1.50 m desde arriba",
+  "hardware": "pasador con candado en el larguero central de la hoja derecha (vista desde la cochera), a la altura de la varilla. No va en la textura: es de un solo lado",
+  "symmetry": "las 2 hojas son espejo una de la otra: el arillo más cercano al centro queda junto al larguero central",
+  "measured_from_photo": "por hoja: 9 barrotes (5 torcidos, 4 lisos) a ≈ 14 cm entre ejes, 5 arillos de ≈ 12 cm; travesaño de los arillos a 0.17 m, varilla a 0.97 m y lámina desde 1.72 m (desde arriba)",
+  "proportion": "ancho/alto = 1.365 por homografía y focal (13 mm equivalentes; coseno entre ejes −0.007, casi independiente de la focal): con 3.04 m de ancho, ≈ 2.23 m de alto (±5 cm)",
+  "sag": "la hoja izquierda cuelga ≈ 1 cm en su punta (su borde de arriba baja hacia el centro); no se modela"
+ },
+ "assumptions": [
+  "misma pintura negra que la herrería del pasillo (D10): en esta foto la lámina está saturada",
+  "ancho de la cara = distancia entre bisagras del plano (3.04 m); las hojas reales pueden quedar 1–2 cm más angostas",
+  "relieve (barrotes 6–8 mm, arillos 4 mm, adornos 10 mm, lámina hundida 3 mm) y paso del torcido (6 cm) estimados",
+  "desde la calle se ve igual (la misma textura en las 2 caras): no hay foto desde afuera",
+  "el borde de abajo queda casi en el límite de la foto: la lámina puede bajar 1–2 cm más"
+ ]
+}

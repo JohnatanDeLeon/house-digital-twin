@@ -3565,6 +3565,44 @@
    "id": "D11"
   },
   {
+   "kind": "door",
+   "footprint": [
+    [
+     0.2,
+     0.0
+    ],
+    [
+     3.24,
+     0.0
+    ],
+    [
+     3.24,
+     0.05
+    ],
+    [
+     0.2,
+     0.05
+    ]
+   ],
+   "width": 3.04,
+   "wall_thickness": null,
+   "detected_by": "plano: capa PUERTAS al frente de la cochera (2 hojas de 1.52 m con sus arcos, dibujadas con líneas sueltas, sin bloque PUERTA)",
+   "sill_height": {
+    "value": 0.0,
+    "source": "definición de puerta"
+   },
+   "height": {
+    "value": 2.23,
+    "source": "estimación con 1 foto desde la cochera (2026-10-09 08:47, gran angular de 13 mm): proporción 1.365 por homografía y focal, sobre el ancho del plano (3.04 m); ±5 cm"
+   },
+   "host_wall": null,
+   "connects": [
+    "S10"
+   ],
+   "owner_note": "Portón de herrería de la cochera hacia la calle. El plano lo dibuja entre la barda (bisagra en x = 0.20 m) y el muro del pórtico (bisagra en x = 3.24 m), con las 2 hojas abriendo hacia la cochera; no tiene muro anfitrión. Altura estimada con la foto del dueño.",
+   "id": "D12"
+  },
+  {
    "kind": "window",
    "footprint": [
     [
