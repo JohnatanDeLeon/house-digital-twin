@@ -280,6 +280,32 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 - **Color:** la cámara expuso para la calle y la lámina salió saturada a negro (valores crudos de 2 a 8 sobre 255); cualquier blanco de referencia la deja azulada. Se usa el negro medido en la herrería del pasillo (31, 30, 37), y la misma pintura es un supuesto.
 - **Fuera de la textura:** el pasador con candado, que va de un solo lado, como el portacandado de D10. Tampoco se modela la caída de ≈ 1 cm de la hoja izquierda en su punta.
 
+### 21. Frente del pórtico: ventanas con herrería y reja peatonal (2026-10-09, fotos 08:46:59 y 08:47:02)
+
+- **Qué hay (fotos desde el pórtico):** el muro W03 no es ciego. Tiene 2 aberturas sin vidrio, cerradas con herrería, sobre un murete; arriba les queda una trabe hasta el techo. Entre ellas está la reja peatonal (D01).
+- **Medidas del dueño (con cinta):** la abertura grande mide **2.00 × 1.30 m** y la chica, **1.50 × 1.30 m**. Van como V11 y V12 en `add_openings`, con W03 como muro anfitrión.
+- **Estimado con las fotos:**
+  - **Método:** homografía de la reja con los 0.98 m de ancho del plano. Las 2 fotos coinciden entre sí. El largo total del muro sale con 1 cm de diferencia.
+  - **Antepecho:** ≈ 1.00 m, así que las aberturas llegan a 2.30 m. Con ese antepecho, el alto que da la foto es justo el que midió el dueño.
+  - **Pilastras junto a la reja:** 0.29 m del lado de la bodega y 0.20 m del lado de la cochera.
+  - **Proporción de las ventanas:** la foto da 3–4 % más anchas que las medidas; se usan las medidas.
+- **Posición de D01 (corrección al plano):** la abertura grande arranca en la cara del muro de la bodega (x = 8.393 m), como se ve en las fotos. Con sus 2.00 m y la pilastra de 0.29 m, la reja queda en **x = 5.12–6.10 m**. El plano la pone en x = 6.17–7.15, es decir, ≈ 1.05 m más hacia la bodega.
+  - El camino curvo del piso, que va de la reja a la puerta de entrada (D03), cuadra con la posición corregida.
+  - Va en `opening_corrections` de las anotaciones. La huella del plano queda en `plan_footprint` y el abatimiento se mueve con el vano.
+  - La abertura chica queda en x = 3.42–4.92, y entre ella y el portón queda una pilastra de ≈ 0.18 m.
+- **Alto de D01:** ≈ **2.30 m**, porque llega a la misma altura que las ventanas; la foto da 2.29. U04 (2.10 m) no aplica.
+- **Herrería** (`reja-portico`, `ventana-portico-grande`, `ventana-portico-chica`, con `sheet_door`): está dibujada con medidas de las fotos rectificadas, en el mismo estilo que el portón.
+  - **Reja:** 4 arillos, 3 barrotes torcidos y 2 lisos con 4 adornos, varilla a media altura y lámina abajo.
+  - **Ventana grande:** 7 barrotes torcidos y 6 lisos (cada liso con 2 adornos) y 7 arillos.
+  - **Ventana chica:** 5 torcidos, 5 lisos y 5 arillos.
+- **Color:** la lámina de la reja da **(29, 30, 36)**, con el muro de la bodega como blanco de referencia. Es casi el mismo negro de la herrería del pasillo (31, 30, 37), y las ventanas usan ese valor.
+- **Recorrido:** la herrería de las ventanas da sombra; solo las ventanas con vidrio no la dan. Además se corrigió un error: la sombra del foco, que debía estar apagada, se volvía a encender en la línea siguiente.
+- **Pendientes:**
+  - **Bisagra de D01:** el candado está del lado de la bodega, que es donde el plano pone la bisagra. Falta que el dueño confirme.
+  - **Acabados:** el muro de la bodega se ve liso, el techo del pórtico se ve liso (no de tirol), y falta el camino curvo de concreto peinado.
+  - **Exterior:** pretil con cornisa, número 134, lámpara y banqueta.
+  - **Luz del pórtico:** en el techo hay un portalámparas con lo que parece una cámara tipo foco.
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.

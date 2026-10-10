@@ -306,11 +306,11 @@ async function loadHouse() {
     const name = obj.material && obj.material.name;
     obj.material = tag.hdt_kind === 'IfcWindow' && tag.hdt_size ? windowMaterial(tag.hdt_size, tag.hdt_grid) : materialFor(name);
     if (tag.hdt_id) (byOpening[tag.hdt_id] = byOpening[tag.hdt_id] || []).push({ mesh: obj, material: obj.material });
+    obj.castShadow = !(tag.hdt_kind === 'IfcWindow' && tag.hdt_size);  // el vidrio no da sombra; la herrería sí
     if (tag.hdt_kind === 'IfcDiscreteAccessory' && /-foco$/.test(tag.hdt_id || '')) {
       obj.castShadow = false;  // el foco envuelve a su luz: si proyectara sombra, la apagaría
       bulbs.push(obj);
     }
-    obj.castShadow = tag.hdt_kind !== 'IfcWindow';
     if (obj.material.userData.depth) obj.customDepthMaterial = obj.material.userData.depth;
     obj.receiveShadow = true;
     if (['IfcWall', 'IfcWindow', 'IfcFurniture'].includes(tag.hdt_kind)) colliders.push(obj);

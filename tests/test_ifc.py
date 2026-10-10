@@ -11,9 +11,9 @@ def test_ifc_is_schema_valid_and_complete(facts):
     assert log.statements == []
     assert len(model.by_type('IfcWall')) == len(facts['walls'])
     # 9 puertas del plano + 2 de herrería del dueño; 9 ventanas del plano + la del tragaluz (estimada con fotos)
-    assert len(model.by_type('IfcDoor')) == 12 and len(model.by_type('IfcWindow')) == 10
+    assert len(model.by_type('IfcDoor')) == 12 and len(model.by_type('IfcWindow')) == 12
     # la herrería va entre dos muros, sin hueco que cortar
-    assert len(model.by_type('IfcRelVoidsElement')) == 19 and len(model.by_type('IfcRelFillsElement')) == 19
+    assert len(model.by_type('IfcRelVoidsElement')) == 21 and len(model.by_type('IfcRelFillsElement')) == 21
     assert len(model.by_type('IfcSpace')) == len(facts['spaces'])
 
 
@@ -27,7 +27,7 @@ def test_ifc_flags_assumed_heights(facts):
 def test_ifc_uses_owner_door_height(facts):
     import ifcopenshell.util.element as ue
     model = build_ifc(facts)
-    door = model.by_type('IfcDoor')[0]
+    door = next(d for d in model.by_type('IfcDoor') if d.Name == 'D02')
     assert door.OverallHeight == 2.10
     assert ue.get_psets(door)['HDT_Provenance']['HeightAssumed'] is False
 
