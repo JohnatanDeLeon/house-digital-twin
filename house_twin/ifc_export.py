@@ -384,6 +384,9 @@ def _add_parts(ctx: _IfcContext, storey, spec, parts):
         ifcopenshell.api.material.assign_material(ctx.model, products=[element], material=ctx.material(part['material']))
         if part.get('image_facing'):  # imagen (pantalla): Blender encuadra la textura en la cara que mira hacia allá
             ctx.pset(element, 'HDT_Image', {'FacingX': part['image_facing'][0], 'FacingY': part['image_facing'][1]})
+        if part.get('image_plane'):  # imagen acostada: hacia dónde quedan la derecha y lo de arriba de la foto
+            (rx, ry), (ux, uy) = part['image_plane']
+            ctx.pset(element, 'HDT_Image', {'RightX': rx, 'RightY': ry, 'UpX': ux, 'UpY': uy})
         ctx.pset(element, 'HDT_Provenance', {'Space': spec['applies_to']['space'], 'Source': spec['applies_to']['source'],
                                              'Measures': part.get('source') or spec['measure_source']})
 

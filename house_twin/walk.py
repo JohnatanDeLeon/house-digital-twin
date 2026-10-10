@@ -16,13 +16,13 @@ from house_twin.variants import opening_overrides
 
 TEMPLATE = Path(__file__).with_name('walk_template.html')
 DATA_MARKER = '/*__WALK_DATA__*/null'
-MAP_SIZES = {'basecolor': 1024, 'normal': 1024, 'roughness': 512, 'opacity': 512}  # px del lado mayor
+MAP_SIZES = {'basecolor': 1024, 'normal': 1024, 'roughness': 512, 'opacity': 512, 'metallic': 512}  # px del lado mayor
 GLASS_ALPHA = 0.3  # el vidrio de una puerta se deja ver un poco, en vez de desaparecer
 
 
 def _light_map(src: Path, dst: Path, kind: str, glass: bool = False):
     img = Image.open(src)
-    img = img.convert('L' if kind in ('roughness', 'opacity') else 'RGB')
+    img = img.convert('L' if kind in ('roughness', 'opacity', 'metallic') else 'RGB')
     img.thumbnail((MAP_SIZES[kind], MAP_SIZES[kind]), Image.LANCZOS)
     if kind == 'opacity' and glass:  # 0 = vidrio, 1 = hoja → alfa del visor; sin vidrio, el hueco queda en 0
         img = img.point(lambda v: round(255 * (GLASS_ALPHA + (1 - GLASS_ALPHA) * v / 255)))

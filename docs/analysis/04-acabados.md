@@ -490,6 +490,25 @@ Las medidas importan más aquí. Cada dato lleva su fuente en `sources/lavanderi
 - **Medidas:** salen de la foto de frente, con los módulos ya medidos como escala (± 3 cm); la altura del tubo de abajo, ± 10 cm. Lo guardado es aproximado.
 - **Pendiente:** el pino de las torres usa la textura del closet de la otra recámara, más rojiza que este. La herencia `based_on` no pasa el interior al closet de R2.
 
+### 31. Playera de Venom digitalizada (2026-10-10)
+
+- **Qué es:** playera negra de algodón, de manga corta y cuello redondo con vivo, con la etiqueta blanca en el cuello. El estampado es la cara de Venom: los ojos los forma la palabra VENOM 2 veces, más los dientes, la lengua y la mandíbula. Es de **foil plateado tipo espejo**: en la foto se ve gris, rosa o blanco según lo que refleja.
+- **Perspectiva:** la foto se tomó inclinada; abajo la playera se ve 20 % más ancha.
+  - **Cómo se corrigió:** los costados del cuerpo, que en una playera son rectos, se ajustaron con una recta cada uno. Con la focal (23 mm), ese trapecio es un rectángulo de ancho/alto 1.378 (coseno 0.023).
+  - **Escala (supuesta):** ancho de pecho de 0.52 m (talla M). De ahí, ≈ 0.78 m de manga a manga y ≈ 0.71 m del hombro a la orilla de la foto.
+- **Silueta** (`build_garment`, nuevo en `textures.py`): la tela oscura sobre la sábana clara.
+  - **Fondo:** todo lo claro que toca algún borde, más lo que cae fuera de la foto. Lo claro que la tela encierra (el estampado y la etiqueta) es parte de la prenda.
+  - **Limpieza:** una apertura de 4 px separa la sombra de un pliegue que tocaba el hombro.
+  - **Resultado:** la silueta es la opacidad de la textura (recorte nítido).
+- **Estampado:** lo claro dentro de su zona, más lo que está junto a él y es más claro que la tela (el foil que reflejaba algo oscuro, como en la lengua).
+  - **Color y brillo:** se pinta del color del metal (plata, supuesto) y lleva un mapa `metallic.png`. En Blender y en el recorrido refleja el cuarto solo ahí, con rugosidad 0.32; la tela queda mate (0.95).
+  - **Medidas:** cubre el 2.4 % de la prenda. La tela mide (34, 37, 43), tal como la registró la cámara.
+- **Dónde va:** extendida sobre la cama de S03, que es donde se tomó la foto (se ve la cobija morada en la esquina), con el cuello hacia la cabecera. Es una placa de 3 mm con la imagen acostada (`flat_items`; UV con `HDT_Image` Right/Up).
+- **Límites:**
+  - La orilla de abajo queda en el borde de la foto, así que el largo puede ser 1–3 cm mayor.
+  - Los pliegues y la pelusa vienen de la foto; la placa es plana.
+  - La espalda no se fotografió.
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.

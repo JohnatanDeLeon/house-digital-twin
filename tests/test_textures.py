@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -200,3 +201,14 @@ def test_glass_takes_its_material_not_the_photo(tmp_path, monkeypatch):
     assert np.abs(base[10, 10] - 40).max() <= 3                  # el marco sí sale de la foto
     rough = np.asarray(Image.open(out / 'roughness.png')).astype(float) / 255
     assert rough[50, 37] == pytest.approx(0.03, abs=0.01)
+
+
+def test_garment_texture_cuts_the_silhouette_and_marks_the_foil():
+    folder = Path(__file__).resolve().parent.parent / 'assets' / 'textures' / 'playera-venom'
+    material = json.loads((folder / 'material.json').read_text())
+    alpha = np.asarray(Image.open(folder / 'opacity.png')) > 128
+    metal = np.asarray(Image.open(folder / 'metallic.png')) > 128
+    assert 0.45 < alpha.mean() < 0.75  # la playera, sin la sábana
+    assert 0.01 < material['source']['print_coverage'] < 0.06  # el estampado es una parte chica
+    assert not alpha[0, 0] and alpha[alpha.shape[0] // 2, alpha.shape[1] // 2]
+    assert metal.any()

@@ -205,6 +205,13 @@ def bedroom_parts(spec: dict) -> list[dict]:
         parts += _desk(spec['desk'])
     if spec.get('office'):
         parts += office_parts(spec['office'])
+    for item in spec.get('flat_items', []):  # prenda extendida: placa delgada con la silueta recortada de la foto
+        (cx, cy), (rx, ry), (ux, uy) = item['centre'], item['right'], item['up']
+        w, h = item['size_m']
+        frame = _Run({'origin': [cx, cy], 'along': [rx, ry], 'into_room': [ux, uy]})
+        parts.append({'id': item['id'], 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': item['object_type'],
+                      'material': item['material'], 'mesh': frame.box((-w / 2, w / 2), (item['z'], item['z'] + 0.003), (-h / 2, h / 2)),
+                      'source': item['source'], 'image_plane': [[rx, ry], [ux, uy]]})
     for art in spec.get('artworks', []):  # cuadro: tabla con canto de madera y la imagen de la foto al frente
         frame = _Run(art['wall'])
         t = art['thickness_m']

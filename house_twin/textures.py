@@ -12,7 +12,7 @@ import json
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageFilter, ImageOps
+from PIL import Image, ImageDraw, ImageFilter, ImageOps
 
 ROOT = Path(__file__).resolve().parent.parent
 TEXTURES_DIR = ROOT / 'assets' / 'textures'
@@ -606,8 +606,84 @@ def _glass_pbr(name: str) -> dict:
     return json.loads((TEXTURES_DIR / name / 'material.json').read_text())['pbr']
 
 
+def _component(mask: np.ndarray, seed) -> np.ndarray:
+    """La parte de `mask` conectada con `seed` (relleno por inundación de PIL, sin dependencias extra)."""
+    img = Image.fromarray(np.where(mask, 255, 0).astype(np.uint8), 'L').copy()
+    ImageDraw.floodfill(img, tuple(int(v) for v in seed), 128)
+    return np.asarray(img) == 128
+
+
+def build_garment(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
+    """Prenda fotografiada extendida: silueta recortada (opacidad), tela de la foto y estampado metálico.
+
+    - Silueta: la tela oscura sobre la sábana clara. Lo claro que la toca desde el borde de la foto es fondo; lo claro
+      encerrado por la tela (el estampado, la etiqueta) es prenda. Se queda solo la pieza conectada con `seed_frac`.
+    - Estampado (`print`): lo claro dentro de su zona. Si es de foil metálico, en la foto se ve lo que refleja (la
+      sábana, el cuarto), no su color: se pinta con el color del metal y se marca metálico, como el vidrio de D03.
+    """
+    g = spec['garment']
+    px_per_m = spec['px_per_m']
+    size_px = (round(spec['size_m']['width'] * px_per_m), round(spec['size_m']['height'] * px_per_m))
+    photo = ImageOps.exif_transpose(Image.open(photos_root / spec['photo'])).convert('RGB')
+    base = rectify(photo, spec['corners_px'], size_px)
+    lin = _srgb_to_linear(np.asarray(base).astype(float) / 255)
+    lum = np.asarray(base.convert('L')).astype(float)
+    H, W = lum.shape
+    inside_photo = np.asarray(rectify(Image.new('L', photo.size, 255), spec['corners_px'], size_px)) > 128
+    light = (lum >= g['fabric_max_lum']) | ~inside_photo  # lo que cae fuera de la foto también es fondo
+    background = np.zeros_like(light)
+    border = [(x, 0) for x in range(W)] + [(x, H - 1) for x in range(W)] + [(0, y) for y in range(H)] + [(W - 1, y) for y in range(H)]
+    for x, y in border[::4]:  # el fondo es todo lo claro que toca algún borde
+        if light[y, x] and not background[y, x]:
+            background |= _component(light, (x, y))
+    seed = (g['seed_frac'][0] * W, g['seed_frac'][1] * H)
+    # apertura: lo que solo se une a la prenda por una franja fina (la sombra de un pliegue) se suelta
+    core = _blur((~background).astype(float), g.get('open_px', 4)) > 0.97
+    garment = _blur(_component(core, seed).astype(float), g.get('open_px', 4)) > 0.03
+    garment &= ~background
+    pr = g['print']
+    x0, y0, x1, y1 = (round(v * d) for v, d in zip(pr['region_frac'], (W, H, W, H)))
+    in_region = np.zeros_like(garment)
+    in_region[y0:y1, x0:x1] = True
+    printed = garment & in_region & (lum >= pr['min_lum'])
+    # el foil también refleja cosas oscuras: lo que está junto al estampado y es más claro que la tela, también es foil
+    near = _blur(printed.astype(float), pr.get('close_px', 4)) > 0.25
+    printed |= garment & in_region & near & (lum >= pr.get('reflection_min_lum', 50))
+    printed = _blur(printed.astype(float), pr.get('soften_px', 1.0)) > 0.5
+    fabric = garment & ~printed
+    fabric_color = np.median(lin[fabric], axis=0)
+    lin[~garment] = fabric_color  # sin halo claro en la orilla al filtrar la textura
+    lin[printed] = _srgb_to_linear(np.array(pr['basecolor_srgb'], float) / 255)
+    metallic = _blur(printed.astype(float), 0.8)
+    roughness = np.where(printed, pr['roughness'], g['fabric_roughness'])
+    grain = _grain(_to_image(np.where(printed[..., None], lin, lin)), 1.5)
+    height = grain * g.get('weave_mm', 0.15) / 1000 + printed * pr.get('thickness_mm', 0.1) / 1000
+    out.mkdir(parents=True, exist_ok=True)
+    detail_px = (round(W * DETAIL_MAP_SCALE), round(H * DETAIL_MAP_SCALE))
+    _to_image(lin).save(out / 'basecolor.jpg', quality=92)
+    Image.fromarray((roughness * 255).round().astype(np.uint8)).resize(detail_px, Image.LANCZOS).save(out / 'roughness.png', optimize=True)
+    _normal_map(height, px_per_m).resize(detail_px, Image.LANCZOS).save(out / 'normal.png', optimize=True)
+    Image.fromarray((garment * 255).astype(np.uint8)).save(out / 'opacity.png', optimize=True)
+    Image.fromarray((metallic * 255).round().astype(np.uint8)).resize(detail_px, Image.LANCZOS).save(out / 'metallic.png', optimize=True)
+    material = {
+        'name': spec['name'], 'applies_to': spec['applies_to'], 'size_m': spec['size_m'], 'px_per_m': px_per_m,
+        'size_px': list(size_px), 'tileable': False, 'grid': None,
+        'maps': {'basecolor': 'basecolor.jpg', 'roughness': 'roughness.png', 'normal': 'normal.png (OpenGL)',
+                 'opacity': 'opacity.png (0 = fuera de la prenda)', 'metallic': 'metallic.png (estampado de foil)'},
+        'glass_material': None,
+        'source': {'photo': spec['photo'], 'photo_meta': spec.get('photo_meta', {}), 'perspective': spec.get('perspective'),
+                   'fabric_srgb': [int(v) for v in np.round(_linear_to_srgb(fabric_color) * 255)],
+                   'print_coverage': round(float(printed.sum() / garment.sum()), 4)},
+        'observed': spec.get('observed', {}), 'assumptions': spec.get('assumptions', []),
+    }
+    (out / 'material.json').write_text(json.dumps(material, ensure_ascii=False, indent=1) + '\n')
+    return out
+
+
 def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     spec = json.loads(spec_path.read_text())
+    if spec.get('garment'):
+        return build_garment(spec, TEXTURES_DIR / spec['name'], photos_root)
     if spec.get('kind') == 'constant':
         return build_material(spec, TEXTURES_DIR / spec['name'], photos_root)
     if spec.get('kind') == 'procedural':

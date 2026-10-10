@@ -102,6 +102,8 @@ def texture_material(name, spec, specs):
     normal = nt.nodes.new('ShaderNodeNormalMap')
     nt.links.new(image('normal.png', 'Non-Color').outputs[0], normal.inputs['Color'])
     nt.links.new(normal.outputs[0], bsdf.inputs['Normal'])
+    if 'metallic' in spec['maps']:  # estampado de foil: metálico solo donde lo marca el mapa
+        nt.links.new(image('metallic.png', 'Non-Color').outputs[0], bsdf.inputs['Metallic'])
     if spec.get('emissive'):  # pantalla encendida
         nt.links.new(image('basecolor.jpg', 'sRGB').outputs[0], bsdf.inputs['Emission Color'])
         bsdf.inputs['Emission Strength'].default_value = spec['emissive']
@@ -203,6 +205,23 @@ def write_uvs(obj, fit=None, front=None, axis=None):
     bm.to_mesh(obj.data)
     bm.free()
     return (u1 - u0, z1 - z0) if fit else None
+
+
+def write_plane_uvs(obj, right, up):
+    """UV 0–1 de una imagen acostada: U a lo largo de `right` y V de `up`, ajustadas al objeto."""
+    mw = obj.matrix_world
+    bm = bmesh.new()
+    bm.from_mesh(obj.data)
+    layer = bm.loops.layers.uv.verify()
+    pts = [mw @ v.co for v in bm.verts]
+    u0, u1 = min(p.dot(right) for p in pts), max(p.dot(right) for p in pts)
+    v0, v1 = min(p.dot(up) for p in pts), max(p.dot(up) for p in pts)
+    for face in bm.faces:
+        for loop in face.loops:
+            p = mw @ loop.vert.co
+            loop[layer].uv = ((p.dot(right) - u0) / (u1 - u0), (p.dot(up) - v0) / (v1 - v0))
+    bm.to_mesh(obj.data)
+    bm.free()
 
 
 def split_at_boundaries(obj, boundaries, heights=()):
@@ -307,7 +326,9 @@ class Scene:
         import ifcopenshell.util.element as ue
         material = _ifc_material(obj)
         image = ue.get_psets(tool.Ifc.get_entity(obj)).get('HDT_Image')
-        if image:  # pantalla: la foto entera en su cara, con la U hacia la derecha de quien la mira
+        if image and 'UpX' in image:  # imagen acostada (una prenda extendida): U a la derecha y V hacia arriba de la foto
+            write_plane_uvs(obj, Vector((image['RightX'], image['RightY'], 0)), Vector((image['UpX'], image['UpY'], 0)))
+        elif image:  # pantalla: la foto entera en su cara, con la U hacia la derecha de quien la mira
             write_uvs(obj, fit='unit', axis=Vector((-image['FacingY'], image['FacingX'], 0)))
         else:
             write_uvs(obj)  # melamina: veta en metros del mundo, como los muros

@@ -260,6 +260,9 @@ function mappedMaterial(spec) {
     m.emissiveMap = m.map; m.emissive = new THREE.Color(0xffffff); m.emissiveIntensity = spec.emissive;
   }
   if (spec.maps.roughness) m.roughnessMap = texture(spec.maps.roughness, false, spec);
+  if (spec.maps.metallic) {  // estampado de foil: refleja el cuarto solo donde lo marca el mapa
+    m.metalnessMap = texture(spec.maps.metallic, false, spec); m.metalness = 1; m.envMap = metalEnvironment(); m.envMapIntensity = 0.9;
+  }
   if (spec.maps.normal) m.normalMap = texture(spec.maps.normal, false, spec);
   if (spec.maps.opacity && spec.glass) { m.alphaMap = texture(spec.maps.opacity, false, spec); m.transparent = true; }
   else if (spec.maps.opacity) {  // herrería: recorte nítido, y la sombra sigue los barrotes
