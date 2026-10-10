@@ -303,7 +303,7 @@
      -0.16,
      -0.1
     ],
-    "material": "ropa-blanca",
+    "material": "plastico-blanco",
     "shape": "cylinder"
    },
    {
@@ -444,7 +444,7 @@
      -0.25,
      -0.08
     ],
-    "material": "ropa-blanca",
+    "material": "plastico-blanco",
     "note": "bolsa transparente"
    },
    {
