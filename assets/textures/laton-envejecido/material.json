@@ -1,0 +1,60 @@
+{
+ "name": "laton-envejecido",
+ "applies_to": {
+  "hardware": "perilla",
+  "source": "foto de la chapa de una puerta de madera (dueño, 2026-10-08)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "metallic": 1.0,
+  "roughness": 0.38,
+  "note": "cepillado y gastado: reflejo borroso",
+  "basecolor_srgb": [
+   197,
+   176,
+   134
+  ]
+ },
+ "source": {
+  "photo": "sources/fotos/perilla-recamara.jpg",
+  "photo_meta": {
+   "taken": "2026-10-08T22:38:43",
+   "camera": "Samsung Galaxy S25 Ultra",
+   "focal_35mm": 23
+  },
+  "color": {
+   "white_reference": {
+    "box_px": [
+     120,
+     1200,
+     500,
+     2800
+    ],
+    "albedo_srgb": [
+     235,
+     235,
+     235
+    ],
+    "note": "muro de yeso a la izquierda de la puerta"
+   }
+  },
+  "white_balance_gain": [
+   1.3911,
+   1.1145,
+   0.9183
+  ],
+  "sample": {
+   "box_px": [
+    1400,
+    1530,
+    1800,
+    1600
+   ],
+   "note": "media luna superior de la roseta, cepillada"
+  }
+ },
+ "observed": {},
+ "assumptions": [
+  "la reflectancia del latón se toma del color de la roseta corregido con el muro blanco (aproximación: en un metal depende del entorno)"
+ ]
+}

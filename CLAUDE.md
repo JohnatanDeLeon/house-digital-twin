@@ -39,6 +39,9 @@ Gemelo digital de una casa (Casa Jonhy). Código en inglés, comentarios y docum
   `house_twin/finishes.py` lo resuelve (gana la textura que lista menos espacios) y lo usan el IFC (pisos como
   `IfcCovering` y materiales de vanos) y `blender_scene.py`. Una superficie sin acabado sale en gris violáceo (`sin-dato`).
 - `finishes.py` solo usa la biblioteca estándar: lo importa también el Python de Blender.
+- Herrajes (chapas) en `sources/herrajes/<nombre>.json`: perfil torneado, posición en fracciones de la hoja y material.
+  `house_twin/hardware.py` (solo stdlib) arma la malla y `ifc_export` la guarda como `IfcDiscreteAccessory`, parte de
+  su puerta. Necesitan el abatimiento (`swing`) que sale de los bloques `PUERTA` del DXF.
 
 ## Comandos
 

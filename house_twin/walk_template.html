@@ -136,6 +136,7 @@ body.touch .here { left: auto; right: 16px; bottom: calc(env(safe-area-inset-bot
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/environments/RoomEnvironment.js"></script>
 <script src="casa.js"></script>
 <script>
 const DATA = /*__WALK_DATA__*/null;
@@ -213,10 +214,19 @@ function texture(path, srgb, spec) {
 }
 const pending = new Set();
 
+// Un metal solo se ve por lo que refleja: sin entorno, el latón de las chapas sale negro. Se le da un cuarto
+// genérico para reflejar (solo a los metales: el resto de la casa conserva su luz).
+let metalEnv = null;
+function metalEnvironment() {
+  if (!metalEnv && THREE.RoomEnvironment) metalEnv = new THREE.PMREMGenerator(renderer).fromScene(new THREE.RoomEnvironment(), 0.04).texture;
+  return metalEnv;
+}
 function constantMaterial(pbr) {
   const glass = (pbr.transmission || 0) > 0;
+  const metalness = pbr.metalness ?? pbr.metallic ?? 0;
   return new THREE.MeshStandardMaterial({
-    color: linearColor(pbr.basecolor_srgb), roughness: pbr.roughness ?? 0.5, metalness: pbr.metalness ?? pbr.metallic ?? 0,
+    color: linearColor(pbr.basecolor_srgb), roughness: pbr.roughness ?? 0.5, metalness,
+    envMap: metalness > 0 ? metalEnvironment() : null, envMapIntensity: 0.9,
     transparent: glass, opacity: glass ? 0.28 : 1, side: glass ? THREE.DoubleSide : THREE.FrontSide,
   });
 }

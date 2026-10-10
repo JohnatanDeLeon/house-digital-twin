@@ -1,0 +1,16 @@
+{
+ "_doc": "Latón envejecido de las chapas de perilla. Metal: el color base es su reflectancia; se mide en la roseta cepillada, que refleja la pared y el foco. La perilla sale más oscura en la foto porque refleja el entorno, no porque sea otro color. Regenerar con: python -m house_twin.cli texture sources/texturas/laton-envejecido.json",
+ "name": "laton-envejecido",
+ "kind": "constant",
+ "applies_to": {"hardware": "perilla", "source": "foto de la chapa de una puerta de madera (dueño, 2026-10-08)"},
+ "photo": "sources/fotos/perilla-recamara.jpg",
+ "photo_meta": {"taken": "2026-10-08T22:38:43", "camera": "Samsung Galaxy S25 Ultra", "focal_35mm": 23},
+ "color": {"white_reference": {"box_px": [120, 1200, 500, 2800], "albedo_srgb": [235, 235, 235], "note": "muro de yeso a la izquierda de la puerta"}},
+ "pbr": {
+  "sample": {"box_px": [1400, 1530, 1800, 1600], "note": "media luna superior de la roseta, cepillada"},
+  "metallic": 1.0,
+  "roughness": 0.38,
+  "note": "cepillado y gastado: reflejo borroso"
+ },
+ "assumptions": ["la reflectancia del latón se toma del color de la roseta corregido con el muro blanco (aproximación: en un metal depende del entorno)"]
+}

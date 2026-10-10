@@ -43,6 +43,8 @@
     "height": 2.04,
     "source": "supuesto: proporción medida en la foto (alto/ancho ≈ 2.52) y vano de 2.10 m menos marco y holgura; pendiente de medir"
   },
+  "latch_side": "left",
+  "latch_side_note": "en la foto la perilla está a la izquierda y las bisagras a la derecha: la escena orienta la hoja para que este canto quede donde el plano no pone la bisagra",
   "px_per_m": 1800,
   "color": {
     "white_reference": {

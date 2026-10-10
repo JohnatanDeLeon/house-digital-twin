@@ -3072,7 +3072,19 @@
    "host_wall": "W03",
    "connects": [
     "S11"
-   ]
+   ],
+   "swing": {
+    "hinge_end": [
+     7.153,
+     0.1
+    ],
+    "latch_end": [
+     6.173,
+     0.1
+    ],
+    "opens_into": "S11",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra)"
+   }
   },
   {
    "kind": "door",
@@ -3110,7 +3122,19 @@
    "connects": [
     "S01",
     "S07"
-   ]
+   ],
+   "swing": {
+    "hinge_end": [
+     9.763,
+     3.335
+    ],
+    "latch_end": [
+     8.983,
+     3.335
+    ],
+    "opens_into": "S07",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra)"
+   }
   },
   {
    "kind": "door",
@@ -3148,7 +3172,19 @@
    "connects": [
     "S01",
     "S11"
-   ]
+   ],
+   "swing": {
+    "hinge_end": [
+     7.743,
+     3.34
+    ],
+    "latch_end": [
+     6.743,
+     3.34
+    ],
+    "opens_into": "S01",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra)"
+   }
   },
   {
    "kind": "door",
@@ -3186,7 +3222,19 @@
    "connects": [
     "S01",
     "S12"
-   ]
+   ],
+   "swing": {
+    "hinge_end": [
+     1.29,
+     9.225
+    ],
+    "latch_end": [
+     1.29,
+     8.395
+    ],
+    "opens_into": "S12",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra)"
+   }
   },
   {
    "kind": "door",
@@ -3224,7 +3272,19 @@
    "connects": [
     "S01",
     "S05"
-   ]
+   ],
+   "swing": {
+    "hinge_end": [
+     4.325,
+     12.625
+    ],
+    "latch_end": [
+     4.325,
+     11.825
+    ],
+    "opens_into": "S05",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra)"
+   }
   },
   {
    "kind": "door",
@@ -3262,7 +3322,19 @@
    "connects": [
     "S01",
     "S03"
-   ]
+   ],
+   "swing": {
+    "hinge_end": [
+     4.515,
+     12.815
+    ],
+    "latch_end": [
+     4.515,
+     13.695
+    ],
+    "opens_into": "S03",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra)"
+   }
   },
   {
    "kind": "door",
@@ -3300,7 +3372,19 @@
    "connects": [
     "S01",
     "S04"
-   ]
+   ],
+   "swing": {
+    "hinge_end": [
+     5.705,
+     11.86
+    ],
+    "latch_end": [
+     5.705,
+     11.0
+    ],
+    "opens_into": "S04",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra)"
+   }
   },
   {
    "kind": "door",
@@ -3338,7 +3422,19 @@
    "connects": [
     "S01",
     "S02"
-   ]
+   ],
+   "swing": {
+    "hinge_end": [
+     5.705,
+     12.04
+    ],
+    "latch_end": [
+     5.705,
+     12.935
+    ],
+    "opens_into": "S02",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra)"
+   }
   },
   {
    "kind": "door",
@@ -3376,7 +3472,19 @@
    "connects": [
     "S06",
     "S11"
-   ]
+   ],
+   "swing": {
+    "hinge_end": [
+     8.478,
+     1.855
+    ],
+    "latch_end": [
+     8.478,
+     1.02
+    ],
+    "opens_into": "S06",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra)"
+   }
   },
   {
    "kind": "door",

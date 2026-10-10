@@ -215,6 +215,18 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
   - **Tono medido:** ≈ 193°, igual en la foto de R3 (de día, a través de V05) y en la de V10 (de noche, a través del vidrio).
   - **Supuestos:** saturación y luminosidad, a medio camino entre las dos. De día el azul sale recortado en 255; de noche, el muro recibe mucha menos luz que el blanco de referencia.
 
+### 16. Chapas de las puertas de madera (22:38:35 a 22:38:45)
+
+- **Fotos:** 3 de la chapa de una puerta de madera, de cerca y de noche. Las cinco puertas de madera son iguales (D02, D05, D06, D07 y D08).
+- **Chapa:** de perilla tipo bola, de latón envejecido. La roseta es redonda y cepillada (Ø ≈ 5.8 cm) y la perilla mide Ø ≈ 5.5 cm. El hueco del centro tiene un botón de seguro vertical, que va del lado de adentro del cuarto. En el canto van el pestillo y, en el marco, el cerradero (no se modelan).
+- **Primer herraje en 3D:** `sources/herrajes/perilla-laton.json` describe el perfil torneado (mm), la posición y el material. `build` lo genera dentro del IFC como `IfcDiscreteAccessory`, parte de su puerta, con una perilla en cada cara y el botón del lado del cuarto.
+- **Posición:** sale del parche que tapó la perilla en la foto de la hoja. El centro queda a 0.072 del ancho desde el canto de la chapa (5.8 cm, la entrada estándar de 6 cm) y a 0.485 del alto desde arriba (≈ 1.05 m del piso).
+- **Abatimiento (dato del plano):** los 9 bloques `PUERTA` del DXF traen el arco de abatimiento; su centro es la bisagra. Cada puerta tiene ahora `swing` en los hechos: bisagra, canto de la chapa y espacio hacia el que abre. Las cinco de madera abren hacia su cuarto.
+  - **Orientación de la textura:** la de madera declara `latch_side: left` (en la foto, la perilla está a la izquierda), y la escena orienta la hoja para que ese canto quede del lado contrario a la bisagra del plano.
+  - **Discrepancia en D09:** el plano pone la bisagra en el extremo norte (y = 1.855 m) y la puerta abriendo hacia la bodega. En la foto desde el pórtico, las bisagras se ven a la derecha (el extremo sur). D09 se orienta por su foto (`viewed_from`). Falta que el dueño confirme hacia dónde abre.
+- **Latón (`laton-envejecido`):** metálico. El color base se midió en la roseta cepillada, corregido con el muro blanco: `#c5b086`. En el recorrido, los metales reflejan un cuarto genérico; sin él, el latón salía negro.
+- **Supuestos:** la salida de la perilla (5.5 cm) y el espesor de la roseta, porque las fotos son de frente; y que la perilla de afuera es igual a la de adentro, sin botón.
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.

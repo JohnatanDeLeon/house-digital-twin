@@ -4,6 +4,7 @@
 - Arcos, splines y polilíneas con bulge se aproximan por cuerdas (FLATTEN_TOLERANCE_M).
 - El origen se traslada a la esquina inferior izquierda de MUROS, igual que la fuente PDF.
 """
+import math
 from collections import Counter
 
 import ezdxf
@@ -18,6 +19,7 @@ TEXT_TYPES = {'TEXT', 'MTEXT', 'ATTRIB'}
 # Si $INSUNITS falta o no cuadra con la geometría, se infiere por el tamaño de los muros
 UNIT_GUESSES = ((6, 1, 100), (5, 100, 10_000), (4, 1_000, 100_000))
 PLAUSIBLE_HALF_EXTENT_M = (1.0, 100.0)  # mitad del lado mayor de una casa, en metros
+DOOR_BLOCK = 'PUERTA'  # bloque de puerta del CAD: su arco mayor es el abatimiento, con centro en la bisagra
 
 
 def _effective_layer(entity, parent_layer):
@@ -98,7 +100,34 @@ def load_dxf_drawing(dxf_path: str) -> Drawing:
             pts = [to_m(p) for p in _polyline_points(e, tolerance)]
             drawing.segments.setdefault(layer, []).extend((a, b) for a, b in zip(pts, pts[1:]) if a != b)
     drawing.texts = [Text(layer, value, to_m(pos)) for layer, value, pos in raw_texts]
+    drawing.metadata['door_swings'] = _door_swings(doc, to_m)
     return drawing
+
+
+def _door_swings(doc, to_m) -> list[dict]:
+    """Bisagra y punto medio del arco de cada bloque de puerta, en metros del modelo.
+
+    El arco mayor del bloque es el barrido de la hoja: su centro es la bisagra y su punto medio cae del lado
+    hacia el que abre. Se transforma con la matriz de cada inserción (giro, escala y espejo incluidos).
+    """
+    if DOOR_BLOCK not in doc.blocks:
+        return []
+    arcs = [e for e in doc.blocks[DOOR_BLOCK] if e.dxftype() == 'ARC']
+    if not arcs:
+        return []
+    arc = max(arcs, key=lambda a: a.dxf.radius)
+    c, r = arc.dxf.center, arc.dxf.radius
+    a0, a1 = math.radians(arc.dxf.start_angle), math.radians(arc.dxf.end_angle)
+    if a1 < a0:
+        a1 += 2 * math.pi
+    mid = (a0 + a1) / 2
+    swings = []
+    for ins in doc.modelspace().query(f'INSERT[name=="{DOOR_BLOCK}"]'):
+        m = ins.matrix44()
+        hinge = m.transform((c.x, c.y, 0))
+        arc_mid = m.transform((c.x + r * math.cos(mid), c.y + r * math.sin(mid), 0))
+        swings.append({'hinge': list(to_m((hinge.x, hinge.y))), 'arc_mid': list(to_m((arc_mid.x, arc_mid.y)))})
+    return swings
 
 
 def inventory(dxf_path: str) -> dict:
