@@ -344,6 +344,45 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
   - **Ventana sobre el inodoro:** está en el muro del pórtico (W27) y no aparece en el plano. Tiene vidrio texturizado, marco oscuro y un repisón de azulejo. Desde la calle se ve con protección de herrería; es la «ventana pequeña» que se veía detrás de la abertura del pórtico.
   - **Botiquín:** blanco, con espejo, repisa y toallero, sobre el lavabo.
 
+### 24. Cocineta (2026-10-09, fotos 13:12:33 a 13:13:57)
+
+- **Dónde (plano + fotos):** el plano solo acierta en la estufa (bloque `COCINA`, contra el muro norte) y en el centro de carga (bloque `CENTR`, en el muro del fondo del nicho). La tarja bajo las ventanas y el refrigerador que dibuja el plano no corresponden a la cocina actual.
+  - **Barra:** va contra el muro norte, de muro a muro, en el nicho de 2.85 m (x = 1.375–4.225 m).
+  - **Mueble chico y refrigerador:** en el muro oeste, entre la esquina y la puerta al pasillo (D04), con una alacena sobre el refrigerador.
+- **Medidas (foto de frente, 23 mm):** la barra mide 2.85 m entre muros y la estufa 0.78 m en la foto, lo que cuadra con una estufa de 30" (0.76 m). Con esa escala y la cámara a ≈ 1.10 m:
+  - **Barra baja**, de izquierda a derecha:
+    - mueble de la tarja de 1.07 m (2 puertas + 1 y frente falso);
+    - estufa;
+    - 2 muebles de 0.49 m, cada uno con cajón y 2 puertas.
+  - **Alturas:** cubierta a 0.90 m y puertas de 0.245 × 0.55 m.
+  - **Muebles altos:** de 1.54 a 2.35 m. El de sobre la estufa es más corto (desde 1.72 m) y queda alineado con ella, lo que confirma las medidas.
+  - **Supuestos:** profundidades, zoclo de 0.10 m, el mueble chico de 0.60 m y el refrigerador de 0.70 × 0.70 × 1.75 m. La foto de conjunto es de gran angular y no da escala fiable.
+- **Melamina** (`melamina-cocina`): la textura es la parte baja de una puerta, sin la jaladera, su sombra ni las marcas de limpieza.
+  - **Proporción:** la puerta mide 0.443 por homografía y focal, lo mismo que la foto de frente (0.245 × 0.55 m).
+  - **Tratamiento:** se rectificó, se quitó el brillo azulado de la ventana (`flatten_lighting`) y se hizo repetible.
+  - **Color:** el tono es el de la cámara con luz de día. La luminosidad sale de los muebles altos contra la pared pintada de al lado, en el mismo plano: **(108, 112, 116)**.
+- **Cubierta** (`laminado-cubierta`): la foto tiene el reflejo de la ventana en casi toda la cubierta. Las zonas oscuras con la silueta del dueño son justo donde su cuerpo tapó el reflejo, así que ahí se ve el laminado real.
+  - **Lo que no sirvió:** se probó restar el velo del reflejo (`percentile` y por zonas), pero los bordes de la silueta seguían notándose.
+  - **Cómo se armó:** con 2 trozos de la franja sin reflejo, en 4 hileras desplazadas y volteadas (`compose`). Funciona porque la veta corre a lo largo. Cada trozo se nivela por filas y columnas (`level_px`), y eso quita las bandas de luz en los empalmes sin borrar las fibras.
+  - **Color:** **(74, 74, 77)**, relativo a la melamina de la foto tomada 16 s después (estimación).
+- **Modelo** (`sources/cocina/cocineta.json`, `house_twin/kitchen.py`): los muebles son `IfcFurniture`, con cuerpo, frentes con juntas de 3 mm y jaladeras de barra.
+  - **Cubiertas:** con zoclo trasero de 8 cm.
+  - **Tarja:** de granito negro, con llave cuello de ganso.
+  - **Estufa y refrigerador:** son `IfcElectricAppliance` negros, con colores supuestos.
+  - **En el recorrido:** todo frena el paso.
+- **Azulejo, cenefa y murales** (foto de frente):
+  - **Escala:** el muro del fondo mide 2.85 m (plano) y 3085 px → ≈ 1082 px/m. La foto está derecha (verticales paralelas), así que la escala vertical es la misma; con la cubierta (0.90 m) como ancla, la cámara queda a ≈ 1.09 m.
+  - **Hasta dónde llega el azulejo:** la línea que parecía el techo es el **remate del azulejo, a ≈ 2.23 m**; arriba hay pintura blanca y el techo queda fuera de la foto. Cubre los 3 muros del nicho de la barra, del piso a 2.23 m. Afuera del nicho, el muro es pintado.
+  - **`azulejo-cocina`:** blanco brillante con veteado beige tenue, de **≈ 20 × 30 cm (supuesto)**: juntas cada 205–220 × 320–335 px. Es una columna de 1 × 2 azulejos recortada a la izquierda del mueble alto, sin el reflejo de la ventana y con los agujeros de taquetes tapados. El color se midió contra el muro pintado de arriba: (198, 202, 196).
+  - **`cenefa-cocina`:** listelo de frutas de **≈ 20 × 5.5 cm a 1.24–1.29 m**. Una pieza tomada tal cual (es un diseño impreso) y repetida en los 3 muros.
+  - **`mural-frutas`:** 2 murales iguales, de 2 azulejos (0.40 m) cada uno, sobre la cenefa y hasta el mueble alto (1.295–1.537 m). Su centro está en x = 2.02 y 3.55 m. Se tomó el mural derecho, que no tiene enfrente la llave de la tarja. En el modelo es una placa de 3 mm (`IfcCovering` CLADDING).
+  - **Cómo se aplica:** `Finishes` acepta franjas (`up_to_m: [desde, hasta]`) y zonas en planta (`region_m`); entre capas del mismo espacio gana la franja más angosta. Blender corta los muros en esas alturas y zonas.
+  - **Límite:** la cuadrícula se alinea con la junta de arriba de la cenefa. Debajo, las juntas reales quedan 5.5 cm más abajo.
+- **Pendiente:**
+  - el protector de vidrio detrás de la estufa;
+  - el microondas con su repisa y la cortina;
+  - el centro de carga en el costado derecho.
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.

@@ -1,0 +1,152 @@
+{
+ "_doc": "Azulejo blanco de la cocina (muro del fondo y costados del nicho de la barra). Textura repetible de 1 × 2 azulejos verticales, recortada en los ejes de junta a la izquierda del mueble alto (sin el reflejo de la ventana). Regenerar con: python -m house_twin.cli texture sources/texturas/azulejo-cocina.json",
+ "name": "azulejo-cocina",
+ "applies_to": {
+  "spaces": [
+   "S01"
+  ],
+  "surface": "muros",
+  "up_to_m": {
+   "S01": [
+    0.0,
+    2.23
+   ]
+  },
+  "region_m": {
+   "S01": [
+    [
+     1.37,
+     9.22
+    ],
+    [
+     4.23,
+     9.22
+    ],
+    [
+     4.23,
+     10.06
+    ],
+    [
+     1.37,
+     10.06
+    ]
+   ]
+  },
+  "source": "fotos de la cocina (dueño, 2026-10-09): azulejo blanco en los 3 muros del nicho de la barra, del piso hasta ≈ 2.23 m; arriba, pintura blanca"
+ },
+ "photo": "sources/fotos/cocina-frente.jpg",
+ "photo_meta": {
+  "taken": "2026-10-09T13:13:13",
+  "camera": "Samsung Galaxy S25 Ultra",
+  "focal_35mm": 23,
+  "light": "luz de día de la ventana"
+ },
+ "corners_px": {
+  "top_left": [
+   448,
+   602
+  ],
+  "top_right": [
+   676,
+   610
+  ],
+  "bottom_right": [
+   700,
+   1262
+  ],
+  "bottom_left": [
+   490,
+   1262
+  ]
+ },
+ "grid": {
+  "cols": 1,
+  "rows": 2,
+  "grout_frac": 0.012,
+  "tile_m": 0.2,
+  "tile_aspect": 1.5,
+  "origin_m": {
+   "x": 0,
+   "y": 1.293
+  },
+  "note": "azulejo vertical; una junta horizontal cae en el borde de arriba de la cenefa (1.293 m). Debajo de la cenefa las juntas reales quedan 5.5 cm más abajo (lo que mide la cenefa): no se corrige"
+ },
+ "size_m": {
+  "width": 0.2,
+  "height": 0.6,
+  "source": "estimado con la foto: juntas cada ≈ 205–220 px de ancho y ≈ 320–335 px de alto a ≈ 1082 px/m → azulejo de ≈ 20 × 30 cm (supuesto, pendiente de medir)"
+ },
+ "px_per_m": 2000,
+ "flatten_lighting": {
+  "exclude_darkest": 0.1,
+  "note": "la luz de la ventana cae de un lado"
+ },
+ "color": {
+  "white_reference": {
+   "box_px": [
+    470,
+    40,
+    850,
+    200
+   ],
+   "albedo_srgb": [
+    235,
+    235,
+    233
+   ],
+   "note": "muro pintado arriba del azulejo, en el mismo plano; la misma pintura blanca supuesta que el resto del interior"
+  }
+ },
+ "patches": [
+  {
+   "note": "taquete del muro (agujero), azulejo de arriba",
+   "from_frac": [
+    0.05,
+    0.27,
+    0.4,
+    0.1
+   ],
+   "to_frac": [
+    0.05,
+    0.09
+   ]
+  },
+  {
+   "note": "taquete del muro (agujero), azulejo de arriba",
+   "from_frac": [
+    0.5,
+    0.6,
+    0.4,
+    0.1
+   ],
+   "to_frac": [
+    0.5,
+    0.37
+   ]
+  }
+ ],
+ "relief": {
+  "type": "grid",
+  "grout_depth_mm": 1.5,
+  "edge_round_px": 8,
+  "grain_mm": 0.02,
+  "note": "esmalte liso; junta hundida (supuesto)"
+ },
+ "roughness": {
+  "base": 0.07,
+  "grain": 0.03,
+  "grout": 0.85,
+  "note": "esmalte brillante: refleja la ventana"
+ },
+ "observed": {
+  "finish": "azulejo blanco brillante con veteado beige muy tenue, junta blanca fina",
+  "extent": "del piso a ≈ 2.23 m en los 3 muros del nicho; cenefa de frutas a 1.24–1.29 m; 2 murales de frutas sobre la cenefa",
+  "geometry": "foto de frente: el muro del fondo mide 2.85 m (plano) y 3085 px a la altura del techo → ≈ 1082 px/m; la foto está derecha (verticales paralelas), así que la escala vertical en el muro es la misma; con la cubierta (0.90 m) como ancla, la cámara queda a ≈ 1.09 m",
+  "other": "taquetes y agujeros sueltos en los azulejos; el centro de carga en el costado derecho"
+ },
+ "assumptions": [
+  "azulejo de 20 × 30 cm",
+  "albedo de la pintura de arriba (235) como blanco",
+  "junta hundida 1.5 mm"
+ ]
+}

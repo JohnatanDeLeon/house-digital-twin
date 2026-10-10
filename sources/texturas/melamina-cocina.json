@@ -1,0 +1,77 @@
+{
+ "_doc": "Melamina de los muebles de la cocina: gris grafito con veta vertical clara (tipo roble ceniza). Recorte de la parte baja de una puerta (sin jaladera, sin su sombra ni las marcas de limpieza de arriba), rectificado y hecho repetible. Regenerar con: python -m house_twin.cli texture sources/texturas/melamina-cocina.json",
+ "name": "melamina-cocina",
+ "applies_to": {
+  "furniture": "muebles de cocina (frentes, costados y cajones)",
+  "source": "fotos de la cocina (dueño, 2026-10-09): todos los muebles, bajos y altos, son de la misma melamina"
+ },
+ "photo": "sources/fotos/cocina-puerta-mueble.jpg",
+ "photo_meta": {
+  "taken": "2026-10-09T13:12:49",
+  "camera": "Samsung Galaxy S25 Ultra",
+  "focal_35mm": 23,
+  "light": "luz de día de la ventana"
+ },
+ "corners_px": {
+  "top_left": [
+   599,
+   1785
+  ],
+  "top_right": [
+   2418,
+   1785
+  ],
+  "bottom_right": [
+   2254,
+   3885
+  ],
+  "bottom_left": [
+   859,
+   3885
+  ]
+ },
+ "size_m": {
+  "width": 0.23,
+  "height": 0.354,
+  "source": "la puerta fotografiada es una de los muebles bajos de la derecha (≈ 0.245 × 0.55 m en la foto de frente, con la estufa de 76 cm como escala); su proporción en esta foto (0.443, por homografía y focal) cuadra. El recorte es 0.94 × 0.64 de la puerta"
+ },
+ "px_per_m": 3000,
+ "flatten_lighting": {
+  "exclude_darkest": 0.05,
+  "note": "la ventana deja un brillo azulado que cae de un lado al otro de la puerta"
+ },
+ "color": {
+  "gain": [
+   1.0,
+   1.0,
+   1.0
+  ],
+  "mean_srgb": [
+   108,
+   112,
+   116
+  ],
+  "note": "tono como lo registró la cámara con luz de día (gris neutro, apenas frío). Luminosidad: en la foto de conjunto, los muebles altos contra la pared pintada de al lado, en el mismo plano y con la misma luz, dan (105, 109, 111) y (121, 126, 131); se usa el promedio. Contra el azulejo o en sombra los resultados no sirven (otra luz)"
+ },
+ "seamless": true,
+ "relief": {
+  "type": "flat",
+  "grain_mm": 0.05,
+  "note": "melamina: la veta es impresa, casi sin relieve"
+ },
+ "roughness": {
+  "base": 0.38,
+  "grain": 0.05,
+  "note": "satinada: la ventana se refleja como un brillo difuso"
+ },
+ "observed": {
+  "finish": "melamina gris grafito con veta vertical clara muy marcada (catedrales y vetas rectas), satinada",
+  "handles": "jaladeras de barra de acero inoxidable con 2 postes; verticales en las puertas y horizontales en los cajones",
+  "edges": "canto del mismo acabado; juntas de ≈ 3 mm entre puertas",
+  "condition": "marcas de limpieza y huellas arriba, junto a la jaladera; no van en la textura"
+ },
+ "assumptions": [
+  "luminosidad media del laminado (medida con la pared pintada como blanco, albedo 235)",
+  "rugosidad"
+ ]
+}

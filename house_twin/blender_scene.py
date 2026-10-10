@@ -222,8 +222,9 @@ class Scene:
         self.finishes, self.specs = finishes, specs
         self.openings = openings or {}  # hechos de cada vano por id (retícula de las ventanas)
         # una cara de muro puede mirar a dos espacios (sale del baño y sigue en el pasillo): se corta en sus límites
-        self.boundaries = (sorted({round(p[0], 3) for s in spaces for p in s['polygon']}),
-                           sorted({round(p[1], 3) for s in spaces for p in s['polygon']}))
+        regions = [r for layers in finishes.wall_layers.values() for *_, r in layers if r]  # zonas de un acabado (azulejo del nicho)
+        corners = [p for s in spaces for p in s['polygon']] + [p for r in regions for p in r]
+        self.boundaries = (sorted({round(p[0], 3) for p in corners}), sorted({round(p[1], 3) for p in corners}))
         self.materials = {}
         self.unknown = set()
 
@@ -255,7 +256,7 @@ class Scene:
             n = (rot @ poly.normal).normalized()
             c = mw @ poly.center
             if n.z > 0.7 and c.z < LOW_WALL_MAX_M:  # tope de un muro bajo (sardinel): lleva el acabado de su espacio
-                names.append(self.finishes.wall_finish(self.finishes.space_at((c.x, c.y)), c.z) or 'sin-dato')
+                names.append(self.finishes.wall_finish(self.finishes.space_at((c.x, c.y)), c.z, (c.x, c.y)) or 'sin-dato')
                 continue
             if abs(n.z) > 0.7:
                 names.append('corte')
@@ -273,6 +274,15 @@ class Scene:
     def floor(self, obj, space_id):
         write_uvs(obj)
         self._set(obj, [self.finishes.floor(space_id) or 'sin-dato'] * len(obj.data.polygons))
+
+    def decal(self, obj):
+        """Imagen sobre un muro (mural): la textura entera en la cara que mira al cuarto, sin espejar."""
+        import bonsai.tool as tool
+        import ifcopenshell.util.element as ue
+        material = _ifc_material(obj)
+        space = ue.get_psets(tool.Ifc.get_entity(obj)).get('HDT_Provenance', {}).get('Space')
+        write_uvs(obj, fit='unit', front=self._front(obj, space))
+        self._set(obj, [material if material in self.specs else 'sin-dato'] * len(obj.data.polygons))
 
     def shower_floor(self, obj, space_id):
         write_uvs(obj)
@@ -390,6 +400,8 @@ def apply_finishes(ifc_path):
             scene.wall(obj)
         elif ifc_class == 'IfcCovering' and name.endswith('-techo'):
             scene.ceiling(obj, name.removesuffix('-techo'))
+        elif ifc_class == 'IfcCovering' and name.startswith('cocina-'):
+            scene.decal(obj)
         elif ifc_class == 'IfcCovering' and name.endswith('-regadera'):
             scene.shower_floor(obj, name.removesuffix('-regadera'))
         elif ifc_class == 'IfcCovering':
@@ -402,7 +414,7 @@ def apply_finishes(ifc_path):
         elif ifc_class in ('IfcDoor', 'IfcWindow'):
             scene.opening(obj, name)
         elif ifc_class in ('IfcDiscreteAccessory', 'IfcFurniture', 'IfcOutlet', 'IfcSwitchingDevice', 'IfcValve',
-                           'IfcSanitaryTerminal'):
+                           'IfcSanitaryTerminal', 'IfcElectricAppliance'):
             scene.accessory(obj)
         elif ifc_class in ('IfcSpace', 'IfcOpeningElement'):
             obj.hide_render = obj.hide_viewport = True

@@ -1,0 +1,157 @@
+{
+ "_doc": "Laminado postformado de la cubierta de la cocina: negro carbón con fibras grises horizontales (veta a lo largo de la cubierta), brillante. La foto tiene el reflejo de la ventana sobre casi toda la cubierta, salvo donde el cuerpo del dueño lo tapó: la textura se arma solo con 2 trozos de esa franja sin reflejo, en hileras (desplazados y volteados), y se hace repetible. Regenerar con: python -m house_twin.cli texture sources/texturas/laminado-cubierta.json",
+ "name": "laminado-cubierta",
+ "applies_to": {
+  "furniture": "cubiertas de la cocina (barra y mueble junto al refrigerador)",
+  "source": "fotos de la cocina (dueño, 2026-10-09)"
+ },
+ "photo": "sources/fotos/cocina-cubierta.jpg",
+ "photo_meta": {
+  "taken": "2026-10-09T13:12:33",
+  "camera": "Samsung Galaxy S25 Ultra",
+  "focal_35mm": 23,
+  "light": "luz de día de la ventana, que se refleja en la cubierta"
+ },
+ "compose": {
+  "px_per_m": 5800,
+  "pieces": [
+   {
+    "corners_px": {
+     "top_left": [
+      330,
+      1650
+     ],
+     "top_right": [
+      1050,
+      1650
+     ],
+     "bottom_right": [
+      1050,
+      2300
+     ],
+     "bottom_left": [
+      330,
+      2300
+     ]
+    },
+    "size_m": [
+     0.1241,
+     0.1121
+    ],
+    "note": "franja sin reflejo, lado de la estufa (sin el canto de la estufa)"
+   },
+   {
+    "corners_px": {
+     "top_left": [
+      1950,
+      1650
+     ],
+     "top_right": [
+      2650,
+      1650
+     ],
+     "bottom_right": [
+      2650,
+      2300
+     ],
+     "bottom_left": [
+      1950,
+      2300
+     ]
+    },
+    "size_m": [
+     0.1207,
+     0.1121
+    ],
+    "note": "franja sin reflejo, lado de la jarra"
+   }
+  ],
+  "rows": [
+   [
+    {
+     "piece": 0
+    },
+    {
+     "piece": 1
+    }
+   ],
+   [
+    {
+     "piece": 1,
+     "flip_x": true,
+     "shift_frac": 0.4
+    },
+    {
+     "piece": 0,
+     "shift_frac": 0.55
+    }
+   ],
+   [
+    {
+     "piece": 0,
+     "flip_x": true,
+     "shift_frac": 0.3
+    },
+    {
+     "piece": 1,
+     "shift_frac": 0.6
+    }
+   ],
+   [
+    {
+     "piece": 1,
+     "shift_frac": 0.25
+    },
+    {
+     "piece": 0,
+     "flip_x": true,
+     "shift_frac": 0.7
+    }
+   ]
+  ],
+  "feather_px": 40,
+  "scale_source": "≈ 5800 px/m: entre el canto de la estufa y la jarra caben ≈ 0.45–0.5 m (foto de frente)",
+  "level_note": "cada trozo se nivela por filas y por columnas (≈ 1 cm): quita las bandas y manchas de luz que quedaban en los empalmes; las fibras, más finas, se conservan",
+  "level_px": 60
+ },
+ "size_m": {
+  "width": 0.24,
+  "height": 0.43,
+  "source": "lo que dan los trozos a 5800 px/m (4 hileras), menos los empalmes"
+ },
+ "px_per_m": 2400,
+ "color": {
+  "gain": [
+   1.0,
+   1.0,
+   1.0
+  ],
+  "mean_srgb": [
+   74,
+   74,
+   77
+  ],
+  "note": "tono como lo registró la cámara (gris neutro). Luminosidad: la franja sin reflejo de esta foto contra la puerta del mueble de la otra foto, tomada 16 s después con la misma luz (cubierta ≈ 0.45 de la melamina en lineal); estimación"
+ },
+ "seamless": true,
+ "relief": {
+  "type": "flat",
+  "grain_mm": 0.03,
+  "note": "laminado: la veta es impresa"
+ },
+ "roughness": {
+  "base": 0.14,
+  "grain": 0.04,
+  "note": "brillante: refleja la ventana casi como espejo"
+ },
+ "observed": {
+  "finish": "laminado plástico negro carbón con fibras grises finas a lo largo de la cubierta, brillante, con rayones finos",
+  "profile": "postformado: canto frontal redondeado y zoclo curvo contra el muro (≈ 8 cm)",
+  "reflections": "la ventana y la silueta del dueño se reflejan en casi toda la foto; no van en la textura"
+ },
+ "assumptions": [
+  "escala de la foto (≈ 5800 px/m)",
+  "luminosidad, relativa a la melamina",
+  "rugosidad"
+ ]
+}

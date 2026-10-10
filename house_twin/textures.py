@@ -113,6 +113,62 @@ def make_seamless(image: Image.Image) -> Image.Image:
     return Image.fromarray(out.round().astype(np.uint8))
 
 
+def _level_axis(img: np.ndarray, axis: int, sigma_px: float) -> np.ndarray:
+    """Divide cada fila (axis 0) o columna (axis 1) por su brillo medio suavizado: quita la luz, no la veta fina."""
+    lum = img.mean(axis=(1, 2) if axis == 0 else (0, 2))
+    k = np.exp(-0.5 * (np.arange(-3 * sigma_px, 3 * sigma_px + 1) / sigma_px) ** 2)
+    smooth = np.convolve(np.pad(lum, len(k) // 2, mode='reflect'), k / k.sum(), mode='valid')
+    factor = lum.mean() / smooth
+    return img * (factor[:, None, None] if axis == 0 else factor[None, :, None])
+
+
+def compose_pieces(photo: Image.Image, compose: dict, size_px: tuple[int, int]) -> Image.Image:
+    """Arma la textura con trozos limpios de la foto (p. ej. donde no hay reflejo), en hileras.
+
+    Cada trozo se rectifica (`corners_px`, `size_m`) y se le quita la caída de luz; una hilera pone trozos lado a
+    lado y las hileras se apilan, con un corte difuminado. Sirve para vetas que corren en una sola dirección: una
+    franja de la misma lámina, desplazada o volteada, se ve como otra parte de la veta.
+    """
+    px_per_m = compose['px_per_m']
+    pieces = []
+    for piece in compose['pieces']:
+        w, h = (round(v * px_per_m) for v in piece['size_m'])
+        img = np.asarray(flatten_lighting(rectify(photo, piece['corners_px'], (w, h)), piece.get('exclude_darkest', 0.2))).astype(float)
+        if compose.get('level_px'):  # sin manchas de luz: se nivela el brillo medio de cada fila y de cada columna
+            img = _level_axis(_level_axis(img, 0, compose['level_px']), 1, compose['level_px'])
+        pieces.append(img)
+    feather = compose.get('feather_px', 24)
+
+    def join(a, b, axis):
+        n = min(feather, a.shape[axis], b.shape[axis])
+        ramp = np.linspace(0, 1, n).reshape((-1, 1, 1) if axis == 0 else (1, -1, 1))
+        ta = a[-n:] if axis == 0 else a[:, -n:]
+        hb = b[:n] if axis == 0 else b[:, :n]
+        seam = ta * (1 - ramp) + hb * ramp
+        head = a[:-n] if axis == 0 else a[:, :-n]
+        tail = b[n:] if axis == 0 else b[:, n:]
+        return np.concatenate([head, seam, tail], axis=axis)
+
+    rows = []
+    for row in compose['rows']:
+        strip = None
+        for item in row:
+            img = pieces[item['piece']]
+            if item.get('flip_x'):
+                img = img[:, ::-1]
+            if item.get('flip_y'):
+                img = img[::-1]
+            if item.get('shift_frac'):  # otra parte de la misma veta: el trozo se corre en horizontal
+                img = np.roll(img, round(item['shift_frac'] * img.shape[1]), axis=1)
+            strip = img if strip is None else join(strip, img, 1)
+        rows.append(strip)
+    width = min(r.shape[1] for r in rows)
+    out = rows[0][:, :width]
+    for r in rows[1:]:
+        out = join(out, r[:, :width], 0)
+    return Image.fromarray(np.clip(out, 0, 255).round().astype(np.uint8)).resize(size_px, Image.LANCZOS)
+
+
 def _frac_box(frac, size_px):
     """[x, y, ancho, alto] en fracciones de la textura → píxeles."""
     W, H = size_px
@@ -519,7 +575,7 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     size_px = (round(size_m[0] * px_per_m), round(size_m[1] * px_per_m))
     photo = ImageOps.exif_transpose(Image.open(photos_root / spec['photo'])).convert('RGB')
 
-    base = rectify(photo, spec['corners_px'], size_px)
+    base = compose_pieces(photo, spec['compose'], size_px) if 'compose' in spec else rectify(photo, spec['corners_px'], size_px)
     if 'flatten_lighting' in spec:
         base = flatten_lighting(base, spec['flatten_lighting'].get('exclude_darkest', 0.2))
     base, gain = color_correct(photo, base, spec['color'])

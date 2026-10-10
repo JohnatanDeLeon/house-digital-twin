@@ -44,14 +44,22 @@ def _by_space(materials, matches) -> dict[str, str]:
     return {space: name for _, name, spaces in _claims(materials, matches) for space in spaces}
 
 
-def _layers_by_space(materials, matches) -> dict[str, list[tuple[str, float | None]]]:
-    """Espacio → [(textura, hasta qué altura)], de la más específica a la más general.
+def _layers_by_space(materials, matches) -> dict[str, list[tuple[str, float, float | None, list | None]]]:
+    """Espacio → [(textura, desde, hasta qué altura, zona)], de la más específica a la más general.
 
-    Un lambrín (azulejo hasta 2.10 m) declara `up_to_m` por espacio; por encima de esa altura sigue la siguiente."""
+    Un lambrín (azulejo hasta 2.10 m) declara `up_to_m` por espacio: una altura, o [desde, hasta] para una franja
+    (la cenefa). `region_m` limita la textura a una zona del espacio en planta (el azulejo solo en el nicho de la
+    cocina). Donde una capa no aplica, sigue la siguiente; entre dos del mismo espacio gana la franja más angosta."""
     layers = {}
     for _, name, spaces in reversed(_claims(materials, matches)):
+        a = materials[name]['applies_to']
         for space in spaces:
-            layers.setdefault(space, []).append((name, materials[name]['applies_to'].get('up_to_m', {}).get(space)))
+            band = a.get('up_to_m', {}).get(space)
+            bottom, top = (band if isinstance(band, list) else (0.0, band)) if band is not None else (0.0, None)
+            layers.setdefault(space, []).append((name, bottom, top, a.get('region_m', {}).get(space)))
+    for space, items in layers.items():  # orden estable: más específica (menos espacios) primero; luego, la franja más angosta
+        order = {name: i for i, (name, *_) in enumerate(items)}
+        items.sort(key=lambda it: (order[it[0]] if it[3] is None else -1, (it[2] - it[1]) if it[2] is not None else float('inf')))
     return layers
 
 
@@ -87,18 +95,21 @@ class Finishes:
             return None
         return STREET if point[1] < self.street_y else NEIGHBOUR
 
-    def wall_finish(self, where, z: float | None = None):
-        """Acabado de muro del lugar; con `z`, respeta los lambrines (el azulejo que llega hasta cierta altura)."""
+    def wall_finish(self, where, z: float | None = None, point=None):
+        """Acabado de muro del lugar; con `z` respeta los lambrines y franjas, y con `point` (en planta) las zonas."""
         if where == STREET:
             return self.street
-        for name, top in self.wall_layers.get(where, []):
-            if top is None or z is None or z < top:
+        for name, bottom, top, region in self.wall_layers.get(where, []):
+            if region is not None and (point is None or not _inside(point, region)):
+                continue
+            if z is None or ((top is None or z < top) and z >= bottom):
                 return name
         return None
 
     def wall_split_heights(self) -> list[float]:
         """Alturas en las que cambia el acabado de algún muro: ahí se cortan las caras."""
-        return sorted({top for layers in self.wall_layers.values() for _, top in layers if top is not None})
+        return sorted({h for layers in self.wall_layers.values() for _, bottom, top, _ in layers
+                       for h in (bottom, top) if h})
 
     def floor(self, space_id: str) -> str | None:
         return self.floors.get(space_id)
@@ -120,7 +131,7 @@ class Finishes:
             sides = [s for s in sides if s not in (None, NEIGHBOUR)]
             sides.sort(key=lambda s: s in self.exterior)
             where = sides[0] if sides else None
-        return self.wall_finish(where, z), where
+        return self.wall_finish(where, z, (centre[0] + nx * PROBE_M, centre[1] + ny * PROBE_M)), where
 
     def opening(self, opening_id: str) -> dict[str, str]:
         """Partes del vano → textura: `leaf` (hoja), `frame` (marco) y `glass` (vidrio)."""

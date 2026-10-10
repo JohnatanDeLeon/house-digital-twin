@@ -96,4 +96,13 @@ def test_half_bath_tiles_stop_at_2_10(dxf_facts):
     assert finishes.wall_face(*face, 1.0)[0] == 'azulejo-bano'
     assert finishes.wall_face(*face, 2.3)[0] == 'muro-interior'
     assert finishes.wall_face((3.6, 10.23), (0.0, 1.0), 2.5)[0] == 'azulejo-bano'  # el baño principal, hasta el techo
-    assert finishes.wall_split_heights() == [2.10]
+    assert 2.10 in finishes.wall_split_heights()
+
+
+def test_kitchen_niche_has_tiles_cenefa_and_paint_above(dxf_facts):
+    finishes = Finishes(dxf_facts, load_materials(TEXTURES))
+    back = ((2.8, 10.05), (0.0, -1.0))  # muro del fondo del nicho, mirando a la cocina
+    assert finishes.wall_face(*back, 1.0)[0] == 'azulejo-cocina'
+    assert finishes.wall_face(*back, 1.26)[0] == 'cenefa-cocina'
+    assert finishes.wall_face(*back, 2.4)[0] == 'muro-interior'
+    assert finishes.wall_face((3.0, 6.88), (0.0, 1.0), 1.0)[0] == 'muro-interior'  # fuera del nicho: sin azulejo

@@ -1,0 +1,23 @@
+{
+ "_doc": "acero inoxidable negro cepillado del refrigerador y la llave de la tarja. Supuesto: en las fotos se ve negro; sin referencia para medirlo. Regenerar con: python -m house_twin.cli texture sources/texturas/acero-negro.json",
+ "name": "acero-negro",
+ "kind": "constant",
+ "applies_to": {
+  "appliance": "refrigerador y llave de la tarja",
+  "source": "fotos de la cocina (dueño, 2026-10-09)"
+ },
+ "photo": "sources/fotos/cocina-frente.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   46,
+   46,
+   49
+  ],
+  "metallic": 0.7,
+  "roughness": 0.32,
+  "note": "acero inoxidable negro cepillado del refrigerador y la llave de la tarja"
+ },
+ "assumptions": [
+  "color y acabado: negro común de ese material"
+ ]
+}
