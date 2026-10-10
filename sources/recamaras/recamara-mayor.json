@@ -1,0 +1,218 @@
+{
+ "_doc": "Recámara mayor (S02; el dueño le dice recámara 2, el plano la rotula RECAMARA 1): closet abierto de pino, cama de latón, 2 buros, escritorio y televisión. Marcos de muro como en la cocineta: `origin`, `along`, `into_room`; `u` a lo largo, `z` desde el piso, profundidad desde el muro.",
+ "applies_to": {
+  "space": "S02",
+  "source": "fotos de la recámara (dueño, 2026-10-09)"
+ },
+ "closet": {
+  "id": "recamara-closet",
+  "material": "pino-closet",
+  "rod_material": "cromo",
+  "wall": {
+   "origin": [
+    5.82,
+    13.105
+   ],
+   "along": [
+    0,
+    1
+   ],
+   "into_room": [
+    1,
+    0
+   ]
+  },
+  "depth_m": 0.55,
+  "board_m": 0.018,
+  "top_shelf": {
+   "z": 1.9,
+   "depth_m": 0.45
+  },
+  "sections": [
+   {
+    "kind": "drawers",
+    "u": [
+     0.0,
+     0.625
+    ],
+    "drawers": 5,
+    "drawers_top_m": 0.98,
+    "shelves_m": [
+     1.43
+    ]
+   },
+   {
+    "kind": "hanging",
+    "u": [
+     0.625,
+     1.475
+    ],
+    "rods_m": [
+     0.9,
+     1.77
+    ]
+   },
+   {
+    "kind": "shelves",
+    "u": [
+     1.475,
+     2.16
+    ],
+    "shelves_m": [
+     0.1,
+     0.4,
+     0.67,
+     0.94,
+     1.22,
+     1.53,
+     1.82
+    ]
+   },
+   {
+    "kind": "hanging",
+    "u": [
+     2.16,
+     2.95
+    ],
+    "rods_m": [
+     1.69
+    ],
+    "open": true
+   }
+  ],
+  "source": "plano: closet de 2.95 × 0.60 m (`fixtures` F01); foto: el frente da ≈ 800 px/m y de ahí salen anchos y alturas (± 3 cm). Sin puertas (dueño)"
+ },
+ "bed": {
+  "id": "recamara-cama",
+  "headboard_wall": {
+   "origin": [
+    8.195,
+    16.055
+   ],
+   "along": [
+    1,
+    0
+   ],
+   "into_room": [
+    0,
+    -1
+   ]
+  },
+  "size_m": [
+   1.37,
+   1.9
+  ],
+  "mattress_m": [
+   0.3,
+   0.58
+  ],
+  "head_top_m": 1.45,
+  "foot_top_m": 1.05,
+  "post_radius_m": 0.025,
+  "bar_radius_m": 0.009,
+  "source": "fotos: cabecera contra el muro del patio, entre las 2 ventanas (centro x ≈ 8.20 m), pies hacia la televisión. Cama matrimonial de 1.37 × 1.90 m y alturas comunes (supuesto)"
+ },
+ "nightstands": {
+  "id": "recamara-buro",
+  "material": "madera-negra",
+  "handles": "laton-pulido",
+  "size_m": [
+   0.55,
+   0.4,
+   0.62
+  ],
+  "gap_m": 0.05,
+  "drawers": 2,
+  "source": "fotos: un buro negro de 2 cajones a cada lado de la cabecera; medidas comunes (supuesto)"
+ },
+ "desk": {
+  "id": "recamara-escritorio",
+  "material": "escritorio-claro",
+  "wall": {
+   "origin": [
+    9.86,
+    12.04
+   ],
+   "along": [
+    0,
+    1
+   ],
+   "into_room": [
+    -1,
+    0
+   ]
+  },
+  "u": [
+   0.02,
+   1.22
+  ],
+  "depth_m": 0.6,
+  "height_m": 0.75,
+  "pedestal_m": 0.42,
+  "source": "foto: escritorio en la esquina del muro de la televisión y el muro oriente, con pedestal blanco; 1.20 × 0.60 m (supuesto)"
+ },
+ "tv": {
+  "id": "recamara-tv",
+  "diagonal_in": 75,
+  "aspect": [
+   16,
+   9
+  ],
+  "depth_m": 0.05,
+  "bezel_m": 0.006,
+  "wall": {
+   "origin": [
+    5.79,
+    12.04
+   ],
+   "along": [
+    1,
+    0
+   ],
+   "into_room": [
+    0,
+    1
+   ]
+  },
+  "u_centre": 2.06,
+  "z_bottom": 1.5,
+  "size_source": "dueño (2026-10-09): 75 pulgadas → pantalla de 1.66 × 0.93 m (la foto había hecho estimar 85\")",
+  "position_source": "foto frente a la TV: centrada en el muro de la puerta (x ≈ 7.85 m), con el centro a ≈ 1.97 m del piso (el mismo que en la estimación)",
+  "screen_material": "pantalla-tv",
+  "body_material": "plastico-negro"
+ },
+ "assumptions": [
+  "cama matrimonial de 1.37 × 1.90 m",
+  "buros y escritorio con medidas comunes",
+  "no se modelan la ropa, los peluches, el telescopio, la silla ni el póster"
+ ],
+ "minisplit": {
+  "id": "recamara-minisplit",
+  "wall": {
+   "origin": [
+    9.86,
+    16.055
+   ],
+   "along": [
+    0,
+    -1
+   ],
+   "into_room": [
+    -1,
+    0
+   ]
+  },
+  "u": [
+   0.15,
+   0.97
+  ],
+  "z": [
+   2.17,
+   2.46
+  ],
+  "depth_m": 0.2,
+  "material": "plastico-blanco",
+  "louver_material": "plastico-negro",
+  "source": "fotos: unidad interior en el muro oriente, junto a la esquina con el muro del patio y cerca del techo; tamaño común de un minisplit de 1 t (0.82 × 0.29 × 0.20 m, supuesto)"
+ }
+}

@@ -1,0 +1,23 @@
+{
+ "_doc": "Plástico blanco brillante de la unidad interior del minisplit. Supuesto: valor común. Regenerar con: python -m house_twin.cli texture sources/texturas/plastico-blanco.json",
+ "name": "plastico-blanco",
+ "kind": "constant",
+ "applies_to": {
+  "appliance": "minisplit",
+  "source": "fotos de la recámara mayor (dueño, 2026-10-09)"
+ },
+ "photo": "sources/fotos/rec-cama-lado.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   232,
+   233,
+   230
+  ],
+  "metallic": 0.0,
+  "roughness": 0.3,
+  "note": "plástico blanco satinado"
+ },
+ "assumptions": [
+  "color y brillo comunes"
+ ]
+}

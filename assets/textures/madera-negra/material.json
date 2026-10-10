@@ -1,0 +1,29 @@
+{
+ "name": "madera-negra",
+ "applies_to": {
+  "furniture": "buros",
+  "source": "fotos de la recámara mayor (dueño, 2026-10-09)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   26,
+   25,
+   27
+  ],
+  "metallic": 0.0,
+  "roughness": 0.35,
+  "note": "buros de madera pintada de negro con jaladeras de latón"
+ },
+ "source": {
+  "photo": "sources/fotos/rec-cama-frente.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color y acabado aproximados"
+ ]
+}

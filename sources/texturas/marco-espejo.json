@@ -1,0 +1,23 @@
+{
+ "_doc": "marco de madera clara del espejo; medido contra el muro (235). Regenerar con: python -m house_twin.cli texture sources/texturas/marco-espejo.json",
+ "name": "marco-espejo",
+ "kind": "constant",
+ "applies_to": {
+  "furniture": "recámara S03",
+  "source": "fotos de la recámara del closet de 4 módulos (dueño, 2026-10-09)"
+ },
+ "photo": "sources/fotos/r1-cama-frente.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   204,
+   187,
+   162
+  ],
+  "metallic": 0.0,
+  "roughness": 0.5,
+  "note": "marco de madera clara del espejo; medido contra el muro (235)"
+ },
+ "assumptions": [
+  "la luz del foco sobre el muro como blanco: aproximado"
+ ]
+}

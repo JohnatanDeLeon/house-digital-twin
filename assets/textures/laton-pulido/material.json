@@ -1,0 +1,29 @@
+{
+ "name": "laton-pulido",
+ "applies_to": {
+  "furniture": "cama",
+  "source": "fotos de la recámara mayor (dueño, 2026-10-09)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   222,
+   184,
+   110
+  ],
+  "metallic": 1.0,
+  "roughness": 0.18,
+  "note": "latón pulido de la cama (barrotes, perillas y arillos); reflectancia de tabla del latón"
+ },
+ "source": {
+  "photo": "sources/fotos/rec-cama-frente.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color y acabado aproximados"
+ ]
+}

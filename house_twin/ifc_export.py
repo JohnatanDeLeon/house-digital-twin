@@ -29,6 +29,7 @@ from house_twin.furniture import closet_meshes
 from house_twin.hardware import for_leaf, knob_mesh, placements
 from house_twin.kitchen import kitchen_parts
 from house_twin.living import living_parts
+from house_twin.bedroom import bedroom_parts
 from house_twin.lighting import luminaire_meshes
 from house_twin.plumbing import (faucet_mesh, lever_mesh, material_of, sanitary_mesh, shower_mesh, spec_for,
                                  valve_meshes)
@@ -458,7 +459,8 @@ def _stabilize_guids(model: ifcopenshell.file):
 def build_ifc(facts: dict, finishes: Finishes | None = None, hardware: list[dict] | None = None,
               furniture: list[dict] | None = None, luminaires: list[dict] | None = None,
               devices: dict | None = None, shower: dict | None = None, sanitary: list[dict] | None = None,
-              kitchen: dict | None = None, living: dict | None = None) -> ifcopenshell.file:
+              kitchen: dict | None = None, living: dict | None = None,
+              bedrooms: list[dict] | None = None) -> ifcopenshell.file:
     ctx = _IfcContext(facts['name'])
     site = ctx.element('IfcSite', 'Terreno')
     building = ctx.element('IfcBuilding', 'Casa')
@@ -480,6 +482,8 @@ def build_ifc(facts: dict, finishes: Finishes | None = None, hardware: list[dict
     _add_sanitary(ctx, facts, storey, sanitary)
     _add_parts(ctx, storey, kitchen, kitchen_parts)
     _add_parts(ctx, storey, living, living_parts)
+    for bedroom in bedrooms or []:
+        _add_parts(ctx, storey, bedroom, bedroom_parts)
     _add_spaces(ctx, facts, storey, height)
     if finishes:
         _add_floor_finishes(ctx, facts, storey, finishes)

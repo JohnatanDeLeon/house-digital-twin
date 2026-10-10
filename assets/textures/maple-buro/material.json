@@ -1,0 +1,29 @@
+{
+ "name": "maple-buro",
+ "applies_to": {
+  "furniture": "recámara S03",
+  "source": "fotos de la recámara del closet de 4 módulos (dueño, 2026-10-09)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   178,
+   150,
+   106
+  ],
+  "metallic": 0.0,
+  "roughness": 0.45,
+  "note": "laminado tipo maple claro de los buros; promedio de los 2 buros contra el muro (235)"
+ },
+ "source": {
+  "photo": "sources/fotos/r1-cama-frente.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "la luz del foco sobre el muro como blanco: aproximado"
+ ]
+}

@@ -1,0 +1,29 @@
+{
+ "name": "sabana-gris",
+ "applies_to": {
+  "furniture": "cama",
+  "source": "fotos de la recámara mayor (dueño, 2026-10-09)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   92,
+   97,
+   103
+  ],
+  "metallic": 0.0,
+  "roughness": 0.95,
+  "note": "sábana gris oscura sobre el colchón; tono de la foto"
+ },
+ "source": {
+  "photo": "sources/fotos/rec-cama-frente.jpg",
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "color y acabado aproximados"
+ ]
+}

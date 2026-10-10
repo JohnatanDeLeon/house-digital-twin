@@ -1,0 +1,169 @@
+{
+ "_doc": "Recámara S03 (la del closet de 4 módulos con puertas; el plano la rotula RECAMARA 2): cama con cabecera acolchada, 2 buros, baúl, espejo, televisión y minisplit. El closet ya está modelado (sources/muebles/closet-recamara-2.json). Marcos de muro como en la cocineta.",
+ "applies_to": {
+  "space": "S03",
+  "source": "fotos de la recámara (dueño, 2026-10-09)"
+ },
+ "bed": {
+  "id": "r-s03-cama",
+  "style": "upholstered",
+  "headboard_wall": {
+   "origin": [
+    3.15,
+    16.775
+   ],
+   "along": [
+    1,
+    0
+   ],
+   "into_room": [
+    0,
+    -1
+   ]
+  },
+  "size_m": [
+   1.45,
+   1.95
+  ],
+  "base_m": [
+   0.05,
+   0.33
+  ],
+  "mattress_top_m": 0.58,
+  "headboard": {
+   "width_m": 1.5,
+   "height_m": 1.25,
+   "thickness_m": 0.08,
+   "panels": [
+    4,
+    2
+   ]
+  },
+  "materials": {
+   "base": "vinil-negro",
+   "headboard": "vinil-negro",
+   "cover": "cobija-morada"
+  },
+  "source": "fotos: cabecera contra el muro del patio, centrada bajo la ventana V08 (x ≈ 3.15 m), pies hacia la televisión; cama matrimonial con base negra y cobija morada; tamaño y alturas comunes (supuesto)"
+ },
+ "nightstands": {
+  "id": "r-s03-buro",
+  "style": "framed",
+  "material": "maple-buro",
+  "frame_material": "metal-gris",
+  "handles": "metal-gris",
+  "size_m": [
+   0.5,
+   0.4,
+   0.6
+  ],
+  "gap_m": 0.05,
+  "drawers": 2,
+  "source": "fotos: un buro a cada lado, cajones de laminado claro en un marco metálico gris; medidas comunes (supuesto)"
+ },
+ "ottoman": {
+  "id": "r-s03-baul",
+  "material": "tela-sofa",
+  "size_m": [
+   0.76,
+   0.38,
+   0.38
+  ],
+  "from_foot_m": 0.05,
+  "source": "fotos: baúl plegable de tela gris al pie de la cama; tamaño común (supuesto); tela gris como la del sofá (la del baúl queda en sombra y no se puede medir)"
+ },
+ "mirror": {
+  "id": "r-s03-espejo",
+  "wall": {
+   "origin": [
+    1.45,
+    16.775
+   ],
+   "along": [
+    1,
+    0
+   ],
+   "into_room": [
+    0,
+    -1
+   ]
+  },
+  "u": [
+   0.5,
+   0.82
+  ],
+  "z": [
+   0.6,
+   1.8
+  ],
+  "lean_m": 0.06,
+  "material": "espejo",
+  "frame_material": "marco-espejo",
+  "source": "fotos: espejo de cuerpo entero apoyado en el muro del patio, parado sobre el buro izquierdo, en su mitad de afuera (0.32 × 1.20 m, estimado)"
+ },
+ "tv": {
+  "id": "r-s03-tv",
+  "diagonal_in": 85,
+  "aspect": [
+   16,
+   9
+  ],
+  "depth_m": 0.05,
+  "bezel_m": 0.006,
+  "wall": {
+   "origin": [
+    1.45,
+    12.815
+   ],
+   "along": [
+    1,
+    0
+   ],
+   "into_room": [
+    0,
+    1
+   ]
+  },
+  "u_centre": 1.04,
+  "z_bottom": 1.15,
+  "size_source": "dueño (2026-10-09): 85 pulgadas → pantalla de 1.88 × 1.06 m",
+  "position_source": "fotos: en el muro de la puerta (y = 12.815 m), cargada hacia la esquina poniente: su borde queda a ≈ 0.1 m de esa esquina y a ≈ 1 m del canto del entrante de la puerta (dueño, 2026-10-09: no topa con la puerta); centro a ≈ 1.68 m de alto",
+  "screen_material": "pantalla-tv",
+  "body_material": "plastico-negro"
+ },
+ "minisplit": {
+  "id": "r-s03-minisplit",
+  "wall": {
+   "origin": [
+    1.45,
+    12.815
+   ],
+   "along": [
+    0,
+    1
+   ],
+   "into_room": [
+    1,
+    0
+   ]
+  },
+  "u": [
+   1.0,
+   1.82
+  ],
+  "z": [
+   2.15,
+   2.44
+  ],
+  "depth_m": 0.2,
+  "material": "plastico-blanco",
+  "louver_material": "plastico-negro",
+  "source": "fotos: unidad interior en el muro poniente, arriba del contacto C12 del plano; tamaño común (supuesto)"
+ },
+ "assumptions": [
+  "cama de 1.45 × 1.95 m y alturas comunes",
+  "buros, baúl y espejo con medidas comunes o estimadas",
+  "posición de la TV y del minisplit ± 0.3 m",
+  "no se modelan las cortinas, la ropa ni los objetos sueltos"
+ ]
+}

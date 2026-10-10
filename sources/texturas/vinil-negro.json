@@ -1,0 +1,23 @@
+{
+ "_doc": "vinil negro de la cabecera acolchada; medido contra el muro (235). Regenerar con: python -m house_twin.cli texture sources/texturas/vinil-negro.json",
+ "name": "vinil-negro",
+ "kind": "constant",
+ "applies_to": {
+  "furniture": "recámara S03",
+  "source": "fotos de la recámara del closet de 4 módulos (dueño, 2026-10-09)"
+ },
+ "photo": "sources/fotos/r1-cama-frente.jpg",
+ "pbr": {
+  "basecolor_srgb": [
+   37,
+   38,
+   46
+  ],
+  "metallic": 0.0,
+  "roughness": 0.45,
+  "note": "vinil negro de la cabecera acolchada; medido contra el muro (235)"
+ },
+ "assumptions": [
+  "la luz del foco sobre el muro como blanco: aproximado"
+ ]
+}
