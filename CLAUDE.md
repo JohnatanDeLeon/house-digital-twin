@@ -46,8 +46,9 @@ Gemelo digital de una casa (Casa Jonhy). Código en inglés, comentarios y docum
   solo cambia el estampado. Cada una es un JSON con `"template": "playera-base"` y un `design`:
   `"from": "product"` (imagen de la prenda de frente; el estampado se recorta y se coloca solo) o `"from": "art"`
   (solo el dibujo: mejor PNG con transparencia; sin ella se quita el color de las orillas, así que el dibujo no debe
-  usar ese color; se coloca con `width_m`, `top_m` bajo el punto más alto y `offset_x_m`). La espalda de todas es
-  `playera-base-colgada`. Se generan con `texture`, el molde primero, y se cuelgan agregándolas al `display` del closet.
+  usar ese color; se coloca con `width_m`, `top_m` bajo el punto más alto y `offset_x_m`). Si el estampado es más
+  oscuro que la tela o de otro color, se detecta con `"detect": "contrast"`. Una tela de otro color tiñe el molde
+  (`"fabric": "from_image"` o `fabric_srgb`) y saca su propia espalda; si no, la espalda es `playera-base-colgada`. Se generan con `texture`, el molde primero, y se cuelgan agregándolas al `display` del closet.
   Lo hace `house_twin/garment_designs.py`; la versión colgada, `house_twin/hanging.py`.
 - Closets: el plano da dónde (`fixtures` de los hechos); `sources/muebles/<nombre>.json` da su frente (módulos,
   hojas, jaladeras) en fracciones medidas en una foto. `house_twin/furniture.py` arma la malla e `ifc_export` la

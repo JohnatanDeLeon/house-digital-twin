@@ -91,12 +91,13 @@ def _closet_r3_display():
     return fx, spec, display_parts(fx, spec)
 
 
-def test_closet_r3_only_hangs_the_two_venom_tees_and_they_fit():
+def test_closet_r3_only_hangs_the_owners_tees_and_they_fit():
     from house_twin.closet_interior import interior_parts
     fx, spec, (parts, items) = _closet_r3_display()
     assert not any(m.startswith(('F03-interior-ropa', 'F03-interior-piel')) for m in (p['id'] for p in interior_parts(fx, spec, 2.6)))
-    assert [i['label'] for i in items] == ['la playera de Venom plateada', 'la playera de Venom de la lengua roja']
-    for tee_id in ('F03-playera-venom', 'F03-playera-venom-lengua'):
+    assert [i['label'] for i in items] == ['la playera de Venom plateada', 'la playera de Venom de la lengua roja',
+                                          'la playera gris de I love Julio']
+    for tee_id in (i['id'] for i in items):
         xs = [q[0] for q in next(p for p in parts if p['id'] == tee_id)['mesh'][0]]
         assert 5.79 <= min(xs) and max(xs) <= 6.374  # cabe entre el muro y las hojas
 

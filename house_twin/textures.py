@@ -618,8 +618,9 @@ def segment_garment(spec: dict, photos_root: Path = ROOT) -> dict:
 
     - Silueta: la tela oscura sobre el fondo claro. Lo claro que lo toca desde el borde de la foto es fondo; lo claro
       encerrado por la tela (el estampado, la etiqueta) es prenda. Se queda solo la pieza conectada con `seed_frac`.
-    - Estampado (`print`): lo claro dentro de su zona. Si es de foil (`finish: foil`, el de siempre), también lo que
-      está junto a él y es más claro que la tela: el foil refleja cosas oscuras.
+    - Estampado (`print`): lo claro dentro de su zona (`min_lum`), o con `detect: contrast` lo que se aleja del color
+      de la tela en `min_contrast` (0–255), para un estampado oscuro sobre tela clara. Si es de foil (`finish: foil`,
+      el de siempre), también lo que está junto a él y es más claro que la tela: el foil refleja cosas oscuras.
     """
     g = spec['garment']
     px_per_m = spec['px_per_m']
@@ -645,7 +646,12 @@ def segment_garment(spec: dict, photos_root: Path = ROOT) -> dict:
     x0, y0, x1, y1 = (round(v * d) for v, d in zip(pr['region_frac'], (W, H, W, H)))
     in_region = np.zeros_like(garment)
     in_region[y0:y1, x0:x1] = True
-    printed = garment & in_region & (lum >= pr['min_lum'])
+    if pr.get('detect') == 'contrast':  # estampado más oscuro o de otro color que la tela: lo que se aleja de ella
+        rgb = np.asarray(base).astype(float)
+        fabric_ref = np.median(rgb[garment], axis=0)
+        printed = garment & in_region & (np.abs(rgb - fabric_ref).max(axis=-1) >= pr['min_contrast'])
+    else:  # estampado más claro que la tela
+        printed = garment & in_region & (lum >= pr['min_lum'])
     foil = pr.get('finish', 'foil') == 'foil'
     if foil:  # el foil también refleja cosas oscuras: lo que está junto al estampado y es más claro que la tela, también es foil
         near = _blur(printed.astype(float), pr.get('close_px', 4)) > 0.25

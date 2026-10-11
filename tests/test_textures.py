@@ -305,3 +305,18 @@ def test_art_design_without_transparency_drops_its_background(tmp_path):
     _, cover, placement = design_from_art({'image': 'dibujo.png'}, tmp_path)
     assert cover.shape == (40, 40) and cover.min() > 0.99
     assert placement['source'].startswith('supuesta')
+
+
+def test_designed_tee_on_another_fabric_color_is_dyed_and_gets_its_own_back():
+    root = Path(__file__).resolve().parent.parent / 'assets' / 'textures'
+    material = json.loads((root / 'playera-i-love-julio' / 'material.json').read_text())
+    gray = material['source']['placement']['fabric_srgb']
+    assert all(120 < c < 170 for c in gray)  # la tela gris de la imagen, no el negro del molde
+    for name in ('playera-i-love-julio', 'playera-i-love-julio-espalda'):
+        base = np.asarray(Image.open(root / name / 'basecolor.jpg')).astype(float)
+        alpha = np.asarray(Image.open(root / name / 'opacity.png')) > 128
+        assert np.abs(np.median(base[alpha], axis=0) - gray).max() < 15  # teñida, también la espalda
+    front = np.asarray(Image.open(root / 'playera-i-love-julio' / 'basecolor.jpg')).astype(int)
+    dark = (front.sum(-1) < 120) & alpha
+    red = (front[..., 0] - front[..., 1] > 100) & alpha
+    assert dark.sum() > 2000 and red.sum() > 2000  # el estampado oscuro y rojo se detectó por contraste

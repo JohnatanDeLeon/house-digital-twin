@@ -1,0 +1,43 @@
+{
+ "name": "playera-i-love-julio-espalda",
+ "applies_to": {
+  "garment": "playera gris «I ❤ JULIO»",
+  "source": "imagen de producto que mandó el dueño (2026-10-11)"
+ },
+ "source": {
+  "template": "playera-base",
+  "fabric_srgb": [
+   150,
+   144,
+   137
+  ]
+ },
+ "observed": {
+  "type": "playera de algodón negra de manga corta y cuello redondo",
+  "condition": "imagen de catálogo: sin arrugas ni pelusa"
+ },
+ "size_m": {
+  "width": 0.989,
+  "height": 0.752,
+  "source": "recorte de 1084 × 1090 px. A lo ancho: el cuerpo mide 570 px de costado a costado y se supone un pecho de 0.52 m (talla M, como la otra playera) → 1096 px/m. A lo alto la imagen de catálogo viene estirada (con esa escala la playera mediría 0.95 m de largo): del punto más alto del hombro al dobladillo hay 1043 px y se supone un largo de 0.72 m (talla M) → 1449 px/m"
+ },
+ "px_per_m": 1100,
+ "size_px": [
+  1088,
+  827
+ ],
+ "tileable": false,
+ "grid": null,
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)",
+  "opacity": "opacity.png (0 = fuera de la prenda)"
+ },
+ "glass_material": null,
+ "assumptions": [
+  "ancho de pecho 0.52 m y largo 0.72 m (talla M): faltan medir; la imagen de catálogo no guarda la proporción real",
+  "molde: la tela sin el estampado, rellenada con el color de la tela de alrededor (también es la espalda)",
+  "espalda lisa: el molde teñido"
+ ]
+}

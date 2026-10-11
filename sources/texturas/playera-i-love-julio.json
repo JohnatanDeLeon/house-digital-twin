@@ -1,0 +1,51 @@
+{
+ "_doc": "Playera gris con «I ❤ JULIO», hecha sobre el molde playera-base: el estampado y el color de la tela salen de la imagen de producto que mandó el dueño. Regenerar con: python -m house_twin.cli texture sources/texturas/playera-i-love-julio.json",
+ "name": "playera-i-love-julio",
+ "template": "playera-base",
+ "applies_to": {
+  "garment": "playera gris «I ❤ JULIO»",
+  "source": "imagen de producto que mandó el dueño (2026-10-11)"
+ },
+ "design": {
+  "from": "product",
+  "image": "sources/fotos/playera-i-love-julio.jpg",
+  "fabric": "from_image",
+  "corners_px": {
+   "top_left": [0, 0],
+   "top_right": [344, 0],
+   "bottom_right": [344, 350],
+   "bottom_left": [0, 350]
+  },
+  "px_per_m": 408,
+  "size_m": {
+   "width": 0.8431,
+   "height": 0.8578,
+   "source": "imagen entera de 344 × 350 px; el cuerpo mide 212 px de costado a costado y se supone un pecho de 0.52 m (talla M, como el molde) → 408 px/m. La imagen corta la manga izquierda y el dobladillo, que no hacen falta: la forma es la del molde"
+  },
+  "garment": {
+   "fabric_max_lum": 235,
+   "seed_frac": [0.5, 0.85],
+   "print": {
+    "detect": "contrast",
+    "region_frac": [0.2, 0.08, 0.82, 0.66],
+    "min_contrast": 60,
+    "finish": "ink"
+   }
+  },
+  "roughness": 0.6,
+  "note": "imagen pequeña (344 px): el estampado se agranda ≈ 2.7 veces sobre el molde y se ve algo suave"
+ },
+ "observed": {
+  "type": "playera gris de manga corta y cuello redondo",
+  "print": "«I» negra, un corazón rojo con brillo blanco y «JULIO» en negro debajo, en el pecho"
+ },
+ "assumptions": [
+  "la imagen es de catálogo: el gris de la tela y los colores del estampado son los de la tienda",
+  "el estampado es plano: la imagen no muestra relieve"
+ ],
+ "hanging": {
+  "name": "playera-i-love-julio-colgada",
+  "sleeve_angle_deg": 60,
+  "note": "colgada: cada manga cae a 60° bajo la horizontal, cosida a la sisa (supuesto: así cae una playera de algodón en un gancho)"
+ }
+}

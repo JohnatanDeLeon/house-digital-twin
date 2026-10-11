@@ -624,7 +624,7 @@
      "width_m": 0.4
     }
    ],
-   "note": "colgador doble del módulo 3: tubo arriba (1.82 m) y abajo (≈ 0.82 m); la ropa genérica se quitó (dueño, 2026-10-10): solo cuelgan las 2 playeras de Venom"
+   "note": "colgador doble del módulo 3: tubo arriba (1.82 m) y abajo (≈ 0.82 m); la ropa genérica se quitó (dueño, 2026-10-10): solo cuelgan las playeras del dueño"
   },
   "display": [
    {
@@ -658,6 +658,22 @@
     "yaw_deg": 0,
     "module": 3,
     "source": "playera de la imagen de producto que mandó el dueño (2026-10-10), colgada en su gancho del tubo de arriba del módulo 3, 14.5 cm a la izquierda de la plateada; de canto y perpendicular al tubo, apretada contra las hojas como la otra (la posición en el tubo es supuesta)"
+   },
+   {
+    "id": "playera-i-love-julio",
+    "label": "la playera gris de I love Julio",
+    "material": "playera-i-love-julio-colgada",
+    "back_material": "playera-i-love-julio-colgada-espalda",
+    "u_centre": 1.955,
+    "n": -0.3,
+    "rod_z": 1.82,
+    "size_m": [
+     0.7591,
+     0.7455
+    ],
+    "yaw_deg": 0,
+    "module": 3,
+    "source": "playera de la imagen de producto que mandó el dueño (2026-10-11), hecha sobre el molde playera-base; colgada en su gancho del tubo de arriba del módulo 3, 14.5 cm a la izquierda de la de la lengua roja; de canto y apretada contra las hojas como las otras (la posición en el tubo es supuesta)"
    }
   ]
  }

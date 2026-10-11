@@ -206,6 +206,21 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
   - Los colores son los del catálogo, no los de la prenda en la casa.
   - Todas las playeras del molde tienen la misma forma y la misma talla supuesta.
 
+### 14. Playera gris «I ❤ JULIO» (imagen de producto, 2026-10-11)
+
+- **Fuente:** imagen de producto que mandó el dueño (344 × 350 px), en `sources/fotos/playera-i-love-julio.jpg` (fuera de git). Se describe en `sources/texturas/playera-i-love-julio.json`.
+  - La imagen corta la manga izquierda y el dobladillo. No hacen falta, porque la forma es la del molde.
+- **Prenda:** playera gris de manga corta. En el pecho lleva una «I» negra, un corazón rojo con brillo blanco y «JULIO» en negro.
+- **Primera playera que no es negra:**
+  - **Silueta:** el gris (≈ `#968a89`) es casi tan claro como el fondo, así que la silueta se separa con un umbral más alto (`fabric_max_lum: 235`).
+  - **Estampado:** es más oscuro que la tela, así que se detecta por contraste (`detect: contrast`): lo que se aleja del color de la tela.
+  - **Tela:** el molde negro se tiñe con el gris medido en la imagen (`"fabric": "from_image"` → `[150, 144, 137]`). Conserva sus pliegues y su tejido, y la playera saca su propia espalda gris.
+- **Escala:** el cuerpo mide 212 px y se supone el pecho del molde (0.52 m). El estampado medido es de 0.48 m de ancho y empieza 0.07 m bajo el punto más alto de la playera.
+- **Dónde va:** en el tubo del módulo 3 del closet de R3, 14.5 cm a la izquierda de la de la lengua roja (posición supuesta). Va de canto y apretada contra las hojas, como las otras.
+- **Límites:**
+  - La imagen es pequeña: el estampado se agranda ≈ 2.7 veces y se ve algo suave.
+  - Los colores son los del catálogo.
+
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
 Fotos de conjunto en `sources/fotos/` (fuera de git): `bano-general`, `bano-regadera`, `sala-comedor-1`, `comedor-hacia-cocina`, `comedor-hacia-sala`, `sala-hacia-comedor`, `cocina-frente`, `cocina-sala`, `cocina-cortina`, `pasillo-recamaras` y `closet-3`. Todas son de noche, con gran angular y luz de los focos. No sirven para texturas, sí para confirmar el modelo y encontrar lo que falta.

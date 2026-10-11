@@ -8,7 +8,9 @@ Así, para agregar una playera solo hace falta su dibujo. Sale de una de dos fue
   Se coloca con `width_m`, `top_m` (bajo el punto más alto de la playera) y `offset_x_m` (desde el centro del cuerpo).
 
 La posición del estampado se guarda en metros respecto al centro del cuerpo y al punto más alto de la playera, así
-que un dibujo medido en una prenda cae en el mismo lugar del molde. Después se cuelga como cualquier prenda.
+que un dibujo medido en una prenda cae en el mismo lugar del molde. Si la tela es de otro color que el molde, se tiñe:
+`"fabric": "from_image"` (el color medido en la imagen de la prenda) o `fabric_srgb`. Después se cuelga como cualquier
+prenda.
 """
 import json
 from pathlib import Path
@@ -17,13 +19,14 @@ import numpy as np
 from PIL import Image, ImageOps
 
 from house_twin.hanging import _body_edges, build_hanging, load_maps, write_maps
-from house_twin.textures import ROOT, TEXTURES_DIR, _blur, _linear_to_srgb, segment_garment
+from house_twin.textures import ROOT, TEXTURES_DIR, _blur, _linear_to_srgb, _srgb_to_linear, segment_garment
 
 SPECS_DIR = ROOT / 'sources' / 'texturas'
 DEFAULT_ART_WIDTH_M = 0.28        # ancho de un estampado de pecho en talla M (supuesto)
 DEFAULT_ART_TOP_M = 0.12          # del punto más alto de la playera a la orilla de arriba del estampado (supuesto)
 DEFAULT_BACKGROUND_TOLERANCE = 40  # diferencia (0–255) con el color del fondo a partir de la cual empieza el dibujo
 DEFAULT_INK_ROUGHNESS = 0.6       # serigrafía con tinta plastisol
+RECOLOR_RANGE = (0.5, 1.5)        # al teñir, cuánto puede alejarse un pixel del promedio de la tela (la etiqueta no brilla)
 
 
 def _anchor(alpha: np.ndarray) -> tuple[float, int]:
@@ -43,14 +46,26 @@ def design_from_product(design: dict, template_spec: dict, photos_root: Path = R
     spec = {**template_spec, **{k: v for k, v in design.items() if k in ('corners_px', 'size_m', 'px_per_m', 'garment')}}
     spec['photo'] = design['image']
     seg = segment_garment(spec, photos_root)
-    rgb = _linear_to_srgb(np.clip(seg['lin'], 0, 1))
+    srgb = _linear_to_srgb(np.clip(seg['lin'], 0, 1))
+    fabric = np.median(srgb[seg['garment'] & ~seg['printed']], axis=0)
     alpha = np.clip(_blur(seg['printed'].astype(float), 0.7), 0, 1)
-    rgb, alpha, (x0, y0, x1, _) = _crop_to_alpha(rgb, alpha)
+    rgb, alpha, (x0, y0, x1, _) = _crop_to_alpha(srgb, alpha)
     cx, top = _anchor(seg['garment'])
     ppm = spec['px_per_m']
     placement = {'width_m': round((x1 - x0) / ppm, 4), 'top_m': round((y0 - top) / ppm, 4),
-                 'offset_x_m': round(((x0 + x1) / 2 - cx) / ppm, 4), 'source': 'medida en la imagen de la prenda'}
+                 'offset_x_m': round(((x0 + x1) / 2 - cx) / ppm, 4), 'source': 'medida en la imagen de la prenda',
+                 'fabric_srgb': [int(v) for v in np.round(fabric * 255)]}
     return rgb, alpha, placement
+
+
+def recolor_fabric(layers: dict, alpha: np.ndarray, srgb: list[int]) -> dict:
+    """Tiñe la tela del molde: cada pixel conserva cuánto más claro u oscuro es que el promedio de la tela (pliegues,
+    tejido, sombras), ahora sobre el color nuevo. Se hace en lineal y con la luminancia, para no cambiar el tono."""
+    lin = _srgb_to_linear(layers['basecolor'])
+    luminance = lin @ np.array([0.2126, 0.7152, 0.0722])
+    relative = np.clip(luminance / max(float(np.median(luminance[alpha])), 1e-4), *RECOLOR_RANGE)
+    target = _srgb_to_linear(np.array(srgb, float) / 255)
+    return {**layers, 'basecolor': _linear_to_srgb(np.clip(target * relative[..., None], 0, 1))}
 
 
 def design_from_art(design: dict, photos_root: Path = ROOT):
@@ -104,6 +119,16 @@ def build_design(spec: dict, photos_root: Path = ROOT) -> Path:
         art = design_from_product(design, template_spec, photos_root)
     else:
         art = design_from_art(design, photos_root)
+    fabric = art[2].get('fabric_srgb') if design.get('fabric') == 'from_image' else design.get('fabric_srgb')
+    if fabric:  # tela de otro color que el molde: también su propia espalda lisa (la del molde es de su color)
+        layers = recolor_fabric(layers, alpha, fabric)
+        back = f"{spec['name']}-espalda"
+        write_maps(TEXTURES_DIR / back, {**material, 'name': back, 'applies_to': spec['applies_to'],
+                                         'source': {'template': spec['template'], 'fabric_srgb': fabric},
+                                         'assumptions': material.get('assumptions', []) + ['espalda lisa: el molde teñido']},
+                   layers, alpha)
+        if spec.get('hanging'):
+            spec = {**spec, 'back': {'name': back}, 'hanging': {**spec['hanging'], 'back_name': f"{spec['hanging']['name']}-espalda"}}
     layers = place_design(layers, alpha, material['px_per_m'], art, design.get('roughness', DEFAULT_INK_ROUGHNESS))
     out = TEXTURES_DIR / spec['name']
     source = {'template': spec['template'], 'design': design['image'], 'from': design['from'], 'placement': art[2]}
