@@ -78,18 +78,39 @@ unos 9 cm de vidrio. Si las ventanas abren hacia adentro chocarían con la llave
 - **Muro nuevo W41:** 2.40 m de largo y 0.17 m de espesor, alineado con W13, así que el pasillo de servicio conserva su metro de ancho. Por dentro, la lavandería queda de 1.45 × 2.40 m.
 - **D13 (cocina–lavandería):** de 0.80 m. Es la puerta de vidrio que era D04: da luz a la esquina más oscura de la cocina. Abre hacia la lavandería, lejos de la estufa.
 - **D14 (lavandería–pasillo):** de 0.75 m, de lámina como la de la bodega. Abre hacia la lavandería porque el pasillo mide 1.0 m. Va en el extremo del boiler (y = 11.80–12.55 m), con la bisagra junto al muro de la recámara 2: su barrido libra la lavasecadora y el cilindro de gas.
-- **Lavasecadora (dueño, 2026-10-11):** una Samsung de carga frontal de 686 × 984 × 796 mm sustituye a la lavadora de 2 tinas (95 cm) y a la secadora (75 cm).
-  - **Dónde:** contra el muro del fondo, en y = 10.85–11.54 m, donde ya están el agua, el desagüe y los contactos. Queda 5 cm separada del muro para las mangueras y su frente llega a x = 1.97 m.
-  - **Por qué ahí:** es el único tramo que libran las dos puertas. La hoja de D13 barre el muro del fondo hasta y ≈ 10.79 m. En su posición anterior, D14 golpeaba la puerta redonda de la máquina, y por eso se movió al otro extremo.
-  - **Lo que se gana:** el muro del fondo pasa de 1.71 m ocupados a 0.69 m. Quedan libres la esquina bajo V09, junto a la cocina (unos 0.50 × 0.60 m), y unos 0.55 m entre la máquina y el boiler. Ahí cabría un lavadero chico o un mueble alto para detergentes (no están modelados).
-  - **Pasillo frente a ella:** 0.60 m. Con la puerta abierta, la máquina ocupa más fondo (la ficha del modelo no lo da; en los combos Samsung de 27" es de 1.2 a 1.4 m), así que se carga desde un lado de la puerta.
-  - **Lluvia:** la lavandería sigue sin techo, y una lavasecadora con electrónica no debe mojarse. Hace falta un tejadillo sobre la franja de la máquina, dejando abierto el rincón del boiler y el gas para que ventilen. También conviene un contacto con tierra y protección contra fugas (no modelados).
+- **Lavasecadora (dueño, 2026-10-11):** una Samsung de carga frontal de 686 × 984 × 796 mm sustituye a la lavadora de 2 tinas y a la secadora. Va contra el muro del fondo (y = 10.85–11.54 m), donde ya están el agua, el desagüe y los contactos, a 5 cm del muro por las mangueras. Es el único tramo que libran las dos puertas: la hoja de D13 barre el muro del fondo hasta y ≈ 10.79 m, y D14 se movió al extremo del boiler porque en su lugar anterior golpeaba la puerta redonda de la máquina.
+
+#### Reorganización de la lavandería
+
+**El hallazgo que manda:** al cerrar la lavandería con W41 queda un cubo de luz de 1.45 × 2.40 m (3.5 m²), con muros de 2.60 m y calentador de agua. La NOM-004-SEDG-2004 (6.1.2.1) no permite ahí un cilindro de gas portátil: ni donde hay calentador, ni con muros de más de 2 m y menos de 9 m² de piso. Abierta al pasillo, como está hoy, sí cumplía. Además, el cilindro quedaba a menos de 1 m de la lavasecadora y sus contactos.
+
+| Hoy | Problema |
+|---|---|
+| Cilindro de gas junto al boiler | No cumple la norma con la lavandería cerrada. |
+| Sin techo | La lluvia cae sobre la lavasecadora. |
+| Boiler de depósito sobre una base de 40 × 40 cm | Ocupa el rincón de la entrada. |
+| Esquina bajo V09 y 0.55 m junto al boiler | No se usan. |
+| Sin lavadero ni guardado | Solo hay una repisa a 1.78 m. |
+
+**Propuesta, en el orden del trabajo, a lo largo del muro del fondo (2.40 m):**
+
+| Tramo (y) | Pieza | Por qué |
+|---|---|---|
+| 10.23–10.79 | **Lavadero** de 55 × 55 cm bajo V09 | Remojar y tallar con luz natural; comparte el desagüe de la lavasecadora y queda fuera del barrido de D13. |
+| 10.85–11.54 | **Lavasecadora** con **cubierta** a 1.0 m | Lavar y secar en una sola máquina; la cubierta es la altura cómoda para doblar ropa de pie. |
+| 11.56–12.00 | **Gabinete alto** de PVC (44 × 45 × 200 cm) | Escoba, trapeador, cubetas y detergentes; su frente libra el barrido de D14. |
+| 12.15–12.50 | **Calentador de paso** colgado a 1.40–2.00 m | Va donde estaban las tuberías del boiler, junto al baño, y libera el piso del rincón. Su chimenea sale arriba del techo. |
+
+- **Cilindro de gas:** sale al pasillo de servicio, a la intemperie, contra el muro de la recámara 2, que no tiene ventanas (y ≈ 12.95 m). Al frente quedan 0.75 m hasta la barda (6.1.2.4 pide 0.60 m) y se cambia sin pasar por la cocina (6.1.2.9).
+- **Tendedero retráctil:** 3 hilos a 2.20 m, de W41 al muro del fondo, sobre el paso de la lavandería y arriba de las puertas.
+- **Techo de policarbonato:** lámina celular translúcida sobre perfiles, de 2.90 a 3.00 m, con caída hacia el pasillo de servicio. Entre el remate de los muros (2.60 m) y el techo quedan 30–40 cm abiertos. Así el calentador queda en un sitio con ventilación permanente y chimenea (6.5.2.2 y 6.5.2.3), y la ventana del baño sigue ventilando.
+- **Calentador de paso, condición:** necesita presión de agua suficiente. Si el tinaco está bajo, conviene uno de rápida recuperación (chico, de piso).
+- **Resultado:** en el mismo espacio pasa de 2 piezas útiles a 5, el gas sale de la lavandería y todo queda bajo techo.
 - **Repisa:** se recorta desde x = 2.30 m para no cruzar D13.
-- **Techo:** se recomienda **dejarla sin techo**. Así siguen ventilando el boiler y el gas, la ventana del baño (V09) y la campana. Contra la lluvia basta un tejadillo sobre D13 (no está modelado).
 
 ### Instalaciones
 
-- **Gas:** del cilindro de la lavandería a la estufa, por fuera, sobre W13.
+- **Gas:** del cilindro, ya en el pasillo de servicio, a la estufa por fuera de W41 y W13, y al calentador a través de W41. La instalación la debe hacer un instalador certificado.
 - **Agua y drenaje:** hasta el muro de ventanas. **Falta saber por dónde sale el drenaje de la casa.**
 - **Electricidad:** el apagador A02 sale de donde va la estufa y pasa al vestíbulo de la lavandería. El contacto C07 sale de detrás del refri y pasa sobre la barra nueva. Faltan contactos sobre la barra de ventanas y luz bajo las alacenas, que no están modelados.
 
@@ -112,8 +133,7 @@ unos 9 cm de vidrio. Si las ventanas abren hacia adentro chocarían con la llave
 - **Medidas:** la lavasecadora usa las de la ficha que dio el dueño; su color, su puerta y su tablero son supuestos. Las de la estufa, el refrigerador y los muebles son las del modelo (medidas comunes o estimadas de fotos): conviene medirlos antes de la obra.
 - **Sin modelar:**
   - las chapas de D13 y D14;
-  - el tejadillo sobre D13 y la lavasecadora;
-  - el lavadero o mueble en el espacio que libera la lavasecadora;
+  - el canalón del techo de la lavandería;
   - los contactos nuevos;
   - la luz bajo las alacenas;
   - las tuberías.

@@ -133,3 +133,15 @@ def test_remodel_laundry_combo_clears_both_doors(dxf_facts):
                 px, py, pz = zip(*points)
                 if min(pz) < 2.1:
                     assert not leaf.intersects(box(min(px), min(py), max(px), max(py))), (door, deg, name)
+
+
+def test_remodel_takes_the_gas_cylinder_out_of_the_closed_laundry():
+    """Al cerrarla, la lavandería queda como cubo de luz de 3.5 m² con calentador: el cilindro sale al pasillo
+    (NOM-004-SEDG-2004 6.1.2.1) con 0.60 m libres al frente para cambiarlo (6.1.2.4)."""
+    import json
+    from house_twin.laundry import laundry_parts
+    spec = json.loads((ROOT / _remodel()['specs']['laundry']).read_text())
+    gas = next(p for p in laundry_parts(spec) if p['id'] == 'lavanderia-gas')
+    xs = [p[0] for p in gas['mesh'][0]]
+    assert gas['space'] == 'S12' and max(xs) <= 1.28 and min(xs) - 0.20 >= 0.60  # pasillo; libre hasta la barda
+    assert 'boiler' not in spec and spec['heater']['flue']['top_m'] > spec['roof']['z'][1]  # chimenea arriba del techo
