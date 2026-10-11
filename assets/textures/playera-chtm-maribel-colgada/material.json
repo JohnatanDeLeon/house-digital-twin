@@ -1,0 +1,47 @@
+{
+ "name": "playera-chtm-maribel-colgada",
+ "applies_to": {
+  "garment": "playera negra «CHTM Maribel 🖕»",
+  "source": "pedido del dueño (2026-10-11): texto, sin foto ni imagen de la prenda"
+ },
+ "source": {
+  "template": "playera-base",
+  "design": "sources/disenos/chtm-maribel.png",
+  "from": "art",
+  "placement": {
+   "width_m": 0.28,
+   "top_m": 0.12,
+   "offset_x_m": 0.0,
+   "source": "la del diseño"
+  }
+ },
+ "observed": {
+  "print": "«CHTM» grande arriba y «Maribel 🖕» abajo, en blanco, centrado en el pecho"
+ },
+ "size_m": {
+  "width": 0.7591,
+  "height": 0.7455,
+  "source": "la prenda extendida con cada manga caída a 60° bajo la horizontal, cosida a la sisa (hang_layers)"
+ },
+ "px_per_m": 1100,
+ "size_px": [
+  835,
+  820
+ ],
+ "tileable": false,
+ "grid": null,
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)",
+  "opacity": "opacity.png (0 = fuera de la prenda)"
+ },
+ "glass_material": null,
+ "assumptions": [
+  "ancho de pecho 0.52 m y largo 0.72 m (talla M): faltan medir; la imagen de catálogo no guarda la proporción real",
+  "molde: la tela sin el estampado, rellenada con el color de la tela de alrededor (también es la espalda)",
+  "la playera no existe en foto: color de tela negro (el del molde), letras blancas, tipografía y tamaño los eligió Claude",
+  "estampado de 0.28 m de ancho centrado en el pecho, 0.12 m bajo el punto más alto de la playera",
+  "colgada: cada manga cae a 60° bajo la horizontal, cosida a la sisa (supuesto: así cae una playera de algodón en un gancho)"
+ ]
+}

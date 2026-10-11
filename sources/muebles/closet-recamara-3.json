@@ -674,6 +674,22 @@
     "yaw_deg": 0,
     "module": 3,
     "source": "playera de la imagen de producto que mandó el dueño (2026-10-11), hecha sobre el molde playera-base; colgada en su gancho del tubo de arriba del módulo 3, 14.5 cm a la izquierda de la de la lengua roja; de canto y apretada contra las hojas como las otras (la posición en el tubo es supuesta)"
+   },
+   {
+    "id": "playera-chtm-maribel",
+    "label": "la playera de CHTM Maribel",
+    "material": "playera-chtm-maribel-colgada",
+    "back_material": "playera-base-colgada",
+    "u_centre": 2.39,
+    "n": -0.3,
+    "rod_z": 1.82,
+    "size_m": [
+     0.7591,
+     0.7455
+    ],
+    "yaw_deg": 0,
+    "module": 3,
+    "source": "playera que pidió el dueño (2026-10-11), hecha sobre el molde playera-base con un dibujo de texto; colgada en su gancho del tubo de arriba del módulo 3, 14.5 cm a la derecha de la plateada; de canto y apretada contra las hojas como las otras (la posición en el tubo es supuesta)"
    }
   ]
  }

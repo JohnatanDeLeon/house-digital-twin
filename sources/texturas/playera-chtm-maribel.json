@@ -1,0 +1,28 @@
+{
+ "_doc": "Playera negra con «CHTM Maribel 🖕» en blanco, hecha sobre el molde playera-base con un dibujo de texto (sources/disenos/chtm-maribel.png: Inter Display Black y el emoji de Noto Color Emoji). Regenerar con: python -m house_twin.cli texture sources/texturas/playera-chtm-maribel.json",
+ "name": "playera-chtm-maribel",
+ "template": "playera-base",
+ "applies_to": {
+  "garment": "playera negra «CHTM Maribel 🖕»",
+  "source": "pedido del dueño (2026-10-11): texto, sin foto ni imagen de la prenda"
+ },
+ "design": {
+  "from": "art",
+  "image": "sources/disenos/chtm-maribel.png",
+  "width_m": 0.28,
+  "top_m": 0.12,
+  "roughness": 0.6
+ },
+ "observed": {
+  "print": "«CHTM» grande arriba y «Maribel 🖕» abajo, en blanco, centrado en el pecho"
+ },
+ "assumptions": [
+  "la playera no existe en foto: color de tela negro (el del molde), letras blancas, tipografía y tamaño los eligió Claude",
+  "estampado de 0.28 m de ancho centrado en el pecho, 0.12 m bajo el punto más alto de la playera"
+ ],
+ "hanging": {
+  "name": "playera-chtm-maribel-colgada",
+  "sleeve_angle_deg": 60,
+  "note": "colgada: cada manga cae a 60° bajo la horizontal, cosida a la sisa (supuesto: así cae una playera de algodón en un gancho)"
+ }
+}
