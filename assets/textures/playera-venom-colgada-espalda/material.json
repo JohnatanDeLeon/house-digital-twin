@@ -25,13 +25,13 @@
   "condition": "tela con pelusa y pliegues de estar extendida"
  },
  "size_m": {
-  "width": 0.6512,
+  "width": 0.6994,
   "height": 0.7212,
-  "source": "la prenda extendida con las mangas giradas 90° hacia abajo sobre el hombro"
+  "source": "la prenda extendida con cada manga caída a 60° bajo la horizontal, cosida a la sisa (hang_layers)"
  },
  "px_per_m": 1600,
  "size_px": [
-  1042,
+  1119,
   1154
  ],
  "tileable": false,
@@ -47,7 +47,7 @@
   "ancho de pecho 0.52 m (talla M): falta medirlo",
   "la orilla de abajo queda en el borde de la foto: el largo puede ser 1–3 cm mayor",
   "el estampado es plano (foil), su color plateado es supuesto",
-  "colgada: las mangas caen 72° sobre el hombro (supuesto: así cae una playera de algodón en un gancho)",
-  "espalda lisa (sin foto): la tela del frente sin el estampado"
+  "espalda lisa (sin foto): la tela del frente sin el estampado",
+  "colgada: cada manga cae a 60° bajo la horizontal, cosida a la sisa (supuesto: así cae una playera de algodón en un gancho)"
  ]
 }

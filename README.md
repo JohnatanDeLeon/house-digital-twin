@@ -43,6 +43,7 @@ python -m venv .venv
 .venv/bin/python -m house_twin.cli inspect-dxf data/raw/plano.dxf     # capas, entidades, bloques, unidades
 .venv/bin/python -m house_twin.cli compare sources/casa-jonhy-levantamiento.pdf data/raw/plano.dxf
 .venv/bin/python -m house_twin.cli texture sources/texturas/puerta-recamaras.json  # foto → texturas PBR
+.venv/bin/python -m house_twin.cli hang sources/texturas/playera-venom.json         # prenda colgada desde sus mapas (sin foto)
 .venv/bin/python -m pytest
 ```
 

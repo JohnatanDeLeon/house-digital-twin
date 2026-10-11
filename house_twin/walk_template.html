@@ -470,8 +470,8 @@ function setupItems() {
   scene.add(camera);  // lo que se sostiene viaja con la cámara
   scene.traverse(o => { if (o.isLight) o.layers.enable(HELD_LAYER); });  // y lo iluminan las mismas luces
   for (const it of DATA.items || []) {
-    const meshes = [];
-    scene.traverse(o => { const t = tagOf(o); if (o.isMesh && (t.hdt_id || '').startsWith(it.id) && !t.hdt_id.endsWith('-gancho')) meshes.push(o); });
+    const meshes = [], parts = [it.id, `${it.id}-espalda`];  // por id exacto: una prenda puede ser prefijo de otra
+    scene.traverse(o => { if (o.isMesh && parts.includes(tagOf(o).hdt_id)) meshes.push(o); });
     if (!meshes.length) continue;
     for (const m of meshes) { const i = colliders.indexOf(m); if (i >= 0) colliders.splice(i, 1); }
     const group = new THREE.Group();
@@ -492,12 +492,19 @@ function setupItems() {
     items.push({ ...it, group, body, relax, base, homePos: group.position.clone(), homeQuat: group.quaternion.clone(), spin: 0, returning: false });
   }
 }
-function itemAvailable(it) {
+// qué tan de frente se mira una prenda (coseno con la vista), o -1 si no se alcanza o su puerta está cerrada
+function itemAim(it) {
   const door = doors.find(d => d.id === it.door);
-  if (door && (!door.open || door.angle < 1.2)) return false;
+  if (it.returning || (door && (!door.open || door.angle < 1.2))) return -1;
   const p = modelXY(), dx = it.centre[0] - p[0], dy = it.centre[1] - p[1], dist = Math.hypot(dx, dy);
-  const fx = -Math.sin(player.yaw), fy = Math.cos(player.yaw);
-  return dist < 1.9 && (dx * fx + dy * fy) / (dist || 1) > 0.55;
+  const fx = -Math.sin(player.yaw), fy = Math.cos(player.yaw), aim = (dx * fx + dy * fy) / (dist || 1);
+  return dist < 1.9 && aim > 0.55 ? aim : -1;
+}
+// con varias prendas en el mismo tubo, se saca la que queda más al centro de la vista
+function aimedItem() {
+  let best = null, bestAim = -1;
+  for (const it of items) { const aim = itemAim(it); if (aim > bestAim) { best = it; bestAim = aim; } }
+  return best;
 }
 // lo que se sostiene va en la capa 1 y se dibuja en un segundo paso, sobre el cuarto ya dibujado y con su propia
 // profundidad: una puerta abierta o el closet no lo cortan, y el frente sigue tapando a la espalda
@@ -532,7 +539,7 @@ let currentAction = null, shownText = '';
 function pickAction() {
   const key = isTouch ? '' : ' <kbd>E</kbd>';
   if (held) return { text: `Guardar ${held.label}${key}`, run: returnItem };
-  const it = items.find(i => !i.returning && itemAvailable(i));
+  const it = aimedItem();
   if (it) return { text: `Sacar ${it.label}${key}`, run: () => takeItem(it) };
   const d = nearestDoor();
   if (!d) return null;

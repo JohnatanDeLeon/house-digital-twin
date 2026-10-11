@@ -212,3 +212,52 @@ def test_garment_texture_cuts_the_silhouette_and_marks_the_foil():
     assert 0.01 < material['source']['print_coverage'] < 0.06  # el estampado es una parte chica
     assert not alpha[0, 0] and alpha[alpha.shape[0] // 2, alpha.shape[1] // 2]
     assert metal.any()
+
+
+def test_ink_print_keeps_its_colors_and_is_not_metallic():
+    folder = Path(__file__).resolve().parent.parent / 'assets' / 'textures' / 'playera-venom-lengua'
+    material = json.loads((folder / 'material.json').read_text())
+    assert 'metallic' not in material['maps'] and not (folder / 'metallic.png').exists()
+    base = np.asarray(Image.open(folder / 'basecolor.jpg')).astype(int)
+    alpha = np.asarray(Image.open(folder / 'opacity.png')) > 128
+    red = alpha & (base[..., 0] - base[..., 1] > 80)
+    assert red.sum() > 1000  # la lengua sigue roja: la tinta no se repinta de un solo color
+
+
+def _tee_mask(H=300, W=400):
+    """Playera de prueba extendida: cuerpo de 200 px y mangas horizontales que salen 80 px de cada costado."""
+    alpha = np.zeros((H, W), bool)
+    alpha[40:290, 100:300] = True   # cuerpo
+    alpha[40:110, 20:100] = True    # manga izquierda
+    alpha[40:110, 300:380] = True   # manga derecha
+    return alpha
+
+
+def test_hanging_sleeves_drop_beside_the_body_without_folding_over_it():
+    import math
+    from house_twin.hanging import hang_layers
+    alpha = _tee_mask()
+    color = np.zeros(alpha.shape + (3,))
+    color[..., 0] = np.arange(alpha.shape[1]) / alpha.shape[1]  # rojo según la columna de origen
+    layers, hung = hang_layers({'basecolor': color}, alpha, 60)
+    body = np.zeros_like(alpha)
+    body[40:290, 100:300] = True
+    assert (hung & body).sum() == body.sum()                                        # el cuerpo queda entero
+    assert np.allclose(layers['basecolor'][body][..., 0], color[body][..., 0])     # y la manga no se le monta encima
+    cols = np.nonzero(hung.any(axis=0))[0]
+    reach = 80 * math.cos(math.radians(60))
+    assert cols.min() >= 100 - reach - 2 and cols.max() <= 299 + reach + 2       # sobresale solo lo que da el ángulo
+    rows_left = np.nonzero(hung[:, :100].any(axis=1))[0]
+    assert rows_left.min() <= 42 and rows_left.max() > 110 + 60                    # sigue cosida al hombro y cae
+
+
+def test_hanging_turns_the_sleeve_normals_with_the_fabric():
+    from house_twin.hanging import hang_layers
+    alpha = _tee_mask()
+    flat = np.zeros(alpha.shape + (3,))
+    flat[...] = [1.0, 0.5, 1.0]  # normal que apunta a la derecha de la imagen (x = +1)
+    layers, hung = hang_layers({'normal': flat}, alpha, 60)
+    left_sleeve = hung.copy()
+    left_sleeve[:, 100:] = False
+    n = layers['normal'][left_sleeve] * 2 - 1
+    assert np.allclose(n[:, 1], np.sin(np.radians(60)), atol=0.02)  # la manga izquierda giró 60° en contra del reloj

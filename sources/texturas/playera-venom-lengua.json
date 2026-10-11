@@ -1,0 +1,84 @@
+{
+ "_doc": "Playera negra con Venom de perfil y la lengua roja, serigrafiada en blanco, gris y rojo. Sale de la imagen de producto que mandó el dueño (de frente, sobre fondo blanco): se recorta la silueta y el estampado conserva sus colores (tinta, no foil). Regenerar con: python -m house_twin.cli texture sources/texturas/playera-venom-lengua.json",
+ "name": "playera-venom-lengua",
+ "applies_to": {
+  "garment": "playera negra de Venom con la lengua roja",
+  "source": "imagen de producto que mandó el dueño (2026-10-10)"
+ },
+ "photo": "sources/fotos/playera-venom-lengua.jpg",
+ "photo_meta": {
+  "origin": "imagen de producto de una tienda, no foto de la prenda en la casa",
+  "size_px": [
+   1164,
+   1200
+  ],
+  "view": "de frente y sin perspectiva, sobre fondo blanco"
+ },
+ "perspective": "la imagen ya es de frente: el recorte es un rectángulo, sin corrección",
+ "corners_px": {
+  "top_left": [
+   40,
+   70
+  ],
+  "top_right": [
+   1124,
+   70
+  ],
+  "bottom_right": [
+   1124,
+   1160
+  ],
+  "bottom_left": [
+   40,
+   1160
+  ]
+ },
+ "size_m": {
+  "width": 0.989,
+  "height": 0.752,
+  "source": "recorte de 1084 × 1090 px. A lo ancho: el cuerpo mide 570 px de costado a costado y se supone un pecho de 0.52 m (talla M, como la otra playera) → 1096 px/m. A lo alto la imagen de catálogo viene estirada (con esa escala la playera mediría 0.95 m de largo): del punto más alto del hombro al dobladillo hay 1043 px y se supone un largo de 0.72 m (talla M) → 1449 px/m"
+ },
+ "px_per_m": 1100,
+ "garment": {
+  "fabric_max_lum": 75,
+  "seed_frac": [
+   0.5,
+   0.9
+  ],
+  "fabric_roughness": 0.95,
+  "weave_mm": 0.12,
+  "print": {
+   "finish": "ink",
+   "region_frac": [
+    0.254,
+    0.161,
+    0.692,
+    0.862
+   ],
+   "min_lum": 70,
+   "roughness": 0.6,
+   "thickness_mm": 0.08,
+   "note": "serigrafía (tinta plastisol): se queda con los colores de la imagen y sin brillo metálico"
+  }
+ },
+ "observed": {
+  "type": "playera de algodón negra de manga corta y cuello redondo",
+  "print": "cabeza de Venom de perfil en gris y blanco, con los dientes blancos y la lengua roja que cae hasta la mitad del pecho",
+  "condition": "imagen de catálogo: sin arrugas ni pelusa"
+ },
+ "assumptions": [
+  "ancho de pecho 0.52 m y largo 0.72 m (talla M): faltan medir; la imagen de catálogo no guarda la proporción real",
+  "la imagen es de catálogo: el negro de la tela y los colores del estampado son los de la tienda, no los de la prenda en la casa",
+  "el estampado es plano: la imagen no muestra relieve"
+ ],
+ "back": {
+  "name": "playera-venom-lengua-espalda",
+  "note": "espalda lisa (sin imagen): la tela del frente sin el estampado"
+ },
+ "hanging": {
+  "name": "playera-venom-lengua-colgada",
+  "back_name": "playera-venom-lengua-colgada-espalda",
+  "sleeve_angle_deg": 60,
+  "note": "colgada: cada manga cae a 60° bajo la horizontal, cosida a la sisa (supuesto: así cae una playera de algodón en un gancho)"
+ }
+}

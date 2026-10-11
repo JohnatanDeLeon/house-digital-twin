@@ -1,0 +1,55 @@
+{
+ "name": "playera-venom-lengua-colgada",
+ "applies_to": {
+  "garment": "playera negra de Venom con la lengua roja",
+  "source": "imagen de producto que mandó el dueño (2026-10-10)"
+ },
+ "source": {
+  "photo": "sources/fotos/playera-venom-lengua.jpg",
+  "photo_meta": {
+   "origin": "imagen de producto de una tienda, no foto de la prenda en la casa",
+   "size_px": [
+    1164,
+    1200
+   ],
+   "view": "de frente y sin perspectiva, sobre fondo blanco"
+  },
+  "perspective": "la imagen ya es de frente: el recorte es un rectángulo, sin corrección",
+  "fabric_srgb": [
+   40,
+   39,
+   40
+  ],
+  "print_coverage": 0.0832
+ },
+ "observed": {
+  "type": "playera de algodón negra de manga corta y cuello redondo",
+  "print": "cabeza de Venom de perfil en gris y blanco, con los dientes blancos y la lengua roja que cae hasta la mitad del pecho",
+  "condition": "imagen de catálogo: sin arrugas ni pelusa"
+ },
+ "size_m": {
+  "width": 0.7591,
+  "height": 0.7455,
+  "source": "la prenda extendida con cada manga caída a 60° bajo la horizontal, cosida a la sisa (hang_layers)"
+ },
+ "px_per_m": 1100,
+ "size_px": [
+  835,
+  820
+ ],
+ "tileable": false,
+ "grid": null,
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)",
+  "opacity": "opacity.png (0 = fuera de la prenda)"
+ },
+ "glass_material": null,
+ "assumptions": [
+  "ancho de pecho 0.52 m y largo 0.72 m (talla M): faltan medir; la imagen de catálogo no guarda la proporción real",
+  "la imagen es de catálogo: el negro de la tela y los colores del estampado son los de la tienda, no los de la prenda en la casa",
+  "el estampado es plano: la imagen no muestra relieve",
+  "colgada: cada manga cae a 60° bajo la horizontal, cosida a la sisa (supuesto: así cae una playera de algodón en un gancho)"
+ ]
+}

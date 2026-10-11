@@ -97,6 +97,13 @@ def texture(spec: Path):
         print(f'→ {f.relative_to(ROOT)}')
 
 
+def hang(spec: Path):
+    """Solo la versión colgada de una prenda, a partir de sus mapas extendidos: no necesita la foto."""
+    from house_twin.hanging import build_hanging
+    for folder in build_hanging(json.loads(spec.read_text())):
+        print(f'→ {folder.relative_to(ROOT)}')
+
+
 def closet_extras(facts: dict) -> tuple[list[dict], list[dict]]:
     """De los closets con interior: las hojas de abajo (se abren) y las prendas que se pueden sacar en el recorrido."""
     from house_twin.closet_interior import display_parts, leaf_parts
@@ -149,6 +156,8 @@ def main():
     i.add_argument('source', type=Path)
     t = sub.add_parser('texture', help='foto → texturas PBR según un JSON de sources/texturas/')
     t.add_argument('spec', type=Path)
+    h = sub.add_parser('hang', help='prenda colgada a partir de sus mapas extendidos (no necesita la foto)')
+    h.add_argument('spec', type=Path)
     sc = sub.add_parser('scene', help='IFC + texturas → escena de Blender y recorrido web (docs/viewer/recorrido/)')
     sc.add_argument('--render', action='store_true', help='también renderiza las vistas previas (Cycles, CPU: ~5 min)')
     args = parser.parse_args()
@@ -160,6 +169,8 @@ def main():
         inspect_dxf(args.source)
     elif args.command == 'texture':
         texture(args.spec)
+    elif args.command == 'hang':
+        hang(args.spec)
     elif args.command == 'scene':
         scene(args.render)
 
