@@ -647,7 +647,7 @@
     "id": "playera-venom-lengua",
     "label": "la playera de Venom de la lengua roja",
     "material": "playera-venom-lengua-colgada",
-    "back_material": "playera-venom-lengua-colgada-espalda",
+    "back_material": "playera-base-colgada",
     "u_centre": 2.1,
     "n": -0.3,
     "rod_z": 1.82,

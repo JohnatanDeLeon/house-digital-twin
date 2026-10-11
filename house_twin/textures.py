@@ -613,15 +613,13 @@ def _component(mask: np.ndarray, seed) -> np.ndarray:
     return np.asarray(img) == 128
 
 
-def build_garment(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
-    """Prenda fotografiada extendida: silueta recortada (opacidad), tela de la foto y estampado.
+def segment_garment(spec: dict, photos_root: Path = ROOT) -> dict:
+    """Foto de una prenda extendida → imagen rectificada (`lin`, `lum`), silueta (`garment`) y estampado (`printed`).
 
     - Silueta: la tela oscura sobre el fondo claro. Lo claro que lo toca desde el borde de la foto es fondo; lo claro
       encerrado por la tela (el estampado, la etiqueta) es prenda. Se queda solo la pieza conectada con `seed_frac`.
-    - Estampado (`print`): lo claro dentro de su zona. Si es de foil metálico (`finish: foil`, el de siempre), en la
-      foto se ve lo que refleja (la sábana, el cuarto), no su color: se pinta con el color del metal y se marca metálico,
-      como el vidrio de D03. Si es de tinta (`finish: ink`), se queda con los colores de la foto y sin metálico.
-    - Con `hanging`, además la versión colgada (`house_twin.hanging`), a partir de los mapas que se acaban de escribir.
+    - Estampado (`print`): lo claro dentro de su zona. Si es de foil (`finish: foil`, el de siempre), también lo que
+      está junto a él y es más claro que la tela: el foil refleja cosas oscuras.
     """
     g = spec['garment']
     px_per_m = spec['px_per_m']
@@ -653,6 +651,21 @@ def build_garment(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
         near = _blur(printed.astype(float), pr.get('close_px', 4)) > 0.25
         printed |= garment & in_region & near & (lum >= pr.get('reflection_min_lum', 50))
     printed = _blur(printed.astype(float), pr.get('soften_px', 1.0)) > 0.5
+    return {'lin': lin, 'lum': lum, 'garment': garment, 'printed': printed, 'foil': foil}
+
+
+def build_garment(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
+    """Prenda fotografiada extendida: silueta recortada (opacidad), tela de la foto y estampado (`segment_garment`).
+
+    - Foil metálico (`finish: foil`, el de siempre): en la foto se ve lo que refleja (la sábana, el cuarto), no su
+      color: se pinta con el color del metal y se marca metálico, como el vidrio de D03.
+    - Tinta (`finish: ink`): se queda con los colores de la foto y sin metálico.
+    - Con `blank`, la prenda sale lisa, sin el estampado: es el molde de `house_twin.garment_designs`.
+    - Con `hanging`, además la versión colgada (`house_twin.hanging`), a partir de los mapas que se acaban de escribir.
+    """
+    g, pr, px_per_m = spec['garment'], spec['garment']['print'], spec['px_per_m']
+    seg = segment_garment(spec, photos_root)
+    lin, lum, garment, printed, foil = seg['lin'], seg['lum'], seg['garment'], seg['printed'], seg['foil']
     fabric = garment & ~printed
     fabric_color = np.median(lin[fabric], axis=0)
     lin[~garment] = fabric_color  # sin halo claro en la orilla al filtrar la textura
@@ -673,8 +686,12 @@ def build_garment(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
     common = {'applies_to': spec['applies_to'], 'source': source, 'observed': spec.get('observed', {})}
     back_rough = np.full(lum.shape, g['fabric_roughness'])
     back_height = grain * g.get('weave_mm', 0.15) / 1000
-    _garment_maps(out, spec['name'], spec['size_m'], px_per_m, lin, garment, roughness, height, metallic, common,
-                  spec.get('assumptions', []))
+    if spec.get('blank'):  # molde: la tela sin el estampado, de los dos lados
+        _garment_maps(out, spec['name'], spec['size_m'], px_per_m, plain, garment, back_rough, back_height, None, common,
+                      spec.get('assumptions', []) + [spec['blank']])
+    else:
+        _garment_maps(out, spec['name'], spec['size_m'], px_per_m, lin, garment, roughness, height, metallic, common,
+                      spec.get('assumptions', []))
     if spec.get('back'):
         _garment_maps(TEXTURES_DIR / spec['back']['name'], spec['back']['name'], spec['size_m'], px_per_m, plain, garment,
                       back_rough, back_height, None, common, spec.get('assumptions', []) + [spec['back']['note']])
@@ -704,6 +721,9 @@ def _garment_maps(out: Path, name: str, size_m: dict, px_per_m: int, lin, alpha,
 
 def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     spec = json.loads(spec_path.read_text())
+    if spec.get('template'):  # prenda hecha sobre un molde: se genera después del molde
+        from house_twin.garment_designs import build_design  # importa este módulo: se resuelve aquí para no hacer un ciclo
+        return build_design(spec, photos_root)
     if spec.get('garment'):
         return build_garment(spec, TEXTURES_DIR / spec['name'], photos_root)
     if spec.get('kind') == 'constant':

@@ -1,0 +1,77 @@
+{
+ "_doc": "Molde de playera: la playera de la imagen de producto que mandó el dueño, sin el estampado. Da la silueta, la tela, la espalda lisa y la versión colgada que comparten todas las playeras con \"template\": \"playera-base\"; cada una solo cambia su estampado (ver house_twin/garment_designs.py). Regenerar con: python -m house_twin.cli texture sources/texturas/playera-base.json (antes que las playeras)",
+ "name": "playera-base",
+ "applies_to": {
+  "garment": "molde de playera negra de manga corta y cuello redondo",
+  "source": "imagen de producto que mandó el dueño (2026-10-10), sin su estampado"
+ },
+ "photo": "sources/fotos/playera-venom-lengua.jpg",
+ "photo_meta": {
+  "origin": "imagen de producto de una tienda, no foto de la prenda en la casa",
+  "size_px": [
+   1164,
+   1200
+  ],
+  "view": "de frente y sin perspectiva, sobre fondo blanco"
+ },
+ "perspective": "la imagen ya es de frente: el recorte es un rectángulo, sin corrección",
+ "corners_px": {
+  "top_left": [
+   40,
+   70
+  ],
+  "top_right": [
+   1124,
+   70
+  ],
+  "bottom_right": [
+   1124,
+   1160
+  ],
+  "bottom_left": [
+   40,
+   1160
+  ]
+ },
+ "size_m": {
+  "width": 0.989,
+  "height": 0.752,
+  "source": "recorte de 1084 × 1090 px. A lo ancho: el cuerpo mide 570 px de costado a costado y se supone un pecho de 0.52 m (talla M, como la otra playera) → 1096 px/m. A lo alto la imagen de catálogo viene estirada (con esa escala la playera mediría 0.95 m de largo): del punto más alto del hombro al dobladillo hay 1043 px y se supone un largo de 0.72 m (talla M) → 1449 px/m"
+ },
+ "px_per_m": 1100,
+ "garment": {
+  "fabric_max_lum": 75,
+  "seed_frac": [
+   0.5,
+   0.9
+  ],
+  "fabric_roughness": 0.95,
+  "weave_mm": 0.12,
+  "print": {
+   "finish": "ink",
+   "region_frac": [
+    0.254,
+    0.161,
+    0.692,
+    0.862
+   ],
+   "min_lum": 70,
+   "roughness": 0.6,
+   "thickness_mm": 0.08,
+   "note": "serigrafía (tinta plastisol): se queda con los colores de la imagen y sin brillo metálico"
+  }
+ },
+ "observed": {
+  "type": "playera de algodón negra de manga corta y cuello redondo",
+  "condition": "imagen de catálogo: sin arrugas ni pelusa"
+ },
+ "assumptions": [
+  "ancho de pecho 0.52 m y largo 0.72 m (talla M): faltan medir; la imagen de catálogo no guarda la proporción real"
+ ],
+ "blank": "molde: la tela sin el estampado, rellenada con el color de la tela de alrededor (también es la espalda)",
+ "hanging": {
+  "name": "playera-base-colgada",
+  "sleeve_angle_deg": 60,
+  "note": "colgada: cada manga cae a 60° bajo la horizontal, cosida a la sisa (supuesto: así cae una playera de algodón en un gancho)"
+ }
+}

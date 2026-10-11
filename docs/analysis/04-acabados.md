@@ -191,6 +191,10 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 - **Fuente:** el dueño mandó la imagen de producto de una tienda (de frente, sobre fondo blanco, 1164 × 1200 px), no una foto de la prenda en la casa. Va en `sources/fotos/playera-venom-lengua.jpg` (fuera de git) y se describe en `sources/texturas/playera-venom-lengua.json`.
 - **Prenda:** playera negra de algodón, manga corta y cuello redondo. El estampado es la cabeza de Venom de perfil, en gris y blanco, con la lengua roja.
 - **Estampado de tinta** (`finish: ink`): a diferencia del foil de la otra playera, la serigrafía se queda con los colores de la imagen y no es metálica.
+- **Molde para las demás playeras (pedido del dueño, 2026-10-11):** de esta imagen sale `playera-base`, la playera sin el estampado (la tela de alrededor rellena el hueco). Da la silueta, la tela, la espalda lisa y la versión colgada (`playera-base-colgada`) de todas las playeras nuevas, que solo cambian su estampado (`house_twin/garment_designs.py`).
+  - Esta misma playera ya se hace sobre el molde: su estampado se recorta de la imagen y cae en el mismo lugar, 0.33 m de ancho y 0.12 m bajo el punto más alto de la playera.
+  - Un estampado puede salir de una imagen de la prenda (se recorta y se coloca solo) o de un dibujo suelto. El dibujo suelto se coloca con su ancho y su altura; si no se dan, se suponen 0.28 m de ancho, centrado, 0.12 m bajo el punto más alto.
+  - Un dibujo sin transparencia pierde el color de su fondo. Un dibujo con blanco sobre fondo blanco pierde su blanco: conviene un PNG con transparencia.
 - **Escala (supuesta, talla M):**
   - A lo ancho, el cuerpo mide 570 px y se supone un pecho de 0.52 m.
   - A lo alto, la imagen de catálogo viene estirada: con la misma escala la playera mediría 0.95 m de largo. El largo se fija en 0.72 m, del punto más alto del hombro al dobladillo.
@@ -198,8 +202,9 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 - **Dónde va:** colgada en el mismo tubo del módulo 3 del closet de R3, 14.5 cm a la izquierda de la plateada (posición supuesta). Va de canto y apretada contra las hojas, igual que la otra.
 - **Colgada** (`playera-venom-lengua-colgada`): con las mangas a 60° bajo la horizontal mide 0.76 × 0.75 m.
 - **Límites:**
-  - La espalda es lisa, sin imagen.
+  - La espalda es lisa, sin imagen: es la del molde, la misma para todas las playeras.
   - Los colores son los del catálogo, no los de la prenda en la casa.
+  - Todas las playeras del molde tienen la misma forma y la misma talla supuesta.
 
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 

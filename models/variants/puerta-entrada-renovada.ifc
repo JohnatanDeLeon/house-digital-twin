@@ -1,7 +1,7 @@
 ISO-10303-21;
 HEADER;
 FILE_DESCRIPTION(('ViewDefinition[DesignTransferView]'),'2;1');
-FILE_NAME('/dev/null','2026-10-11T00:03:37+00:00',(''),(''),'IfcOpenShell 0.9.0','IfcOpenShell 0.9.0','Nobody');
+FILE_NAME('/dev/null','2026-10-11T00:26:33+00:00',(''),(''),'IfcOpenShell 0.9.0','IfcOpenShell 0.9.0','Nobody');
 FILE_SCHEMA(('IFC4'));
 ENDSEC;
 DATA;
@@ -16172,7 +16172,7 @@ DATA;
 #16845=IFCDIRECTION((1.,0.,0.));
 #16846=IFCAXIS2PLACEMENT3D(#16843,#16844,#16845);
 #16847=IFCLOCALPLACEMENT(#47,#16846);
-#16848=IFCMATERIAL('playera-venom-lengua-colgada-espalda',$,'acabado');
+#16848=IFCMATERIAL('playera-base-colgada',$,'acabado');
 #16849=IFCRELASSOCIATESMATERIAL('3uPL$9BrXImOmOVXhBuWS0',$,$,$,(#16827),#16848);
 #16850=IFCPROPERTYSET('0SZgyb7bnHawyyiP4Ht308',$,'HDT_Image',$,(#16852,#16853));
 #16851=IFCRELDEFINESBYPROPERTIES('0HjTlrntHRiPZuoL50834P',$,$,$,(#16827),#16850);

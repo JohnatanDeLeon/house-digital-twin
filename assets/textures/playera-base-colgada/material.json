@@ -1,8 +1,8 @@
 {
- "name": "playera-venom-lengua-colgada-espalda",
+ "name": "playera-base-colgada",
  "applies_to": {
-  "garment": "playera negra de Venom con la lengua roja",
-  "source": "imagen de producto que mandó el dueño (2026-10-10)"
+  "garment": "molde de playera negra de manga corta y cuello redondo",
+  "source": "imagen de producto que mandó el dueño (2026-10-10), sin su estampado"
  },
  "source": {
   "photo": "sources/fotos/playera-venom-lengua.jpg",
@@ -24,7 +24,6 @@
  },
  "observed": {
   "type": "playera de algodón negra de manga corta y cuello redondo",
-  "print": "cabeza de Venom de perfil en gris y blanco, con los dientes blancos y la lengua roja que cae hasta la mitad del pecho",
   "condition": "imagen de catálogo: sin arrugas ni pelusa"
  },
  "size_m": {
@@ -48,9 +47,7 @@
  "glass_material": null,
  "assumptions": [
   "ancho de pecho 0.52 m y largo 0.72 m (talla M): faltan medir; la imagen de catálogo no guarda la proporción real",
-  "la imagen es de catálogo: el negro de la tela y los colores del estampado son los de la tienda, no los de la prenda en la casa",
-  "el estampado es plano: la imagen no muestra relieve",
-  "espalda lisa (sin imagen): la tela del frente sin el estampado",
+  "molde: la tela sin el estampado, rellenada con el color de la tela de alrededor (también es la espalda)",
   "colgada: cada manga cae a 60° bajo la horizontal, cosida a la sisa (supuesto: así cae una playera de algodón en un gancho)"
  ]
 }

@@ -261,3 +261,47 @@ def test_hanging_turns_the_sleeve_normals_with_the_fabric():
     left_sleeve[:, 100:] = False
     n = layers['normal'][left_sleeve] * 2 - 1
     assert np.allclose(n[:, 1], np.sin(np.radians(60)), atol=0.02)  # la manga izquierda giró 60° en contra del reloj
+
+
+def test_template_tee_is_plain_and_shared_by_the_designed_tee():
+    root = Path(__file__).resolve().parent.parent / 'assets' / 'textures'
+    base = np.asarray(Image.open(root / 'playera-base' / 'opacity.png')) > 128
+    tee = np.asarray(Image.open(root / 'playera-venom-lengua' / 'opacity.png')) > 128
+    assert np.array_equal(base, tee)  # misma silueta: solo cambia el estampado
+    color = np.asarray(Image.open(root / 'playera-base' / 'basecolor.jpg')).astype(int)
+    assert not (base & (color[..., 0] - color[..., 1] > 80)).any()  # el molde ya no tiene la lengua roja
+    material = json.loads((root / 'playera-venom-lengua' / 'material.json').read_text())
+    assert material['source']['template'] == 'playera-base' and material['source']['from'] == 'product'
+
+
+def _template_maps():
+    from house_twin.hanging import load_maps
+    from house_twin.textures import TEXTURES_DIR
+    return load_maps(TEXTURES_DIR / 'playera-base')
+
+
+def test_art_design_uses_its_transparency_and_lands_where_the_spec_says(tmp_path):
+    from house_twin.garment_designs import _anchor, design_from_art, place_design
+    art = np.zeros((100, 200, 4), np.uint8)
+    art[..., :3] = [255, 0, 0]
+    art[20:80, 50:150, 3] = 255  # rectángulo rojo opaco dentro de un PNG transparente
+    Image.fromarray(art, 'RGBA').save(tmp_path / 'dibujo.png')
+    material, layers, alpha = _template_maps()
+    rgb, cover, placement = design_from_art({'image': 'dibujo.png', 'width_m': 0.2, 'top_m': 0.15}, tmp_path)
+    assert cover.shape == (60, 100) and placement['offset_x_m'] == 0.0  # recortado a lo que se ve
+    out = place_design(layers, alpha, material['px_per_m'], (rgb, cover, placement), 0.6)
+    ppm, (cx, top) = material['px_per_m'], _anchor(alpha)
+    y, x = round(top + 0.15 * ppm + 0.06 * ppm), round(cx)  # el centro del rectángulo (0.2 × 0.12 m)
+    assert np.allclose(out['basecolor'][y, x], [1, 0, 0], atol=0.02)
+    assert np.allclose(out['roughness'][y, x], 0.6, atol=0.01)
+    assert np.allclose(out['basecolor'][~alpha], layers['basecolor'][~alpha])  # fuera de la playera no se pinta
+
+
+def test_art_design_without_transparency_drops_its_background(tmp_path):
+    from house_twin.garment_designs import design_from_art
+    art = np.full((80, 80, 3), 30, np.uint8)  # fondo oscuro liso
+    art[20:60, 20:60] = [240, 200, 40]
+    Image.fromarray(art).save(tmp_path / 'dibujo.png')  # RGB, sin canal de transparencia
+    _, cover, placement = design_from_art({'image': 'dibujo.png'}, tmp_path)
+    assert cover.shape == (40, 40) and cover.min() > 0.99
+    assert placement['source'].startswith('supuesta')

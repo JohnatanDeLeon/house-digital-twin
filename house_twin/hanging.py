@@ -114,7 +114,7 @@ def _crop_box(alpha: np.ndarray):
     return max(0, ys.min() - MARGIN_PX), min(H, ys.max() + MARGIN_PX + 1), max(0, xs.min() - MARGIN_PX), min(W, xs.max() + MARGIN_PX + 1)
 
 
-def _load(folder: Path) -> tuple[dict, dict[str, np.ndarray], np.ndarray]:
+def load_maps(folder: Path) -> tuple[dict, dict[str, np.ndarray], np.ndarray]:
     """Mapas de una prenda extendida a resolución completa (los de detalle se generan a media resolución)."""
     material = json.loads((folder / 'material.json').read_text())
     alpha = np.asarray(Image.open(folder / 'opacity.png').convert('L')) > 127
@@ -127,7 +127,8 @@ def _load(folder: Path) -> tuple[dict, dict[str, np.ndarray], np.ndarray]:
     return material, layers, alpha
 
 
-def _save(out: Path, material: dict, layers: dict, alpha: np.ndarray, size_source: str, note: str, name: str):
+def write_maps(out: Path, material: dict, layers: dict, alpha: np.ndarray):
+    """Escribe los mapas de una prenda (los de detalle a media resolución) y su `material.json`, en una carpeta limpia."""
     out.mkdir(parents=True, exist_ok=True)
     for stale in out.glob('*'):
         stale.unlink()
@@ -140,10 +141,7 @@ def _save(out: Path, material: dict, layers: dict, alpha: np.ndarray, size_sourc
     Image.fromarray(alpha.astype(np.uint8) * 255).save(out / 'opacity.png', optimize=True)
     if 'metallic' in layers:
         Image.fromarray(to8(layers['metallic'][..., 0])).resize(detail, Image.LANCZOS).save(out / 'metallic.png', optimize=True)
-    px_per_m = material['px_per_m']
-    material = {**material, 'name': name, 'size_px': [W, H], 'assumptions': material.get('assumptions', []) + [note],
-                'size_m': {'width': round(W / px_per_m, 4), 'height': round(H / px_per_m, 4), 'source': size_source}}
-    (out / 'material.json').write_text(json.dumps(material, ensure_ascii=False, indent=1) + '\n')
+    (out / 'material.json').write_text(json.dumps({**material, 'size_px': [W, H]}, ensure_ascii=False, indent=1) + '\n')
 
 
 def build_hanging(spec: dict) -> list[Path]:
@@ -153,13 +151,17 @@ def build_hanging(spec: dict) -> list[Path]:
     size_source = (f'la prenda extendida con cada manga caída a {angle}° bajo la horizontal, cosida a la sisa '
                    f'(hang_layers)')
     pairs = [(spec['name'], hang['name'])] + ([(spec['back']['name'], hang['back_name'])] if spec.get('back') else [])
-    _, _, front_alpha = _load(TEXTURES_DIR / spec['name'])
+    _, _, front_alpha = load_maps(TEXTURES_DIR / spec['name'])
     written = []
     for flat, hanging in pairs:
-        material, layers, alpha = _load(TEXTURES_DIR / flat)
+        material, layers, _ = load_maps(TEXTURES_DIR / flat)
         layers, hung = hang_layers(layers, front_alpha, angle)  # la espalda cae con la misma silueta que el frente
         y0, y1, x0, x1 = _crop_box(hung)
-        layers = {k: v[y0:y1, x0:x1] for k, v in layers.items()}
-        _save(TEXTURES_DIR / hanging, material, layers, hung[y0:y1, x0:x1], size_source, hang['note'], hanging)
+        layers, hung = {k: v[y0:y1, x0:x1] for k, v in layers.items()}, hung[y0:y1, x0:x1]
+        px_per_m = material['px_per_m']
+        size = {'width': round(hung.shape[1] / px_per_m, 4), 'height': round(hung.shape[0] / px_per_m, 4),
+                'source': size_source}
+        write_maps(TEXTURES_DIR / hanging, {**material, 'name': hanging, 'size_m': size,
+                                            'assumptions': material.get('assumptions', []) + [hang['note']]}, layers, hung)
         written.append(TEXTURES_DIR / hanging)
     return written
