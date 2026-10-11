@@ -64,6 +64,7 @@ select:focus-visible, .btn:focus-visible, #map:focus-visible { outline: 2px soli
 }
 .here .room { font-family: var(--font-display); font-size: 18px; font-weight: 600; }
 .here .coords { font-family: var(--font-data); font-size: 11.5px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+body.holding .here, body.holding #map { display: none; }
 body.touch .here { left: auto; right: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px + 200px); max-width: 60vw; }
 
 #map {
@@ -465,7 +466,20 @@ function animateDoors(dt) {
 // ---------- cosas que se pueden sacar y ver de cerca (una prenda del closet) ----------
 const items = [];
 let held = null;
-const HELD_AT = new THREE.Vector3(0, -0.04, -0.62);  // frente a los ojos, en el marco de la cámara
+const HELD_MIN_M = 0.45;    // m: más cerca de los ojos ya no se enfoca
+const HELD_FILL = 0.9;      // parte del espacio libre que ocupa la prenda: queda aire alrededor
+const heldAt = new THREE.Vector3();
+// Dónde va lo que se sostiene, en el marco de la cámara: tan lejos como haga falta para que se vea completo entre la
+// barra de arriba y los botones de abajo, a lo ancho y a lo alto (en el celular vertical, el ancho es lo que manda).
+function heldTarget(it) {
+  const H = innerHeight, top = document.querySelector('.bar').getBoundingClientRect().bottom;
+  const below = [itemFlip, doorAction].filter(b => !b.hidden).map(b => b.getBoundingClientRect().top);
+  const bottom = Math.min(H, ...below);
+  const tanV = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)), band = Math.max(0.2, (bottom - top) / H);
+  const w = it.relaxed_width_m || it.size_m[0], h = it.size_m[1];
+  const d = Math.max(HELD_MIN_M, h / (2 * tanV * band * HELD_FILL), w / (2 * tanV * camera.aspect * HELD_FILL));
+  return heldAt.set(0, (1 - (top + bottom) / H) * d * tanV, -d);  // centrada en la franja libre
+}
 function setupItems() {
   scene.add(camera);  // lo que se sostiene viaja con la cámara
   scene.traverse(o => { if (o.isLight) o.layers.enable(HELD_LAYER); });  // y lo iluminan las mismas luces
@@ -510,15 +524,20 @@ function aimedItem() {
 // profundidad: una puerta abierta o el closet no lo cortan, y el frente sigue tapando a la espalda
 const HELD_LAYER = 1;
 function onTop(it, on) { it.group.traverse(o => { if (o.isMesh) o.layers.set(on ? HELD_LAYER : 0); }); }
-function takeItem(it) { camera.attach(it.group); it.spin = 0; it.returning = false; onTop(it, true); held = it; }
-function returnItem() { if (!held) return; onTop(held, false); scene.attach(held.group); held.returning = true; held = null; }
+// mientras se sostiene algo, la ficha del cuarto y la planta se ocultan: le dejan la pantalla a la prenda
+const holding = on => document.body.classList.toggle('holding', on);
+function takeItem(it) { camera.attach(it.group); it.spin = 0; it.returning = false; onTop(it, true); held = it; holding(true); }
+function returnItem() {
+  if (!held) return;
+  onTop(held, false); scene.attach(held.group); held.returning = true; held = null; holding(false);
+}
 function flipItem(turn = Math.PI) { if (held) held.spin += turn; }
 const spinQ = new THREE.Quaternion(), yAxis = new THREE.Vector3(0, 1, 0);
 function animateItems(dt) {
   const k = 1 - Math.exp(-dt * 9);
   for (const it of items) {
     if (it === held) {
-      it.group.position.lerp(HELD_AT, k);
+      it.group.position.lerp(heldTarget(it), k);
       it.group.quaternion.slerp(spinQ.setFromAxisAngle(yAxis, it.spin).multiply(it.base), k);
       it.body.scale.x += (it.relax - it.body.scale.x) * k;
     } else if (it.returning) {
