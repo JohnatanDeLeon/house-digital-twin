@@ -60,10 +60,14 @@ select:focus-visible, .btn:focus-visible, #map:focus-visible { outline: 2px soli
 .here {
   position: absolute; left: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); z-index: 2;
   background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 12px;
-  display: grid; gap: 2px; max-width: calc(100% - 32px - 120px);
+  display: grid; gap: 1px; max-width: calc(100% - 32px - 120px); cursor: pointer;
 }
-.here .room { font-family: var(--font-display); font-size: 18px; font-weight: 600; }
-.here .coords { font-family: var(--font-data); font-size: 11.5px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.here .room { font-family: var(--font-display); font-size: 15px; font-weight: 600; }
+.here .coords { font-family: var(--font-data); font-size: 11px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+/* en pantallas chicas solo el cuarto; las coordenadas aparecen al tocar el recuadro */
+@media (max-width: 720px) { .here { padding: 4px 8px; } .here .room { font-size: 13px; } .here:not(.open) .coords { display: none; } }
+body.touch .here:not(.open) .coords { display: none; }
+body.touch .here { padding: 4px 8px; } body.touch .here .room { font-size: 13px; }
 body.holding .here, body.holding #map { display: none; }
 body.touch .here { left: auto; right: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px + 200px); max-width: 60vw; }
 
@@ -104,7 +108,17 @@ body.touch .door-action { bottom: calc(env(safe-area-inset-bottom, 0px) + 170px)
   background: var(--surface); border: 1px solid var(--accent); border-left-width: 4px;
   font-size: 13px; line-height: 1.4; color: var(--ink);
 }
-.proposal strong { font-family: var(--font-display); font-size: 15px; display: block; }
+.proposal-title { all: unset; cursor: pointer; display: flex; gap: 8px; align-items: baseline; width: 100%;
+  font-family: var(--font-display); font-size: 15px; font-weight: 600; }
+.proposal-title::after { content: '▾'; margin-left: auto; color: var(--ink-soft); }
+.proposal-title:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.proposal-body { margin-top: 4px; }
+/* plegada: solo el nombre, en un renglón (se abre tocándolo) */
+.proposal.collapsed { padding: 5px 10px; }
+.proposal.collapsed .proposal-title { font-size: 13px; }
+.proposal.collapsed .proposal-title span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.proposal.collapsed .proposal-title::after { content: '▸'; }
+.proposal.collapsed .proposal-body { display: none; }
 .hint {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 4;
   width: min(420px, calc(100% - 32px)); background: var(--surface); border: 1px solid var(--rule); border-radius: 8px;
@@ -822,13 +836,31 @@ function setVariant(variant) {
   const note = $('proposal');
   note.hidden = !variant;
   placeNote();
-  if (variant) note.innerHTML = `<strong>Propuesta: ${variant.name}</strong>${variant.description}`
-    + (variant.disclaimer ? ` <em>${variant.disclaimer}</em>` : '');
+  if (variant) note.innerHTML = `<button class="proposal-title" type="button" aria-expanded="true"><span>Propuesta: ${variant.name}</span></button>`
+    + `<div class="proposal-body">${variant.description}` + (variant.disclaimer ? ` <em>${variant.disclaimer}</em>` : '') + '</div>';
+  foldNote(false);
+  clearTimeout(noteTimer);
+  if (variant) noteTimer = setTimeout(() => foldNote(true), NOTE_OPEN_MS);  // se lee al elegirla y luego se pliega
 }
+const NOTE_OPEN_MS = 8000;
+let noteTimer = 0;
+function foldNote(folded) {
+  const note = $('proposal');
+  note.classList.toggle('collapsed', folded);
+  const title = note.querySelector('.proposal-title');
+  if (title) title.setAttribute('aria-expanded', String(!folded));
+}
+$('proposal').addEventListener('click', e => {
+  if (!e.target.closest('.proposal-title')) return;
+  clearTimeout(noteTimer);
+  foldNote(!$('proposal').classList.contains('collapsed'));
+});
+$('here').addEventListener('click', () => $('here').classList.toggle('open'));
 function placeNote() {
   $('proposal').style.top = `${document.querySelector('.bar').getBoundingClientRect().bottom + 8}px`;
 }
 addEventListener('resize', placeNote);
+new ResizeObserver(placeNote).observe(document.querySelector('.bar'));  // la barra crece al mostrar «Versión»
 function setupVariants() {
   const variants = DATA.variants || [];
   if (!variants.length) return;
