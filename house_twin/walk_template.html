@@ -64,6 +64,7 @@ select:focus-visible, .btn:focus-visible, #map:focus-visible { outline: 2px soli
 }
 .here .room { font-family: var(--font-display); font-size: 18px; font-weight: 600; }
 .here .coords { font-family: var(--font-data); font-size: 11.5px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+body.holding .here, body.holding #map { display: none; }
 body.touch .here { left: auto; right: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px + 200px); max-width: 60vw; }
 
 #map {
@@ -465,52 +466,87 @@ function animateDoors(dt) {
 // ---------- cosas que se pueden sacar y ver de cerca (una prenda del closet) ----------
 const items = [];
 let held = null;
-const HELD_AT = new THREE.Vector3(0, -0.04, -0.62);  // frente a los ojos, en el marco de la cámara
+const HELD_MIN_M = 0.45;    // m: más cerca de los ojos ya no se enfoca
+const HELD_FILL = 0.9;      // parte del espacio libre que ocupa la prenda: queda aire alrededor
+const heldAt = new THREE.Vector3();
+// Dónde va lo que se sostiene, en el marco de la cámara: tan lejos como haga falta para que se vea completo entre la
+// barra de arriba y los botones de abajo, a lo ancho y a lo alto (en el celular vertical, el ancho es lo que manda).
+function heldTarget(it) {
+  const H = innerHeight, top = document.querySelector('.bar').getBoundingClientRect().bottom;
+  const below = [itemFlip, doorAction].filter(b => !b.hidden).map(b => b.getBoundingClientRect().top);
+  const bottom = Math.min(H, ...below);
+  const tanV = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)), band = Math.max(0.2, (bottom - top) / H);
+  const w = it.relaxed_width_m || it.size_m[0], h = it.size_m[1];
+  const d = Math.max(HELD_MIN_M, h / (2 * tanV * band * HELD_FILL), w / (2 * tanV * camera.aspect * HELD_FILL));
+  return heldAt.set(0, (1 - (top + bottom) / H) * d * tanV, -d);  // centrada en la franja libre
+}
 function setupItems() {
   scene.add(camera);  // lo que se sostiene viaja con la cámara
   scene.traverse(o => { if (o.isLight) o.layers.enable(HELD_LAYER); });  // y lo iluminan las mismas luces
   for (const it of DATA.items || []) {
-    const meshes = [];
-    scene.traverse(o => { const t = tagOf(o); if (o.isMesh && (t.hdt_id || '').startsWith(it.id) && !t.hdt_id.endsWith('-gancho')) meshes.push(o); });
+    const meshes = [], parts = [it.id, `${it.id}-espalda`];  // por id exacto: una prenda puede ser prefijo de otra
+    scene.traverse(o => { if (o.isMesh && parts.includes(tagOf(o).hdt_id)) meshes.push(o); });
     if (!meshes.length) continue;
     for (const m of meshes) { const i = colliders.indexOf(m); if (i >= 0) colliders.splice(i, 1); }
     const group = new THREE.Group();
     group.position.copy(toThree(it.centre[0], it.centre[1], it.centre[2]));
     scene.add(group); group.updateMatrixWorld(true);
-    for (const m of meshes) group.attach(m);
+    // en el closet la prenda puede ir apretada contra el fondo y las hojas: `body` corre a lo ancho de la prenda y al
+    // sacarla la estira a su ancho real (`relaxed_width_m`)
+    const body = new THREE.Group();
+    body.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), toThree(-it.facing[1], it.facing[0]).normalize());
+    group.add(body); body.updateMatrixWorld(true);
+    for (const m of meshes) body.attach(m);
+    const relax = (it.relaxed_width_m || it.size_m[0]) / it.size_m[0];
     // giro que pone el frente de la prenda (hacia `facing`) mirando a la cámara, derecha
     const front = new THREE.Vector3(it.facing[0], 0, -it.facing[1]).normalize(), up = new THREE.Vector3(0, 1, 0);
     const local = new THREE.Matrix4().makeBasis(front, up, front.clone().cross(up));
     const target = new THREE.Matrix4().makeBasis(new THREE.Vector3(0, 0, 1), up, new THREE.Vector3(0, 0, 1).cross(up));
     const base = new THREE.Quaternion().setFromRotationMatrix(target.multiply(local.transpose()));
-    items.push({ ...it, group, base, homePos: group.position.clone(), homeQuat: group.quaternion.clone(), spin: 0, returning: false });
+    items.push({ ...it, group, body, relax, base, homePos: group.position.clone(), homeQuat: group.quaternion.clone(), spin: 0, returning: false });
   }
 }
-function itemAvailable(it) {
+// qué tan de frente se mira una prenda (coseno con la vista), o -1 si no se alcanza o su puerta está cerrada
+function itemAim(it) {
   const door = doors.find(d => d.id === it.door);
-  if (door && (!door.open || door.angle < 1.2)) return false;
+  if (it.returning || (door && (!door.open || door.angle < 1.2))) return -1;
   const p = modelXY(), dx = it.centre[0] - p[0], dy = it.centre[1] - p[1], dist = Math.hypot(dx, dy);
-  const fx = -Math.sin(player.yaw), fy = Math.cos(player.yaw);
-  return dist < 1.9 && (dx * fx + dy * fy) / (dist || 1) > 0.55;
+  const fx = -Math.sin(player.yaw), fy = Math.cos(player.yaw), aim = (dx * fx + dy * fy) / (dist || 1);
+  return dist < 1.9 && aim > 0.55 ? aim : -1;
+}
+// con varias prendas en el mismo tubo, se saca la que queda más al centro de la vista
+function aimedItem() {
+  let best = null, bestAim = -1;
+  for (const it of items) { const aim = itemAim(it); if (aim > bestAim) { best = it; bestAim = aim; } }
+  return best;
 }
 // lo que se sostiene va en la capa 1 y se dibuja en un segundo paso, sobre el cuarto ya dibujado y con su propia
 // profundidad: una puerta abierta o el closet no lo cortan, y el frente sigue tapando a la espalda
 const HELD_LAYER = 1;
 function onTop(it, on) { it.group.traverse(o => { if (o.isMesh) o.layers.set(on ? HELD_LAYER : 0); }); }
-function takeItem(it) { camera.attach(it.group); it.spin = 0; it.returning = false; onTop(it, true); held = it; }
-function returnItem() { if (!held) return; onTop(held, false); scene.attach(held.group); held.returning = true; held = null; }
+// mientras se sostiene algo, la ficha del cuarto y la planta se ocultan: le dejan la pantalla a la prenda
+const holding = on => document.body.classList.toggle('holding', on);
+function takeItem(it) { camera.attach(it.group); it.spin = 0; it.returning = false; onTop(it, true); held = it; holding(true); }
+function returnItem() {
+  if (!held) return;
+  onTop(held, false); scene.attach(held.group); held.returning = true; held = null; holding(false);
+}
 function flipItem(turn = Math.PI) { if (held) held.spin += turn; }
 const spinQ = new THREE.Quaternion(), yAxis = new THREE.Vector3(0, 1, 0);
 function animateItems(dt) {
   const k = 1 - Math.exp(-dt * 9);
   for (const it of items) {
     if (it === held) {
-      it.group.position.lerp(HELD_AT, k);
+      it.group.position.lerp(heldTarget(it), k);
       it.group.quaternion.slerp(spinQ.setFromAxisAngle(yAxis, it.spin).multiply(it.base), k);
+      it.body.scale.x += (it.relax - it.body.scale.x) * k;
     } else if (it.returning) {
       it.group.position.lerp(it.homePos, k);
       it.group.quaternion.slerp(it.homeQuat, k);
-      if (it.group.position.distanceTo(it.homePos) < 0.002) { it.group.position.copy(it.homePos); it.group.quaternion.copy(it.homeQuat); it.returning = false; }
+      it.body.scale.x += (1 - it.body.scale.x) * k;
+      if (it.group.position.distanceTo(it.homePos) < 0.002) {
+        it.group.position.copy(it.homePos); it.group.quaternion.copy(it.homeQuat); it.body.scale.x = 1; it.returning = false;
+      }
     }
   }
 }
@@ -522,7 +558,7 @@ let currentAction = null, shownText = '';
 function pickAction() {
   const key = isTouch ? '' : ' <kbd>E</kbd>';
   if (held) return { text: `Guardar ${held.label}${key}`, run: returnItem };
-  const it = items.find(i => !i.returning && itemAvailable(i));
+  const it = aimedItem();
   if (it) return { text: `Sacar ${it.label}${key}`, run: () => takeItem(it) };
   const d = nearestDoor();
   if (!d) return null;

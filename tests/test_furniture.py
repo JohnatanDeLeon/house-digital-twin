@@ -81,16 +81,41 @@ def test_closet_r3_interior_is_hollow_and_leaves_open():
     assert sum(1 for p in leaves if p['ifc'] == 'IfcFurniture') == 6
 
 
-def test_closet_r3_only_hangs_the_venom_tee_and_it_fits():
+def _closet_r3_display():
     import json
-    from house_twin.closet_interior import display_parts, interior_parts
+    from house_twin.closet_interior import display_parts
     from house_twin.furniture import load_furniture
     facts = json.loads(open('data/facts/existing.facts.json').read())
     fx = next(x for x in facts['fixtures'] if x['id'] == 'F03')
     spec = next(s for s in load_furniture() if s['applies_to']['space'] == 'S04')
+    return fx, spec, display_parts(fx, spec)
+
+
+def test_closet_r3_only_hangs_the_owners_tees_and_they_fit():
+    from house_twin.closet_interior import interior_parts
+    fx, spec, (parts, items) = _closet_r3_display()
     assert not any(m.startswith(('F03-interior-ropa', 'F03-interior-piel')) for m in (p['id'] for p in interior_parts(fx, spec, 2.6)))
-    parts, items = display_parts(fx, spec)
-    assert [i['label'] for i in items] == ['la playera de Venom']
-    tee = next(p for p in parts if p['id'] == 'F03-playera-venom')
-    xs = [q[0] for q in tee['mesh'][0]]
-    assert 5.79 <= min(xs) and max(xs) <= 6.374  # cabe entre el muro y las hojas
+    assert [i['label'] for i in items] == ['la playera de Venom plateada', 'la playera de Venom de la lengua roja',
+                                          'la playera gris de I love Julio']
+    for tee_id in (i['id'] for i in items):
+        xs = [q[0] for q in next(p for p in parts if p['id'] == tee_id)['mesh'][0]]
+        assert 5.79 <= min(xs) and max(xs) <= 6.374  # cabe entre el muro y las hojas
+
+
+def test_closet_r3_tees_hang_edge_on_and_pressed_to_the_depth():
+    _, _, (parts, items) = _closet_r3_display()
+    for item in items:
+        assert abs(item['facing'][0]) < 1e-6 and abs(abs(item['facing'][1]) - 1) < 1e-6  # mira a lo ancho del closet: de canto
+        assert item['size_m'][0] < item['relaxed_width_m']  # apretada en el closet; al sacarla recupera su ancho
+        xs = [q[0] for p in parts if p['id'] in (item['id'], f"{item['id']}-espalda") for q in p['mesh'][0]]
+        assert abs(max(xs) - 6.364) < 1e-6 and min(xs) > 5.79  # 1 cm libre de las hojas, sin entrar al fondo
+
+
+def test_closet_r3_tee_ids_are_not_prefixes_of_their_neighbours_parts():
+    """El recorrido junta las piezas de cada prenda por id exacto (`id` y `id-espalda`), así que basta con que
+    cada prenda tenga sus 2 placas y su gancho con ids distintos."""
+    _, _, (parts, items) = _closet_r3_display()
+    ids = [p['id'] for p in parts]
+    assert len(ids) == len(set(ids))
+    for item in items:
+        assert {item['id'], f"{item['id']}-espalda", f"{item['id']}-gancho"} <= set(ids)

@@ -613,13 +613,14 @@ def _component(mask: np.ndarray, seed) -> np.ndarray:
     return np.asarray(img) == 128
 
 
-def build_garment(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
-    """Prenda fotografiada extendida: silueta recortada (opacidad), tela de la foto y estampado metálico.
+def segment_garment(spec: dict, photos_root: Path = ROOT) -> dict:
+    """Foto de una prenda extendida → imagen rectificada (`lin`, `lum`), silueta (`garment`) y estampado (`printed`).
 
-    - Silueta: la tela oscura sobre la sábana clara. Lo claro que la toca desde el borde de la foto es fondo; lo claro
+    - Silueta: la tela oscura sobre el fondo claro. Lo claro que lo toca desde el borde de la foto es fondo; lo claro
       encerrado por la tela (el estampado, la etiqueta) es prenda. Se queda solo la pieza conectada con `seed_frac`.
-    - Estampado (`print`): lo claro dentro de su zona. Si es de foil metálico, en la foto se ve lo que refleja (la
-      sábana, el cuarto), no su color: se pinta con el color del metal y se marca metálico, como el vidrio de D03.
+    - Estampado (`print`): lo claro dentro de su zona (`min_lum`), o con `detect: contrast` lo que se aleja del color
+      de la tela en `min_contrast` (0–255), para un estampado oscuro sobre tela clara. Si es de foil (`finish: foil`,
+      el de siempre), también lo que está junto a él y es más claro que la tela: el foil refleja cosas oscuras.
     """
     g = spec['garment']
     px_per_m = spec['px_per_m']
@@ -645,16 +646,38 @@ def build_garment(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
     x0, y0, x1, y1 = (round(v * d) for v, d in zip(pr['region_frac'], (W, H, W, H)))
     in_region = np.zeros_like(garment)
     in_region[y0:y1, x0:x1] = True
-    printed = garment & in_region & (lum >= pr['min_lum'])
-    # el foil también refleja cosas oscuras: lo que está junto al estampado y es más claro que la tela, también es foil
-    near = _blur(printed.astype(float), pr.get('close_px', 4)) > 0.25
-    printed |= garment & in_region & near & (lum >= pr.get('reflection_min_lum', 50))
+    if pr.get('detect') == 'contrast':  # estampado más oscuro o de otro color que la tela: lo que se aleja de ella
+        rgb = np.asarray(base).astype(float)
+        fabric_ref = np.median(rgb[garment], axis=0)
+        printed = garment & in_region & (np.abs(rgb - fabric_ref).max(axis=-1) >= pr['min_contrast'])
+    else:  # estampado más claro que la tela
+        printed = garment & in_region & (lum >= pr['min_lum'])
+    foil = pr.get('finish', 'foil') == 'foil'
+    if foil:  # el foil también refleja cosas oscuras: lo que está junto al estampado y es más claro que la tela, también es foil
+        near = _blur(printed.astype(float), pr.get('close_px', 4)) > 0.25
+        printed |= garment & in_region & near & (lum >= pr.get('reflection_min_lum', 50))
     printed = _blur(printed.astype(float), pr.get('soften_px', 1.0)) > 0.5
+    return {'lin': lin, 'lum': lum, 'garment': garment, 'printed': printed, 'foil': foil}
+
+
+def build_garment(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
+    """Prenda fotografiada extendida: silueta recortada (opacidad), tela de la foto y estampado (`segment_garment`).
+
+    - Foil metálico (`finish: foil`, el de siempre): en la foto se ve lo que refleja (la sábana, el cuarto), no su
+      color: se pinta con el color del metal y se marca metálico, como el vidrio de D03.
+    - Tinta (`finish: ink`): se queda con los colores de la foto y sin metálico.
+    - Con `blank`, la prenda sale lisa, sin el estampado: es el molde de `house_twin.garment_designs`.
+    - Con `hanging`, además la versión colgada (`house_twin.hanging`), a partir de los mapas que se acaban de escribir.
+    """
+    g, pr, px_per_m = spec['garment'], spec['garment']['print'], spec['px_per_m']
+    seg = segment_garment(spec, photos_root)
+    lin, lum, garment, printed, foil = seg['lin'], seg['lum'], seg['garment'], seg['printed'], seg['foil']
     fabric = garment & ~printed
     fabric_color = np.median(lin[fabric], axis=0)
     lin[~garment] = fabric_color  # sin halo claro en la orilla al filtrar la textura
-    lin[printed] = _srgb_to_linear(np.array(pr['basecolor_srgb'], float) / 255)
-    metallic = _blur(printed.astype(float), 0.8)
+    if foil:
+        lin[printed] = _srgb_to_linear(np.array(pr['basecolor_srgb'], float) / 255)
+    metallic = _blur(printed.astype(float), 0.8) if foil else None
     roughness = np.where(printed, pr['roughness'], g['fabric_roughness'])
     grain = _grain(_to_image(np.where(printed[..., None], lin, lin)), 1.5)
     height = grain * g.get('weave_mm', 0.15) / 1000 + printed * pr.get('thickness_mm', 0.1) / 1000
@@ -669,79 +692,19 @@ def build_garment(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
     common = {'applies_to': spec['applies_to'], 'source': source, 'observed': spec.get('observed', {})}
     back_rough = np.full(lum.shape, g['fabric_roughness'])
     back_height = grain * g.get('weave_mm', 0.15) / 1000
-    _garment_maps(out, spec['name'], spec['size_m'], px_per_m, lin, garment, roughness, height, metallic, common,
-                  spec.get('assumptions', []))
+    if spec.get('blank'):  # molde: la tela sin el estampado, de los dos lados
+        _garment_maps(out, spec['name'], spec['size_m'], px_per_m, plain, garment, back_rough, back_height, None, common,
+                      spec.get('assumptions', []) + [spec['blank']])
+    else:
+        _garment_maps(out, spec['name'], spec['size_m'], px_per_m, lin, garment, roughness, height, metallic, common,
+                      spec.get('assumptions', []))
     if spec.get('back'):
         _garment_maps(TEXTURES_DIR / spec['back']['name'], spec['back']['name'], spec['size_m'], px_per_m, plain, garment,
                       back_rough, back_height, None, common, spec.get('assumptions', []) + [spec['back']['note']])
-    hang = spec.get('hanging')
-    if hang:  # la misma prenda colgada: las mangas caen girando sobre el hombro
-        front, back = hang_sleeves([lin, garment, roughness, height, metallic], garment, hang), \
-            hang_sleeves([plain, garment, back_rough, back_height], garment, hang)
-        size = {'width': round(front[1].shape[1] / px_per_m, 4), 'height': round(front[1].shape[0] / px_per_m, 4),
-                'source': f"la prenda extendida con las mangas giradas {hang['drop_deg']}° hacia abajo sobre el hombro"}
-        note = [hang['note']]
-        _garment_maps(TEXTURES_DIR / hang['name'], hang['name'], size, px_per_m, front[0], front[1] > 0.5, front[2], front[3],
-                      front[4], common, spec.get('assumptions', []) + note)
-        if spec.get('back'):
-            _garment_maps(TEXTURES_DIR / hang['back_name'], hang['back_name'], size, px_per_m, back[0], back[1] > 0.5, back[2],
-                          back[3], None, common, spec.get('assumptions', []) + note + [spec['back']['note']])
+    if spec.get('hanging'):
+        from house_twin.hanging import build_hanging  # importa este módulo: se resuelve aquí para no hacer un ciclo
+        build_hanging(spec)
     return out
-
-
-def hang_sleeves(layers: list, garment: np.ndarray, hang: dict) -> list:
-    """Prenda colgada a partir de la extendida: cada manga gira `drop_deg` hacia abajo sobre su hombro y queda encima
-    del cuerpo. El cuerpo es lo que está entre sus costados (rectos, medidos cerca de la orilla de abajo); el hombro es
-    lo más alto de la prenda en el costado. Se recorta a la nueva silueta."""
-    H, W = garment.shape
-    rows = [y for y in range(int(H * 0.8), int(H * 0.95)) if garment[y].any()]
-    left = int(np.median([np.argmax(garment[y]) for y in rows]))
-    right = int(np.median([W - 1 - np.argmax(garment[y][::-1]) for y in rows]))
-    out = []
-    for layer in layers:
-        arr = layer.astype(float) if layer.ndim == 3 else layer.astype(float)[..., None]
-        body = arr.copy()
-        result = arr.copy()  # las mangas se quitan abajo, con la silueta
-        out.append([result, arr])
-    sleeves = []
-    for side, x_edge in ((-1, left), (1, right)):
-        top = int(np.argmax(garment[:, x_edge]))
-        # axila: la primera fila (bajando) donde la prenda ya no pasa del costado
-        outside = garment[:, :max(0, x_edge - 6)] if side < 0 else garment[:, x_edge + 6:]
-        start = next(y for y in range(top, H) if outside[y].any())  # donde la manga ya sobresale del costado
-        armpit = next(y for y in range(start, H) if not outside[y].any())
-        cols = (np.arange(W) < x_edge - 2) if side < 0 else (np.arange(W) > x_edge + 2)
-        region = cols[None, :] & (np.arange(H) < armpit)[:, None]
-        angle = hang['drop_deg'] * (1 if side < 0 else -1)  # PIL gira en contra de las manecillas: la izquierda baja así
-        sleeves.append((region, (x_edge, armpit - hang.get('pivot_up_px', 0)), angle))  # gira sobre la axila: la manga cae por fuera del cuerpo
-    alpha_body = (garment & ~sleeves[0][0] & ~sleeves[1][0]).astype(float)
-    alpha = alpha_body.copy()
-    rotated_alpha = []
-    for region, pivot, angle in sleeves:
-        a = (garment & region).astype(np.float32)
-        ra = np.asarray(Image.fromarray(a, 'F').rotate(angle, resample=Image.BILINEAR, center=pivot))
-        rotated_alpha.append(ra)
-        alpha = np.maximum(alpha, ra)
-    final = []
-    for (result, arr), layer in zip(out, layers):
-        result = result * alpha_body[..., None]
-        for (region, pivot, angle), ra in zip(sleeves, rotated_alpha):
-            piece = arr * (garment & region)[..., None]
-            rot = np.stack([np.asarray(Image.fromarray(piece[..., c].astype(np.float32), 'F').rotate(angle, resample=Image.BILINEAR, center=pivot))
-                            for c in range(arr.shape[2])], -1)
-            w = ra[..., None]
-            result = np.where(w > 0.5, rot / np.maximum(w, 1e-3), result)  # la manga queda encima del cuerpo
-        final.append(result)
-    ys, xs = np.nonzero(alpha > 0.5)
-    m = hang.get('margin_px', 8)
-    y0, y1, x0, x1 = max(0, ys.min() - m), min(H, ys.max() + m), max(0, xs.min() - m), min(W, xs.max() + m)
-    crop = lambda a: a[y0:y1, x0:x1]
-    res = []
-    for i, f in enumerate(final):
-        f = crop(f)
-        res.append(f if layers[i].ndim == 3 else f[..., 0])
-    res[1] = crop(alpha)
-    return res
 
 
 def _garment_maps(out: Path, name: str, size_m: dict, px_per_m: int, lin, alpha, roughness, height, metallic, common, assumptions):
@@ -764,6 +727,9 @@ def _garment_maps(out: Path, name: str, size_m: dict, px_per_m: int, lin, alpha,
 
 def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
     spec = json.loads(spec_path.read_text())
+    if spec.get('template'):  # prenda hecha sobre un molde: se genera después del molde
+        from house_twin.garment_designs import build_design  # importa este módulo: se resuelve aquí para no hacer un ciclo
+        return build_design(spec, photos_root)
     if spec.get('garment'):
         return build_garment(spec, TEXTURES_DIR / spec['name'], photos_root)
     if spec.get('kind') == 'constant':

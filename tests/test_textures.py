@@ -212,3 +212,111 @@ def test_garment_texture_cuts_the_silhouette_and_marks_the_foil():
     assert 0.01 < material['source']['print_coverage'] < 0.06  # el estampado es una parte chica
     assert not alpha[0, 0] and alpha[alpha.shape[0] // 2, alpha.shape[1] // 2]
     assert metal.any()
+
+
+def test_ink_print_keeps_its_colors_and_is_not_metallic():
+    folder = Path(__file__).resolve().parent.parent / 'assets' / 'textures' / 'playera-venom-lengua'
+    material = json.loads((folder / 'material.json').read_text())
+    assert 'metallic' not in material['maps'] and not (folder / 'metallic.png').exists()
+    base = np.asarray(Image.open(folder / 'basecolor.jpg')).astype(int)
+    alpha = np.asarray(Image.open(folder / 'opacity.png')) > 128
+    red = alpha & (base[..., 0] - base[..., 1] > 80)
+    assert red.sum() > 1000  # la lengua sigue roja: la tinta no se repinta de un solo color
+
+
+def _tee_mask(H=300, W=400):
+    """Playera de prueba extendida: cuerpo de 200 px y mangas horizontales que salen 80 px de cada costado."""
+    alpha = np.zeros((H, W), bool)
+    alpha[40:290, 100:300] = True   # cuerpo
+    alpha[40:110, 20:100] = True    # manga izquierda
+    alpha[40:110, 300:380] = True   # manga derecha
+    return alpha
+
+
+def test_hanging_sleeves_drop_beside_the_body_without_folding_over_it():
+    import math
+    from house_twin.hanging import hang_layers
+    alpha = _tee_mask()
+    color = np.zeros(alpha.shape + (3,))
+    color[..., 0] = np.arange(alpha.shape[1]) / alpha.shape[1]  # rojo según la columna de origen
+    layers, hung = hang_layers({'basecolor': color}, alpha, 60)
+    body = np.zeros_like(alpha)
+    body[40:290, 100:300] = True
+    assert (hung & body).sum() == body.sum()                                        # el cuerpo queda entero
+    assert np.allclose(layers['basecolor'][body][..., 0], color[body][..., 0])     # y la manga no se le monta encima
+    cols = np.nonzero(hung.any(axis=0))[0]
+    reach = 80 * math.cos(math.radians(60))
+    assert cols.min() >= 100 - reach - 2 and cols.max() <= 299 + reach + 2       # sobresale solo lo que da el ángulo
+    rows_left = np.nonzero(hung[:, :100].any(axis=1))[0]
+    assert rows_left.min() <= 42 and rows_left.max() > 110 + 60                    # sigue cosida al hombro y cae
+
+
+def test_hanging_turns_the_sleeve_normals_with_the_fabric():
+    from house_twin.hanging import hang_layers
+    alpha = _tee_mask()
+    flat = np.zeros(alpha.shape + (3,))
+    flat[...] = [1.0, 0.5, 1.0]  # normal que apunta a la derecha de la imagen (x = +1)
+    layers, hung = hang_layers({'normal': flat}, alpha, 60)
+    left_sleeve = hung.copy()
+    left_sleeve[:, 100:] = False
+    n = layers['normal'][left_sleeve] * 2 - 1
+    assert np.allclose(n[:, 1], np.sin(np.radians(60)), atol=0.02)  # la manga izquierda giró 60° en contra del reloj
+
+
+def test_template_tee_is_plain_and_shared_by_the_designed_tee():
+    root = Path(__file__).resolve().parent.parent / 'assets' / 'textures'
+    base = np.asarray(Image.open(root / 'playera-base' / 'opacity.png')) > 128
+    tee = np.asarray(Image.open(root / 'playera-venom-lengua' / 'opacity.png')) > 128
+    assert np.array_equal(base, tee)  # misma silueta: solo cambia el estampado
+    color = np.asarray(Image.open(root / 'playera-base' / 'basecolor.jpg')).astype(int)
+    assert not (base & (color[..., 0] - color[..., 1] > 80)).any()  # el molde ya no tiene la lengua roja
+    material = json.loads((root / 'playera-venom-lengua' / 'material.json').read_text())
+    assert material['source']['template'] == 'playera-base' and material['source']['from'] == 'product'
+
+
+def _template_maps():
+    from house_twin.hanging import load_maps
+    from house_twin.textures import TEXTURES_DIR
+    return load_maps(TEXTURES_DIR / 'playera-base')
+
+
+def test_art_design_uses_its_transparency_and_lands_where_the_spec_says(tmp_path):
+    from house_twin.garment_designs import _anchor, design_from_art, place_design
+    art = np.zeros((100, 200, 4), np.uint8)
+    art[..., :3] = [255, 0, 0]
+    art[20:80, 50:150, 3] = 255  # rectángulo rojo opaco dentro de un PNG transparente
+    Image.fromarray(art, 'RGBA').save(tmp_path / 'dibujo.png')
+    material, layers, alpha = _template_maps()
+    rgb, cover, placement = design_from_art({'image': 'dibujo.png', 'width_m': 0.2, 'top_m': 0.15}, tmp_path)
+    assert cover.shape == (60, 100) and placement['offset_x_m'] == 0.0  # recortado a lo que se ve
+    out = place_design(layers, alpha, material['px_per_m'], (rgb, cover, placement), 0.6)
+    ppm, (cx, top) = material['px_per_m'], _anchor(alpha)
+    y, x = round(top + 0.15 * ppm + 0.06 * ppm), round(cx)  # el centro del rectángulo (0.2 × 0.12 m)
+    assert np.allclose(out['basecolor'][y, x], [1, 0, 0], atol=0.02)
+    assert np.allclose(out['roughness'][y, x], 0.6, atol=0.01)
+    assert np.allclose(out['basecolor'][~alpha], layers['basecolor'][~alpha])  # fuera de la playera no se pinta
+
+
+def test_art_design_without_transparency_drops_its_background(tmp_path):
+    from house_twin.garment_designs import design_from_art
+    art = np.full((80, 80, 3), 30, np.uint8)  # fondo oscuro liso
+    art[20:60, 20:60] = [240, 200, 40]
+    Image.fromarray(art).save(tmp_path / 'dibujo.png')  # RGB, sin canal de transparencia
+    _, cover, placement = design_from_art({'image': 'dibujo.png'}, tmp_path)
+    assert cover.shape == (40, 40) and cover.min() > 0.99
+    assert placement['source'].startswith('supuesta')
+
+
+def test_designed_tee_on_another_fabric_color_is_dyed_and_gets_its_own_back():
+    root = Path(__file__).resolve().parent.parent / 'assets' / 'textures'
+    material = json.loads((root / 'playera-i-love-julio' / 'material.json').read_text())
+    gray = material['source']['placement']['fabric_srgb']
+    assert all(120 < c < 170 for c in gray)  # la tela gris de la imagen, no el negro del molde
+    for name in ('playera-i-love-julio', 'playera-i-love-julio-espalda'):
+        base = np.asarray(Image.open(root / name / 'basecolor.jpg')).astype(float)
+        alpha = np.asarray(Image.open(root / name / 'opacity.png')) > 128
+        assert np.abs(np.median(base[alpha], axis=0) - gray).max() < 15  # teñida, también la espalda
+    front = np.asarray(Image.open(root / 'playera-i-love-julio' / 'basecolor.jpg')).astype(int)
+    dark = (front.sum(-1) < 120) & alpha
+    red = (front[..., 0] - front[..., 1] > 100) & alpha
+    assert dark.sum() > 2000 and red.sum() > 2000  # el estampado oscuro y rojo se detectó por contraste

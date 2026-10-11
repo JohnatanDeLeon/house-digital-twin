@@ -160,16 +160,30 @@ def leaf_parts(fixture: dict, spec: dict, height: float) -> tuple[list[dict], li
     return parts, doors
 
 
+PRESS_CLEARANCE_M = 0.01  # lo que queda entre la prenda apretada y el fondo o las hojas
+
+
+def _pressed_width(fixture: dict, spec: dict, d: dict, yaw: float) -> float:
+    """Ancho de la prenda en el tubo. Si de frente a fondo no cabe entre el fondo y las hojas, la tela se aprieta
+    contra ellos, como en un closet real: la placa se angosta a lo que cabe y en el recorrido recupera su ancho."""
+    w = d['size_m'][0]
+    room = min(-d['n'] - spec['leaf_thickness_mm'] / 1000, fixture['depth'] + d['n']) - PRESS_CLEARANCE_M
+    across = abs(math.cos(yaw))  # parte del ancho de la prenda que corre de frente a fondo
+    return w if across * w / 2 <= room else 2 * room / across
+
+
 def display_parts(fixture: dict, spec: dict) -> tuple[list[dict], list[dict]]:
     """Prendas colgadas en un tubo (se pueden sacar en el recorrido): de canto, como cuelga la ropa, con el frente
-    girado `yaw_deg` hacia el cuarto. Frente con la imagen y espalda lisa, como 2 placas delgadas con la silueta
-    recortada, y su gancho sobre el tubo. Devuelve las piezas y los datos para el recorrido."""
+    girado `yaw_deg` respecto al ancho del closet (0 = perpendicular al tubo). Frente con la imagen y espalda lisa,
+    como 2 placas delgadas con la silueta recortada, y su gancho sobre el tubo. Devuelve las piezas y los datos para
+    el recorrido."""
     f = _Frame(fixture)
     (ax, ay), (nx, ny) = f.along, f.normal
     parts, items = [], []
     for d in spec.get('interior', {}).get('display', []):
-        w, h = d['size_m']
         t = math.radians(d['yaw_deg'])
+        relaxed, h = d['size_m']
+        w = _pressed_width(fixture, spec, d, t)
         face = (math.cos(t) * ax + math.sin(t) * nx, math.cos(t) * ay + math.sin(t) * ny)  # hacia donde mira el frente
         right = (-face[1], face[0])  # derecha de quien mira el frente
         cx, cy, _ = f.point(d['u_centre'], 0.0, d['n'])
@@ -187,5 +201,6 @@ def display_parts(fixture: dict, spec: dict) -> tuple[list[dict], list[dict]]:
         parts.append({'id': f"{fixture['id']}-{d['id']}-gancho", 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': 'gancho',
                       'material': 'plastico-negro', 'mesh': merge(hanger), 'source': d['source']})
         items.append({'id': f"{fixture['id']}-{d['id']}", 'label': d['label'], 'door': f"{fixture['id']}-m{d['module']}",
-                      'centre': [round(cx, 4), round(cy, 4), round(top - h / 2, 4)], 'size_m': [w, h], 'facing': facing})
+                      'centre': [round(cx, 4), round(cy, 4), round(top - h / 2, 4)], 'size_m': [round(w, 4), h],
+                      'relaxed_width_m': relaxed, 'facing': facing})
     return parts, items

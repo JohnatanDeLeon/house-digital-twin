@@ -42,6 +42,14 @@ Gemelo digital de una casa (Casa Jonhy). Código en inglés, comentarios y docum
 - Herrajes (chapas) en `sources/herrajes/<nombre>.json`: perfil torneado, posición en fracciones de la hoja y material.
   `house_twin/hardware.py` (solo stdlib) arma la malla y `ifc_export` la guarda como `IfcDiscreteAccessory`, parte de
   su puerta. Necesitan el abatimiento (`swing`) que sale de los bloques `PUERTA` del DXF.
+- Playeras nuevas: se hacen sobre el molde `playera-base` (`sources/texturas/playera-base.json`, la playera lisa) y
+  solo cambia el estampado. Cada una es un JSON con `"template": "playera-base"` y un `design`:
+  `"from": "product"` (imagen de la prenda de frente; el estampado se recorta y se coloca solo) o `"from": "art"`
+  (solo el dibujo: mejor PNG con transparencia; sin ella se quita el color de las orillas, así que el dibujo no debe
+  usar ese color; se coloca con `width_m`, `top_m` bajo el punto más alto y `offset_x_m`). Si el estampado es más
+  oscuro que la tela o de otro color, se detecta con `"detect": "contrast"`. Una tela de otro color tiñe el molde
+  (`"fabric": "from_image"` o `fabric_srgb`) y saca su propia espalda; si no, la espalda es `playera-base-colgada`. Se generan con `texture`, el molde primero, y se cuelgan agregándolas al `display` del closet.
+  Lo hace `house_twin/garment_designs.py`; la versión colgada, `house_twin/hanging.py`.
 - Closets: el plano da dónde (`fixtures` de los hechos); `sources/muebles/<nombre>.json` da su frente (módulos,
   hojas, jaladeras) en fracciones medidas en una foto. `house_twin/furniture.py` arma la malla e `ifc_export` la
   guarda como `IfcFurniture` con sus jaladeras. Sin especificación del frente, el closet no se modela.
@@ -53,6 +61,7 @@ Gemelo digital de una casa (Casa Jonhy). Código en inglés, comentarios y docum
 .venv/bin/python -m house_twin.cli compare A B
 .venv/bin/python -m house_twin.cli inspect-dxf data/raw/plano.dxf
 .venv/bin/python -m house_twin.cli texture sources/texturas/puerta-recamaras.json
+.venv/bin/python -m house_twin.cli hang sources/texturas/playera-venom.json   # solo la prenda colgada, desde sus mapas extendidos
 .venv/bin/python -m house_twin.cli scene [--render]   # necesita `blender` con Bonsai en el PATH
 .venv/bin/python -m pytest
 ```

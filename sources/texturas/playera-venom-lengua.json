@@ -1,0 +1,27 @@
+{
+ "_doc": "Playera negra con Venom de perfil y la lengua roja, hecha sobre el molde playera-base: su estampado se recorta de la imagen de producto que mandó el dueño y cae en el mismo lugar del molde. Regenerar con: python -m house_twin.cli texture sources/texturas/playera-venom-lengua.json",
+ "name": "playera-venom-lengua",
+ "template": "playera-base",
+ "applies_to": {
+  "garment": "playera negra de Venom con la lengua roja",
+  "source": "imagen de producto que mandó el dueño (2026-10-10)"
+ },
+ "design": {
+  "from": "product",
+  "image": "sources/fotos/playera-venom-lengua.jpg",
+  "roughness": 0.6,
+  "note": "la imagen es la misma de la que sale el molde: el recorte y la zona del estampado son los del molde"
+ },
+ "observed": {
+  "print": "cabeza de Venom de perfil en gris y blanco, con los dientes blancos y la lengua roja que cae hasta la mitad del pecho"
+ },
+ "assumptions": [
+  "la imagen es de catálogo: los colores del estampado son los de la tienda, no los de la prenda en la casa",
+  "el estampado es plano: la imagen no muestra relieve"
+ ],
+ "hanging": {
+  "name": "playera-venom-lengua-colgada",
+  "sleeve_angle_deg": 60,
+  "note": "colgada: cada manga cae a 60° bajo la horizontal, cosida a la sisa (supuesto: así cae una playera de algodón en un gancho)"
+ }
+}

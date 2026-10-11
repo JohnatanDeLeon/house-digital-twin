@@ -173,15 +173,53 @@ Son dos fotos del mismo muro. La de lejos (gran angular de 13 mm) da 3 × 2 azul
 
 - **Acabado:** aplanado de mortero lanzado (**zarpeo / tirol rústico**) con pintura blanca mate. Tiene crestas irregulares, cráteres y poros de 1 a 10 mm, y algunos filos marcados. Coincide con lo que dice el dueño: rugosidad alta, «casi como bordes».
 - **Dónde va (corrección del dueño):** en el closet de la recámara 3, **colgada en vertical como una prenda real**. El closet solo tiene esta prenda; la ropa genérica se quitó.
-  - **Colgada** (`playera-venom-colgada`): sale de la misma imagen con las mangas caídas. Cada manga se recorta arriba de la axila y gira 90° sobre un punto del costado (`hang_sleeves`). Así queda de ≈ 0.65 m de ancho en vez de 0.96 m extendida.
-  - **En el tubo:** cuelga del tubo de arriba del módulo 3 con su gancho, de canto como cualquier prenda y girada 30° hacia el cuarto. Así cabe en el fondo del closet (0.58 m) y desde el cuarto se ve el estampado.
+  - **Colgada** (`playera-venom-colgada`): sale de los mapas de la playera extendida con las mangas caídas (`house_twin/hanging.py`, comando `hang`; no necesita la foto). Queda de 0.70 m de ancho en vez de 0.96 m extendida.
+    - **Cómo cae la manga:** sigue cosida a la sisa y su eje baja de su ángulo en la foto a **60° bajo la horizontal** (supuesto: así cae una playera de algodón en un gancho). Cae por fuera del cuerpo, sin montarse encima.
+    - **Corrección del dueño (2026-10-10):** antes cada manga giraba 90° como pieza rígida sobre un punto del costado y quedaba encima del cuerpo, con escalones en el hombro: «parecen dobladas».
+  - **En el tubo:** cuelga del tubo de arriba del módulo 3 con su gancho, de canto y perpendicular al tubo, como cualquier prenda en un closet. Desde el cuarto se ve su costado (el hombro, la manga cercana y la orilla), no el estampado: el frente mira al costado del closet. Antes iba girada 30° hacia el cuarto para que se viera el estampado; el dueño pidió la perspectiva real (2026-10-10).
+  - **Apretada en el fondo:** colgada mide 0.70 m de manga a manga, y como el gancho va a la mitad del fondo, de él a las hojas solo hay 0.28 m. Como en un closet real, la tela se aprieta: `display_parts` angosta la placa a lo que cabe (0.55 m, con 1 cm libre hasta las hojas) y el recorrido le devuelve su ancho al sacarla y la vuelve a apretar al guardarla.
   - **Frente y espalda:** son 2 placas delgadas con la misma silueta. La espalda es la tela sin el estampado, rellenada con el color de la tela de alrededor; no hay foto de la espalda.
-- **Interacción en el recorrido** (`DATA.items`): con el módulo 3 abierto y mirando la playera aparece «Sacar la playera de Venom» (E o el botón).
+- **Interacción en el recorrido** (`DATA.items`): con el módulo 3 abierto y mirando una playera aparece «Sacar la playera de Venom plateada» o «… de la lengua roja» (E o el botón). Con 2 prendas en el mismo tubo se saca la que queda más al centro de la vista, y las piezas de cada una se juntan por id exacto (`playera-venom` es prefijo de `playera-venom-lengua`).
   - **Al sacarla:** se sostiene frente a los ojos, de frente y derecha. Se dibuja en un segundo paso (capa 1), para que la puerta abierta no la corte. Se voltea con R, el botón «Voltear» o la rueda del mouse, y se guarda con E: regresa sola a su gancho.
 - **Límites:**
   - La orilla de abajo queda en el borde de la foto, así que el largo puede ser 1–3 cm mayor.
   - Los pliegues y la pelusa vienen de la foto; la placa es plana.
   - La espalda no se fotografió.
+
+### 13. Playera de Venom de la lengua roja (imagen de producto, 2026-10-10)
+
+- **Fuente:** el dueño mandó la imagen de producto de una tienda (de frente, sobre fondo blanco, 1164 × 1200 px), no una foto de la prenda en la casa. Va en `sources/fotos/playera-venom-lengua.jpg` (fuera de git) y se describe en `sources/texturas/playera-venom-lengua.json`.
+- **Prenda:** playera negra de algodón, manga corta y cuello redondo. El estampado es la cabeza de Venom de perfil, en gris y blanco, con la lengua roja.
+- **Estampado de tinta** (`finish: ink`): a diferencia del foil de la otra playera, la serigrafía se queda con los colores de la imagen y no es metálica.
+- **Molde para las demás playeras (pedido del dueño, 2026-10-11):** de esta imagen sale `playera-base`, la playera sin el estampado (la tela de alrededor rellena el hueco). Da la silueta, la tela, la espalda lisa y la versión colgada (`playera-base-colgada`) de todas las playeras nuevas, que solo cambian su estampado (`house_twin/garment_designs.py`).
+  - Esta misma playera ya se hace sobre el molde: su estampado se recorta de la imagen y cae en el mismo lugar, 0.33 m de ancho y 0.12 m bajo el punto más alto de la playera.
+  - Un estampado puede salir de una imagen de la prenda (se recorta y se coloca solo) o de un dibujo suelto. El dibujo suelto se coloca con su ancho y su altura; si no se dan, se suponen 0.28 m de ancho, centrado, 0.12 m bajo el punto más alto.
+  - Un dibujo sin transparencia pierde el color de su fondo. Un dibujo con blanco sobre fondo blanco pierde su blanco: conviene un PNG con transparencia.
+- **Escala (supuesta, talla M):**
+  - A lo ancho, el cuerpo mide 570 px y se supone un pecho de 0.52 m.
+  - A lo alto, la imagen de catálogo viene estirada: con la misma escala la playera mediría 0.95 m de largo. El largo se fija en 0.72 m, del punto más alto del hombro al dobladillo.
+  - Faltan las medidas reales de la prenda.
+- **Dónde va:** colgada en el mismo tubo del módulo 3 del closet de R3, 14.5 cm a la izquierda de la plateada (posición supuesta). Va de canto y apretada contra las hojas, igual que la otra.
+- **Colgada** (`playera-venom-lengua-colgada`): con las mangas a 60° bajo la horizontal mide 0.76 × 0.75 m.
+- **Límites:**
+  - La espalda es lisa, sin imagen: es la del molde, la misma para todas las playeras.
+  - Los colores son los del catálogo, no los de la prenda en la casa.
+  - Todas las playeras del molde tienen la misma forma y la misma talla supuesta.
+
+### 14. Playera gris «I ❤ JULIO» (imagen de producto, 2026-10-11)
+
+- **Fuente:** imagen de producto que mandó el dueño (344 × 350 px), en `sources/fotos/playera-i-love-julio.jpg` (fuera de git). Se describe en `sources/texturas/playera-i-love-julio.json`.
+  - La imagen corta la manga izquierda y el dobladillo. No hacen falta, porque la forma es la del molde.
+- **Prenda:** playera gris de manga corta. En el pecho lleva una «I» negra, un corazón rojo con brillo blanco y «JULIO» en negro.
+- **Primera playera que no es negra:**
+  - **Silueta:** el gris (≈ `#968a89`) es casi tan claro como el fondo, así que la silueta se separa con un umbral más alto (`fabric_max_lum: 235`).
+  - **Estampado:** es más oscuro que la tela, así que se detecta por contraste (`detect: contrast`): lo que se aleja del color de la tela.
+  - **Tela:** el molde negro se tiñe con el gris medido en la imagen (`"fabric": "from_image"` → `[150, 144, 137]`). Conserva sus pliegues y su tejido, y la playera saca su propia espalda gris.
+- **Escala:** el cuerpo mide 212 px y se supone el pecho del molde (0.52 m). El estampado medido es de 0.48 m de ancho y empieza 0.07 m bajo el punto más alto de la playera.
+- **Dónde va:** en el tubo del módulo 3 del closet de R3, 14.5 cm a la izquierda de la de la lengua roja (posición supuesta). Va de canto y apretada contra las hojas, como las otras.
+- **Límites:**
+  - La imagen es pequeña: el estampado se agranda ≈ 2.7 veces y se ve algo suave.
+  - Los colores son los del catálogo.
 
 ## Recorrido del interior (2026-10-08, fotos de conjunto)
 
