@@ -318,7 +318,7 @@ function windowMaterial(size, grid) {
 }
 
 // ---------- casa ----------
-const colliders = [];
+const colliders = [], wallMeshes = [];  // muros: lo que no se cruza al reacomodar al jugador
 const tour = [];
 const glowing = [];   // materiales que se encienden de noche (focos)
 const bulbs = [];     // luces puntuales, una por foco
@@ -358,6 +358,7 @@ async function loadHouse() {
     if (obj.material.userData.depth) obj.customDepthMaterial = obj.material.userData.depth;
     obj.receiveShadow = true;
     if (['IfcWall', 'IfcWindow', 'IfcFurniture', 'IfcSanitaryTerminal', 'IfcDoor', 'IfcElectricAppliance', 'IfcFlowStorageDevice'].includes(tag.hdt_kind)) colliders.push(obj);
+    if (tag.hdt_kind === 'IfcWall') wallMeshes.push(obj);
     const closetLeaf = /^(F\d+-m\d+)-hoja-(\d)/.exec(tag.hdt_id || '');  // hoja de closet (y su jaladera)
     const doorId = closetLeaf ? closetLeaf[1] : tag.hdt_kind === 'IfcDoor' ? tag.hdt_id
       : (tag.hdt_kind === 'IfcDiscreteAccessory' && /^D\d+-/.test(tag.hdt_id || '') ? tag.hdt_id.split('-')[0] : null);
@@ -373,8 +374,10 @@ const player = { pos: new THREE.Vector3(), yaw: 0, pitch: 0 };
 function goTo(stop) {
   if (stop.start) {  // punto calculado de los hechos: posición y dirección en el modelo
     const { at, facing } = stop.start;
+    const target = toThree(at[0] + facing[0] * 2.3, at[1] + facing[1] * 2.3, EYE);  // lo que se quiere ver
     player.pos.copy(toThree(at[0], at[1], EYE));
-    player.yaw = Math.atan2(-facing[0], facing[1]);
+    settle();  // el punto sale de los hechos, que no saben de muebles: si cae sobre uno, se busca piso libre
+    player.yaw = Math.atan2(-(target.x - player.pos.x), -(target.z - player.pos.z));
     player.pitch = -0.05;
     return;
   }
@@ -403,6 +406,33 @@ function blocked(axis, step) {
     }
   }
   return false;
+}
+const DOWN = new THREE.Vector3(0, -1, 0);
+// ¿Hay algo (mueble, muro) en el círculo del jugador, de 0.2 m para arriba? Se ve con rayos desde arriba.
+function occupied(x, z) {
+  for (let k = 0; k <= 8; k++) {
+    const r = k ? RADIUS : 0, a = k * Math.PI / 4;
+    ray.set(new THREE.Vector3(x + r * Math.cos(a), EYE + 0.3, z + r * Math.sin(a)), DOWN);
+    ray.far = EYE + 0.1;
+    if (ray.intersectObjects(colliders, false).length) return true;
+  }
+  return false;
+}
+// Lleva al jugador al punto libre más cercano (en espiral, hasta 1.5 m), sin cruzar muros.
+function settle() {
+  const { x, z } = player.pos;
+  if (!occupied(x, z)) return;
+  for (let r = 0.1; r <= 1.5; r += 0.1) {
+    for (let k = 0; k < 16; k++) {
+      const a = k * Math.PI / 8, nx = x + r * Math.cos(a), nz = z + r * Math.sin(a);
+      if (occupied(nx, nz)) continue;
+      const dir = new THREE.Vector3(nx - x, 0, nz - z);
+      ray.set(new THREE.Vector3(x, 1.1, z), dir.clone().normalize()); ray.far = dir.length();
+      if (ray.intersectObjects(wallMeshes, false).length) continue;
+      player.pos.x = nx; player.pos.z = nz;
+      return;
+    }
+  }
 }
 function move(forward, strafe, dt, fast) {
   const len = Math.hypot(forward, strafe);
