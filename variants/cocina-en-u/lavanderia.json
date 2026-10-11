@@ -1,41 +1,38 @@
 {
- "_doc": "Lavandería de la propuesta cocina-en-u: la misma de sources/lavanderia/lavanderia.json con la repisa recortada para que no cruce la puerta nueva de la cocina (D13). Solo la usa la variante.",
+ "_doc": "Lavandería de la propuesta cocina-en-u: la de sources/lavanderia/lavanderia.json con la repisa recortada para no cruzar la puerta nueva de la cocina (D13), y una lavasecadora Samsung (dato del dueño) en lugar de la lavadora de 2 tinas y la secadora. Solo la usa la variante.",
  "applies_to": {
   "space": "S13",
   "source": "fotos de la lavandería y medidas del dueño (2026-10-10)"
  },
  "scale_source": "foto de frente (2026-10-10 09:04): la ventana V09 (0.78 m de ancho en el plano) da ≈ 449 px/m en el plano del muro del fondo, y la lavadora (95 cm, dueño) da lo mismo (453 px/m); el boiler (1.00 m sobre su base de 0.60 m, dueño) también (440 px/m)",
  "back_wall_x": 2.82,
- "washer": {
-  "id": "lavanderia-lavadora",
+ "combo": {
+  "id": "lavanderia-lavasecadora",
   "y": [
-   10.225,
-   11.175
+   10.85,
+   11.536
   ],
-  "depth_m": 0.5,
-  "body_m": 0.9,
-  "panel_m": 0.97,
+  "depth_m": 0.796,
+  "height_m": 0.984,
+  "rear_gap_m": 0.05,
+  "door": {
+   "z": 0.5,
+   "diameter_m": 0.52,
+   "ring_m": 0.03,
+   "thickness_m": 0.05
+  },
+  "panel_m": [
+   0.5,
+   0.08
+  ],
   "materials": {
    "body": "esmalte-blanco",
-   "lid": "plastico-gris"
+   "ring": "cromo",
+   "door": "plastico-negro-brillante",
+   "panel": "plastico-negro-brillante"
   },
-  "size_source": "dueño: 95 × 50 cm (lavadora LG de 2 tinas)",
-  "position_source": "foto: contra el muro del fondo, bajo la ventana, pegada al muro de la cocina (y = 10.225 m)",
-  "height_source": "foto: tablero a ≈ 0.97 m (escala del boiler); supuesto ± 3 cm"
- },
- "dryer": {
-  "id": "lavanderia-secadora",
-  "y": [
-   11.185,
-   11.935
-  ],
-  "depth_m": 0.65,
-  "body_m": 0.92,
-  "console_m": 1.04,
-  "material": "esmalte-blanco",
-  "size_source": "dueño: 75 × 65 cm (secadora Whirlpool)",
-  "position_source": "foto: contra el muro del fondo, junto a la lavadora (≈ 1 cm)",
-  "height_source": "foto: cubierta a ≈ 0.92 m y tablero a ≈ 1.04 m (escala del boiler); ± 3 cm"
+  "size_source": "dueño (2026-10-11): ficha de Samsung, 686 mm de ancho × 984 de alto × 796 de fondo; lavasecadora de carga frontal (modelo exacto sin confirmar)",
+  "position_source": "propuesta cocina-en-u (Claude, 2026-10-11): una sola máquina en lugar de la lavadora y la secadora, contra el muro del fondo donde estaban sus tomas; entre el barrido de D13 (libre desde y = 10.79 m a su frente) y el de D14; 5 cm atrás para las mangueras"
  },
  "boiler": {
   "id": "lavanderia-boiler",
@@ -102,9 +99,9 @@
  ],
  "devices_source": "foto: 2 contactos y un apagador entre ellos en el muro del fondo, placas color marfil; posición y altura por la escala de la ventana (± 3 cm)",
  "assumptions": [
-  "alturas de la lavadora y la secadora (± 3 cm, foto)",
   "separación del boiler al muro",
   "cilindro de gas, repisa y placas: tamaño común o estimado",
+  "lavasecadora: color blanco, puerta de 52 cm a media altura y tablero arriba (supuestos: la ficha solo da el tamaño); 5 cm atrás para las mangueras (supuesto)",
   "no se modelan el tendedero, las cubetas, el cesto ni la ropa; la herrería de V09 tampoco"
  ]
 }

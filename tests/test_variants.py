@@ -108,3 +108,28 @@ def test_walk_offers_a_remodel_with_its_own_model(dxf_facts):
     door_ids = {d['id'] for d in entry['house']['doors']}
     assert 'D04' not in door_ids and {'D13', 'D14'} <= door_ids
     assert entry['focus'] is not None
+
+
+def test_remodel_laundry_combo_clears_both_doors(dxf_facts):
+    """La lavasecadora (686 × 796 mm, dueño) y lo demás de la lavandería quedan fuera del barrido de D13 y D14."""
+    import json
+    import math
+    from shapely.geometry import LineString, box
+    from house_twin.laundry import laundry_parts
+    from house_twin.variants import variant_facts
+    proposed = {o['id']: o for o in variant_facts(dxf_facts, _remodel())['openings']}
+    spec = json.loads((ROOT / _remodel()['specs']['laundry']).read_text())
+    parts = {p['id']: p['mesh'][0] for p in laundry_parts(spec)}
+    xs, ys, _ = zip(*parts['lavanderia-lavasecadora'])
+    assert (round(max(ys) - min(ys), 3), round(max(xs) - min(xs), 3)) == (0.686, 0.796)
+    for door in ('D13', 'D14'):
+        hinge, latch = proposed[door]['swing']['hinge_end'], proposed[door]['swing']['latch_end']
+        length = math.dist(hinge, latch)
+        closed = math.atan2(latch[1] - hinge[1], latch[0] - hinge[0])
+        for deg in range(0, 91, 5):
+            a = closed + math.radians(deg)  # las dos abren hacia la lavandería: +y (D13) y +x (D14)
+            leaf = LineString([hinge, (hinge[0] + length * math.cos(a), hinge[1] + length * math.sin(a))]).buffer(0.02)
+            for name, points in parts.items():
+                px, py, pz = zip(*points)
+                if min(pz) < 2.1:
+                    assert not leaf.intersects(box(min(px), min(py), max(px), max(py))), (door, deg, name)

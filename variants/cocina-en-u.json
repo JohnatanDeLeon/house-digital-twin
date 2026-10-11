@@ -7,7 +7,7 @@
  "requested": "dueño (2026-10-11): «quiero que esa puerta [de la cocina al pasillo de servicio] conecte directo con la lavandería, en la lavandería levantar el muro que falta para que quede cerrada y en el nuevo muro colocar una puerta para salir hacia el pasillo de servicio»; la cocineta se reubica (análisis aprobado)",
  "author": "Claude",
  "created_on": "2026-10-11",
- "description": "La puerta de la cocina al pasillo de servicio se tapia y la cocina sale a la lavandería, que se cierra con un muro y una puerta nueva al pasillo. La cocineta se reacomoda en U: tarja bajo la ventana, estufa con campana al muro del pasillo y refrigerador a la entrada.",
+ "description": "La puerta de la cocina al pasillo de servicio se tapia y la cocina sale a la lavandería, que se cierra con un muro y una puerta nueva al pasillo. La cocineta se reacomoda en U: tarja bajo la ventana, estufa con campana al muro del pasillo y refrigerador a la entrada. En la lavandería, una lavasecadora en lugar de la lavadora y la secadora.",
  "disclaimer": "Propuesta: el hueco en el muro de la cocina necesita un dintel y que un profesional revise si ese muro es de carga.",
  "focus_opening": "D13",
  "geometry": {
@@ -122,19 +122,19 @@
     "footprint": [
      [
       1.205,
-      11.1
+      11.8
      ],
      [
       1.375,
-      11.1
+      11.8
      ],
      [
       1.375,
-      11.85
+      12.55
      ],
      [
       1.205,
-      11.85
+      12.55
      ]
     ],
     "width": 0.75,
@@ -156,14 +156,14 @@
     "swing": {
      "hinge_end": [
       1.29,
-      11.85
+      12.55
      ],
      "latch_end": [
       1.29,
-      11.1
+      11.8
      ],
      "opens_into": "S13",
-     "source": "propuesta cocina-en-u (Claude, 2026-10-11): abre hacia la lavandería (el pasillo de servicio mide 1.0 m); de 0.75 m para librar la secadora"
+     "source": "propuesta cocina-en-u (Claude, 2026-10-11): abre hacia la lavandería (el pasillo de servicio mide 1.0 m); en el extremo del boiler, con la bisagra junto al muro de la recámara 2, para que su barrido libre la lavasecadora y el cilindro de gas"
     }
    }
   ],

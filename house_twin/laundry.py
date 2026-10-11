@@ -1,4 +1,4 @@
-"""Lavandería: lavadora, secadora, boiler, cilindro de gas, repisa y placas, descritos en
+"""Lavandería: lavadora y secadora (o una lavasecadora, `combo`), boiler, cilindro de gas, repisa y placas, descritos en
 `sources/lavanderia/lavanderia.json`. Arma las mallas en coordenadas del mundo con el mismo formato de piezas que
 la cocineta; `ifc_export` las guarda. Solo biblioteca estándar.
 """
@@ -22,9 +22,9 @@ def _against_back(x_wall, depth, y, z):
     return _box(((2 * x_wall - depth) / 2, (y0 + y1) / 2, (z0 + z1) / 2), (depth, y1 - y0, z1 - z0))
 
 
-def laundry_parts(spec: dict, plate: dict | None = None) -> list[dict]:
-    xw, parts = spec['back_wall_x'], []
-    w = spec['washer']
+def _washer_dryer_parts(xw, spec):
+    """Lavadora de 2 tinas (tapa arriba) y secadora, lado a lado contra el muro del fondo."""
+    w, parts = spec['washer'], []
     body = _against_back(xw, w['depth_m'], w['y'], (0.0, w['body_m'] - 0.02))
     lid = merge([_against_back(xw, w['depth_m'] - 0.02, (w['y'][0] + 0.01, w['y'][1] - 0.01), (w['body_m'] - 0.02, w['body_m'])),
                  _against_back(xw, 0.08, w['y'], (w['body_m'], w['panel_m']))])
@@ -36,6 +36,33 @@ def laundry_parts(spec: dict, plate: dict | None = None) -> list[dict]:
                    _against_back(xw, 0.12, (d['y'][0] + 0.02, d['y'][1] - 0.02), (d['body_m'], d['console_m']))])
     parts.append({'id': d['id'], 'ifc': 'IfcElectricAppliance', 'type': 'TUMBLEDRYER', 'material': d['material'], 'mesh': dryer,
                   'source': f"{d['size_source']}; {d['position_source']}; {d['height_source']}"})
+    return parts
+
+
+def _combo_parts(xw, c):
+    """Lavasecadora de carga frontal: gabinete separado del muro (mangueras), puerta redonda con aro y tablero arriba."""
+    back = xw - c['rear_gap_m']
+    front = back - c['depth_m']
+    (y0, y1), h = c['y'], c['height_m']
+    yc, door = (y0 + y1) / 2, c['door']
+    src = f"{c['size_source']}; {c['position_source']}"
+    glass = cylinder((front, yc, door['z']), (front - door['thickness_m'], yc, door['z']), door['diameter_m'] / 2, 32)
+    ring = cylinder((front, yc, door['z']), (front - door['thickness_m'] / 2, yc, door['z']), door['diameter_m'] / 2 + door['ring_m'], 32)
+    (pw, ph) = c['panel_m']
+    panel = _box((front - 0.003, yc, h - 0.04 - ph / 2), (0.006, pw, ph))
+    kind = {'ifc': 'IfcElectricAppliance', 'type': 'USERDEFINED', 'object_type': 'lavasecadora', 'source': src}
+    return [{'id': c['id'], 'material': c['materials']['body'], 'mesh': _against_back(back, c['depth_m'], c['y'], (0.0, h)), **kind},
+            {'id': f"{c['id']}-aro", 'material': c['materials']['ring'], 'mesh': ring, **kind},
+            {'id': f"{c['id']}-puerta", 'material': c['materials']['door'], 'mesh': glass, **kind},
+            {'id': f"{c['id']}-tablero", 'material': c['materials']['panel'], 'mesh': panel, **kind}]
+
+
+def laundry_parts(spec: dict, plate: dict | None = None) -> list[dict]:
+    xw, parts = spec['back_wall_x'], []
+    if 'combo' in spec:
+        parts += _combo_parts(xw, spec['combo'])
+    if 'washer' in spec:
+        parts += _washer_dryer_parts(xw, spec)
     b = spec['boiler']
     (cx, cy), r, z0 = b['centre'], b['diameter_m'] / 2, b['stand_m']
     sw, sd = b['stand_size_m']

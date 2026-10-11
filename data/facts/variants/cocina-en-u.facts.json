@@ -4190,19 +4190,19 @@
    "footprint": [
     [
      1.205,
-     11.1
+     11.8
     ],
     [
      1.375,
-     11.1
+     11.8
     ],
     [
      1.375,
-     11.85
+     12.55
     ],
     [
      1.205,
-     11.85
+     12.55
     ]
    ],
    "width": 0.75,
@@ -4224,14 +4224,14 @@
    "swing": {
     "hinge_end": [
      1.29,
-     11.85
+     12.55
     ],
     "latch_end": [
      1.29,
-     11.1
+     11.8
     ],
     "opens_into": "S13",
-    "source": "propuesta cocina-en-u (Claude, 2026-10-11): abre hacia la lavandería (el pasillo de servicio mide 1.0 m); de 0.75 m para librar la secadora"
+    "source": "propuesta cocina-en-u (Claude, 2026-10-11): abre hacia la lavandería (el pasillo de servicio mide 1.0 m); en el extremo del boiler, con la bisagra junto al muro de la recámara 2, para que su barrido libre la lavasecadora y el cilindro de gas"
    }
   }
  ],
