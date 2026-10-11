@@ -43,6 +43,17 @@ def _handle(spec, frame, u, z, n0, vertical):
     return merge(parts)
 
 
+def _hood(frame: _Run, hood: dict) -> dict:
+    """Campana: cuerpo (`z` es su orilla de abajo, `height_m` su alto) y chimenea centrada hasta `chimney_top_m`."""
+    (u0, u1), z, d = hood['u'], hood['z'], hood['depth_m']
+    top = z + hood['height_m']
+    mid, (cw, cd) = (u0 + u1) / 2, hood['chimney_m']
+    mesh = merge([frame.box((u0, u1), (z, top), (0, d)),
+                  frame.box((mid - cw / 2, mid + cw / 2), (top, hood['chimney_top_m']), (0, cd))])
+    return {'id': f"cocina-{hood['id']}", 'ifc': 'IfcElectricAppliance', 'type': 'USERDEFINED', 'object_type': 'campana',
+            'material': hood['material'], 'mesh': mesh, 'source': hood['source']}
+
+
 def kitchen_parts(spec: dict) -> list[dict]:
     """Piezas de la cocineta: id, clase IFC, tipo, material y malla (puntos, caras)."""
     m, gap, t = spec['materials'], spec['gap_m'], spec['front_thickness_m']
@@ -109,6 +120,9 @@ def kitchen_parts(spec: dict) -> list[dict]:
         for appliance in run.get('appliances', []):
             u0, u1 = appliance['u']
             d, h = appliance['depth_m'], appliance['height_m']
+            if appliance['kind'] == 'hood':
+                parts.append(_hood(frame, appliance))
+                continue
             if appliance['kind'] == 'stove':
                 pieces = [frame.box((u0, u1), (0.02, h), (0, d)),
                           frame.box((u0 + 0.03, u1 - 0.03), (h, h + appliance['grates_m']), (0.08, d - 0.06))]

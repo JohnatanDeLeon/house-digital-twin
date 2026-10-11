@@ -10,9 +10,13 @@ Gemelo digital de una casa (Casa Jonhy). Código en inglés, comentarios y docum
 - **Supuesto**: solo donde un formato lo exige (alturas para el IFC). Vive en `ASSUMED_DEFAULTS`
   de `ifc_export.py` y se marca en el Pset `HDT_Provenance`. Jamás se escribe de vuelta a los hechos.
 - **Propuesta**: lo que diseña la IA. Va en archivos de variante, nunca modifica `existing.*`.
-  Hoy: `variants/<id>.json` con `changes` de acabado por vano (`opening`, `part`, `material`); el material de una
-  propuesta no lista `openings` en su `applies_to` (usa `variant`), así la casa existente no lo toma. `build` escribe
-  `models/variants/<id>.ifc` y el recorrido ofrece cada variante en el selector «Versión».
+  `variants/<id>.json` con `changes` de acabado por vano (`opening`, `part`, `material`); el material de una
+  propuesta no lista `openings` en su `applies_to` (usa `variant`), así la casa existente no lo toma. Una
+  remodelación agrega `geometry` (`close_openings`, `add_walls`, `add_openings`, `update_openings`/`_spaces`/
+  `_devices` por `id`), `update_materials` (zonas de acabado que se mueven) y `specs` propias en `variants/<id>/`
+  (`kitchen`, `laundry`). `variants.variant_facts` arma los hechos propuestos sobre una copia: `build` los escribe
+  en `data/facts/variants/<id>.facts.json` y el IFC en `models/variants/<id>.ifc`; `scene` le hace su propio modelo
+  (`casa-<id>.js`) y el recorrido lo carga al elegirla en el selector «Versión» (`#<id>` en la página).
 - Las propuestas no sustituyen la validación estructural ni normativa de un profesional.
 
 ## Flujo

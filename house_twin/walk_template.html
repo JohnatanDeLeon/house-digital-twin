@@ -157,9 +157,12 @@ body.touch .door-action { bottom: calc(env(safe-area-inset-bottom, 0px) + 170px)
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/environments/RoomEnvironment.js"></script>
-<script src="casa.js"></script>
 <script>
 const DATA = /*__WALK_DATA__*/null;
+// Una remodelación cambia muros, puertas y muebles: trae su propio modelo y sus datos de la casa. Se elige con el
+// #id de la página (el selector «Versión» lo pone y recarga), así cada versión arranca limpia.
+const ACTIVE = (DATA.variants || []).find(v => v.model && v.id === location.hash.slice(1)) || null;
+if (ACTIVE) Object.assign(DATA, ACTIVE.house);
 const EYE = 1.6;              // m, altura de los ojos
 const RADIUS = 0.22;          // m, medio ancho de una persona: no se acerca más a un muro
 const WALK = 1.3, RUN = 2.8;  // m/s
@@ -325,8 +328,17 @@ function tagOf(obj) {
   for (let o = obj; o; o = o.parent) if (o.userData && o.userData.hdt_kind) return o.userData;
   return {};
 }
+function loadModelScript(src) {  // el GLB va dentro de un .js: así lo carga un <script> (ver walk.py)
+  return new Promise((ok, fail) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = ok; s.onerror = () => fail(new Error(`falta ${src} junto a esta página`));
+    document.head.appendChild(s);
+  });
+}
 async function loadHouse() {
-  if (!window.HDT_GLB) throw new Error('falta casa.js junto a esta página');
+  const model = ACTIVE ? ACTIVE.model : 'casa.js';
+  await loadModelScript(model);
+  if (!window.HDT_GLB) throw new Error(`falta ${model} junto a esta página`);
   const bytes = Uint8Array.from(atob(window.HDT_GLB), c => c.charCodeAt(0));
   const buffer = bytes.buffer;
   const gltf = await new Promise((ok, fail) => new THREE.GLTFLoader().parse(buffer, '', ok, fail));
@@ -794,8 +806,14 @@ function setupVariants() {
   // las etiquetas se ocultan en el celular: cada opción dice qué es
   select.innerHTML = '<option value="">Versión: casa actual</option>'
     + variants.map((v, i) => `<option value="${i}">Propuesta: ${v.name}</option>`).join('');
+  if (ACTIVE) { select.value = String(variants.indexOf(ACTIVE)); setVariant(ACTIVE); }
   select.addEventListener('change', () => {
     const variant = variants[select.value] || null;
+    if ((variant && variant.model) || ACTIVE) {  // otra geometría: se recarga con el modelo de esa versión
+      location.hash = variant ? variant.id : '';
+      location.reload();
+      return;
+    }
     setVariant(variant);
     if (variant && variant.focus) goTo({ start: variant.focus });  // frente a lo que cambia
     select.blur();
@@ -815,7 +833,8 @@ loadHouse().then(() => {
   if (street) tour.unshift(street);  // el recorrido empieza afuera: hay que abrir las puertas para entrar
   select.innerHTML = tour.map((t, i) => `<option value="${i}">${t.label}</option>`).join('');
   select.addEventListener('change', () => { goTo(tour[Number(select.value)]); select.blur(); });
-  if (tour.length) goTo(tour[0]); else teleport(siteW / 2, 1);
+  if (ACTIVE && ACTIVE.focus) goTo({ start: ACTIVE.focus });  // una remodelación arranca frente a lo que cambia
+  else if (tour.length) goTo(tour[0]); else teleport(siteW / 2, 1);
   resize();
   $('status').hidden = true;
   toggleHint(true);

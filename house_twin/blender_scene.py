@@ -21,6 +21,7 @@ ROOT = Path(ARGS[0])
 sys.path.insert(0, str(ROOT))
 from house_twin.finishes import Finishes, _inside, load_materials  # noqa: E402  (necesita la raíz en sys.path)
 from house_twin.sunlight import sun_direction  # noqa: E402
+from house_twin.variants import apply_variant, variant_materials  # noqa: E402
 
 TEXTURES = ROOT / 'assets' / 'textures'
 FACTS = ROOT / 'data' / 'facts' / 'existing.facts.json'
@@ -415,13 +416,15 @@ def _ifc_name(obj):
     return ifc_class, name
 
 
-def apply_finishes(ifc_path):
+def apply_finishes(ifc_path, facts, variant=None):
     for obj in list(bpy.data.objects):  # escena de inicio: cubo, cámara y luz
         bpy.data.objects.remove(obj)
     bpy.ops.bim.load_project(filepath=str(ifc_path))
-    facts = json.loads(FACTS.read_text())
     specs = load_materials(TEXTURES)
-    scene = Scene(Finishes(facts, specs), specs, facts['spaces'], {o['id']: o for o in facts['openings']})
+    finishes = Finishes(facts, variant_materials(specs, variant) if variant else specs)
+    if variant:  # una remodelación: los acabados de sus vanos nuevos
+        finishes = apply_variant(finishes, variant, specs)
+    scene = Scene(finishes, specs, facts['spaces'], {o['id']: o for o in facts['openings']})
     for obj in [o for o in bpy.data.objects if o.type == 'MESH']:
         ifc_class, name = _ifc_name(obj)
         if obj.data.users > 1:
@@ -617,11 +620,14 @@ def main():
     parser.add_argument('blend', type=Path)
     parser.add_argument('--render', type=Path)
     parser.add_argument('--glb', type=Path)
+    parser.add_argument('--facts', type=Path, default=FACTS, help='hechos del IFC (los propuestos, en una variante)')
+    parser.add_argument('--variant', type=Path, help='variante cuyos acabados van encima (una remodelación)')
     args = parser.parse_args(ARGS)
     ifc_path, blend_path = args.ifc, args.blend
-    scene = apply_finishes(ifc_path)
+    facts = json.loads(args.facts.read_text())
+    scene = apply_finishes(ifc_path, facts, json.loads(args.variant.read_text()) if args.variant else None)
     light_scene()
-    add_cameras(json.loads(FACTS.read_text())['spaces'])
+    add_cameras(facts['spaces'])
     show_materials()
     blend_path.parent.mkdir(parents=True, exist_ok=True)
     bpy.ops.wm.save_as_mainfile(filepath=str(blend_path), relative_remap=True)
@@ -629,7 +635,7 @@ def main():
     for line in sorted(scene.unknown):
         print(f'sin acabado: {line}')
     if args.glb:
-        export_glb(args.glb, {o['id']: o for o in json.loads(FACTS.read_text())['openings']})
+        export_glb(args.glb, {o['id']: o for o in facts['openings']})
     if args.render:
         render_all(args.render)
 

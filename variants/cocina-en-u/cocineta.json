@@ -1,0 +1,613 @@
+{
+ "_doc": "Cocina en U de la propuesta cocina-en-u: los mismos muebles de sources/cocina/cocineta.json reacomodados (cada módulo conserva sus medidas y sus frentes) más los nuevos que se marcan con «nuevo». Mismo formato que la cocineta de la casa; solo la usa la variante.",
+ "applies_to": {
+  "space": "S01",
+  "source": "propuesta de Claude (2026-10-11) sobre la cocineta del dueño"
+ },
+ "measure_source": "foto de frente de la barra (2026-10-09 13:13:13, 23 mm): la barra va de muro a muro en el nicho de 2.85 m del plano (x = 1.375–4.225 m) y la estufa mide 0.78 m en la foto (estufa de 30\" ≈ 0.76 m), lo que confirma la escala; las alturas salen de la misma foto con la cámara a ≈ 1.10 m (cubierta 0.89–0.90, muebles altos de 1.54 a 2.35 m). Profundidades y espesores: medidas comunes (supuesto)",
+ "materials": {
+  "body": "melamina-cocina",
+  "counter": "laminado-cubierta",
+  "plinth": "esmalte-negro",
+  "handles": "acero-inoxidable"
+ },
+ "gap_m": 0.003,
+ "front_thickness_m": 0.018,
+ "handle": {
+  "length_m": 0.128,
+  "radius_m": 0.006,
+  "standoff_m": 0.03,
+  "post_radius_m": 0.005
+ },
+ "runs": [
+  {
+   "id": "ventanas",
+   "note": "muro de las ventanas V03 y V04 (hacia la cochera): esquinero, tarja bajo V04 y remate junto al comedor",
+   "origin": [
+    1.375,
+    6.875
+   ],
+   "along": [
+    1,
+    0
+   ],
+   "into_room": [
+    0,
+    1
+   ],
+   "base": {
+    "depth_m": 0.56,
+    "plinth_m": 0.1,
+    "plinth_setback_m": 0.05,
+    "top_m": 0.86,
+    "modules": [
+     {
+      "u": [
+       0.0,
+       0.6
+      ],
+      "fronts": [
+       {
+        "u": [
+         0.0,
+         0.6
+        ],
+        "z": [
+         0.665,
+         0.845
+        ],
+        "kind": "drawer"
+       },
+       {
+        "u": [
+         0.0,
+         0.3
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "right"
+       },
+       {
+        "u": [
+         0.3,
+         0.6
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "left"
+       }
+      ],
+      "note": "esquinero: era el mueble chico junto al refrigerador"
+     },
+     {
+      "u": [
+       0.6,
+       1.665
+      ],
+      "fronts": [
+       {
+        "u": [
+         0.625,
+         1.665
+        ],
+        "z": [
+         0.665,
+         0.845
+        ],
+        "kind": "panel",
+        "note": "frente falso de la tarja"
+       },
+       {
+        "u": [
+         0.625,
+         0.965
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "right"
+       },
+       {
+        "u": [
+         0.965,
+         1.325
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "left"
+       },
+       {
+        "u": [
+         1.325,
+         1.665
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "left"
+       }
+      ],
+      "note": "el mueble de la tarja, ahora bajo la ventana V04"
+     },
+     {
+      "u": [
+       1.665,
+       1.91
+      ],
+      "note": "nuevo: remate junto al comedor, de una puerta",
+      "fronts": [
+       {
+        "u": [
+         1.665,
+         1.885
+        ],
+        "z": [
+         0.1,
+         0.845
+        ],
+        "kind": "door",
+        "handle": "left"
+       },
+       {
+        "u": [
+         1.885,
+         1.91
+        ],
+        "z": [
+         0.1,
+         0.845
+        ],
+        "kind": "panel",
+        "note": "relleno contra el muro"
+       }
+      ]
+     }
+    ]
+   },
+   "counters": [
+    {
+     "u": [
+      0.0,
+      1.91
+     ]
+    }
+   ],
+   "counter": {
+    "z": [
+     0.86,
+     0.9
+    ],
+    "depth_m": 0.6,
+    "backsplash_m": [
+     0.05,
+     0.012
+    ]
+   },
+   "sink": {
+    "u_centre": 1.195,
+    "size_m": [
+     0.55,
+     0.42
+    ],
+    "from_wall_m": 0.07,
+    "faucet": {
+     "from_wall_m": 0.05,
+     "height_m": 0.38,
+     "reach_m": 0.2,
+     "radius_m": 0.013
+    }
+   },
+   "note_backsplash": "salpicadero de 5 cm: termina justo en el pretil nuevo de las ventanas (0.95 m)"
+  },
+  {
+   "id": "estufa",
+   "note": "muro hacia el pasillo de servicio (W13, sin la puerta D04): barra, estufa con campana y barra",
+   "origin": [
+    1.375,
+    6.875
+   ],
+   "along": [
+    0,
+    1
+   ],
+   "into_room": [
+    1,
+    0
+   ],
+   "base": {
+    "depth_m": 0.56,
+    "plinth_m": 0.1,
+    "plinth_setback_m": 0.05,
+    "top_m": 0.86,
+    "modules": [
+     {
+      "u": [
+       0.6,
+       1.09
+      ],
+      "fronts": [
+       {
+        "u": [
+         0.6,
+         1.09
+        ],
+        "z": [
+         0.665,
+         0.845
+        ],
+        "kind": "drawer"
+       },
+       {
+        "u": [
+         0.6,
+         0.845
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "right"
+       },
+       {
+        "u": [
+         0.845,
+         1.09
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "left"
+       }
+      ],
+      "note": "el mueble con cajón de junto a la estufa"
+     },
+     {
+      "u": [
+       1.85,
+       2.365
+      ],
+      "fronts": [
+       {
+        "u": [
+         1.85,
+         2.34
+        ],
+        "z": [
+         0.665,
+         0.845
+        ],
+        "kind": "drawer"
+       },
+       {
+        "u": [
+         1.85,
+         2.095
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "right"
+       },
+       {
+        "u": [
+         2.095,
+         2.34
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "left"
+       },
+       {
+        "u": [
+         2.34,
+         2.365
+        ],
+        "z": [
+         0.1,
+         0.845
+        ],
+        "kind": "panel",
+        "note": "relleno contra el muro"
+       }
+      ],
+      "note": "el otro mueble con cajón de la barra"
+     }
+    ]
+   },
+   "counters": [
+    {
+     "u": [
+      0.6,
+      1.09
+     ]
+    },
+    {
+     "u": [
+      1.85,
+      2.365
+     ]
+    }
+   ],
+   "counter": {
+    "z": [
+     0.86,
+     0.9
+    ],
+    "depth_m": 0.6,
+    "backsplash_m": [
+     0.08,
+     0.012
+    ]
+   },
+   "uppers": {
+    "depth_m": 0.33,
+    "modules": [
+     {
+      "u": [
+       0.31,
+       1.09
+      ],
+      "z": [
+       1.54,
+       2.35
+      ],
+      "doors": 2,
+      "note": "la alacena de 0.78 m que estaba a la derecha de la estufa"
+     },
+     {
+      "u": [
+       1.85,
+       2.365
+      ],
+      "z": [
+       1.54,
+       2.35
+      ],
+      "doors": 1,
+      "note": "la alacena de sobre la estufa, recortada a 0.515 m"
+     }
+    ]
+   },
+   "appliances": [
+    {
+     "id": "estufa",
+     "kind": "stove",
+     "u": [
+      1.09,
+      1.85
+     ],
+     "depth_m": 0.64,
+     "height_m": 0.9,
+     "grates_m": 0.03,
+     "material": "esmalte-negro",
+     "source": "foto: estufa Mabe de 30\" de 4 quemadores y comal; medidas comunes; reubicada (propuesta)"
+    },
+    {
+     "id": "campana",
+     "kind": "hood",
+     "u": [
+      1.09,
+      1.85
+     ],
+     "z": 1.6,
+     "height_m": 0.12,
+     "depth_m": 0.5,
+     "chimney_m": [
+      0.28,
+      0.25
+     ],
+     "chimney_top_m": 2.6,
+     "height_note": "a 0.70 m de la estufa",
+     "material": "acero-inoxidable",
+     "source": "nuevo (propuesta): campana de 76 cm; el ducto sale por el muro W13 al pasillo de servicio"
+    }
+   ],
+   "decals": [
+    {
+     "id": "mural-1",
+     "u": [
+      0.645,
+      1.045
+     ],
+     "z": [
+      1.295,
+      1.537
+     ],
+     "material": "mural-frutas"
+    },
+    {
+     "id": "mural-2",
+     "u": [
+      1.905,
+      2.305
+     ],
+     "z": [
+      1.295,
+      1.537
+     ],
+     "material": "mural-frutas"
+    }
+   ],
+   "decals_source": "los 2 murales de fruta de la barra, vueltos a poner a los lados de la estufa"
+  },
+  {
+   "id": "fondo",
+   "note": "muro hacia lavandería y baño (W15): vestíbulo de la puerta nueva, refrigerador y barra",
+   "origin": [
+    1.375,
+    10.055
+   ],
+   "along": [
+    1,
+    0
+   ],
+   "into_room": [
+    0,
+    -1
+   ],
+   "base": {
+    "depth_m": 0.56,
+    "plinth_m": 0.1,
+    "plinth_setback_m": 0.05,
+    "top_m": 0.86,
+    "modules": [
+     {
+      "u": [
+       2.245,
+       2.85
+      ],
+      "note": "nuevo: mueble con cajón junto al refrigerador, como los de la barra",
+      "fronts": [
+       {
+        "u": [
+         2.245,
+         2.85
+        ],
+        "z": [
+         0.665,
+         0.845
+        ],
+        "kind": "drawer"
+       },
+       {
+        "u": [
+         2.245,
+         2.545
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "right"
+       },
+       {
+        "u": [
+         2.545,
+         2.85
+        ],
+        "z": [
+         0.1,
+         0.655
+        ],
+        "kind": "door",
+        "handle": "left"
+       }
+      ]
+     }
+    ]
+   },
+   "counters": [
+    {
+     "u": [
+      2.245,
+      2.85
+     ]
+    }
+   ],
+   "counter": {
+    "z": [
+     0.86,
+     0.9
+    ],
+    "depth_m": 0.6,
+    "backsplash_m": [
+     0.08,
+     0.012
+    ]
+   },
+   "uppers": {
+    "depth_m": 0.33,
+    "modules": [
+     {
+      "u": [
+       2.25,
+       2.85
+      ],
+      "z": [
+       1.54,
+       2.35
+      ],
+      "doors": 2,
+      "note": "la alacena de 0.6 m que estaba sobre la tarja"
+     }
+    ]
+   },
+   "appliances": [
+    {
+     "id": "refrigerador",
+     "kind": "fridge",
+     "u": [
+      1.525,
+      2.245
+     ],
+     "depth_m": 0.7,
+     "height_m": 1.75,
+     "material": "acero-negro",
+     "source": "foto: refrigerador Mabe de 2 puertas, negro; medidas comunes; reubicado (propuesta)"
+    }
+   ]
+  },
+  {
+   "id": "alacena-refri",
+   "note": "la alacena de sobre el refrigerador, que se va con él (otra profundidad)",
+   "origin": [
+    1.375,
+    10.055
+   ],
+   "along": [
+    1,
+    0
+   ],
+   "into_room": [
+    0,
+    -1
+   ],
+   "uppers": {
+    "depth_m": 0.36,
+    "modules": [
+     {
+      "u": [
+       1.525,
+       2.245
+      ],
+      "z": [
+       1.82,
+       2.35
+      ],
+      "doors": 2,
+      "note": "sobre el refrigerador"
+     }
+    ]
+   }
+  }
+ ],
+ "assumptions": [
+  "profundidades (bajos 0.56 + frente, cubierta 0.60, altos 0.33, alacena 0.36), zoclo de 0.10 m y espesores: medidas comunes",
+  "mueble chico junto al refrigerador de 0.60 m y refrigerador de 0.70 × 0.70 × 1.75 m: medidas comunes; la foto de conjunto es de gran angular y no da escala fiable",
+  "estufa de 0.76 × 0.64 × 0.90 m (30\"); tarja de 0.55 × 0.42 m",
+  "no se modelan el horno de microondas, la repisa, la freidora ni los objetos sueltos",
+  "propuesta: campana de 76 cm a 0.70 m sobre la estufa y muebles nuevos del mismo acabado que los existentes"
+ ]
+}

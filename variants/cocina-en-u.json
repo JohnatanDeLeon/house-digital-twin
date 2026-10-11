@@ -1,0 +1,307 @@
+{
+ "_doc": "Remodelación (propuesta): ver docs/analysis/06-remodelacion-cocina.md. Nunca modifica los hechos ni models/existing.*: `build` escribe los hechos propuestos en data/facts/variants/ y su IFC en models/variants/; `scene` le hace su propio modelo para el recorrido.",
+ "id": "cocina-en-u",
+ "name": "Cocina en U y lavandería cerrada",
+ "kind": "remodelación",
+ "based_on": "existing",
+ "requested": "dueño (2026-10-11): «quiero que esa puerta [de la cocina al pasillo de servicio] conecte directo con la lavandería, en la lavandería levantar el muro que falta para que quede cerrada y en el nuevo muro colocar una puerta para salir hacia el pasillo de servicio»; la cocineta se reubica (análisis aprobado)",
+ "author": "Claude",
+ "created_on": "2026-10-11",
+ "description": "La puerta de la cocina al pasillo de servicio se tapia y la cocina sale a la lavandería, que se cierra con un muro y una puerta nueva al pasillo. La cocineta se reacomoda en U: tarja bajo la ventana, estufa con campana al muro del pasillo y refrigerador a la entrada.",
+ "disclaimer": "Propuesta: el hueco en el muro de la cocina necesita un dintel y que un profesional revise si ese muro es de carga.",
+ "focus_opening": "D13",
+ "geometry": {
+  "close_openings": [
+   "D04"
+  ],
+  "add_walls": [
+   {
+    "id": "W41",
+    "footprint": [
+     [
+      1.205,
+      10.225
+     ],
+     [
+      1.375,
+      10.225
+     ],
+     [
+      1.375,
+      12.625
+     ],
+     [
+      1.205,
+      12.625
+     ]
+    ],
+    "axis": [
+     [
+      1.29,
+      10.225
+     ],
+     [
+      1.29,
+      12.625
+     ]
+    ],
+    "length": 2.4,
+    "thickness": 0.17,
+    "on_property_line": false,
+    "faces_exterior": true,
+    "height": {
+     "value": null,
+     "source": "propuesta: hasta la altura del muro de la cocina"
+    },
+    "load_bearing": {
+     "value": false,
+     "source": "propuesta cocina-en-u (Claude, 2026-10-11): muro divisorio, sin carga"
+    },
+    "material": {
+     "value": "block",
+     "source": "propuesta cocina-en-u (Claude, 2026-10-11): como el resto de la casa (U05 sin confirmar)"
+    },
+    "source": "propuesta cocina-en-u (Claude, 2026-10-11): cierra la lavandería del lado del pasillo de servicio, alineado con el muro de la cocina (W13)"
+   }
+  ],
+  "add_openings": [
+   {
+    "kind": "door",
+    "id": "D13",
+    "footprint": [
+     [
+      1.45,
+      10.055
+     ],
+     [
+      2.25,
+      10.055
+     ],
+     [
+      2.25,
+      10.225
+     ],
+     [
+      1.45,
+      10.225
+     ]
+    ],
+    "width": 0.8,
+    "wall_thickness": 0.17,
+    "detected_by": "propuesta",
+    "sill_height": {
+     "value": 0.0,
+     "source": "definición de puerta"
+    },
+    "height": {
+     "value": 2.1,
+     "source": "propuesta cocina-en-u (Claude, 2026-10-11): como D04"
+    },
+    "host_wall": "W15",
+    "connects": [
+     "S01",
+     "S13"
+    ],
+    "swing": {
+     "hinge_end": [
+      1.45,
+      10.14
+     ],
+     "latch_end": [
+      2.25,
+      10.14
+     ],
+     "opens_into": "S13",
+     "source": "propuesta cocina-en-u (Claude, 2026-10-11): abre hacia la lavandería, lejos de la estufa"
+    },
+    "owner_note": "la puerta de vidrio que era D04, en el muro de la cocina con la lavandería"
+   },
+   {
+    "kind": "door",
+    "id": "D14",
+    "footprint": [
+     [
+      1.205,
+      11.1
+     ],
+     [
+      1.375,
+      11.1
+     ],
+     [
+      1.375,
+      11.85
+     ],
+     [
+      1.205,
+      11.85
+     ]
+    ],
+    "width": 0.75,
+    "wall_thickness": 0.17,
+    "detected_by": "propuesta",
+    "sill_height": {
+     "value": 0.0,
+     "source": "definición de puerta"
+    },
+    "height": {
+     "value": 2.1,
+     "source": "propuesta cocina-en-u (Claude, 2026-10-11)"
+    },
+    "host_wall": "W41",
+    "connects": [
+     "S13",
+     "S12"
+    ],
+    "swing": {
+     "hinge_end": [
+      1.29,
+      11.85
+     ],
+     "latch_end": [
+      1.29,
+      11.1
+     ],
+     "opens_into": "S13",
+     "source": "propuesta cocina-en-u (Claude, 2026-10-11): abre hacia la lavandería (el pasillo de servicio mide 1.0 m); de 0.75 m para librar la secadora"
+    }
+   }
+  ],
+  "update_openings": [
+   {
+    "id": "V03",
+    "sill_height": {
+     "value": 0.95,
+     "source": "propuesta cocina-en-u (Claude, 2026-10-11): pretil subido de 0.86 a 0.95 m para la barra"
+    },
+    "height": {
+     "value": 1.18,
+     "source": "propuesta cocina-en-u (Claude, 2026-10-11): el cerramiento queda en 2.13 m"
+    }
+   },
+   {
+    "id": "V04",
+    "sill_height": {
+     "value": 0.95,
+     "source": "propuesta cocina-en-u (Claude, 2026-10-11): pretil subido de 0.87 a 0.95 m para la barra"
+    },
+    "height": {
+     "value": 1.19,
+     "source": "propuesta cocina-en-u (Claude, 2026-10-11): el cerramiento queda en 2.14 m"
+    }
+   }
+  ],
+  "update_spaces": [
+   {
+    "id": "S13",
+    "polygon": [
+     [
+      2.82,
+      12.625
+     ],
+     [
+      2.82,
+      10.225
+     ],
+     [
+      1.375,
+      10.225
+     ],
+     [
+      1.375,
+      12.625
+     ]
+    ],
+    "enclosed": {
+     "value": true,
+     "source": "propuesta cocina-en-u (Claude, 2026-10-11): muro W41 y puerta D14"
+    },
+    "owner_note": "Fuera de la casa, detrás del baño; la ventana del baño da hacia ella. No está techada ni cerrada. Ocupa el recuadro entre el pasillo de servicio y el baño. Propuesta: cerrada por el muro W41, sigue sin techo."
+   }
+  ],
+  "update_devices": [
+   {
+    "id": "A02",
+    "position": [
+     1.375,
+     9.65
+    ],
+    "source": "propuesta cocina-en-u (Claude, 2026-10-11): el apagador sale de donde va la estufa; pasa al vestíbulo de la lavandería"
+   },
+   {
+    "id": "C07",
+    "position": [
+     3.92,
+     10.055
+    ],
+    "source": "propuesta cocina-en-u (Claude, 2026-10-11): el contacto sale de detrás del refrigerador; pasa sobre la barra nueva"
+   }
+  ]
+ },
+ "specs": {
+  "kitchen": "variants/cocina-en-u/cocineta.json",
+  "laundry": "variants/cocina-en-u/lavanderia.json"
+ },
+ "changes": [
+  {
+   "opening": "D13",
+   "part": "leaf",
+   "material": "puerta-cocina"
+  },
+  {
+   "opening": "D14",
+   "part": "leaf",
+   "material": "puerta-bodega"
+  }
+ ],
+ "update_materials": [
+  {
+   "name": "azulejo-cocina",
+   "region_m": {
+    "S01": [
+     [
+      1.37,
+      6.87
+     ],
+     [
+      4.23,
+      6.87
+     ],
+     [
+      4.23,
+      10.06
+     ],
+     [
+      1.37,
+      10.06
+     ]
+    ]
+   },
+   "source": "propuesta cocina-en-u: el azulejo sigue a la cocina en sus 3 muros (ventanas, pasillo de servicio y fondo), del piso a 2.23 m como hoy"
+  },
+  {
+   "name": "cenefa-cocina",
+   "region_m": {
+    "S01": [
+     [
+      1.37,
+      6.87
+     ],
+     [
+      4.23,
+      6.87
+     ],
+     [
+      4.23,
+      10.06
+     ],
+     [
+      1.37,
+      10.06
+     ]
+    ]
+   },
+   "source": "propuesta cocina-en-u: la cenefa de frutas también"
+  }
+ ]
+}

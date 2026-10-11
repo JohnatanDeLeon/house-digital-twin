@@ -38,3 +38,73 @@ def test_repo_variants_are_valid(dxf_facts):
     materials = load_materials(ROOT / 'assets' / 'textures')
     variants = load_variants()
     assert all(not validate(v, dxf_facts, materials) for v in variants)  # puede no haber ninguna
+
+
+def _remodel():
+    return next(v for v in load_variants() if v['id'] == 'cocina-en-u')
+
+
+def test_remodel_builds_proposed_facts_without_touching_the_house(dxf_facts):
+    import copy
+    from house_twin.variants import variant_facts
+    before = copy.deepcopy(dxf_facts)
+    proposed = variant_facts(dxf_facts, _remodel())
+    assert dxf_facts == before  # los hechos de la casa no cambian
+    openings = {o['id']: o for o in proposed['openings']}
+    assert 'D04' not in openings and {'D13', 'D14'} <= set(openings)
+    assert openings['D13']['host_wall'] == 'W15' and openings['D14']['host_wall'] == 'W41'
+    assert 'W41' in {w['id'] for w in proposed['walls']}
+    assert openings['V03']['sill_height']['value'] == 0.95 and openings['V04']['sill_height']['value'] == 0.95
+    laundry = next(s for s in proposed['spaces'] if s['id'] == 'S13')
+    assert laundry['enclosed']['value'] is True and min(p[0] for p in laundry['polygon']) == 1.375
+    assert proposed['provenance']['variant'] == 'cocina-en-u'
+
+
+def test_geometry_problems_are_reported(dxf_facts):
+    variant = {'id': 'v', 'geometry': {'close_openings': ['D99'],
+                                       'add_openings': [{'id': 'D50', 'host_wall': 'W99', 'kind': 'door'}]},
+               'specs': {'horno': 'variants/no-existe.json'}}
+    problems = validate(variant, dxf_facts, {})
+    assert any('D99' in p for p in problems) and any('W99' in p for p in problems)
+    assert any('horno' in p for p in problems) and any('no-existe' in p for p in problems)
+
+
+def _kitchen_parts():
+    import json
+    from house_twin.kitchen import kitchen_parts
+    spec = json.loads((ROOT / _remodel()['specs']['kitchen']).read_text())
+    return {p['id']: p['mesh'][0] for p in kitchen_parts(spec)}
+
+
+def _centre(points):
+    return tuple(sum(p[i] for p in points) / len(points) for i in (0, 1))
+
+
+def test_remodel_kitchen_is_a_u_with_the_sink_under_the_window_and_a_sound_work_triangle():
+    import math
+    parts = _kitchen_parts()
+    sink, stove, fridge = (_centre(parts[k]) for k in ('cocina-ventanas-tarja', 'cocina-estufa', 'cocina-refrigerador'))
+    assert 2.29 < sink[0] < 2.81 and sink[1] < 7.5          # tarja bajo la ventana V04
+    assert stove[0] < 2.05                                    # estufa contra el muro del pasillo de servicio
+    assert fridge[1] > 9.3                                    # refrigerador contra el muro del fondo
+    legs = [math.dist(sink, stove), math.dist(stove, fridge), math.dist(fridge, sink)]
+    assert all(1.2 <= leg <= 2.7 for leg in legs) and 4.0 <= sum(legs) <= 7.9
+
+
+def test_remodel_kitchen_leaves_the_laundry_door_free():
+    for name, points in _kitchen_parts().items():
+        xs, ys, zs = zip(*points)
+        in_front_of_d13 = min(xs) < 2.25 and max(xs) > 1.45 and max(ys) > 9.25 and min(zs) < 2.1
+        assert not in_front_of_d13, name
+
+
+def test_walk_offers_a_remodel_with_its_own_model(dxf_facts):
+    from house_twin.variants import variant_facts
+    from house_twin.walk import _variant_entry
+    variant = _remodel()
+    proposed = variant_facts(dxf_facts, variant)
+    entry = _variant_entry(variant, dxf_facts, {'facts': proposed, 'glb': None, 'doors': [], 'items': []})
+    assert entry['model'] == 'casa-cocina-en-u.js' and entry['overrides'] == {}
+    door_ids = {d['id'] for d in entry['house']['doors']}
+    assert 'D04' not in door_ids and {'D13', 'D14'} <= door_ids
+    assert entry['focus'] is not None
