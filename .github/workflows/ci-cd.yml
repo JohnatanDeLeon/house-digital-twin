@@ -1,0 +1,65 @@
+# CI/CD del gemelo digital.
+# - CI (cada push y PR): pruebas, y que los hechos y el visor generados estén al día con el plano.
+# - CD (push a main): publica docs/ en GitHub Pages (portada, recorrido 3D, visor, renders).
+# La escena 3D (`scene`) necesita Blender + Bonsai y no corre aquí: su salida (docs/viewer/recorrido/) se
+# regenera en la PC y se sube al repo; este flujo solo la publica.
+name: CI/CD
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Pruebas
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: pytest
+        run: python -m pytest -q
+      - name: Los generados están al día
+        # `build` vuelve a sacar hechos, IFC y visor del plano. Solo cambian las fechas; cualquier otra
+        # diferencia quiere decir que alguien cambió el código o las fuentes sin regenerar.
+        run: |
+          python -m house_twin.cli build
+          git diff --exit-code --stat -I 'built_on' -- data/facts docs/viewer/casa-jonhy-3d.html \
+            || { echo '::error::Los generados no están al día: corre `python -m house_twin.cli build` y súbelos.'; exit 1; }
+
+  pages-build:
+    name: Armar el sitio
+    needs: test
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  pages-deploy:
+    name: Publicar en GitHub Pages
+    needs: pages-build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
