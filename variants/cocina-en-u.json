@@ -7,7 +7,7 @@
  "requested": "dueño (2026-10-11): «quiero que esa puerta [de la cocina al pasillo de servicio] conecte directo con la lavandería, en la lavandería levantar el muro que falta para que quede cerrada y en el nuevo muro colocar una puerta para salir hacia el pasillo de servicio»; la cocineta se reubica (análisis aprobado)",
  "author": "Claude",
  "created_on": "2026-10-11",
- "description": "La puerta de la cocina al pasillo de servicio se tapia y la cocina sale a la lavandería, que se cierra con un muro y una puerta nueva al pasillo. La cocineta se reacomoda en U: tarja bajo la ventana, estufa con campana al muro del pasillo y refrigerador a la entrada. La lavandería se reorganiza: lavadero, lavasecadora con cubierta para doblar, gabinete alto y calentador de paso en el muro del fondo; el cilindro de gas sale al pasillo y se techa con policarbonato ventilado.",
+ "description": "La puerta de la cocina al pasillo de servicio se tapia y la cocina sale a la lavandería, que se cierra con un muro y una puerta nueva al pasillo. La cocineta se reacomoda en U: tarja bajo la ventana, estufa con campana al muro del pasillo y refrigerador a la entrada. La lavandería se reorganiza: barra con tarja, cestos y cajones, alacenas y azulejo tipo metro; lavasecadora bajo una cubierta para doblar, frente a la corrediza de cristal; calentador de paso; el cilindro de gas sale al pasillo y se techa con policarbonato ventilado.",
  "disclaimer": "Propuesta: el hueco en el muro de la cocina necesita un dintel y que un profesional revise si ese muro es de carga.",
  "focus_opening": "D13",
  "geometry": {
@@ -146,24 +146,65 @@
     },
     "height": {
      "value": 2.1,
-     "source": "propuesta cocina-en-u (Claude, 2026-10-11)"
+     "source": "propuesta cocina-en-u (Claude, 2026-10-17): vano de 2.10 m; la hoja corrediza mide 2.14 m"
     },
     "host_wall": "W41",
     "connects": [
      "S13",
      "S12"
     ],
-    "swing": {
-     "hinge_end": [
-      1.29,
-      12.55
+    "slide": {
+     "line": [
+      [
+       1.16,
+       12.6
+      ],
+      [
+       1.16,
+       11.75
+      ]
      ],
-     "latch_end": [
-      1.29,
-      11.8
+     "wall_normal": [
+      1.0,
+      0.0
      ],
-     "opens_into": "S13",
-     "source": "propuesta cocina-en-u (Claude, 2026-10-11): abre hacia la lavandería (el pasillo de servicio mide 1.0 m); en el extremo del boiler, con la bisagra junto al muro de la recámara 2, para que su barrido libre la lavasecadora y el cilindro de gas"
+     "travel": [
+      0.0,
+      -0.85
+     ],
+     "thickness_m": 0.01,
+     "z": [
+      0.01,
+      2.15
+     ],
+     "track": {
+      "from": [
+       1.16,
+       10.85
+      ],
+      "to": [
+       1.16,
+       12.62
+      ],
+      "z": 2.19,
+      "height_m": 0.04,
+      "n": [
+       0.0,
+       0.012
+      ],
+      "wall_n": 0.045
+     },
+     "hardware": {
+      "material": "acero-negro-mate",
+      "hanger_inset_m": 0.12,
+      "wheel_radius_m": 0.035,
+      "pull_u": 0.1,
+      "pull_z": [
+       0.75,
+       1.35
+      ]
+     },
+     "source": "propuesta cocina-en-u (Claude, 2026-10-17): puerta corrediza de cristal templado esmerilado de 10 mm (85 × 214 cm, 5 cm de traslape por lado sobre el vano de 75 × 210), colgada de un riel aparente de acero negro mate del lado del pasillo de servicio, a 4.5 cm del muro; corre hacia la cocina (y menor), donde W41 está libre. Así la lavandería no pierde el barrido de la hoja y el pasillo conserva 0.90 m libres"
     }
    }
   ],
@@ -251,7 +292,7 @@
   {
    "opening": "D14",
    "part": "leaf",
-   "material": "puerta-bodega"
+   "material": "vidrio-esmerilado"
   }
  ],
  "update_materials": [

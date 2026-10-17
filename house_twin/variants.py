@@ -76,11 +76,17 @@ def variant_facts(facts: dict, variant: dict) -> dict:
 
 
 def variant_materials(materials: dict[str, dict], variant: dict) -> dict[str, dict]:
-    """Los materiales con las zonas de acabado que la variante mueve; los de la casa no se tocan."""
+    """Los materiales con las zonas de acabado que la variante mueve y los acabados propios de la variante en muros o
+    pisos (`variant_applies_to` de un material con `applies_to.variant`, que la casa existente no toma); los de la
+    casa no se tocan."""
     updates = variant.get('update_materials', [])
-    if not updates:
+    own = [n for n, m in materials.items()
+           if m.get('variant_applies_to') and m['applies_to'].get('variant') == variant['id']]
+    if not updates and not own:
         return materials
     result = copy.deepcopy(materials)
+    for name in own:
+        result[name]['applies_to'] = {**result[name]['applies_to'], **result[name]['variant_applies_to']}
     for update in updates:
         result[update['name']]['applies_to']['region_m'] = update['region_m']
     return result

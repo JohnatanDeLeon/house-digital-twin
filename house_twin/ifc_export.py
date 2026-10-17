@@ -32,6 +32,7 @@ from house_twin.kitchen import kitchen_parts
 from house_twin.living import living_parts
 from house_twin.bedroom import bedroom_parts
 from house_twin.laundry import laundry_parts
+from house_twin.sliding import panel_polygon, sliding_parts
 from house_twin.lighting import luminaire_meshes
 from house_twin.plumbing import (faucet_mesh, lever_mesh, material_of, sanitary_mesh, shower_mesh, spec_for,
                                  valve_meshes)
@@ -165,7 +166,12 @@ def _add_opening(ctx: _IfcContext, o, walls, storey, finishes: Finishes | None, 
     sill, sill_assumed = (0.0, False) if is_door else _value_or_assumed(o['sill_height'], 'window_sill')
     height, height_assumed = _value_or_assumed(o['height'], 'door_height' if is_door else 'window_height')
     filler = ctx.element('IfcDoor' if is_door else 'IfcWindow', o['id'], 'DOOR' if is_door else 'WINDOW')
-    ctx.extrude_polygon(filler, _panel(o['footprint'], PANEL_THICKNESS), height, sill)
+    slide = o.get('slide') if is_door else None
+    if slide:  # corrediza: la hoja cuelga por fuera del muro, no dentro del vano
+        filler.OperationType = 'SLIDING_TO_LEFT'
+        ctx.extrude_polygon(filler, panel_polygon(slide), slide['z'][1] - slide['z'][0], slide['z'][0])
+    else:
+        ctx.extrude_polygon(filler, _panel(o['footprint'], PANEL_THICKNESS), height, sill)
     filler.OverallWidth, filler.OverallHeight = o['width'], height
     host = walls.get(o['host_wall'])
     if host:  # sin muro (puerta de herrería entre dos muros) no hay hueco que cortar: la puerta va sola
@@ -183,6 +189,21 @@ def _add_opening(ctx: _IfcContext, o, walls, storey, finishes: Finishes | None, 
     if is_door and o.get('swing'):
         for spec in for_leaf(hardware or [], parts.get('leaf')):
             _add_hardware(ctx, filler, o, spec, height, spaces)
+    if slide:
+        _add_sliding_hardware(ctx, filler, o)
+
+
+def _add_sliding_hardware(ctx: _IfcContext, door, o):
+    """Riel, carretillas y jaladeras de una corrediza: IfcDiscreteAccessory, partes de la puerta."""
+    for part in sliding_parts(o['id'], o['slide']):
+        points, faces = part['mesh']
+        accessory = ctx.element('IfcDiscreteAccessory', part['id'])
+        accessory.ObjectType = 'herraje de puerta corrediza'
+        ifcopenshell.api.geometry.assign_representation(
+            ctx.model, product=accessory, representation=ctx.builder.get_representation(ctx.body, [ctx.builder.polygonal_face_set(points, faces)]))
+        ifcopenshell.api.aggregate.assign_object(ctx.model, products=[accessory], relating_object=door)
+        ifcopenshell.api.material.assign_material(ctx.model, products=[accessory], material=ctx.material(part['material']))
+        ctx.pset(accessory, 'HDT_Provenance', {'FactId': o['id'], 'Source': o['slide']['source'], 'MovesWithLeaf': part['moves']})
 
 
 def _add_hardware(ctx: _IfcContext, door, o, spec, height, spaces):

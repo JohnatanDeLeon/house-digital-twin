@@ -43,19 +43,20 @@ def _handle(spec, frame, u, z, n0, vertical):
     return merge(parts)
 
 
-def _hood(frame: _Run, hood: dict) -> dict:
+def _hood(frame: _Run, hood: dict, prefix: str = 'cocina') -> dict:
     """Campana: cuerpo (`z` es su orilla de abajo, `height_m` su alto) y chimenea centrada hasta `chimney_top_m`."""
     (u0, u1), z, d = hood['u'], hood['z'], hood['depth_m']
     top = z + hood['height_m']
     mid, (cw, cd) = (u0 + u1) / 2, hood['chimney_m']
     mesh = merge([frame.box((u0, u1), (z, top), (0, d)),
                   frame.box((mid - cw / 2, mid + cw / 2), (top, hood['chimney_top_m']), (0, cd))])
-    return {'id': f"cocina-{hood['id']}", 'ifc': 'IfcElectricAppliance', 'type': 'USERDEFINED', 'object_type': 'campana',
+    return {'id': f"{prefix}-{hood['id']}", 'ifc': 'IfcElectricAppliance', 'type': 'USERDEFINED', 'object_type': 'campana',
             'material': hood['material'], 'mesh': mesh, 'source': hood['source']}
 
 
-def kitchen_parts(spec: dict) -> list[dict]:
-    """Piezas de la cocineta: id, clase IFC, tipo, material y malla (puntos, caras)."""
+def kitchen_parts(spec: dict, prefix: str = 'cocina') -> list[dict]:
+    """Piezas de la cocineta: id, clase IFC, tipo, material y malla (puntos, caras). Con otro `prefix` arma los muebles
+    de otro cuarto con el mismo formato (la barra de la lavandería)."""
     m, gap, t = spec['materials'], spec['gap_m'], spec['front_thickness_m']
     parts = []
     for run in spec['runs']:
@@ -74,11 +75,11 @@ def kitchen_parts(spec: dict) -> list[dict]:
                         handles.append(_handle(spec, frame, u, z1 - 0.11, depth + t, True))
                     elif front['kind'] == 'drawer':
                         handles.append(_handle(spec, frame, (u0 + u1) / 2, (z0 + z1) / 2, depth + t, False))
-                parts.append({'id': f'cocina-{rid}-bajo-{i + 1}', 'ifc': 'IfcFurniture', 'type': 'USERDEFINED',
+                parts.append({'id': f'{prefix}-{rid}-bajo-{i + 1}', 'ifc': 'IfcFurniture', 'type': 'USERDEFINED',
                               'material': m['body'], 'mesh': merge(pieces)})
             span = (min(mod['u'][0] for mod in base['modules']), max(mod['u'][1] for mod in base['modules']))
             plinths = [frame.box(mod['u'], (0, base['plinth_m']), (0, depth + t - base['plinth_setback_m'])) for mod in base['modules']]
-            parts.append({'id': f'cocina-{rid}-zoclo', 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'material': m['plinth'],
+            parts.append({'id': f'{prefix}-{rid}-zoclo', 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'material': m['plinth'],
                           'mesh': merge(plinths), 'span': span})
         c = run.get('counter')
         for i, counter in enumerate(run.get('counters', [])):
@@ -86,21 +87,21 @@ def kitchen_parts(spec: dict) -> list[dict]:
             bh, bt = c['backsplash_m']
             if bh:
                 pieces.append(frame.box(counter['u'], (c['z'][1], c['z'][1] + bh), (0, bt)))
-            parts.append({'id': f'cocina-{rid}-cubierta-{i + 1}', 'ifc': 'IfcFurniture', 'type': 'USERDEFINED',
+            parts.append({'id': f'{prefix}-{rid}-cubierta-{i + 1}', 'ifc': 'IfcFurniture', 'type': 'USERDEFINED',
                           'material': m['counter'], 'mesh': merge(pieces)})
         sink = run.get('sink')
         if sink:
             w, d = sink['size_m']
             top = c['z'][1]
             u0, n0 = sink['u_centre'] - w / 2, sink['from_wall_m']
-            parts.append({'id': f'cocina-{rid}-tarja', 'ifc': 'IfcSanitaryTerminal', 'type': 'SINK', 'material': 'granito-negro',
+            parts.append({'id': f'{prefix}-{rid}-tarja', 'ifc': 'IfcSanitaryTerminal', 'type': 'SINK', 'material': sink.get('material', 'granito-negro'),
                           'mesh': frame.box((u0, u0 + w), (top, top + 0.004), (n0, n0 + d))})
             f = sink['faucet']
             base_pt = frame.point(sink['u_centre'], f['from_wall_m'], top)
             up = frame.point(sink['u_centre'], f['from_wall_m'], top + f['height_m'])
             out = frame.point(sink['u_centre'], f['from_wall_m'] + f['reach_m'], top + f['height_m'] - 0.03)
             spout = frame.point(sink['u_centre'], f['from_wall_m'] + f['reach_m'], top + f['height_m'] - 0.12)
-            parts.append({'id': f'cocina-{rid}-llave', 'ifc': 'IfcValve', 'type': 'FAUCET', 'material': 'acero-negro',
+            parts.append({'id': f'{prefix}-{rid}-llave', 'ifc': 'IfcValve', 'type': 'FAUCET', 'material': f.get('material', 'acero-negro'),
                           'mesh': merge([cylinder(base_pt, up, f['radius_m'], 12), cylinder(up, out, f['radius_m'], 12),
                                          cylinder(out, spout, f['radius_m'] * 1.3, 12)])})
         uppers = run.get('uppers')
@@ -115,13 +116,13 @@ def kitchen_parts(spec: dict) -> list[dict]:
                     pieces.append(frame.box((a + gap / 2, b - gap / 2), (z0 + gap / 2, z1 - gap / 2), (depth - t, depth)))
                     u = b - 0.04 if k == 0 and module['doors'] > 1 else a + 0.04
                     handles.append(_handle(spec, frame, u, z0 + 0.11, depth, True))
-                parts.append({'id': f'cocina-{rid}-alto-{i + 1}', 'ifc': 'IfcFurniture', 'type': 'USERDEFINED',
+                parts.append({'id': f'{prefix}-{rid}-alto-{i + 1}', 'ifc': 'IfcFurniture', 'type': 'USERDEFINED',
                               'material': m['body'], 'mesh': merge(pieces)})
         for appliance in run.get('appliances', []):
             u0, u1 = appliance['u']
             d, h = appliance['depth_m'], appliance['height_m']
             if appliance['kind'] == 'hood':
-                parts.append(_hood(frame, appliance))
+                parts.append(_hood(frame, appliance, prefix))
                 continue
             if appliance['kind'] == 'stove':
                 pieces = [frame.box((u0, u1), (0.02, h), (0, d)),
@@ -134,14 +135,14 @@ def kitchen_parts(spec: dict) -> list[dict]:
             else:
                 pieces = [frame.box((u0, u1), (0, h * 0.72 - 0.004), (0, d)), frame.box((u0, u1), (h * 0.72 + 0.004, h), (0, d)),
                           frame.box((u0 + 0.01, u1 - 0.01), (h * 0.72 - 0.004, h * 0.72 + 0.004), (0, d - 0.01))]
-            parts.append({'id': f"cocina-{appliance['id']}", 'ifc': 'IfcElectricAppliance',
+            parts.append({'id': f"{prefix}-{appliance['id']}", 'ifc': 'IfcElectricAppliance',
                           'type': 'REFRIGERATOR' if appliance['kind'] == 'fridge' else 'USERDEFINED',
                           'object_type': None if appliance['kind'] == 'fridge' else 'estufa de gas',
                           'material': appliance['material'], 'mesh': merge(pieces), 'source': appliance['source']})
         for decal in run.get('decals', []):  # murales: placa delgada sobre el azulejo, con su imagen
-            parts.append({'id': f"cocina-{decal['id']}", 'ifc': 'IfcCovering', 'type': 'CLADDING', 'material': decal['material'],
+            parts.append({'id': f"{prefix}-{decal['id']}", 'ifc': 'IfcCovering', 'type': 'CLADDING', 'material': decal['material'],
                           'mesh': frame.box(decal['u'], decal['z'], (0, DECAL_THICKNESS_M)), 'source': run.get('decals_source')})
         if handles:
-            parts.append({'id': f'cocina-{rid}-jaladeras', 'ifc': 'IfcDiscreteAccessory', 'type': None,
+            parts.append({'id': f'{prefix}-{rid}-jaladeras', 'ifc': 'IfcDiscreteAccessory', 'type': None,
                           'material': m['handles'], 'mesh': merge(handles)})
     return parts
