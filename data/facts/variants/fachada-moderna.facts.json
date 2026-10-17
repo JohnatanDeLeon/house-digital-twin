@@ -3651,33 +3651,38 @@
     "S10"
    ],
    "owner_note": "Portón de herrería de la cochera hacia la calle. El plano lo dibuja entre la barda (bisagra en x = 0.20 m) y el muro del pórtico (bisagra en x = 3.24 m), con las 2 hojas abriendo hacia la cochera; no tiene muro anfitrión. Altura estimada con la foto del dueño.",
-   "leaves": [
-    {
-     "hinge_end": [
-      0.2,
-      0.025
-     ],
-     "latch_end": [
-      1.72,
-      0.025
-     ],
-     "opens_into": "S10",
-     "source": "plano: arco de la hoja con centro en la barda (x = 0.20 m), hacia la cochera"
+   "leaves": [],
+   "id": "D12",
+   "lift": {
+    "x": [
+     0.26,
+     3.18
+    ],
+    "y": 0.14,
+    "thickness_m": 0.04,
+    "panels": 4,
+    "panel_m": 0.5675,
+    "material": "porton-seccional-negro",
+    "track": {
+     "z_curve": 2.28,
+     "radius_m": 0.12,
+     "direction": 1,
+     "length_m": 2.2,
+     "profile_m": 0.035,
+     "material": "lamina-negra-mate"
     },
-    {
-     "hinge_end": [
-      3.24,
-      0.025
+    "operator": {
+     "motor_y": 2.75,
+     "motor_m": [
+      0.35,
+      0.45,
+      0.15
      ],
-     "latch_end": [
-      1.72,
-      0.025
-     ],
-     "opens_into": "S10",
-     "source": "plano: arco de la hoja con centro en el muro del pórtico (x = 3.24 m), hacia la cochera"
-    }
-   ],
-   "id": "D12"
+     "photocell_z": 0.15,
+     "material": "lamina-negra-mate"
+    },
+    "source": "propuesta fachada-moderna (Claude, 2026-10-17): portón seccional eléctrico de 4 paneles aislados de 2.92 × 0.57 m (2.27 m de alto, 4 cm sobre el dintel), detrás del vano; sube por guías laterales y se acuesta bajo el techo nuevo (curva de 12 cm, guía horizontal a 2.40 m, bajo las vigas a 2.44 m). Motor de techo con riel al centro y fotoceldas de seguridad a 15 cm del piso. No invade la banqueta al abrir"
+   }
   },
   {
    "kind": "window",

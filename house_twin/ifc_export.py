@@ -33,6 +33,7 @@ from house_twin.living import living_parts
 from house_twin.bedroom import bedroom_parts
 from house_twin.extras import extras_parts
 from house_twin.laundry import laundry_parts
+from house_twin.lift import lift_parts, panel_box
 from house_twin.sliding import panel_polygon, sliding_parts
 from house_twin.lighting import luminaire_meshes
 from house_twin.plumbing import (faucet_mesh, lever_mesh, material_of, sanitary_mesh, shower_mesh, spec_for,
@@ -168,9 +169,16 @@ def _add_opening(ctx: _IfcContext, o, walls, storey, finishes: Finishes | None, 
     height, height_assumed = _value_or_assumed(o['height'], 'door_height' if is_door else 'window_height')
     filler = ctx.element('IfcDoor' if is_door else 'IfcWindow', o['id'], 'DOOR' if is_door else 'WINDOW')
     slide = o.get('slide') if is_door else None
+    lift = o.get('lift') if is_door else None
     if slide:  # corrediza: la hoja cuelga por fuera del muro, no dentro del vano
         filler.OperationType = 'SLIDING_TO_LEFT'
         ctx.extrude_polygon(filler, panel_polygon(slide), slide['z'][1] - slide['z'][0], slide['z'][0])
+    elif lift:  # seccional: el IfcDoor es el panel de abajo, detrás del vano; los demás van como sus piezas
+        filler.OperationType = 'USERDEFINED'
+        filler.UserDefinedOperationType = 'seccional (sube y se acuesta bajo el techo)'
+        points, faces = panel_box(lift, 0)
+        ifcopenshell.api.geometry.assign_representation(
+            ctx.model, product=filler, representation=ctx.builder.get_representation(ctx.body, [ctx.builder.polygonal_face_set(points, faces)]))
     else:
         ctx.extrude_polygon(filler, _panel(o['footprint'], PANEL_THICKNESS), height, sill)
     filler.OverallWidth, filler.OverallHeight = o['width'], height
@@ -192,19 +200,26 @@ def _add_opening(ctx: _IfcContext, o, walls, storey, finishes: Finishes | None, 
             _add_hardware(ctx, filler, o, spec, height, spaces)
     if slide:
         _add_sliding_hardware(ctx, filler, o)
+    if lift:
+        _add_door_parts(ctx, filler, o, lift_parts(o['id'], lift), lift['source'])
 
 
 def _add_sliding_hardware(ctx: _IfcContext, door, o):
     """Riel, carretillas y jaladeras de una corrediza: IfcDiscreteAccessory, partes de la puerta."""
-    for part in sliding_parts(o['id'], o['slide']):
+    _add_door_parts(ctx, door, o, sliding_parts(o['id'], o['slide']), o['slide']['source'])
+
+
+def _add_door_parts(ctx: _IfcContext, door, o, door_parts, source):
+    """Piezas de una puerta (herraje, paneles, guías, motor): IfcDiscreteAccessory, partes de la puerta."""
+    for part in door_parts:
         points, faces = part['mesh']
         accessory = ctx.element('IfcDiscreteAccessory', part['id'])
-        accessory.ObjectType = 'herraje de puerta corrediza'
+        accessory.ObjectType = 'pieza de puerta'
         ifcopenshell.api.geometry.assign_representation(
             ctx.model, product=accessory, representation=ctx.builder.get_representation(ctx.body, [ctx.builder.polygonal_face_set(points, faces)]))
         ifcopenshell.api.aggregate.assign_object(ctx.model, products=[accessory], relating_object=door)
         ifcopenshell.api.material.assign_material(ctx.model, products=[accessory], material=ctx.material(part['material']))
-        ctx.pset(accessory, 'HDT_Provenance', {'FactId': o['id'], 'Source': o['slide']['source'], 'MovesWithLeaf': part['moves']})
+        ctx.pset(accessory, 'HDT_Provenance', {'FactId': o['id'], 'Source': source, 'MovesWithLeaf': part['moves']})
 
 
 def _add_hardware(ctx: _IfcContext, door, o, spec, height, spaces):
@@ -412,6 +427,8 @@ def _add_parts(ctx: _IfcContext, storey, spec, parts):
             ctx.pset(element, 'HDT_Image', {'RightX': rx, 'RightY': ry, 'UpX': ux, 'UpY': uy})
         ctx.pset(element, 'HDT_Provenance', {'Space': spec['applies_to']['space'], 'Source': spec['applies_to']['source'],
                                              'Measures': part.get('source') or spec['measure_source']})
+        for name, props in part.get('psets', {}).items():  # p. ej. HDT_Light de una luminaria
+            ctx.pset(element, name, props)
 
 
 def _add_spaces(ctx: _IfcContext, facts, storey, height):

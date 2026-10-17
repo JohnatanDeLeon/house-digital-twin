@@ -2,7 +2,7 @@
  "id": "fachada-moderna",
  "name": "Fachada moderna",
  "kind": "remodelación",
- "description": "La fachada cambia de estuco rugoso con herrería de aros a una composición limpia: aplanado fino blanco, zócalo de porcelanato grafito, la entrada enmarcada en duela de WPC nogal y el volumen de la bodega en microcemento grafito. Portón y reja de lamas horizontales de aluminio negro, celosías verticales en las aberturas del pórtico piso de porcelanato en el pórtico y un remate negro que limpia el borde de la azotea.",
+ "description": "La fachada cambia de estuco rugoso con herrería de aros a una composición limpia: aplanado fino blanco, zócalo de porcelanato grafito, la entrada enmarcada en duela de WPC nogal y el volumen de la bodega en microcemento grafito, con remate negro en el borde de la azotea. La cochera se techa (multipanel con una franja translúcida frente a las ventanas de la cocina) y su portón pasa a seccional eléctrico, que sube y se guarda bajo el techo. Reja de lamas negras, celosías en el pórtico, piso de porcelanato e iluminación cálida: arbotantes, empotrados en la cochera y una línea de LED bajo el remate.",
  "disclaimer": "Propuesta: materiales y colores comerciales, sin medir; los cambios no alteran muros, vanos ni la línea de la calle.",
  "own_model": true,
  "focus": {
@@ -19,7 +19,7 @@
   {
    "opening": "D12",
    "part": "leaf",
-   "material": "porton-duela-negra"
+   "material": "porton-seccional-negro"
   },
   {
    "opening": "D01",
@@ -38,6 +38,44 @@
   }
  ],
  "specs": {
-  "extras": "variants/fachada-moderna/remates.json"
+  "extras": "variants/fachada-moderna/piezas.json"
+ },
+ "geometry": {
+  "update_openings": [
+   {
+    "id": "D12",
+    "leaves": [],
+    "lift": {
+     "x": [
+      0.26,
+      3.18
+     ],
+     "y": 0.14,
+     "thickness_m": 0.04,
+     "panels": 4,
+     "panel_m": 0.5675,
+     "material": "porton-seccional-negro",
+     "track": {
+      "z_curve": 2.28,
+      "radius_m": 0.12,
+      "direction": 1,
+      "length_m": 2.2,
+      "profile_m": 0.035,
+      "material": "lamina-negra-mate"
+     },
+     "operator": {
+      "motor_y": 2.75,
+      "motor_m": [
+       0.35,
+       0.45,
+       0.15
+      ],
+      "photocell_z": 0.15,
+      "material": "lamina-negra-mate"
+     },
+     "source": "propuesta fachada-moderna (Claude, 2026-10-17): portón seccional eléctrico de 4 paneles aislados de 2.92 × 0.57 m (2.27 m de alto, 4 cm sobre el dintel), detrás del vano; sube por guías laterales y se acuesta bajo el techo nuevo (curva de 12 cm, guía horizontal a 2.40 m, bajo las vigas a 2.44 m). Motor de techo con riel al centro y fotoceldas de seguridad a 15 cm del piso. No invade la banqueta al abrir"
+    }
+   }
+  ]
  }
 }

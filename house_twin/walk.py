@@ -80,6 +80,12 @@ def doors(facts: dict) -> list[dict]:
     spaces = {s['id']: s for s in facts['spaces']}
     result = []
     for o in facts['openings']:
+        if o['kind'] == 'door' and o.get('lift'):  # seccional: los paneles suben por su trayectoria (house_twin/lift.py)
+            lift = o['lift']
+            (x0, x1), y0 = lift['x'], lift['y']
+            result.append({'id': o['id'], 'lift': {k: lift[k] for k in ('y', 'panels', 'panel_m', 'track')},
+                           'leaves': [{'hinge': [x0, y0], 'latch': [x1, y0], 'opens_toward': [0.0, 0.0], 'assumed': False}]})
+            continue
         if o['kind'] == 'door' and o.get('slide'):
             (ax, ay), (bx, by) = o['slide']['line']
             result.append({'id': o['id'], 'slide': o['slide']['travel'],
