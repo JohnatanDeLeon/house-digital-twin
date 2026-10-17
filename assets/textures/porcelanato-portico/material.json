@@ -1,0 +1,74 @@
+{
+ "name": "porcelanato-portico",
+ "applies_to": {
+  "variant": "fachada-moderna",
+  "source": "propuesta fachada-moderna (Claude, 2026-10-17): piso del pórtico, en lugar del concreto"
+ },
+ "kind": "procedural",
+ "tileable": true,
+ "variant_applies_to": {
+  "spaces": [
+   "S11"
+  ],
+  "surface": "piso",
+  "replaces": [
+   "piso-exterior"
+  ]
+ },
+ "size_m": {
+  "width": 1.206,
+  "height": 1.206,
+  "source": "2 × 2 piezas de 60 cm con su junta"
+ },
+ "px_per_m": 600,
+ "size_px": [
+  724,
+  724
+ ],
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)"
+ },
+ "glass_material": null,
+ "source": {
+  "method": "procedural",
+  "seed": 59,
+  "references": []
+ },
+ "parameters": {
+  "tile": {
+   "length_m": 0.6,
+   "height_m": 0.6,
+   "joint_m": 0.003,
+   "bevel_m": 0.002,
+   "relief_mm": 0.2,
+   "joint_depth_mm": 0.8,
+   "bond": "stack",
+   "note": "porcelanato de 60 × 60 cm"
+  },
+  "color": {
+   "tile_srgb": [
+    196,
+    194,
+    188
+   ],
+   "joint_srgb": [
+    150,
+    148,
+    142
+   ],
+   "tile_variation": 0.03,
+   "note": "gris cemento claro, propuesto"
+  },
+  "roughness": {
+   "tile": 0.6,
+   "joint": 0.9,
+   "note": "mate antiderrapante (exterior)"
+  }
+ },
+ "observed": {},
+ "assumptions": [
+  "material propuesto: pieza y color comerciales, sin medir"
+ ]
+}

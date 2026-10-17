@@ -17,6 +17,10 @@ Gemelo digital de una casa (Casa Jonhy). Código en inglés, comentarios y docum
   (`kitchen`, `laundry`). `variants.variant_facts` arma los hechos propuestos sobre una copia: `build` los escribe
   en `data/facts/variants/<id>.facts.json` y el IFC en `models/variants/<id>.ifc`; `scene` le hace su propio modelo
   (`casa-<id>.js`) y el recorrido lo carga al elegirla en el selector «Versión» (`#<id>` en la página).
+  Acabados propios de una propuesta: material con `applies_to.variant` y `variant_applies_to` (espacios o `calle`,
+  `up_to_m`, `region_m`, `replaces`); la casa no los toma. `own_model` da modelo propio a una variante que solo cambia
+  acabados; `specs.extras` agrega piezas sueltas (`house_twin/extras.py`). Puertas corredizas: `slide` en el vano
+  (`house_twin/sliding.py`) en vez de `swing`.
 - Las propuestas no sustituyen la validación estructural ni normativa de un profesional.
 
 ## Flujo

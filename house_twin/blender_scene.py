@@ -358,7 +358,10 @@ class Scene:
             obj.data.materials.clear()
             obj.data.materials.append(mat)
             return
-        write_uvs(obj, fit='unit', front=self._front(obj, self.finishes.viewed_from(oid)), axis=self._latch_axis(oid, parts))
+        if self.specs.get(parts.get('leaf'), {}).get('tileable'):  # hoja de un material continuo (paneles de un portón
+            write_uvs(obj)                                            # seccional): en metros, como sus demás paneles
+        else:
+            write_uvs(obj, fit='unit', front=self._front(obj, self.finishes.viewed_from(oid)), axis=self._latch_axis(oid, parts))
         if 'leaf' not in parts:
             self.unknown.add(f'{obj.name}: sin textura de hoja')
         self._set(obj, [parts.get('leaf', 'sin-dato')] * len(obj.data.polygons))

@@ -1,0 +1,60 @@
+{
+ "name": "multipanel-gris",
+ "applies_to": {
+  "variant": "fachada-moderna",
+  "source": "propuesta fachada-moderna (Claude, 2026-10-17): techo de la cochera"
+ },
+ "kind": "procedural",
+ "tileable": true,
+ "size_m": {
+  "width": 1.0,
+  "height": 1.0,
+  "source": "4 nervaduras de 25 cm: se repite sin costura"
+ },
+ "px_per_m": 400,
+ "size_px": [
+  400,
+  400
+ ],
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)"
+ },
+ "glass_material": null,
+ "source": {
+  "method": "procedural",
+  "seed": 71,
+  "references": []
+ },
+ "parameters": {
+  "slats": {
+   "orientation": "vertical",
+   "pitch_m": 0.25,
+   "gap_m": 0.03,
+   "relief_mm": 6,
+   "round_m": 0.01,
+   "see_through": false,
+   "gap_shade": 0.85,
+   "note": "nervadura trapezoidal de la lámina"
+  },
+  "color": {
+   "srgb": [
+    208,
+    210,
+    211
+   ],
+   "tone_variation": 0.0,
+   "note": "gris claro de fábrica, propuesto"
+  },
+  "roughness": {
+   "base": 0.55,
+   "gap": 0.6,
+   "note": "lámina prepintada"
+  }
+ },
+ "observed": {},
+ "assumptions": [
+  "material propuesto: panel comercial, sin medir"
+ ]
+}

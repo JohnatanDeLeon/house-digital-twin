@@ -1,0 +1,26 @@
+{
+ "_doc": "Policarbonato celular satinado de 10 mm para la franja del techo de la cochera frente a las ventanas de la cocina: deja pasar la luz difusa (propuesta). Material propuesto, sin foto. Regenerar con: python -m house_twin.cli texture sources/texturas/policarbonato-satinado.json",
+ "name": "policarbonato-satinado",
+ "kind": "constant",
+ "applies_to": {
+  "variant": "fachada-moderna",
+  "source": "propuesta fachada-moderna (Claude, 2026-10-17): franja translúcida del techo de la cochera"
+ },
+ "pbr": {
+  "basecolor_srgb": [
+   232,
+   236,
+   238
+  ],
+  "metallic": 0.0,
+  "roughness": 0.45,
+  "transmission": 0.7,
+  "ior": 1.58,
+  "thickness_mm": 10,
+  "viewer_opacity": 0.45,
+  "note": "policarbonato celular satinado: difunde la luz"
+ },
+ "assumptions": [
+  "material propuesto: translucidez común, sin medir"
+ ]
+}
