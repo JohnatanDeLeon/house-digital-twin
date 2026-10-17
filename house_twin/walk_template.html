@@ -267,7 +267,7 @@ function constantMaterial(pbr) {
   const m = new THREE.MeshStandardMaterial({
     color: linearColor(pbr.basecolor_srgb), roughness: pbr.roughness ?? 0.5, metalness,
     envMap: metalness > 0 ? metalEnvironment() : null, envMapIntensity: 0.9,
-    transparent: glass, opacity: glass ? 0.28 : 1, side: glass ? THREE.DoubleSide : THREE.FrontSide,
+    transparent: glass, opacity: glass ? (pbr.viewer_opacity ?? 0.28) : 1,  // esmerilado: menos transparente side: glass ? THREE.DoubleSide : THREE.FrontSide,
   });
   if (pbr.emission_srgb && pbr.always_on) {  // luz de un aparato (teclado, LED): siempre encendida
     m.emissive = linearColor(pbr.emission_srgb);
@@ -465,6 +465,16 @@ function setupDoors() {
   for (const d of DATA.doors || []) {
     const meshes = doorMeshes[d.id] || [];
     if (!meshes.length) continue;
+    if (d.slide) {  // corrediza: la hoja y su herraje se deslizan juntos; el riel (`riel-<id>`) se queda
+      const group = new THREE.Group();
+      scene.add(group);
+      group.updateMatrixWorld(true);
+      for (const m of meshes) group.attach(m.mesh);
+      const [l] = d.leaves;
+      doors.push({ id: d.id, label: d.label, slide: d.slide, group, leaves: [{ hinge: l.hinge, latch: l.latch }],
+                   centre: [(l.hinge[0] + l.latch[0]) / 2, (l.hinge[1] + l.latch[1]) / 2], open: false, angle: 0 });
+      continue;
+    }
     const leaves = d.leaves.map((leaf, i) => {
       const pivot = new THREE.Group();
       pivot.position.copy(toThree(leaf.hinge[0], leaf.hinge[1], 0));
@@ -488,6 +498,11 @@ function segmentDistance([px, py], [ax, ay], [bx, by]) {
 // ¿la hoja barrería al jugador? Al abrir, el cuarto de círculo del lado al que abre; al cerrar, la hoja cerrada.
 function inTheWay(door) {
   const p = modelXY();
+  if (door.slide) {  // corrediza: estorba si el jugador está pegado a la hoja, cerrada o abierta
+    const [dx, dy] = door.slide, [l] = door.leaves;
+    const shifted = [[l.hinge[0] + dx, l.hinge[1] + dy], [l.latch[0] + dx, l.latch[1] + dy]];
+    return segmentDistance(p, l.hinge, l.latch) < RADIUS + 0.02 || segmentDistance(p, ...shifted) < RADIUS + 0.02;
+  }
   return door.leaves.some(l => {
     if (door.open) return segmentDistance(p, l.hinge, l.latch) < RADIUS + 0.05;
     const r = Math.hypot(p[0] - l.hinge[0], p[1] - l.hinge[1]);
@@ -516,6 +531,12 @@ function animateDoors(dt) {
     const step = DOOR_SPEED * dt;
     d.angle = Math.abs(target - d.angle) <= step ? target : d.angle + Math.sign(target - d.angle) * step;
     const eased = DOOR_OPEN * (1 - Math.cos(Math.PI * d.angle / DOOR_OPEN)) / 2;
+    if (d.slide) {  // misma curva que el giro, como fracción del recorrido
+      const f = eased / DOOR_OPEN;
+      d.group.position.set(d.slide[0] * f, 0, -d.slide[1] * f);
+      d.group.updateMatrixWorld(true);
+      continue;
+    }
     for (const l of d.leaves) { l.pivot.rotation.y = l.sign * eased; l.pivot.updateMatrixWorld(true); }
   }
 }
