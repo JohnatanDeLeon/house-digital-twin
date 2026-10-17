@@ -404,6 +404,39 @@ def procedural_stucco(spec: dict, size_px: tuple[int, int]) -> tuple[Image.Image
     return _to_image(lin), height, roughness
 
 
+def procedural_subway_tile(spec: dict, size_px: tuple[int, int]) -> tuple[Image.Image, np.ndarray, np.ndarray]:
+    """Azulejo tipo metro a junta corrida (cada hilada desplazada medio azulejo), con canto biselado y junta hundida.
+
+    Para un acabado propuesto, sin foto: piezas y junta de medidas comerciales. El tamaño de la textura debe ser
+    múltiplo del paso (pieza + junta) a lo ancho y de 2 hiladas a lo alto, para que se repita sin costura.
+    """
+    rng = np.random.default_rng(spec['seed'])
+    px_per_m = spec['px_per_m']
+    w, h = size_px
+    t = spec['tile']
+    pitch_u, pitch_v = (t['length_m'] + t['joint_m']) * px_per_m, (t['height_m'] + t['joint_m']) * px_per_m
+    joint, bevel = t['joint_m'] * px_per_m, t['bevel_m'] * px_per_m
+    yy, xx = np.mgrid[0:h, 0:w].astype(float)
+    row = np.floor(yy / pitch_v)
+    xs = xx + (row % 2) * pitch_u / 2  # junta corrida
+    col = np.floor(xs / pitch_u)
+    du = np.minimum(xs - col * pitch_u, (col + 1) * pitch_u - joint - xs)  # distancia al canto, dentro de la pieza
+    dv = np.minimum(yy - row * pitch_v, (row + 1) * pitch_v - joint - yy)
+    inside = (du >= 0) & (dv >= 0)
+    edge = np.clip(np.minimum(du, dv) / max(bevel, 1e-6), 0, 1)
+    height = np.where(inside, (np.sin(edge * np.pi / 2) * t['relief_mm']) / 1000, -t['joint_depth_mm'] / 1000)
+    # cada pieza con un tono apenas distinto (lotes de esmalte), y la junta gris
+    n_cols = int(round(w / pitch_u)) + 1
+    tone = rng.normal(0, spec['color']['tile_variation'], size=(int(round(h / pitch_v)) + 1, n_cols + 1))
+    tile_tone = tone[row.astype(int) % tone.shape[0], col.astype(int) % n_cols]
+    tile = _srgb_to_linear(np.array(spec['color']['tile_srgb'], float) / 255)
+    grout = _srgb_to_linear(np.array(spec['color']['joint_srgb'], float) / 255)
+    lin = np.where(inside[..., None], tile[None, None, :] * (1 + tile_tone[..., None]) * (0.94 + 0.06 * edge[..., None]),
+                   grout[None, None, :])
+    roughness = np.where(inside, spec['roughness']['tile'], spec['roughness']['joint'])
+    return _to_image(np.clip(lin, 0, 1)), height, roughness
+
+
 def _blur(field: np.ndarray, sigma_px: float) -> np.ndarray:
     """Difuminado gaussiano con el borde extendido (la superficie no se repite, a diferencia del estuco)."""
     if sigma_px <= 0:
@@ -570,6 +603,10 @@ def build_procedural(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
         base, height, roughness = procedural_stucco(spec, size_px)
         alpha = None
         parameters = {k: spec[k] for k in ('plates', 'grain', 'color', 'roughness')}
+    elif spec['generator'] == 'subway_tile':
+        base, height, roughness = procedural_subway_tile(spec, size_px)
+        alpha = None
+        parameters = {k: spec[k] for k in ('tile', 'color', 'roughness')}
     elif spec['generator'] == 'sheet_door':
         if 'srgb' in spec['color']:  # colores declarados (una propuesta, o tomados de otra medición), no medidos en esta foto
             colors, gain = spec['color']['srgb'], None
@@ -593,6 +630,7 @@ def build_procedural(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
         maps['opacity'] = 'opacity.png (0 = hueco)'
     material = {
         'name': spec['name'], 'applies_to': spec['applies_to'], 'kind': 'procedural', 'tileable': spec['tileable'],
+        **({'variant_applies_to': spec['variant_applies_to']} if 'variant_applies_to' in spec else {}),
         'size_m': spec['size_m'], 'px_per_m': px_per_m, 'size_px': list(size_px), 'maps': maps,
         'glass_material': spec.get('opacity', {}).get('glass_material'), 'source': source, 'parameters': parameters,
         'observed': spec.get('observed', {}), 'assumptions': spec.get('assumptions', []),

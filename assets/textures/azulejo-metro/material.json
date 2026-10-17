@@ -1,0 +1,96 @@
+{
+ "name": "azulejo-metro",
+ "applies_to": {
+  "variant": "cocina-en-u",
+  "source": "propuesta cocina-en-u (Claude, 2026-10-17): salpicadero de la lavandería, del piso a 1.55 m (debajo de las alacenas y del calentador) en el muro del fondo"
+ },
+ "kind": "procedural",
+ "tileable": true,
+ "variant_applies_to": {
+  "spaces": [
+   "S13"
+  ],
+  "surface": "muros",
+  "up_to_m": {
+   "S13": [
+    0.0,
+    1.55
+   ]
+  },
+  "region_m": {
+   "S13": [
+    [
+     2.55,
+     10.225
+    ],
+    [
+     2.82,
+     10.225
+    ],
+    [
+     2.82,
+     12.625
+    ],
+    [
+     2.55,
+     12.625
+    ]
+   ]
+  }
+ },
+ "size_m": {
+  "width": 0.604,
+  "height": 0.616,
+  "source": "2 piezas de 30 cm a lo ancho y 8 hiladas de 7.5 cm, con su junta: se repite sin costura"
+ },
+ "px_per_m": 1000,
+ "size_px": [
+  604,
+  616
+ ],
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)"
+ },
+ "glass_material": null,
+ "source": {
+  "method": "procedural",
+  "seed": 31,
+  "references": []
+ },
+ "parameters": {
+  "tile": {
+   "length_m": 0.3,
+   "height_m": 0.075,
+   "joint_m": 0.002,
+   "bevel_m": 0.004,
+   "relief_mm": 0.6,
+   "joint_depth_mm": 1.0,
+   "note": "pieza comercial de 7.5 × 30 cm con canto biselado; junta de 2 mm"
+  },
+  "color": {
+   "tile_srgb": [
+    240,
+    240,
+    236
+   ],
+   "joint_srgb": [
+    150,
+    150,
+    146
+   ],
+   "tile_variation": 0.015,
+   "note": "esmalte blanco y junta gris cemento, como en las referencias de lavanderías modernas"
+  },
+  "roughness": {
+   "tile": 0.12,
+   "joint": 0.85,
+   "note": "esmalte brillante; junta mate"
+  }
+ },
+ "observed": {},
+ "assumptions": [
+  "material propuesto: pieza, junta y colores comerciales, sin medir"
+ ]
+}
