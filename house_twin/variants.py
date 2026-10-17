@@ -9,7 +9,10 @@ Una variante nunca toca los hechos ni `models/existing.*`: describe cambios por 
   (`update_materials`: `name` y su nueva `region_m`, p. ej. el azulejo de una cocina reubicada). `variant_facts` aplica todo sobre una copia de los
   hechos: esos son los hechos *propuestos*, con los que se arma el IFC de la variante.
 - `specs`: especificaciones propias de la variante (`kitchen`, `laundry`), en `variants/<id>/`, que reemplazan a las
-  de `sources/` solo en la propuesta.
+  de `sources/` solo en la propuesta; `extras` agrega piezas sueltas (cajas, `house_twin/extras.py`).
+- Acabados propios: un material con `applies_to.variant` y `variant_applies_to` (espacios, `calle`, franjas, zonas)
+  solo cubre muros o pisos en esa propuesta; con `replaces` le quita esos espacios a los acabados de la casa. Una
+  variante que solo cambia acabados de muros declara `own_model` para tener su propio modelo 3D.
 
 El IFC de cada variante va en `models/variants/<id>.ifc` y el recorrido las ofrece en un selector junto a la casa
 actual; una variante con geometría lleva además su propio modelo 3D.
@@ -23,7 +26,7 @@ from house_twin.finishes import Finishes
 ROOT = Path(__file__).resolve().parent.parent
 VARIANTS_DIR = ROOT / 'variants'
 PARTS = ('leaf', 'frame', 'glass')
-SPEC_KINDS = ('kitchen', 'laundry')
+SPEC_KINDS = ('kitchen', 'laundry', 'extras')
 
 
 def load_variants(folder: Path = VARIANTS_DIR) -> list[dict]:
@@ -31,7 +34,9 @@ def load_variants(folder: Path = VARIANTS_DIR) -> list[dict]:
 
 
 def has_geometry(variant: dict) -> bool:
-    return bool(variant.get('geometry')) or bool(variant.get('specs'))
+    """¿Necesita su propio modelo 3D? Sí si cambia geometría, muebles o acabados de muros y pisos (`own_model`); los
+    cambios de hoja de un vano se aplican sobre el modelo de la casa."""
+    return bool(variant.get('geometry')) or bool(variant.get('specs')) or bool(variant.get('own_model'))
 
 
 def _merge_by_id(items: list[dict], updates: list[dict], what: str) -> list[str]:
@@ -86,7 +91,13 @@ def variant_materials(materials: dict[str, dict], variant: dict) -> dict[str, di
         return materials
     result = copy.deepcopy(materials)
     for name in own:
-        result[name]['applies_to'] = {**result[name]['applies_to'], **result[name]['variant_applies_to']}
+        own_to = dict(result[name]['variant_applies_to'])
+        for replaced in own_to.pop('replaces', []):  # acabados de la casa que la propuesta sustituye en sus espacios
+            a = result[replaced]['applies_to']
+            a['spaces'] = [s for s in a.get('spaces', []) if s not in own_to.get('spaces', [])]
+            if own_to.get('street_facade'):
+                a.pop('street_facade', None)
+        result[name]['applies_to'] = {**result[name]['applies_to'], **own_to}
     for update in updates:
         result[update['name']]['applies_to']['region_m'] = update['region_m']
     return result

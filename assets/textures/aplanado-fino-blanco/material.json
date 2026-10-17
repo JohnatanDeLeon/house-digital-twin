@@ -1,0 +1,71 @@
+{
+ "name": "aplanado-fino-blanco",
+ "applies_to": {
+  "variant": "fachada-moderna",
+  "source": "propuesta fachada-moderna (Claude, 2026-10-17): muros de la fachada y del pórtico, en lugar del estuco rugoso"
+ },
+ "kind": "procedural",
+ "tileable": true,
+ "variant_applies_to": {
+  "spaces": [
+   "S11"
+  ],
+  "surface": "muros exteriores",
+  "street_facade": true,
+  "replaces": [
+   "estuco-fachada"
+  ]
+ },
+ "size_m": {
+  "width": 0.5,
+  "height": 0.5,
+  "source": "repetición sin costura; el grano (≈ 1 mm) no se nota repetido"
+ },
+ "px_per_m": 2000,
+ "size_px": [
+  1000,
+  1000
+ ],
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)"
+ },
+ "glass_material": null,
+ "source": {
+  "method": "procedural",
+  "seed": 41,
+  "references": []
+ },
+ "parameters": {
+  "plates": {
+   "size_m": 0.02,
+   "coverage": 0.2,
+   "edge_softness": 0.5,
+   "height_mm": 0.3,
+   "note": "marcas suaves de la llana: casi liso"
+  },
+  "grain": {
+   "size_m": 0.0008,
+   "height_mm": 0.08,
+   "note": "arena fina del aplanado"
+  },
+  "color": {
+   "albedo_srgb": [
+    236,
+    232,
+    224
+   ],
+   "crevice_darkening": 0.03,
+   "note": "blanco cálido (tipo «blanco ostión»), propuesto"
+  },
+  "roughness": {
+   "base": 0.88,
+   "note": "pintura elastomérica mate"
+  }
+ },
+ "observed": {},
+ "assumptions": [
+  "material propuesto: color y relieve comunes, sin medir"
+ ]
+}

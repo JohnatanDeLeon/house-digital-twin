@@ -1,0 +1,97 @@
+{
+ "name": "zoclo-porcelanato-grafito",
+ "applies_to": {
+  "variant": "fachada-moderna",
+  "source": "propuesta fachada-moderna (Claude, 2026-10-17): zócalo de 0.60 m (2 hiladas) en toda la fachada"
+ },
+ "kind": "procedural",
+ "tileable": true,
+ "variant_applies_to": {
+  "spaces": [
+   "calle"
+  ],
+  "surface": "muros exteriores",
+  "up_to_m": {
+   "calle": [
+    0.0,
+    0.6
+   ]
+  },
+  "region_m": {
+   "calle": [
+    [
+     0.0,
+     -0.6
+    ],
+    [
+     10.03,
+     -0.6
+    ],
+    [
+     10.03,
+     0.05
+    ],
+    [
+     0.0,
+     0.05
+    ]
+   ]
+  }
+ },
+ "size_m": {
+  "width": 1.206,
+  "height": 0.606,
+  "source": "2 piezas de 60 cm a lo ancho y 2 hiladas de 30 cm, con su junta"
+ },
+ "px_per_m": 800,
+ "size_px": [
+  965,
+  485
+ ],
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)"
+ },
+ "glass_material": null,
+ "source": {
+  "method": "procedural",
+  "seed": 53,
+  "references": []
+ },
+ "parameters": {
+  "tile": {
+   "length_m": 0.6,
+   "height_m": 0.3,
+   "joint_m": 0.003,
+   "bevel_m": 0.002,
+   "relief_mm": 0.3,
+   "joint_depth_mm": 1.0,
+   "bond": "stack",
+   "note": "porcelanato de 60 × 30 cm"
+  },
+  "color": {
+   "tile_srgb": [
+    64,
+    66,
+    68
+   ],
+   "joint_srgb": [
+    40,
+    40,
+    42
+   ],
+   "tile_variation": 0.04,
+   "note": "gris piedra oscuro, propuesto"
+  },
+  "roughness": {
+   "tile": 0.7,
+   "joint": 0.9,
+   "note": "acabado mate antiderrapante"
+  }
+ },
+ "observed": {},
+ "assumptions": [
+  "material propuesto: pieza y color comerciales, sin medir"
+ ]
+}

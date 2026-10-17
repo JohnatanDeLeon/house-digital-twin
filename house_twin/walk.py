@@ -174,7 +174,7 @@ def _variant_entry(variant: dict, facts: dict, model: dict | None) -> dict:
     target = variant.get('focus_opening') or next((c['opening'] for c in variant.get('changes', [])), None)
     entry = {'id': variant['id'], 'name': variant['name'], 'description': variant['description'],
              'disclaimer': variant.get('disclaimer'), 'overrides': opening_overrides(variant),
-             'focus': focus(house, target) if target else None}
+             'focus': variant.get('focus') or (focus(house, target) if target else None)}  # `focus`: punto de vista declarado
     if model is not None:
         entry.update(model=f"casa-{variant['id']}.js", house=house_data(house, model['doors'], model['items']))
     return entry

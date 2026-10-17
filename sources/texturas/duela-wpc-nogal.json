@@ -1,0 +1,82 @@
+{
+ "_doc": "Revestimiento de duela de WPC (madera plástica) color nogal, en tablas verticales de 15 cm con junta hundida: el marco de la entrada en la propuesta. SINTÉTICO. Regenerar con: python -m house_twin.cli texture sources/texturas/duela-wpc-nogal.json",
+ "name": "duela-wpc-nogal",
+ "kind": "procedural",
+ "generator": "slats",
+ "tileable": true,
+ "applies_to": {
+  "variant": "fachada-moderna",
+  "source": "propuesta fachada-moderna (Claude, 2026-10-17): entre las 2 ventanas del pórtico, alrededor de la reja peatonal (x = 4.92–6.39 m), sobre el zócalo"
+ },
+ "variant_applies_to": {
+  "spaces": [
+   "calle"
+  ],
+  "surface": "muros exteriores",
+  "up_to_m": {
+   "calle": [
+    0.6,
+    3.0
+   ]
+  },
+  "region_m": {
+   "calle": [
+    [
+     4.92,
+     -0.6
+    ],
+    [
+     6.39,
+     -0.6
+    ],
+    [
+     6.39,
+     0.05
+    ],
+    [
+     4.92,
+     0.05
+    ]
+   ]
+  }
+ },
+ "seed": 47,
+ "size_m": {
+  "width": 0.6,
+  "height": 0.6,
+  "source": "4 tablas de 15 cm: se repite sin costura"
+ },
+ "px_per_m": 1000,
+ "slats": {
+  "orientation": "vertical",
+  "pitch_m": 0.15,
+  "gap_m": 0.008,
+  "relief_mm": 3,
+  "round_m": 0.003,
+  "see_through": false,
+  "gap_shade": 0.3,
+  "note": "tabla de WPC de 15 cm con junta de 8 mm (medida comercial)"
+ },
+ "color": {
+  "srgb": [
+   146,
+   100,
+   64
+  ],
+  "tone_variation": 0.05,
+  "grain": {
+   "scale_m": 0.0018,
+   "strength": 0.07,
+   "wobble": 1.2
+  },
+  "note": "nogal, propuesto"
+ },
+ "roughness": {
+  "base": 0.62,
+  "gap": 0.9,
+  "note": "WPC con textura de veta, satinado"
+ },
+ "assumptions": [
+  "material propuesto: tabla, junta y color comerciales, sin medir"
+ ]
+}

@@ -204,3 +204,43 @@ def test_remodel_laundry_layout_is_workable(dxf_facts):
     counter_top = box['lavanderia-barra-cubierta-1'][1][2]
     uppers_bottom = min(box[k][0][2] for k in run if '-alto-' in k)
     assert all(counter_top < d['z'] < uppers_bottom for d in spec['devices'])
+
+
+def _facade():
+    return next(v for v in load_variants() if v['id'] == 'fachada-moderna')
+
+
+def test_facade_remodel_zones_without_touching_the_house(dxf_facts):
+    """La fachada moderna reparte la cara de la calle en zonas (zócalo, marco de duela en la entrada, volumen de
+    microcemento, aplanado fino) y cambia el pórtico; la casa actual conserva su estuco y su piso."""
+    from house_twin.finishes import Finishes, load_materials
+    from house_twin.variants import has_geometry, variant_materials
+    materials = load_materials(ROOT / 'assets' / 'textures')
+    variant = _facade()
+    proposed, today = Finishes(dxf_facts, variant_materials(materials, variant)), Finishes(dxf_facts, materials)
+    expect = {(0.3, 4.0): 'zoclo-porcelanato-grafito', (1.5, 5.5): 'duela-wpc-nogal', (1.5, 9.0): 'microcemento-grafito',
+              (1.5, 4.0): 'aplanado-fino-blanco'}
+    for (z, x), name in expect.items():
+        assert proposed.wall_finish('calle', z, (x, -0.05)) == name
+        assert today.wall_finish('calle', z, (x, -0.05)) == 'estuco-fachada'
+    assert proposed.floor('S11') == 'porcelanato-portico' and today.floor('S11') == 'piso-exterior'
+    assert has_geometry(variant) and not validate(variant, dxf_facts, materials)
+
+
+def test_facade_remodel_uses_only_new_textures():
+    """Ninguna textura de la propuesta es de la casa: todas son materiales propios de la variante."""
+    from house_twin.finishes import load_materials
+    materials = load_materials(ROOT / 'assets' / 'textures')
+    variant = _facade()
+    own = {n for n, m in materials.items() if m['applies_to'].get('variant') == variant['id']}
+    assert {c['material'] for c in variant['changes']} <= own and len(own) >= 9
+
+
+def test_facade_coping_covers_the_slab_edge():
+    """El remate tapa el canto de la losa (2.60–2.70 m) y sale a lo más 2 cm sobre la línea de la calle (y = 0)."""
+    import json
+    from house_twin.extras import extras_parts
+    spec = json.loads((ROOT / _facade()['specs']['extras']).read_text())
+    (cap,) = [p for p in extras_parts(spec) if p['id'] == 'fachada-remate']
+    xs, ys, zs = zip(*cap['mesh'][0])
+    assert min(zs) <= 2.6 and max(zs) >= 2.7 and min(ys) >= -0.02 - 1e-9 and min(xs) <= 3.24 and max(xs) >= 10.03

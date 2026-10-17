@@ -1,0 +1,43 @@
+{
+ "id": "fachada-moderna",
+ "name": "Fachada moderna",
+ "kind": "remodelación",
+ "description": "La fachada cambia de estuco rugoso con herrería de aros a una composición limpia: aplanado fino blanco, zócalo de porcelanato grafito, la entrada enmarcada en duela de WPC nogal y el volumen de la bodega en microcemento grafito. Portón y reja de lamas horizontales de aluminio negro, celosías verticales en las aberturas del pórtico piso de porcelanato en el pórtico y un remate negro que limpia el borde de la azotea.",
+ "disclaimer": "Propuesta: materiales y colores comerciales, sin medir; los cambios no alteran muros, vanos ni la línea de la calle.",
+ "own_model": true,
+ "focus": {
+  "at": [
+   5.0,
+   -7.5
+  ],
+  "facing": [
+   0.0,
+   1.0
+  ]
+ },
+ "changes": [
+  {
+   "opening": "D12",
+   "part": "leaf",
+   "material": "porton-duela-negra"
+  },
+  {
+   "opening": "D01",
+   "part": "leaf",
+   "material": "reja-duela-negra"
+  },
+  {
+   "opening": "V11",
+   "part": "leaf",
+   "material": "celosia-v11"
+  },
+  {
+   "opening": "V12",
+   "part": "leaf",
+   "material": "celosia-v12"
+  }
+ ],
+ "specs": {
+  "extras": "variants/fachada-moderna/remates.json"
+ }
+}

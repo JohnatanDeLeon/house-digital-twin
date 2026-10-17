@@ -405,7 +405,8 @@ def procedural_stucco(spec: dict, size_px: tuple[int, int]) -> tuple[Image.Image
 
 
 def procedural_subway_tile(spec: dict, size_px: tuple[int, int]) -> tuple[Image.Image, np.ndarray, np.ndarray]:
-    """Azulejo tipo metro a junta corrida (cada hilada desplazada medio azulejo), con canto biselado y junta hundida.
+    """Azulejo tipo metro a junta corrida (cada hilada desplazada medio azulejo; `bond: stack` la alinea, como un
+    porcelanato a hueso), con canto biselado y junta hundida.
 
     Para un acabado propuesto, sin foto: piezas y junta de medidas comerciales. El tamaño de la textura debe ser
     múltiplo del paso (pieza + junta) a lo ancho y de 2 hiladas a lo alto, para que se repita sin costura.
@@ -418,7 +419,7 @@ def procedural_subway_tile(spec: dict, size_px: tuple[int, int]) -> tuple[Image.
     joint, bevel = t['joint_m'] * px_per_m, t['bevel_m'] * px_per_m
     yy, xx = np.mgrid[0:h, 0:w].astype(float)
     row = np.floor(yy / pitch_v)
-    xs = xx + (row % 2) * pitch_u / 2  # junta corrida
+    xs = xx + (row % 2) * pitch_u / 2 * (t.get('bond', 'running') == 'running')  # junta corrida (o a hueso: `stack`)
     col = np.floor(xs / pitch_u)
     du = np.minimum(xs - col * pitch_u, (col + 1) * pitch_u - joint - xs)  # distancia al canto, dentro de la pieza
     dv = np.minimum(yy - row * pitch_v, (row + 1) * pitch_v - joint - yy)
@@ -435,6 +436,54 @@ def procedural_subway_tile(spec: dict, size_px: tuple[int, int]) -> tuple[Image.
                    grout[None, None, :])
     roughness = np.where(inside, spec['roughness']['tile'], spec['roughness']['joint'])
     return _to_image(np.clip(lin, 0, 1)), height, roughness
+
+
+def procedural_slats(spec: dict, size_px: tuple[int, int]):
+    """Duelas o lamas paralelas (`orientation`: horizontal o vertical), con marco perimetral opcional.
+
+    Para acabados propuestos sin foto: revestimiento de duela (veta con `color.grain`), portón o reja de lamas de
+    aluminio, celosía. Con `see_through`, la ranura entre lamas es hueco (opacidad 0) y el marco queda opaco; si no,
+    la ranura es una junta hundida. Devuelve color base, altura (m), rugosidad y opacidad (o None).
+    """
+    rng = np.random.default_rng(spec['seed'])
+    px_per_m = spec['px_per_m']
+    w, h = size_px
+    sl, c = spec['slats'], spec['color']
+    yy, xx = np.mgrid[0:h, 0:w].astype(float)
+    across = yy if sl['orientation'] == 'horizontal' else xx  # cruza las lamas
+    frame = sl.get('frame_m', 0) * px_per_m
+    in_frame = np.minimum.reduce([xx, w - 1 - xx, yy, h - 1 - yy]) < frame
+    pitch, gap = sl['pitch_m'] * px_per_m, sl['gap_m'] * px_per_m
+    offset = across - frame if frame else across
+    k = np.floor(offset / pitch)
+    pos = offset - k * pitch  # dentro de la lama: 0 … pitch
+    in_gap = pos >= pitch - gap
+    edge = np.clip(np.minimum(pos, pitch - gap - pos) / max(sl.get('round_m', 0.002) * px_per_m, 1e-6), 0, 1)
+    height = np.where(in_gap, -sl['relief_mm'] / 1000, np.sin(edge * np.pi / 2) * sl['relief_mm'] / 1000)
+    base = _srgb_to_linear(np.array(c['srgb'], float) / 255)
+    n_slats = int(np.ceil(max(w, h) / pitch)) + 2
+    tone = 1 + rng.normal(0, c.get('tone_variation', 0.0), n_slats)[np.clip(k.astype(int), 0, n_slats - 1)]
+    shade = tone * (0.9 + 0.1 * edge)
+    grain = c.get('grain')
+    if grain:  # veta: rayas finas a lo largo de cada duela, desfasadas por duela, más algo de nudo suave
+        scale = grain['scale_m'] * px_per_m
+        phase = rng.uniform(0, 2 * np.pi, n_slats)[np.clip(k.astype(int), 0, n_slats - 1)]
+        wobble = _periodic_noise((h, w), scale * 8, rng) * grain.get('wobble', 3.0)
+        streak = np.sin((pos + wobble) / max(scale, 1e-6) * 2 * np.pi / 3 + phase)  # `wobble` es periódico: se repite sin costura
+        shade = shade * (1 + grain['strength'] * streak)
+    lin = base[None, None, :] * shade[..., None]
+    if frame:
+        lin = np.where(in_frame[..., None], _srgb_to_linear(np.array(c.get('frame_srgb', c['srgb']), float) / 255)[None, None, :], lin)
+        height = np.where(in_frame, sl['relief_mm'] / 1000, height)
+    rough = spec['roughness']
+    roughness = np.where(in_gap & ~in_frame, rough.get('gap', rough['base']), rough['base'])
+    alpha = None
+    if sl.get('see_through'):
+        alpha = np.where(in_gap & ~in_frame, 0.0, 1.0)
+        lin = np.where((in_gap & ~in_frame)[..., None], lin * 0.4, lin)
+    else:
+        lin = np.where((in_gap & ~in_frame)[..., None], lin * sl.get('gap_shade', 0.35), lin)
+    return _to_image(np.clip(lin, 0, 1)), height, roughness, alpha
 
 
 def _blur(field: np.ndarray, sigma_px: float) -> np.ndarray:
@@ -603,6 +652,9 @@ def build_procedural(spec: dict, out: Path, photos_root: Path = ROOT) -> Path:
         base, height, roughness = procedural_stucco(spec, size_px)
         alpha = None
         parameters = {k: spec[k] for k in ('plates', 'grain', 'color', 'roughness')}
+    elif spec['generator'] == 'slats':
+        base, height, roughness, alpha = procedural_slats(spec, size_px)
+        parameters = {k: spec[k] for k in ('slats', 'color', 'roughness')}
     elif spec['generator'] == 'subway_tile':
         base, height, roughness = procedural_subway_tile(spec, size_px)
         alpha = None
