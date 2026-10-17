@@ -17,6 +17,11 @@ BLEND_PATH = ROOT / 'models' / 'existing.blend'
 RENDERS_DIR = ROOT / 'docs' / 'analysis' / '05-renders'
 WALK_DIR = ROOT / 'docs' / 'viewer' / 'recorrido'
 GLB_PATH = ROOT / 'models' / 'existing.glb'
+VARIANT_FACTS_DIR = ROOT / 'data' / 'facts' / 'variants'
+
+
+def variant_facts_path(variant: dict) -> Path:
+    return VARIANT_FACTS_DIR / f"{variant['id']}.facts.json"
 
 
 def _load_drawing(source: Path):
@@ -48,7 +53,8 @@ def build(source: Path):
     from house_twin.lighting import load_luminaires
     from house_twin.plumbing import load_sanitary_specs, load_shower_spec
     from house_twin.render import render_facts
-    from house_twin.variants import apply_variant, load_variants, validate
+    from house_twin.variants import (apply_variant, has_geometry, load_variants, validate, variant_facts,
+                                     variant_materials, variant_specs)
     from house_twin.viewer import render_viewer
     facts = build_facts(_load_drawing(source), load_annotations(OWNER_ANNOTATIONS))
     FACTS_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -65,14 +71,20 @@ def build(source: Path):
     render_viewer(facts, VIEWER_PATH)
     print(f"{len(facts['spaces'])} espacios, {len(facts['walls'])} muros, {len(facts['openings'])} vanos")
     outputs = [FACTS_PATH, IFC_PATH, OVERLAY_PATH, VIEWER_PATH]
-    for variant in load_variants():  # propuestas: su propio IFC, la casa existente no cambia
+    for variant in load_variants():  # propuestas: sus hechos y su IFC; la casa existente no cambia
         problems = validate(variant, facts, materials)
         if problems:
             raise SystemExit('\n'.join(problems))
+        proposed = variant_facts(facts, variant)
+        specs = variant_specs(variant, {'kitchen': kitchen, 'laundry': laundry})
+        if has_geometry(variant):  # remodelación: sus hechos propuestos quedan escritos (los usa `scene`)
+            VARIANT_FACTS_DIR.mkdir(parents=True, exist_ok=True)
+            variant_facts_path(variant).write_text(json.dumps(proposed, ensure_ascii=False, indent=1))
+            outputs.append(variant_facts_path(variant))
         path = VARIANTS_IFC_DIR / f"{variant['id']}.ifc"
         path.parent.mkdir(parents=True, exist_ok=True)
-        build_ifc(facts, apply_variant(finishes, variant, materials), hardware, furniture, luminaires, devices,
-                  shower, sanitary, kitchen, living, bedrooms, laundry).write(str(path))
+        build_ifc(proposed, apply_variant(Finishes(proposed, variant_materials(materials, variant)), variant, materials), hardware, furniture,
+                  luminaires, devices, shower, sanitary, specs['kitchen'], living, bedrooms, specs['laundry']).write(str(path))
         outputs.append(path)
     for path in outputs:
         print(f'→ {path.relative_to(ROOT)}')
@@ -119,28 +131,45 @@ def closet_extras(facts: dict) -> tuple[list[dict], list[dict]]:
     return doors, items
 
 
-def scene(render: bool):
-    """Escena de Blender con los acabados, recorrido web y (opcional) renders: corre `blender_scene.py` dentro de Blender."""
+def _blender(ifc: Path, blend: Path, glb: Path, facts: Path, renders: Path | None = None, variant: Path | None = None):
+    """Corre `blender_scene.py` dentro de Blender: IFC + texturas → escena con materiales, GLB y (opcional) renders."""
     import shutil
     import subprocess
-    from house_twin.finishes import load_materials
-    from house_twin.variants import load_variants
-    from house_twin.walk import build_walk
     blender = shutil.which('blender')
     if blender is None:
         raise SystemExit('No encuentro `blender` en el PATH (ver README: Blender + Bonsai)')
     args = [blender, '--background', '--python', str(ROOT / 'house_twin' / 'blender_scene.py'), '--',
-            str(ROOT), str(IFC_PATH), str(BLEND_PATH), '--glb', str(GLB_PATH)]
-    args += ['--render', str(RENDERS_DIR)] if render else []
+            str(ROOT), str(ifc), str(blend), '--glb', str(glb), '--facts', str(facts)]
+    args += ['--render', str(renders)] if renders else []
+    args += ['--variant', str(variant)] if variant else []
     out = subprocess.run(args, capture_output=True, text=True)
     report = [line for line in out.stdout.splitlines() if line.startswith(('materiales:', 'sin acabado:', 'Error'))]
     print('\n'.join(report))
-    if out.returncode != 0 or not BLEND_PATH.exists():
+    if out.returncode != 0 or not blend.exists():
         raise SystemExit(out.stderr[-2000:] or 'Blender falló')
+
+
+def scene(render: bool):
+    """Escena de Blender con los acabados, recorrido web y (opcional) renders. Cada variante con geometría (una
+    remodelación) pasa también por Blender y el recorrido la ofrece con su propio modelo."""
+    from house_twin.finishes import load_materials
+    from house_twin.variants import VARIANTS_DIR, has_geometry, load_variants
+    from house_twin.walk import build_walk
+    _blender(IFC_PATH, BLEND_PATH, GLB_PATH, FACTS_PATH, RENDERS_DIR if render else None)
+    outputs = [BLEND_PATH, GLB_PATH]
+    variants, models = load_variants(), {}
+    for variant in [v for v in variants if has_geometry(v)]:
+        blend, glb = (VARIANTS_IFC_DIR / f"{variant['id']}{ext}" for ext in ('.blend', '.glb'))
+        _blender(VARIANTS_IFC_DIR / f"{variant['id']}.ifc", blend, glb, variant_facts_path(variant),
+                 variant=VARIANTS_DIR / f"{variant['id']}.json")
+        proposed = json.loads(variant_facts_path(variant).read_text())
+        doors, items = closet_extras(proposed)
+        models[variant['id']] = {'facts': proposed, 'glb': glb, 'doors': doors, 'items': items}
+        outputs += [blend, glb]
     facts = json.loads(FACTS_PATH.read_text())
     doors, items = closet_extras(facts)
-    walk = build_walk(facts, load_materials(TEXTURES_DIR), TEXTURES_DIR, WALK_DIR, GLB_PATH, load_variants(), doors, items)
-    for path in [BLEND_PATH, GLB_PATH, walk] + (sorted(RENDERS_DIR.glob('*.jpg')) if render else []):
+    walk = build_walk(facts, load_materials(TEXTURES_DIR), TEXTURES_DIR, WALK_DIR, GLB_PATH, variants, doors, items, models)
+    for path in outputs + [walk] + (sorted(RENDERS_DIR.glob('*.jpg')) if render else []):
         print(f'→ {path.relative_to(ROOT)}')
 
 

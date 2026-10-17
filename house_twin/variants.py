@@ -1,8 +1,18 @@
 """Variantes: propuestas sobre la casa existente (`variants/<id>.json`).
 
-Una variante nunca toca los hechos ni `models/existing.*`: describe cambios por encima. Por ahora, cambios de
-acabado de un vano (`changes`: `opening`, `part`, `material`). El IFC de cada variante va en
-`models/variants/<id>.ifc` y el recorrido las ofrece en un selector junto a la casa actual.
+Una variante nunca toca los hechos ni `models/existing.*`: describe cambios por encima.
+
+- `changes`: acabados de un vano (`opening`, `part`, `material`).
+- `geometry` (remodelaciones): vanos que se tapian (`close_openings`), muros y vanos nuevos (`add_walls`,
+  `add_openings`) y datos que cambian en vanos, espacios y placas (`update_openings`, `update_spaces`,
+  `update_devices`, que se mezclan sobre el dato por su `id`) y zonas de acabado que se mueven con la obra
+  (`update_materials`: `name` y su nueva `region_m`, p. ej. el azulejo de una cocina reubicada). `variant_facts` aplica todo sobre una copia de los
+  hechos: esos son los hechos *propuestos*, con los que se arma el IFC de la variante.
+- `specs`: especificaciones propias de la variante (`kitchen`, `laundry`), en `variants/<id>/`, que reemplazan a las
+  de `sources/` solo en la propuesta.
+
+El IFC de cada variante va en `models/variants/<id>.ifc` y el recorrido las ofrece en un selector junto a la casa
+actual; una variante con geometría lleva además su propio modelo 3D.
 """
 import copy
 import json
@@ -13,17 +23,88 @@ from house_twin.finishes import Finishes
 ROOT = Path(__file__).resolve().parent.parent
 VARIANTS_DIR = ROOT / 'variants'
 PARTS = ('leaf', 'frame', 'glass')
+SPEC_KINDS = ('kitchen', 'laundry')
 
 
 def load_variants(folder: Path = VARIANTS_DIR) -> list[dict]:
     return [json.loads(p.read_text()) for p in sorted(Path(folder).glob('*.json'))]
 
 
-def validate(variant: dict, facts: dict, materials: dict[str, dict]) -> list[str]:
-    """Problemas que impiden aplicar la variante: vano o material inexistente, parte desconocida."""
-    openings = {o['id'] for o in facts['openings']}
+def has_geometry(variant: dict) -> bool:
+    return bool(variant.get('geometry')) or bool(variant.get('specs'))
+
+
+def _merge_by_id(items: list[dict], updates: list[dict], what: str) -> list[str]:
+    by_id = {item['id']: item for item in items}
+    missing = []
+    for update in updates:
+        if update['id'] not in by_id:
+            missing.append(f"no existe {what} {update['id']}")
+            continue
+        by_id[update['id']].update(update)
+    return missing
+
+
+def _apply_geometry(facts: dict, geometry: dict) -> list[str]:
+    """Aplica la geometría de una variante sobre `facts` (ya copiado) y devuelve lo que no se pudo aplicar."""
+    if not geometry:
+        return []
     problems = []
-    for c in variant['changes']:
+    closed = set(geometry.get('close_openings', []))
+    problems += [f'no existe el vano {o}' for o in closed - {o['id'] for o in facts['openings']}]
+    facts['openings'] = [o for o in facts['openings'] if o['id'] not in closed]
+    facts['walls'] = facts.get('walls', []) + copy.deepcopy(geometry.get('add_walls', []))
+    facts['openings'] += copy.deepcopy(geometry.get('add_openings', []))
+    walls = {w['id'] for w in facts['walls']}
+    problems += [f"el vano {o['id']} va en un muro que no existe ({o['host_wall']})"
+                 for o in geometry.get('add_openings', []) if o.get('host_wall') not in walls]
+    problems += _merge_by_id(facts['openings'], geometry.get('update_openings', []), 'el vano')
+    problems += _merge_by_id(facts['spaces'], geometry.get('update_spaces', []), 'el espacio')
+    problems += _merge_by_id(facts['devices'], geometry.get('update_devices', []), 'la placa')
+    return problems
+
+
+def variant_facts(facts: dict, variant: dict) -> dict:
+    """Hechos propuestos: los de la casa con la geometría de la variante encima. Los de la casa no se tocan."""
+    result = copy.deepcopy(facts)
+    problems = _apply_geometry(result, variant.get('geometry', {}))
+    if problems:
+        raise ValueError(f"{variant['id']}: " + '; '.join(problems))
+    result['name'] = f"{facts['name']} — propuesta: {variant['name']}"
+    result['provenance'] = {**facts['provenance'], 'variant': variant['id'], 'variant_kind': variant.get('kind')}
+    return result
+
+
+def variant_materials(materials: dict[str, dict], variant: dict) -> dict[str, dict]:
+    """Los materiales con las zonas de acabado que la variante mueve; los de la casa no se tocan."""
+    updates = variant.get('update_materials', [])
+    if not updates:
+        return materials
+    result = copy.deepcopy(materials)
+    for update in updates:
+        result[update['name']]['applies_to']['region_m'] = update['region_m']
+    return result
+
+
+def variant_specs(variant: dict, defaults: dict, root: Path = ROOT) -> dict:
+    """Las especificaciones de la casa (`defaults`, por tipo) con las que la variante reemplaza."""
+    specs = dict(defaults)
+    for kind, path in variant.get('specs', {}).items():
+        specs[kind] = json.loads((root / path).read_text())
+    return specs
+
+
+def validate(variant: dict, facts: dict, materials: dict[str, dict]) -> list[str]:
+    """Problemas que impiden aplicar la variante: geometría que no cuadra con los hechos, vano o material
+    inexistente, parte desconocida, especificación que no existe."""
+    proposed = copy.deepcopy(facts)
+    problems = [f"{variant['id']}: {p}" for p in _apply_geometry(proposed, variant.get('geometry', {}))]
+    problems += [f"{variant['id']}: tipo de especificación desconocido {k}" for k in variant.get('specs', {}) if k not in SPEC_KINDS]
+    problems += [f"{variant['id']}: no existe {p}" for p in variant.get('specs', {}).values() if not (ROOT / p).exists()]
+    problems += [f"{variant['id']}: no existe el material {u['name']}" for u in variant.get('update_materials', [])
+                 if u['name'] not in materials]
+    openings = {o['id'] for o in proposed['openings']}
+    for c in variant.get('changes', []):
         if c['opening'] not in openings:
             problems.append(f"{variant['id']}: no existe el vano {c['opening']}")
         if c['part'] not in PARTS:
@@ -36,7 +117,7 @@ def validate(variant: dict, facts: dict, materials: dict[str, dict]) -> list[str
 def apply_variant(finishes: Finishes, variant: dict, materials: dict[str, dict]) -> Finishes:
     """Los acabados de la casa con los cambios de la variante encima; los de la casa no se tocan."""
     result = copy.deepcopy(finishes)
-    for c in variant['changes']:
+    for c in variant.get('changes', []):
         parts = result.openings.setdefault(c['opening'], {})
         parts[c['part']] = c['material']
         glass = materials[c['material']].get('glass_material')
@@ -46,5 +127,8 @@ def apply_variant(finishes: Finishes, variant: dict, materials: dict[str, dict])
 
 
 def opening_overrides(variant: dict) -> dict[str, str]:
-    """Vano → material de su hoja en la variante (lo que el recorrido cambia al elegirla)."""
-    return {c['opening']: c['material'] for c in variant['changes'] if c['part'] == 'leaf'}
+    """Vano → material de su hoja en la variante (lo que el recorrido cambia al elegirla). Una variante con geometría
+    ya trae sus acabados en su propio modelo: no cambia nada sobre el de la casa."""
+    if has_geometry(variant):
+        return {}
+    return {c['opening']: c['material'] for c in variant.get('changes', []) if c['part'] == 'leaf'}

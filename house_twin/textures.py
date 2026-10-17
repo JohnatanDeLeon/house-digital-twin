@@ -353,14 +353,14 @@ def sample_color(photo: Image.Image, color: dict, sample: dict) -> tuple[list[in
 
 def build_material(spec: dict, out: Path, photos_root: Path) -> Path:
     """Material sin mapas (perfil liso, vidrio): color medido en la foto y parámetros PBR declarados."""
-    photo = ImageOps.exif_transpose(Image.open(photos_root / spec['photo'])).convert('RGB')
     pbr = dict(spec['pbr'])
     gain = None
-    if 'sample' in pbr:
+    if 'sample' in pbr:  # un material propuesto (sin foto) declara su color
+        photo = ImageOps.exif_transpose(Image.open(photos_root / spec['photo'])).convert('RGB')
         pbr['basecolor_srgb'], gain = sample_color(photo, spec['color'], pbr.pop('sample'))
     material = {
         'name': spec['name'], 'applies_to': spec['applies_to'], 'kind': 'constant', 'pbr': pbr,
-        'source': {'photo': spec['photo'], 'photo_meta': spec.get('photo_meta', {}), 'color': spec.get('color'),
+        'source': {'photo': spec.get('photo'), 'photo_meta': spec.get('photo_meta', {}), 'color': spec.get('color'),
                    'white_balance_gain': gain, 'sample': spec['pbr'].get('sample')},
         'observed': spec.get('observed', {}), 'assumptions': spec.get('assumptions', []),
     }
@@ -810,7 +810,7 @@ def build_texture(spec_path: Path, photos_root: Path = ROOT) -> Path:
         'grid': spec.get('grid'),
         'maps': maps, 'glass_material': spec.get('opacity', {}).get('glass_material'), 'latch_side': spec.get('latch_side'),
         'emissive': spec.get('emissive'),  # pantalla encendida: la imagen también emite luz
-        'source': {'photo': spec['photo'], 'photo_meta': spec.get('photo_meta', {}),
+        'source': {'photo': spec.get('photo'), 'photo_meta': spec.get('photo_meta', {}),
                    'color': spec['color'], 'white_balance_gain': gain},
         'observed': spec.get('observed', {}), 'assumptions': spec.get('assumptions', []),
     }

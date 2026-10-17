@@ -145,37 +145,56 @@ def write_model_script(glb: Path, out: Path):
     out.write_text('window.HDT_GLB = "' + base64.b64encode(glb.read_bytes()).decode('ascii') + '";\n')
 
 
-def build_walk(facts: dict, materials: dict[str, dict], textures_dir: Path, out_dir: Path, glb: Path | None = None,
-               variants: list[dict] | None = None, extra_doors: list[dict] | None = None,
-               items: list[dict] | None = None):
-    """Escribe `index.html`, `texturas/` y, si se da el GLB que exporta Blender, `casa.js`.
-
-    Con `variants`, el recorrido ofrece cada propuesta junto a la casa actual y cambia los materiales que tocan.
-    """
-    tex_out = out_dir / 'texturas'
-    entries = {name: _material_entry(name, spec, Path(textures_dir) / name, tex_out) for name, spec in materials.items()}
-    data = {
+def house_data(facts: dict, extra_doors: list[dict] | None = None, items: list[dict] | None = None) -> dict:
+    """Lo del recorrido que sale de los hechos: espacios, muros, puertas, prendas y por dónde se empieza."""
+    return {
         'name': facts['name'],
         'storey_height': facts['levels'][0]['storey_height']['value'],
-        'materials': entries,
         'spaces': [{'id': s['id'], 'name': s['name'] or 'Sin rótulo', 'polygon': s['polygon'], 'exterior': s['is_exterior']}
                    for s in facts['spaces']],
         'walls': [w['footprint'] for w in facts['walls']],
         'site': facts['site']['polygon'],
-        'sun': [round(c, 4) for c in sun_direction()],
         'entrance': entrance(facts),
         'start': street_start(facts),
         'doors': doors(facts) + (extra_doors or []),  # además de las puertas, las hojas de los closets
         'items': items or [],  # cosas que se pueden sacar y ver de cerca (una prenda del closet)
-        'variants': [{'id': v['id'], 'name': v['name'], 'description': v['description'], 'disclaimer': v.get('disclaimer'),
-                      'overrides': opening_overrides(v), 'focus': focus(facts, v['changes'][0]['opening'])}
-                     for v in variants or []],
     }
+
+
+def _variant_entry(variant: dict, facts: dict, model: dict | None) -> dict:
+    """Una propuesta en el selector. Con geometría (`model`) trae su modelo (`casa-<id>.js`) y sus propios datos de
+    la casa; si no, los materiales que cambia sobre el modelo de la casa."""
+    house = facts if model is None else model['facts']
+    target = variant.get('focus_opening') or next((c['opening'] for c in variant.get('changes', [])), None)
+    entry = {'id': variant['id'], 'name': variant['name'], 'description': variant['description'],
+             'disclaimer': variant.get('disclaimer'), 'overrides': opening_overrides(variant),
+             'focus': focus(house, target) if target else None}
+    if model is not None:
+        entry.update(model=f"casa-{variant['id']}.js", house=house_data(house, model['doors'], model['items']))
+    return entry
+
+
+def build_walk(facts: dict, materials: dict[str, dict], textures_dir: Path, out_dir: Path, glb: Path | None = None,
+               variants: list[dict] | None = None, extra_doors: list[dict] | None = None,
+               items: list[dict] | None = None, models: dict[str, dict] | None = None):
+    """Escribe `index.html`, `texturas/` y, si se da el GLB que exporta Blender, `casa.js`.
+
+    Con `variants`, el recorrido ofrece cada propuesta junto a la casa actual. Una propuesta de acabados cambia los
+    materiales que toca; una remodelación (con su entrada en `models`: hechos propuestos, GLB, hojas de closet y
+    prendas) se recorre con su propio modelo, `casa-<id>.js`.
+    """
+    models = models or {}
+    tex_out = out_dir / 'texturas'
+    entries = {name: _material_entry(name, spec, Path(textures_dir) / name, tex_out) for name, spec in materials.items()}
+    data = {**house_data(facts, extra_doors, items), 'materials': entries, 'sun': [round(c, 4) for c in sun_direction()],
+            'variants': [_variant_entry(v, facts, models.get(v['id'])) for v in variants or []]}
     html = TEMPLATE.read_text()
     if DATA_MARKER not in html:
         raise ValueError(f'La plantilla del recorrido no tiene el marcador {DATA_MARKER}')
     out_dir.mkdir(parents=True, exist_ok=True)
     if glb is not None:
         write_model_script(glb, out_dir / 'casa.js')
+    for variant_id, model in models.items():
+        write_model_script(model['glb'], out_dir / f'casa-{variant_id}.js')
     (out_dir / 'index.html').write_text(html.replace(DATA_MARKER, json.dumps(data, ensure_ascii=False, separators=(',', ':'))))
     return out_dir / 'index.html'

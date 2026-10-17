@@ -1,0 +1,29 @@
+{
+ "name": "cemento-lavadero",
+ "applies_to": {
+  "variant": "cocina-en-u",
+  "source": "propuesta cocina-en-u (Claude, 2026-10-11): lavadero de la lavandería"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   168,
+   166,
+   160
+  ],
+  "metallic": 0.0,
+  "roughness": 0.6,
+  "note": "cemento pulido gris claro, como los lavaderos prefabricados"
+ },
+ "source": {
+  "photo": null,
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "material propuesto: color común, sin medir"
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "_doc": "Lavadero de cemento pulido o granito gris (propuesta cocina-en-u). Material propuesto: no hay foto; color común. Regenerar con: python -m house_twin.cli texture sources/texturas/cemento-lavadero.json",
+ "name": "cemento-lavadero",
+ "kind": "constant",
+ "applies_to": {
+  "variant": "cocina-en-u",
+  "source": "propuesta cocina-en-u (Claude, 2026-10-11): lavadero de la lavandería"
+ },
+ "pbr": {
+  "basecolor_srgb": [168, 166, 160],
+  "metallic": 0.0,
+  "roughness": 0.6,
+  "note": "cemento pulido gris claro, como los lavaderos prefabricados"
+ },
+ "assumptions": ["material propuesto: color común, sin medir"]
+}

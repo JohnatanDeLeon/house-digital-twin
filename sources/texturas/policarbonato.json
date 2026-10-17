@@ -1,0 +1,19 @@
+{
+ "_doc": "Lámina de policarbonato celular translúcido para el techo de la lavandería (propuesta cocina-en-u). Material propuesto: no hay foto; color y parámetros comunes. Regenerar con: python -m house_twin.cli texture sources/texturas/policarbonato.json",
+ "name": "policarbonato",
+ "kind": "constant",
+ "applies_to": {
+  "variant": "cocina-en-u",
+  "source": "propuesta cocina-en-u (Claude, 2026-10-11): techo de la lavandería"
+ },
+ "pbr": {
+  "basecolor_srgb": [236, 240, 242],
+  "metallic": 0.0,
+  "roughness": 0.3,
+  "transmission": 0.8,
+  "ior": 1.58,
+  "thickness_mm": 6,
+  "note": "policarbonato celular de 6 mm, cristal (translúcido, difunde la luz)"
+ },
+ "assumptions": ["material propuesto: color y translucidez comunes, sin medir"]
+}

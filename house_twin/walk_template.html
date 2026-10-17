@@ -60,10 +60,14 @@ select:focus-visible, .btn:focus-visible, #map:focus-visible { outline: 2px soli
 .here {
   position: absolute; left: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); z-index: 2;
   background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 12px;
-  display: grid; gap: 2px; max-width: calc(100% - 32px - 120px);
+  display: grid; gap: 1px; max-width: calc(100% - 32px - 120px); cursor: pointer;
 }
-.here .room { font-family: var(--font-display); font-size: 18px; font-weight: 600; }
-.here .coords { font-family: var(--font-data); font-size: 11.5px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.here .room { font-family: var(--font-display); font-size: 15px; font-weight: 600; }
+.here .coords { font-family: var(--font-data); font-size: 11px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+/* en pantallas chicas solo el cuarto; las coordenadas aparecen al tocar el recuadro */
+@media (max-width: 720px) { .here { padding: 4px 8px; } .here .room { font-size: 13px; } .here:not(.open) .coords { display: none; } }
+body.touch .here:not(.open) .coords { display: none; }
+body.touch .here { padding: 4px 8px; } body.touch .here .room { font-size: 13px; }
 body.holding .here, body.holding #map { display: none; }
 body.touch .here { left: auto; right: 16px; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px + 200px); max-width: 60vw; }
 
@@ -104,7 +108,17 @@ body.touch .door-action { bottom: calc(env(safe-area-inset-bottom, 0px) + 170px)
   background: var(--surface); border: 1px solid var(--accent); border-left-width: 4px;
   font-size: 13px; line-height: 1.4; color: var(--ink);
 }
-.proposal strong { font-family: var(--font-display); font-size: 15px; display: block; }
+.proposal-title { all: unset; cursor: pointer; display: flex; gap: 8px; align-items: baseline; width: 100%;
+  font-family: var(--font-display); font-size: 15px; font-weight: 600; }
+.proposal-title::after { content: '▾'; margin-left: auto; color: var(--ink-soft); }
+.proposal-title:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.proposal-body { margin-top: 4px; }
+/* plegada: solo el nombre, en un renglón (se abre tocándolo) */
+.proposal.collapsed { padding: 5px 10px; }
+.proposal.collapsed .proposal-title { font-size: 13px; }
+.proposal.collapsed .proposal-title span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.proposal.collapsed .proposal-title::after { content: '▸'; }
+.proposal.collapsed .proposal-body { display: none; }
 .hint {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 4;
   width: min(420px, calc(100% - 32px)); background: var(--surface); border: 1px solid var(--rule); border-radius: 8px;
@@ -157,9 +171,12 @@ body.touch .door-action { bottom: calc(env(safe-area-inset-bottom, 0px) + 170px)
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/environments/RoomEnvironment.js"></script>
-<script src="casa.js"></script>
 <script>
 const DATA = /*__WALK_DATA__*/null;
+// Una remodelación cambia muros, puertas y muebles: trae su propio modelo y sus datos de la casa. Se elige con el
+// #id de la página (el selector «Versión» lo pone y recarga), así cada versión arranca limpia.
+const ACTIVE = (DATA.variants || []).find(v => v.model && v.id === location.hash.slice(1)) || null;
+if (ACTIVE) Object.assign(DATA, ACTIVE.house);
 const EYE = 1.6;              // m, altura de los ojos
 const RADIUS = 0.22;          // m, medio ancho de una persona: no se acerca más a un muro
 const WALK = 1.3, RUN = 2.8;  // m/s
@@ -315,7 +332,7 @@ function windowMaterial(size, grid) {
 }
 
 // ---------- casa ----------
-const colliders = [];
+const colliders = [], wallMeshes = [];  // muros: lo que no se cruza al reacomodar al jugador
 const tour = [];
 const glowing = [];   // materiales que se encienden de noche (focos)
 const bulbs = [];     // luces puntuales, una por foco
@@ -325,8 +342,17 @@ function tagOf(obj) {
   for (let o = obj; o; o = o.parent) if (o.userData && o.userData.hdt_kind) return o.userData;
   return {};
 }
+function loadModelScript(src) {  // el GLB va dentro de un .js: así lo carga un <script> (ver walk.py)
+  return new Promise((ok, fail) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = ok; s.onerror = () => fail(new Error(`falta ${src} junto a esta página`));
+    document.head.appendChild(s);
+  });
+}
 async function loadHouse() {
-  if (!window.HDT_GLB) throw new Error('falta casa.js junto a esta página');
+  const model = ACTIVE ? ACTIVE.model : 'casa.js';
+  await loadModelScript(model);
+  if (!window.HDT_GLB) throw new Error(`falta ${model} junto a esta página`);
   const bytes = Uint8Array.from(atob(window.HDT_GLB), c => c.charCodeAt(0));
   const buffer = bytes.buffer;
   const gltf = await new Promise((ok, fail) => new THREE.GLTFLoader().parse(buffer, '', ok, fail));
@@ -346,6 +372,7 @@ async function loadHouse() {
     if (obj.material.userData.depth) obj.customDepthMaterial = obj.material.userData.depth;
     obj.receiveShadow = true;
     if (['IfcWall', 'IfcWindow', 'IfcFurniture', 'IfcSanitaryTerminal', 'IfcDoor', 'IfcElectricAppliance', 'IfcFlowStorageDevice'].includes(tag.hdt_kind)) colliders.push(obj);
+    if (tag.hdt_kind === 'IfcWall') wallMeshes.push(obj);
     const closetLeaf = /^(F\d+-m\d+)-hoja-(\d)/.exec(tag.hdt_id || '');  // hoja de closet (y su jaladera)
     const doorId = closetLeaf ? closetLeaf[1] : tag.hdt_kind === 'IfcDoor' ? tag.hdt_id
       : (tag.hdt_kind === 'IfcDiscreteAccessory' && /^D\d+-/.test(tag.hdt_id || '') ? tag.hdt_id.split('-')[0] : null);
@@ -361,8 +388,10 @@ const player = { pos: new THREE.Vector3(), yaw: 0, pitch: 0 };
 function goTo(stop) {
   if (stop.start) {  // punto calculado de los hechos: posición y dirección en el modelo
     const { at, facing } = stop.start;
+    const target = toThree(at[0] + facing[0] * 2.3, at[1] + facing[1] * 2.3, EYE);  // lo que se quiere ver
     player.pos.copy(toThree(at[0], at[1], EYE));
-    player.yaw = Math.atan2(-facing[0], facing[1]);
+    settle();  // el punto sale de los hechos, que no saben de muebles: si cae sobre uno, se busca piso libre
+    player.yaw = Math.atan2(-(target.x - player.pos.x), -(target.z - player.pos.z));
     player.pitch = -0.05;
     return;
   }
@@ -391,6 +420,33 @@ function blocked(axis, step) {
     }
   }
   return false;
+}
+const DOWN = new THREE.Vector3(0, -1, 0);
+// ¿Hay algo (mueble, muro) en el círculo del jugador, de 0.2 m para arriba? Se ve con rayos desde arriba.
+function occupied(x, z) {
+  for (let k = 0; k <= 8; k++) {
+    const r = k ? RADIUS : 0, a = k * Math.PI / 4;
+    ray.set(new THREE.Vector3(x + r * Math.cos(a), EYE + 0.3, z + r * Math.sin(a)), DOWN);
+    ray.far = EYE + 0.1;
+    if (ray.intersectObjects(colliders, false).length) return true;
+  }
+  return false;
+}
+// Lleva al jugador al punto libre más cercano (en espiral, hasta 1.5 m), sin cruzar muros.
+function settle() {
+  const { x, z } = player.pos;
+  if (!occupied(x, z)) return;
+  for (let r = 0.1; r <= 1.5; r += 0.1) {
+    for (let k = 0; k < 16; k++) {
+      const a = k * Math.PI / 8, nx = x + r * Math.cos(a), nz = z + r * Math.sin(a);
+      if (occupied(nx, nz)) continue;
+      const dir = new THREE.Vector3(nx - x, 0, nz - z);
+      ray.set(new THREE.Vector3(x, 1.1, z), dir.clone().normalize()); ray.far = dir.length();
+      if (ray.intersectObjects(wallMeshes, false).length) continue;
+      player.pos.x = nx; player.pos.z = nz;
+      return;
+    }
+  }
 }
 function move(forward, strafe, dt, fast) {
   const len = Math.hypot(forward, strafe);
@@ -780,13 +836,31 @@ function setVariant(variant) {
   const note = $('proposal');
   note.hidden = !variant;
   placeNote();
-  if (variant) note.innerHTML = `<strong>Propuesta: ${variant.name}</strong>${variant.description}`
-    + (variant.disclaimer ? ` <em>${variant.disclaimer}</em>` : '');
+  if (variant) note.innerHTML = `<button class="proposal-title" type="button" aria-expanded="true"><span>Propuesta: ${variant.name}</span></button>`
+    + `<div class="proposal-body">${variant.description}` + (variant.disclaimer ? ` <em>${variant.disclaimer}</em>` : '') + '</div>';
+  foldNote(false);
+  clearTimeout(noteTimer);
+  if (variant) noteTimer = setTimeout(() => foldNote(true), NOTE_OPEN_MS);  // se lee al elegirla y luego se pliega
 }
+const NOTE_OPEN_MS = 8000;
+let noteTimer = 0;
+function foldNote(folded) {
+  const note = $('proposal');
+  note.classList.toggle('collapsed', folded);
+  const title = note.querySelector('.proposal-title');
+  if (title) title.setAttribute('aria-expanded', String(!folded));
+}
+$('proposal').addEventListener('click', e => {
+  if (!e.target.closest('.proposal-title')) return;
+  clearTimeout(noteTimer);
+  foldNote(!$('proposal').classList.contains('collapsed'));
+});
+$('here').addEventListener('click', () => $('here').classList.toggle('open'));
 function placeNote() {
   $('proposal').style.top = `${document.querySelector('.bar').getBoundingClientRect().bottom + 8}px`;
 }
 addEventListener('resize', placeNote);
+new ResizeObserver(placeNote).observe(document.querySelector('.bar'));  // la barra crece al mostrar «Versión»
 function setupVariants() {
   const variants = DATA.variants || [];
   if (!variants.length) return;
@@ -794,8 +868,14 @@ function setupVariants() {
   // las etiquetas se ocultan en el celular: cada opción dice qué es
   select.innerHTML = '<option value="">Versión: casa actual</option>'
     + variants.map((v, i) => `<option value="${i}">Propuesta: ${v.name}</option>`).join('');
+  if (ACTIVE) { select.value = String(variants.indexOf(ACTIVE)); setVariant(ACTIVE); }
   select.addEventListener('change', () => {
     const variant = variants[select.value] || null;
+    if ((variant && variant.model) || ACTIVE) {  // otra geometría: se recarga con el modelo de esa versión
+      location.hash = variant ? variant.id : '';
+      location.reload();
+      return;
+    }
     setVariant(variant);
     if (variant && variant.focus) goTo({ start: variant.focus });  // frente a lo que cambia
     select.blur();
@@ -815,7 +895,8 @@ loadHouse().then(() => {
   if (street) tour.unshift(street);  // el recorrido empieza afuera: hay que abrir las puertas para entrar
   select.innerHTML = tour.map((t, i) => `<option value="${i}">${t.label}</option>`).join('');
   select.addEventListener('change', () => { goTo(tour[Number(select.value)]); select.blur(); });
-  if (tour.length) goTo(tour[0]); else teleport(siteW / 2, 1);
+  if (ACTIVE && ACTIVE.focus) goTo({ start: ACTIVE.focus });  // una remodelación arranca frente a lo que cambia
+  else if (tour.length) goTo(tour[0]); else teleport(siteW / 2, 1);
   resize();
   $('status').hidden = true;
   toggleHint(true);
