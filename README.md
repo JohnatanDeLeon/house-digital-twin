@@ -58,6 +58,11 @@ Herramientas: `house_summary`, `list_rooms`, `get_room`, `get_adjacent_rooms`, `
 
 ### Ver el modelo en 3D
 
+**En línea:** GitHub Pages publica `docs/` en `https://johnatandeleon.github.io/house-digital-twin/`, con la portada
+(`docs/index.html`), el recorrido, el visor y los renders. Lo hace el flujo `.github/workflows/ci-cd.yml` en cada push a `main`,
+después de que pasen las pruebas.
+
+
 En el navegador (también en el celular): `docs/viewer/casa-jonhy-3d.html`, generado por `build`.
 Gira con el dedo, toca un espacio para ver su ficha, cambia a vista en planta o corta los muros a 1 m.
 
@@ -78,6 +83,20 @@ Con los acabados: `python -m house_twin.cli scene [--render]` abre el IFC con Bo
 `assets/textures/` y guarda `models/existing.blend` (fuera de git). Con `--render` también deja vistas previas en
 `docs/analysis/05-renders/` (Cycles en CPU, ~5 min). La colección `Recorrido` tiene una cámara por espacio a la altura de los ojos, cada una ligada a un fotograma: en vista de cámara (Numpad 0), ← y → pasan de un cuarto al siguiente; para caminar adentro, *View → Navigation → Walk Navigation* (Shift + `). Si se recarga el IFC dentro de Blender, los materiales se
 pierden: hay que volver a correr `scene`.
+
+## CI/CD
+
+`.github/workflows/ci-cd.yml` corre en cada push y en cada PR:
+
+1. **Pruebas:** `pytest`.
+2. **Generados al día:** corre `build` y falla si los hechos o el visor cambian en algo más que la fecha, es decir, si se
+   cambió código o fuentes sin regenerar.
+3. **Publicación** (solo en `main`): sube `docs/` a GitHub Pages.
+
+`scene` necesita Blender con Bonsai y no corre en el CI. El recorrido (`docs/viewer/recorrido/`) se regenera en la PC y
+se sube al repo; el flujo solo lo publica.
+
+Para activarlo una sola vez: *Settings → Pages → Build and deployment → Source: GitHub Actions*.
 
 ## Estructura
 

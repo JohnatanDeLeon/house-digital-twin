@@ -26,6 +26,9 @@ Gemelo digital de una casa (Casa Jonhy). Código en inglés, comentarios y docum
 
 - `data/facts/*.json`, `models/*.ifc`, `docs/analysis/02-*.png` y `docs/viewer/*.html` son **generados**: no editarlos a mano,
   regenerar con `python -m house_twin.cli build`. `docs/viewer/recorrido/` y `docs/analysis/05-renders/` salen de `scene`.
+- `docs/` se publica en GitHub Pages (`.github/workflows/ci-cd.yml`, en cada push a `main` tras `pytest` y la revisión de
+  que `build` no cambia nada más que fechas). `docs/index.html` es la portada, escrita a mano. `scene` no corre en el CI:
+  el recorrido regenerado se sube al repo.
 - Si el CAD usa otros nombres de capa, se ajusta `LAYER_ROLES` en `house_twin/drawing.py`.
 - El PDF está ploteado a 1:77.4 aunque el cajetín diga 1:100: la escala sale de las cotas, nunca del rótulo.
 - El DXF declara milímetros pero está en metros: `sources/dxf.py` valida unidades por plausibilidad.

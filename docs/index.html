@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Casa Jonhy · Gemelo digital</title>
+<meta name="description" content="Gemelo digital de Casa Jonhy: recorrido 3D, visor de la planta, renders y propuestas de remodelación.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Portada del sitio (GitHub Pages). Escrita a mano: los visores que enlaza son generados (ver CLAUDE.md).
+   Mismos colores y letras que el recorrido. */
+:root {
+  --paper: #eef1f4; --ink: #1d2733; --ink-soft: #5a6878; --rule: #cfd6de; --surface: #ffffff; --accent: #2f62c9;
+  --font-display: 'Archivo Narrow', 'Arial Narrow', 'Roboto Condensed', sans-serif;
+  --font-body: 'Public Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-data: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #151b22; --ink: #e6ebf1; --ink-soft: #9aa7b6; --rule: #2c3540; --surface: #1d252e; --accent: #6f9bf2; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --paper: #151b22; --ink: #e6ebf1; --ink-soft: #9aa7b6; --rule: #2c3540; --surface: #1d252e; --accent: #6f9bf2; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-body); line-height: 1.5; }
+main { max-width: 960px; margin: 0 auto; padding: 40px 16px 56px; }
+.eyebrow { font-family: var(--font-data); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+h1 { font-family: var(--font-display); font-size: clamp(32px, 6vw, 48px); line-height: 1.05; margin: 6px 0 12px; }
+h2 { font-family: var(--font-display); font-size: 22px; margin: 40px 0 12px; }
+.lead { font-size: 17px; color: var(--ink-soft); max-width: 62ch; margin: 0; }
+a { color: var(--accent); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.card { display: block; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--rule);
+  border-radius: 8px; padding: 16px; transition: border-color .15s; }
+.card:hover, .card:focus-visible { border-color: var(--accent); outline: none; }
+.card strong { font-family: var(--font-display); font-size: 20px; display: block; color: var(--ink); }
+.card span { color: var(--ink-soft); font-size: 14px; }
+.card.main { border-left: 4px solid var(--accent); }
+.renders { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; }
+.renders figure { margin: 0; }
+.renders img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 6px; border: 1px solid var(--rule); display: block; }
+.renders figcaption { font-size: 13px; color: var(--ink-soft); margin-top: 4px; }
+ul.docs { padding-left: 18px; margin: 0; }
+ul.docs li { margin: 4px 0; }
+footer { margin-top: 48px; font-size: 13px; color: var(--ink-soft); border-top: 1px solid var(--rule); padding-top: 16px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">Gemelo digital · planta baja</div>
+  <h1>Casa Jonhy</h1>
+  <p class="lead">El plano de la casa convertido en un modelo BIM (IFC) con sus acabados reales, para recorrerla en 3D
+    y probar remodelaciones antes de hacerlas.</p>
+
+  <h2>Ver la casa</h2>
+  <div class="cards">
+    <a class="card main" href="viewer/recorrido/"><strong>Recorrido 3D</strong>
+      <span>Camina por la casa en primera persona, abre puertas y closets. En «Versión» se elige la casa actual o una propuesta.</span></a>
+    <a class="card" href="viewer/recorrido/#cocina-en-u"><strong>Propuesta: cocina en U</strong>
+      <span>La remodelación de la cocina y la lavandería, directo en el recorrido.</span></a>
+    <a class="card" href="viewer/casa-jonhy-3d.html"><strong>Visor de la planta</strong>
+      <span>Muros, vanos y cuartos tal como salen del plano, para girar y medir.</span></a>
+  </div>
+
+  <h2>Renders</h2>
+  <div class="renders">
+    <figure><img src="analysis/05-renders/fachada.jpg" alt="Fachada" loading="lazy"><figcaption>Fachada</figcaption></figure>
+    <figure><img src="analysis/05-renders/sala-cocina.jpg" alt="Sala y cocina" loading="lazy"><figcaption>Sala y cocina</figcaption></figure>
+    <figure><img src="analysis/05-renders/pasillo.jpg" alt="Pasillo" loading="lazy"><figcaption>Pasillo</figcaption></figure>
+    <figure><img src="analysis/05-renders/bano.jpg" alt="Baño" loading="lazy"><figcaption>Baño</figcaption></figure>
+    <figure><img src="analysis/05-renders/aerea.jpg" alt="Vista aérea" loading="lazy"><figcaption>Vista aérea</figcaption></figure>
+  </div>
+
+  <h2>Análisis</h2>
+  <ul class="docs">
+    <li><a href="https://github.com/JohnatanDeLeon/house-digital-twin/blob/main/docs/analysis/06-remodelacion-cocina.md">Remodelación: cocina en U y lavandería</a></li>
+    <li><a href="https://github.com/JohnatanDeLeon/house-digital-twin/blob/main/docs/analysis/02-modelo-de-hechos.md">Modelo de hechos</a> · <a href="analysis/02-hechos-planta-existente.png">planta de hechos</a></li>
+    <li><a href="https://github.com/JohnatanDeLeon/house-digital-twin/blob/main/docs/analysis/04-acabados.md">Acabados y texturas</a></li>
+    <li><a href="https://github.com/JohnatanDeLeon/house-digital-twin/blob/main/docs/analysis/03-validacion-dxf.md">Validación del plano (DXF contra PDF)</a></li>
+  </ul>
+
+  <footer>Las propuestas son de diseño: no sustituyen la validación estructural ni normativa de un profesional.
+    Código en <a href="https://github.com/JohnatanDeLeon/house-digital-twin">GitHub</a>.</footer>
+</main>
+</body>
+</html>
