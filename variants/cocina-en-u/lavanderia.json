@@ -77,7 +77,7 @@
   "height_m": 2.0,
   "material": "plastico-blanco",
   "handle_material": "cromo",
-  "source": "propuesta cocina-en-u (Claude, 2026-10-11): gabinete alto de PVC (resiste la humedad) para escoba, trapeador, cubetas y detergentes; su frente (x = 2.37 m) libra el barrido de D14"
+  "source": "propuesta cocina-en-u (Claude, 2026-10-11): gabinete alto de PVC (resiste la humedad) para escoba, trapeador, cubetas y detergentes"
  },
  "heater": {
   "id": "lavanderia-calentador",

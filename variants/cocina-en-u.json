@@ -146,24 +146,65 @@
     },
     "height": {
      "value": 2.1,
-     "source": "propuesta cocina-en-u (Claude, 2026-10-11)"
+     "source": "propuesta cocina-en-u (Claude, 2026-10-17): vano de 2.10 m; la hoja corrediza mide 2.14 m"
     },
     "host_wall": "W41",
     "connects": [
      "S13",
      "S12"
     ],
-    "swing": {
-     "hinge_end": [
-      1.29,
-      12.55
+    "slide": {
+     "line": [
+      [
+       1.16,
+       12.6
+      ],
+      [
+       1.16,
+       11.75
+      ]
      ],
-     "latch_end": [
-      1.29,
-      11.8
+     "wall_normal": [
+      1.0,
+      0.0
      ],
-     "opens_into": "S13",
-     "source": "propuesta cocina-en-u (Claude, 2026-10-11): abre hacia la lavandería (el pasillo de servicio mide 1.0 m); en el extremo del boiler, con la bisagra junto al muro de la recámara 2, para que su barrido libre la lavasecadora y el cilindro de gas"
+     "travel": [
+      0.0,
+      -0.85
+     ],
+     "thickness_m": 0.01,
+     "z": [
+      0.01,
+      2.15
+     ],
+     "track": {
+      "from": [
+       1.16,
+       10.85
+      ],
+      "to": [
+       1.16,
+       12.62
+      ],
+      "z": 2.19,
+      "height_m": 0.04,
+      "n": [
+       0.0,
+       0.012
+      ],
+      "wall_n": 0.045
+     },
+     "hardware": {
+      "material": "acero-negro-mate",
+      "hanger_inset_m": 0.12,
+      "wheel_radius_m": 0.035,
+      "pull_u": 0.1,
+      "pull_z": [
+       0.75,
+       1.35
+      ]
+     },
+     "source": "propuesta cocina-en-u (Claude, 2026-10-17): puerta corrediza de cristal templado esmerilado de 10 mm (85 × 214 cm, 5 cm de traslape por lado sobre el vano de 75 × 210), colgada de un riel aparente de acero negro mate del lado del pasillo de servicio, a 4.5 cm del muro; corre hacia la cocina (y menor), donde W41 está libre. Así la lavandería no pierde el barrido de la hoja y el pasillo conserva 0.90 m libres"
     }
    }
   ],
@@ -251,7 +292,7 @@
   {
    "opening": "D14",
    "part": "leaf",
-   "material": "puerta-bodega"
+   "material": "vidrio-esmerilado"
   }
  ],
  "update_materials": [
