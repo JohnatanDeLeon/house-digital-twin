@@ -1,0 +1,59 @@
+{
+ "_doc": "Remodelación (propuesta): ver docs/analysis/08-recamara-2-ventana.md. Nunca modifica los hechos ni models/existing.*: `build` escribe los hechos propuestos en data/facts/variants/ y su IFC en models/variants/; `scene` le hace su propio modelo para el recorrido.",
+ "id": "recamara-2-ventana",
+ "name": "Recámara 2: ventana al muro del pasillo",
+ "kind": "remodelación",
+ "based_on": "existing",
+ "requested": "dueño (2026-10-25): «una propuesta de remodelación para la recámara 2 [S03, la que el proyecto rotula así]; el objetivo es reubicar la ventana que queda detrás del respaldo de la cama»",
+ "author": "Claude",
+ "created_on": "2026-10-25",
+ "description": "La ventana V08 (1.50 × 1.22 m), que hoy queda justo detrás de la cabecera de la cama, se tapia con block y el muro del patio queda liso para la cabecera. La ventana pasa, con la misma medida y la misma corrediza de aluminio negro, al muro poniente (W12), al lado de la cama y mirando al pasillo de servicio (V13, y = 14.85–16.35 m). La luz y la ventilación se conservan (mismo vano), la cabecera deja de tapar el vidrio y ya no hace falta cortinar detrás de la cama.",
+ "disclaimer": "Propuesta: el vano nuevo en W12 y el tapiado de V08 necesitan que un profesional revise el muro (U03: se desconoce cuáles son de carga) y diseñe castillos, dintel y repisón. El muro W12 da a un pasillo de 1.08 m con la barda de la colindancia: la altura de la barda (sin medir) decide cuánta luz directa entra.",
+ "focus_opening": "V13",
+ "geometry": {
+  "close_openings": [
+   "V08"
+  ],
+  "add_openings": [
+   {
+    "kind": "window",
+    "id": "V13",
+    "footprint": [
+     [1.28, 14.85],
+     [1.45, 14.85],
+     [1.45, 16.35],
+     [1.28, 16.35]
+    ],
+    "width": 1.5,
+    "wall_thickness": 0.17,
+    "detected_by": "propuesta",
+    "sill_height": {
+     "value": 0.86,
+     "source": "propuesta recamara-2-ventana (Claude, 2026-10-25): el mismo antepecho que V08, para que la ventana siga a la altura del cerramiento de las puertas (0.86 + 1.22 = 2.08 m)"
+    },
+    "height": {
+     "value": 1.22,
+     "source": "propuesta recamara-2-ventana (Claude, 2026-10-25): la misma altura que V08"
+    },
+    "host_wall": "W12",
+    "connects": [
+     "S03",
+     "S12"
+    ],
+    "owner_note": "la ventana que estaba detrás de la cabecera (V08), movida al muro poniente"
+   }
+  ]
+ },
+ "changes": [
+  {
+   "opening": "V13",
+   "part": "frame",
+   "material": "aluminio-negro"
+  },
+  {
+   "opening": "V13",
+   "part": "glass",
+   "material": "vidrio-claro"
+  }
+ ]
+}

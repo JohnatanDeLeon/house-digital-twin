@@ -310,3 +310,39 @@ def test_facade_lighting_is_warm_and_lights_up_at_night():
         assert parts[lum['id']]['psets']['HDT_Light']['Lumens'] == lum['lumens']
         assert lum['id'].startswith(('fachada-', 'cochera-'))  # luminarias exteriores para el recorrido
     assert all(lum['position'][1] == 0.0 and lum['z'] == 1.95 for lum in lights if lum['kind'] == 'updown')
+
+
+def _window_remodel():
+    return next(v for v in load_variants() if v['id'] == 'recamara-2-ventana')
+
+
+def test_bedroom_window_moves_to_the_side_wall_with_the_same_size(dxf_facts):
+    """V08 (detrás de la cabecera) se tapia y V13 la sustituye en W12 con el mismo vano: la luz y la ventilación no bajan."""
+    from house_twin.variants import variant_facts
+    proposed = {o['id']: o for o in variant_facts(dxf_facts, _window_remodel())['openings']}
+    old = next(o for o in dxf_facts['openings'] if o['id'] == 'V08')
+    assert 'V08' not in proposed and 'V08' in {o['id'] for o in dxf_facts['openings']}  # la casa existente no cambia
+    new = proposed['V13']
+    assert (new['width'], new['sill_height']['value'], new['height']['value']) == \
+           (old['width'], old['sill_height']['value'], old['height']['value'])
+    assert new['host_wall'] == 'W12' and new['connects'] == ['S03', 'S12']
+
+
+def test_bedroom_window_clears_the_bed_the_closet_and_the_minisplit(dxf_facts):
+    """V13 cabe en W12 (con ≥ 0.40 m a la esquina), queda fuera de la cabecera y de la unidad del minisplit."""
+    import json
+    from house_twin.variants import variant_facts
+    proposed = variant_facts(dxf_facts, _window_remodel())
+    window = next(o for o in proposed['openings'] if o['id'] == 'V13')
+    ys = [p[1] for p in window['footprint']]
+    wall = next(w for w in proposed['walls'] if w['id'] == 'W12')
+    room = next(s for s in proposed['spaces'] if s['id'] == 'S03')
+    y_min, y_max = min(ys), max(ys)
+    assert room['bbox'][3] - y_max >= 0.40  # a la esquina con el muro del patio
+    assert min(p[1] for p in wall['footprint']) < y_min and max(p[1] for p in wall['footprint']) > y_max
+    spec = json.loads((ROOT / 'sources' / 'recamaras' / 'recamara-s03.json').read_text())
+    mini_y = (12.815 + spec['minisplit']['u'][0], 12.815 + spec['minisplit']['u'][1])
+    top = window['sill_height']['value'] + window['height']['value']
+    assert y_min >= mini_y[1] or top <= spec['minisplit']['z'][0]
+    # la cabecera (la cama) queda contra el muro del patio, donde V08 ya no está
+    assert spec['bed']['headboard_wall']['origin'][1] == 16.775
