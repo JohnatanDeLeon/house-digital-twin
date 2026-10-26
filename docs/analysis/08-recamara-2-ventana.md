@@ -55,6 +55,15 @@ Reubicar la ventana que queda detrás del respaldo de la cama, después de inves
   ciudad de la casa y el documento no clasifica recámaras. Con el mismo vano (12 % y ≈ 6 % ventilado), la propuesta queda
   igual que hoy.
 
+## Renders (hoy contra propuesta)
+
+Salen de la geometría de `models/existing.ifc` y de `models/variants/recamara-2-ventana.ifc`, sin techo y en colores planos (no son los
+renders con texturas de `scene`, que necesita Blender).
+
+![Vista aérea](08-render-aerea.png)
+![Hacia la cabecera](08-render-cabecera.png)
+![Hacia el muro poniente](08-render-ventana.png)
+
 ## Opciones
 
 | | Qué es | A favor | En contra |
