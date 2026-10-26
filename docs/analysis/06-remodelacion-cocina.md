@@ -83,7 +83,7 @@ unos 9 cm de vidrio. Si las ventanas abren hacia adentro chocarían con la llave
   - **Hacia dónde corre:** hacia la cocina, sobre el tramo libre de W41 (y = 10.90–11.75 m).
   - **Por qué del lado del pasillo:** del lado de la lavandería, la hoja le quitaría 5 cm al paso de 0.60 m frente a la lavasecadora. Por fuera, la lavandería ya no pierde el barrido de una hoja abatible y el pasillo conserva 0.90 m libres. El cristal esmerilado deja pasar luz sin que se vea hacia dentro.
   - **Ojo:** queda a la intemperie. Herrajes para exterior o inoxidables, y un tope de piso para que el viento no la mueva.
-- **Lavasecadora (dueño, 2026-10-11):** una Samsung de carga frontal de 686 × 984 × 796 mm sustituye a la lavadora de 2 tinas y a la secadora. Va contra el muro del fondo (y = 10.85–11.54 m), donde ya están el agua, el desagüe y los contactos, a 5 cm del muro por las mangueras. Es el único tramo que libran las dos puertas: la hoja de D13 barre el muro del fondo hasta y ≈ 10.79 m, y D14 se movió al extremo del boiler porque en su lugar anterior golpeaba la puerta redonda de la máquina.
+- **Lavasecadora (dueño, 2026-10-11):** una Samsung de carga frontal de 686 × 984 × 796 mm sustituye a la lavadora de 2 tinas y a la secadora.
 
 #### Reorganización de la lavandería
 
@@ -97,20 +97,44 @@ unos 9 cm de vidrio. Si las ventanas abren hacia adentro chocarían con la llave
 | Esquina bajo V09 y 0.55 m junto al boiler | No se usan. |
 | Sin lavadero ni guardado | Solo hay una repisa a 1.78 m. |
 
-**Propuesta, en el orden del trabajo, a lo largo del muro del fondo (2.40 m):**
+#### Lavandería moderna (2026-10-17)
 
-| Tramo (y) | Pieza | Por qué |
+El dueño trajo dos referencias: una columna de lavadora y secadora apiladas con muebles grises, y una barra corrida con
+tarja, máquinas bajo la cubierta, alacenas de madera, repisas abiertas y azulejo tipo metro. De ellas se toman las
+ideas que caben en 1.45 × 2.40 m: barra corrida con tarja, cestos extraíbles y cajones, alacenas encima, salpicadero de
+azulejo y una cubierta para doblar sobre la máquina. Lo que no cabe se descarta:
+- **Columna apilada:** no aplica, porque es una sola lavasecadora.
+- **Repisas y barra para colgar en el muro de enfrente:** dejarían el paso en menos de 0.60 m.
+
+**El límite real es el ancho.** La lavasecadora con sus mangueras ocupa 0.85 m de fondo, y frente a ella quedan 0.60 m.
+Las guías piden 0.75–1.0 m para hincarse y sacar la ropa. Girarla hacia el largo del cuarto no funciona: en 1.45 m no
+caben la máquina (0.69 m) y una barra (0.55 m) sin que una tape a la otra. **Solución:** la máquina va frente al vano de
+la corrediza D14. Con la puerta abierta, delante de ella quedan 1.77 m libres (0.60 + el muro + el pasillo de servicio).
+Por eso la corrediza tenía que ir del lado del pasillo.
+
+| Tramo (y), muro del fondo | Pieza | Por qué |
 |---|---|---|
-| 10.23–10.79 | **Lavadero** de 55 × 55 cm bajo V09 | Remojar y tallar con luz natural; comparte el desagüe de la lavasecadora y queda fuera del barrido de D13. |
-| 10.85–11.54 | **Lavasecadora** con **cubierta** a 1.0 m | Lavar y secar en una sola máquina; la cubierta es la altura cómoda para doblar ropa de pie. |
-| 11.56–12.00 | **Gabinete alto** de PVC (44 × 45 × 200 cm) | Escoba, trapeador, cubetas y detergentes. |
-| 12.15–12.50 | **Calentador de paso** colgado a 1.40–2.00 m | Va donde estaban las tuberías del boiler, junto al baño, y libera el piso del rincón. Su chimenea sale arriba del techo. |
+| 10.30–10.90 | **Tarja de acero** de 50 × 40 cm, bajo V09 | Remojar y tallar con luz natural. La barra empieza en y = 10.30 m para librar el barrido de D13. Llave abatible negra de 30 cm de alto, que no topa con el pretil de V09 (1.28 m). |
+| 10.90–11.35 | **2 cestos extraíbles** | Separar la ropa sucia (blancos y color) sin cestos en el piso. |
+| 11.35–11.77 | **3 cajones** | Detergentes, pinzas y trapos, a la mano junto a la máquina. |
+| 11.83–12.52 | **Lavasecadora** en un nicho, bajo una cubierta a 1.04 m | Frente al vano de D14. La cubierta (87 × 84 cm, 2.6 cm sobre la máquina) es la mesa para doblar, a la altura cómoda para hacerlo de pie. |
+| 11.05–11.95, a 1.50–2.20 m | **2 alacenas** de 35 cm de fondo | Guardado arriba, sin tapar la ventana. Entre la barra y las alacenas quedan los contactos. |
+| 12.15–12.50, a 1.55–2.15 m | **Calentador de paso** | Donde estaban las tuberías del boiler, 51 cm sobre la cubierta y a 20 cm de las alacenas. |
+
+- **Barra:** cubierta a 0.92 m, de 55 cm de fondo. El paso entre la barra y el muro W41 es de 0.90 m.
+- **Acabados:**
+  - Muebles en `melamina-cocina` y cubierta `laminado-cubierta`, los mismos de la cocina, que se ve a través de D13.
+  - Jaladeras de acero negro mate, como la corrediza.
+  - Azulejo tipo metro blanco de 7.5 × 30 cm con junta gris, del piso a 1.55 m en el muro del fondo. Es un material propuesto y solo lo toma la variante.
+- **Instalaciones:** el agua y el desagüe se alargan unos 0.9 m por el muro del fondo hasta el nicho de la máquina.
+- **Se quitan:**
+  - el lavadero de cemento y el gabinete alto, porque la tarja y la barra los sustituyen;
+  - la escoba y el trapeador, que van colgados en el muro W41 con un riel organizador de 10 cm (no modelado).
 
 - **Cilindro de gas:** sale al pasillo de servicio, a la intemperie, contra el muro de la recámara 2, que no tiene ventanas (y ≈ 12.95 m). Al frente quedan 0.75 m hasta la barda (6.1.2.4 pide 0.60 m) y se cambia sin pasar por la cocina (6.1.2.9).
-- **Tendedero retráctil:** 3 hilos a 2.20 m, de W41 al muro del fondo, sobre el paso de la lavandería y arriba de las puertas.
+- **Tendedero retráctil:** 3 hilos a 2.35 m, de W41 al muro del fondo, por encima de las alacenas y de las puertas. También sirve para colgar ganchos.
 - **Techo de policarbonato:** lámina celular translúcida sobre perfiles, de 2.90 a 3.00 m, con caída hacia el pasillo de servicio. Entre el remate de los muros (2.60 m) y el techo quedan 30–40 cm abiertos. Así el calentador queda en un sitio con ventilación permanente y chimenea (6.5.2.2 y 6.5.2.3), y la ventana del baño sigue ventilando.
 - **Calentador de paso, condición:** necesita presión de agua suficiente. Si el tinaco está bajo, conviene uno de rápida recuperación (chico, de piso).
-- **Resultado:** en el mismo espacio pasa de 2 piezas útiles a 5, el gas sale de la lavandería y todo queda bajo techo.
 - **Repisa:** se recorta desde x = 2.30 m para no cruzar D13.
 
 ### Instalaciones

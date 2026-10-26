@@ -1,5 +1,5 @@
 {
- "_doc": "Lavandería de la propuesta cocina-en-u (ver docs/analysis/06-remodelacion-cocina.md): lavadero, lavasecadora Samsung (dato del dueño) con cubierta, gabinete alto y calentador de paso en el muro del fondo; el cilindro de gas sale al pasillo de servicio; techo de policarbonato ventilado y tendedero. La repisa se recorta para no cruzar la puerta nueva de la cocina (D13). Solo la usa la variante.",
+ "_doc": "Lavandería de la propuesta cocina-en-u (ver docs/analysis/06-remodelacion-cocina.md): barra con tarja, cestos extraíbles, cajones y alacenas en el muro del fondo; lavasecadora Samsung (dato del dueño) bajo una cubierta para doblar, frente a la corrediza D14; calentador de paso en lugar del boiler; cilindro de gas en el pasillo; techo de policarbonato y tendedero. La repisa se recorta para no cruzar D13. Solo la usa la variante.",
  "applies_to": {
   "space": "S13",
   "source": "fotos de la lavandería y medidas del dueño (2026-10-10)"
@@ -9,8 +9,8 @@
  "combo": {
   "id": "lavanderia-lavasecadora",
   "y": [
-   10.85,
-   11.536
+   11.832,
+   12.518
   ],
   "depth_m": 0.796,
   "height_m": 0.984,
@@ -32,53 +32,287 @@
    "panel": "plastico-negro-brillante"
   },
   "size_source": "dueño (2026-10-11): ficha de Samsung, 686 mm de ancho × 984 de alto × 796 de fondo; lavasecadora de carga frontal (modelo exacto sin confirmar)",
-  "position_source": "propuesta cocina-en-u (Claude, 2026-10-11): una sola máquina en lugar de la lavadora y la secadora, contra el muro del fondo donde estaban sus tomas; entre el barrido de D13 (libre desde y = 10.79 m a su frente) y el de D14; 5 cm atrás para las mangueras"
+  "position_source": "propuesta cocina-en-u (Claude, 2026-10-17): contra el muro del fondo, frente al vano de D14 (y = 11.80–12.55 m), bajo una cubierta para doblar. Frente a la máquina el paso es de 0.60 m, pero con la corrediza abierta se suma el pasillo de servicio (1.77 m libres para hincarse y sacar la ropa). Agua y desagüe se alargan 0.9 m por el muro del fondo; 5 cm atrás para las mangueras"
  },
- "sink": {
-  "id": "lavanderia-lavadero",
-  "y": [
-   10.235,
-   10.785
-  ],
-  "depth_m": 0.55,
-  "top_m": 0.85,
-  "basin_floor_m": 0.62,
-  "rim_m": 0.04,
-  "material": "cemento-lavadero",
-  "faucet": {
-   "z": 1.05,
-   "reach_m": 0.18,
-   "radius_m": 0.012,
-   "material": "cromo"
+ "cabinetry": {
+  "_doc": "barra de la lavandería en el muro del fondo, con el formato de la cocineta (house_twin/kitchen.py): tarja bajo V09, cestos extraíbles y cajones; alacenas arriba de los contactos; cubierta aparte, más alta, sobre la lavasecadora",
+  "measure_source": "propuesta cocina-en-u (Claude, 2026-10-17): muebles de medidas comerciales (bajos de 53 cm de fondo, cubierta de 55 cm a 0.92 m, alacenas de 35 cm de 1.50 a 2.20 m); la barra empieza en y = 10.30 m para librar el barrido de D13",
+  "materials": {
+   "body": "melamina-cocina",
+   "counter": "laminado-cubierta",
+   "plinth": "esmalte-negro",
+   "handles": "acero-negro-mate"
   },
-  "source": "propuesta cocina-en-u (Claude, 2026-10-11): lavadero de 55 × 55 cm (medida común) bajo la ventana V09, para remojar y tallar a mano; comparte el desagüe con la lavasecadora y queda fuera del barrido de D13"
+  "gap_m": 0.003,
+  "front_thickness_m": 0.018,
+  "handle": {
+   "length_m": 0.16,
+   "radius_m": 0.006,
+   "standoff_m": 0.03,
+   "post_radius_m": 0.005
+  },
+  "runs": [
+   {
+    "id": "barra",
+    "note": "muro del fondo, de y = 10.30 a 11.77 m",
+    "origin": [
+     2.82,
+     10.3
+    ],
+    "along": [
+     0,
+     1
+    ],
+    "into_room": [
+     -1,
+     0
+    ],
+    "base": {
+     "depth_m": 0.53,
+     "plinth_m": 0.1,
+     "plinth_setback_m": 0.05,
+     "top_m": 0.88,
+     "modules": [
+      {
+       "u": [
+        0.0,
+        0.6
+       ],
+       "note": "tarja bajo V09",
+       "fronts": [
+        {
+         "u": [
+          0.0,
+          0.6
+         ],
+         "z": [
+          0.68,
+          0.86
+         ],
+         "kind": "panel",
+         "note": "frente falso de la tarja"
+        },
+        {
+         "u": [
+          0.0,
+          0.3
+         ],
+         "z": [
+          0.1,
+          0.67
+         ],
+         "kind": "door",
+         "handle": "right"
+        },
+        {
+         "u": [
+          0.3,
+          0.6
+         ],
+         "z": [
+          0.1,
+          0.67
+         ],
+         "kind": "door",
+         "handle": "left"
+        }
+       ]
+      },
+      {
+       "u": [
+        0.6,
+        1.05
+       ],
+       "note": "2 cestos extraíbles para la ropa sucia: blancos y color",
+       "fronts": [
+        {
+         "u": [
+          0.6,
+          1.05
+         ],
+         "z": [
+          0.1,
+          0.48
+         ],
+         "kind": "drawer"
+        },
+        {
+         "u": [
+          0.6,
+          1.05
+         ],
+         "z": [
+          0.48,
+          0.86
+         ],
+         "kind": "drawer"
+        }
+       ]
+      },
+      {
+       "u": [
+        1.05,
+        1.47
+       ],
+       "note": "cajones: detergentes, pinzas, trapos",
+       "fronts": [
+        {
+         "u": [
+          1.05,
+          1.47
+         ],
+         "z": [
+          0.1,
+          0.36
+         ],
+         "kind": "drawer"
+        },
+        {
+         "u": [
+          1.05,
+          1.47
+         ],
+         "z": [
+          0.36,
+          0.62
+         ],
+         "kind": "drawer"
+        },
+        {
+         "u": [
+          1.05,
+          1.47
+         ],
+         "z": [
+          0.62,
+          0.86
+         ],
+         "kind": "drawer"
+        }
+       ]
+      }
+     ]
+    },
+    "counters": [
+     {
+      "u": [
+       0.0,
+       1.47
+      ]
+     }
+    ],
+    "counter": {
+     "z": [
+      0.88,
+      0.92
+     ],
+     "depth_m": 0.55,
+     "backsplash_m": [
+      0.0,
+      0.0
+     ]
+    },
+    "sink": {
+     "u_centre": 0.3,
+     "size_m": [
+      0.5,
+      0.4
+     ],
+     "from_wall_m": 0.08,
+     "material": "acero-inoxidable",
+     "faucet": {
+      "from_wall_m": 0.04,
+      "height_m": 0.3,
+      "reach_m": 0.22,
+      "radius_m": 0.012,
+      "material": "acero-negro-mate"
+     }
+    },
+    "uppers": {
+     "depth_m": 0.35,
+     "modules": [
+      {
+       "u": [
+        0.75,
+        1.2
+       ],
+       "z": [
+        1.5,
+        2.2
+       ],
+       "doors": 1
+      },
+      {
+       "u": [
+        1.2,
+        1.65
+       ],
+       "z": [
+        1.5,
+        2.2
+       ],
+       "doors": 1
+      }
+     ]
+    }
+   },
+   {
+    "id": "doblado",
+    "note": "cubierta para doblar sobre la lavasecadora, a 1.04 m (la máquina mide 0.984 m: 2.6 cm de holgura)",
+    "origin": [
+     2.82,
+     11.79
+    ],
+    "along": [
+     0,
+     1
+    ],
+    "into_room": [
+     -1,
+     0
+    ],
+    "counters": [
+     {
+      "u": [
+       0.0,
+       0.835
+      ]
+     }
+    ],
+    "counter": {
+     "z": [
+      1.01,
+      1.04
+     ],
+     "depth_m": 0.87,
+     "backsplash_m": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  ]
  },
- "counter": {
-  "id": "lavanderia-cubierta",
-  "y": [
-   10.85,
-   11.536
-  ],
-  "z": [
-   0.995,
-   1.025
-  ],
-  "depth_m": 0.846,
-  "material": "laminado-cubierta",
-  "source": "propuesta cocina-en-u (Claude, 2026-10-11): cubierta sobre la lavasecadora para doblar ropa de pie (a 1.0 m)"
- },
- "cabinet": {
-  "id": "lavanderia-gabinete",
-  "y": [
-   11.56,
-   12.0
-  ],
-  "depth_m": 0.45,
-  "height_m": 2.0,
-  "material": "plastico-blanco",
-  "handle_material": "cromo",
-  "source": "propuesta cocina-en-u (Claude, 2026-10-11): gabinete alto de PVC (resiste la humedad) para escoba, trapeador, cubetas y detergentes"
- },
+ "boxes": [
+  {
+   "id": "lavanderia-costado-nicho",
+   "x": [
+    1.95,
+    2.82
+   ],
+   "y": [
+    11.77,
+    11.79
+   ],
+   "z": [
+    0.0,
+    1.01
+   ],
+   "material": "melamina-cocina",
+   "object_type": "costado del nicho de la lavasecadora",
+   "source": "propuesta cocina-en-u (Claude, 2026-10-17): costado que separa la barra del nicho de la lavasecadora y sostiene su cubierta (el otro lado se apoya en el muro de la recámara 2)"
+  }
+ ],
  "heater": {
   "id": "lavanderia-calentador",
   "y": [
@@ -86,8 +320,8 @@
    12.5
   ],
   "z": [
-   1.4,
-   2.0
+   1.55,
+   2.15
   ],
   "depth_m": 0.24,
   "material": "esmalte-blanco",
@@ -95,15 +329,15 @@
    "diameter_m": 0.1,
    "top_m": 3.3
   },
-  "source": "propuesta cocina-en-u (Claude, 2026-10-11): calentador de paso colgado del muro del baño, donde estaban las tuberías del boiler (medidas comunes de un calentador de 6 L/min); a 15 cm del gabinete; su chimenea sale arriba del techo (NOM-004-SEDG 6.5.2)"
+  "source": "propuesta cocina-en-u (Claude, 2026-10-17): calentador de paso colgado del muro del baño, donde estaban las tuberías del boiler (medidas comunes de un calentador de 6 L/min), a 0.51 m sobre la cubierta de la lavasecadora y a 20 cm de las alacenas; su chimenea sale arriba del techo (NOM-004-SEDG 6.5.2)"
  },
  "line": {
   "id": "lavanderia-tendedero",
   "from_x": 1.375,
   "y": 11.66,
-  "z": 2.2,
+  "z": 2.35,
   "material": "plastico-blanco",
-  "source": "propuesta cocina-en-u (Claude, 2026-10-11): tendedero retráctil de 3 hilos sobre el pasillo de la lavandería, a 2.20 m (arriba de las puertas), de W41 al muro del fondo"
+  "source": "propuesta cocina-en-u (Claude, 2026-10-17): tendedero retráctil de 3 hilos a 2.35 m, de W41 al muro del fondo, por encima de las alacenas y de las puertas; también sirve para colgar ganchos"
  },
  "roof": {
   "id": "lavanderia-techo",
@@ -175,8 +409,8 @@
  "assumptions": [
   "cilindro de gas, repisa y placas: tamaño común o estimado",
   "lavasecadora: color blanco, puerta de 52 cm a media altura y tablero arriba (supuestos: la ficha solo da el tamaño); 5 cm atrás para las mangueras (supuesto)",
-  "lavadero, gabinete, calentador de paso y techo: medidas comunes de mercado, no medidas",
+  "muebles, tarja, calentador de paso y techo: medidas comerciales, no medidas",
   "altura de los muros de la lavandería: la del entrepiso (2.60 m, dueño)",
-  "no se modelan las cubetas, el cesto ni la ropa; la herrería de V09 tampoco"
+  "no se modelan las cubetas, los cestos por dentro ni la ropa; la herrería de V09 tampoco"
  ]
 }

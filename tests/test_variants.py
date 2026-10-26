@@ -175,3 +175,32 @@ def test_remodel_laundry_sliding_door(dxf_facts):
         assert max(ys_) < gas_y0  # no llega al cilindro de gas
     entry = next(d for d in doors(proposed) if d['id'] == 'D14')
     assert entry['slide'] == slide['travel'] and len(entry['leaves']) == 1
+
+
+def test_remodel_laundry_layout_is_workable(dxf_facts):
+    """La barra deja un paso de al menos 0.85 m; la lavasecadora queda frente al vano de D14 (con la corrediza
+    abierta se puede hincar para sacar la ropa) y bajo una cubierta para doblar, con holgura sobre la máquina; los
+    muebles de piso no se enciman y los contactos quedan entre la barra y las alacenas."""
+    import json
+    from house_twin.laundry import laundry_parts
+    from house_twin.variants import variant_facts
+    d14 = next(o for o in variant_facts(dxf_facts, _remodel())['openings'] if o['id'] == 'D14')
+    spec = json.loads((ROOT / _remodel()['specs']['laundry']).read_text())
+    parts = {p['id']: p['mesh'][0] for p in laundry_parts(spec)}
+    box = {k: ([min(p[i] for p in v) for i in range(3)], [max(p[i] for p in v) for i in range(3)]) for k, v in parts.items()}
+    w41_face = 1.375
+    run = [k for k in box if k.startswith('lavanderia-barra-')]
+    assert min(box[k][0][0] for k in run) - w41_face >= 0.85  # paso frente a la barra
+    combo_lo, combo_hi = box['lavanderia-lavasecadora']
+    dy = [p[1] for p in d14['footprint']]
+    assert min(dy) <= combo_lo[1] and combo_hi[1] <= max(dy)  # frente al vano de la corrediza
+    top_lo, top_hi = box['lavanderia-doblado-cubierta-1']
+    assert 0.02 <= top_lo[2] - combo_hi[2] <= 0.05 and top_lo[0] <= combo_lo[0]  # cubierta encima, con holgura
+    floor = ['lavanderia-lavasecadora', 'lavanderia-costado-nicho'] + [k for k in run if '-bajo-' in k]
+    for i, a in enumerate(floor):
+        for b in floor[i + 1:]:
+            (alo, ahi), (blo, bhi) = box[a], box[b]
+            assert ahi[0] <= blo[0] + 1e-6 or bhi[0] <= alo[0] + 1e-6 or ahi[1] <= blo[1] + 1e-6 or bhi[1] <= alo[1] + 1e-6, (a, b)
+    counter_top = box['lavanderia-barra-cubierta-1'][1][2]
+    uppers_bottom = min(box[k][0][2] for k in run if '-alto-' in k)
+    assert all(counter_top < d['z'] < uppers_bottom for d in spec['devices'])

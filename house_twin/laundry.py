@@ -1,6 +1,7 @@
 """Lavandería: lavadora y secadora (o una lavasecadora, `combo`), boiler (o calentador de paso, `heater`), cilindro
 de gas, repisa y placas, descritos en `sources/lavanderia/lavanderia.json`. Una propuesta puede agregar lavadero
-(`sink`), cubierta (`counter`), gabinete alto (`cabinet`), tendedero (`line`) y techo (`roof`). Arma las mallas en coordenadas del mundo con el mismo formato de piezas que
+(`sink`), cubierta (`counter`), gabinete alto (`cabinet`), tendedero (`line`), techo (`roof`), muebles con el formato
+de la cocineta (`cabinetry`: barra con tarja, cajones y alacenas) y tableros sueltos (`boxes`). Arma las mallas en coordenadas del mundo con el mismo formato de piezas que
 la cocineta; `ifc_export` las guarda. Solo biblioteca estándar.
 """
 import json
@@ -8,6 +9,7 @@ from pathlib import Path
 
 from house_twin.electrical import device_mesh
 from house_twin.hardware import _box, cylinder, merge
+from house_twin.kitchen import kitchen_parts
 
 ROOT = Path(__file__).resolve().parent.parent
 SPEC_PATH = ROOT / 'sources' / 'lavanderia' / 'lavanderia.json'
@@ -166,6 +168,15 @@ def laundry_parts(spec: dict, plate: dict | None = None) -> list[dict]:
     parts += _heater_parts(xw, spec['heater']) if 'heater' in spec else []
     parts += _line_parts(xw, spec['line']) if 'line' in spec else []
     parts += _roof_parts(spec['roof']) if 'roof' in spec else []
+    if 'cabinetry' in spec:
+        for part in kitchen_parts(spec['cabinetry'], prefix='lavanderia'):
+            part.setdefault('source', spec['cabinetry']['measure_source'])
+            parts.append(part)
+    for b in spec.get('boxes', []):  # tablero suelto: costado de un nicho, etc.
+        (x0, x1), (y0, y1), (z0, z1) = b['x'], b['y'], b['z']
+        parts.append({'id': b['id'], 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': b.get('object_type', 'tablero'),
+                      'material': b['material'], 'mesh': _box(((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2), (x1 - x0, y1 - y0, z1 - z0)),
+                      'source': b['source']})
     if 'counter' in spec:
         c = spec['counter']
         parts.append({'id': c['id'], 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': 'cubierta', 'material': c['material'],
