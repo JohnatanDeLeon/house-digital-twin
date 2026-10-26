@@ -1,0 +1,29 @@
+{
+ "name": "mosaico-alberca",
+ "applies_to": {
+  "variant": "patio-social",
+  "source": "propuesta patio-social (Claude, 2026-10-26): mosaico azul del fondo de la alberca"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   52,
+   128,
+   168
+  ],
+  "metallic": 0.0,
+  "roughness": 0.2,
+  "note": "mosaico vítreo azul del fondo de la alberca"
+ },
+ "source": {
+  "photo": null,
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}

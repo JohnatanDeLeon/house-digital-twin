@@ -1,0 +1,25 @@
+{
+ "_doc": "Remodelación (propuesta): ver docs/analysis/09-patio-social.md. Nunca modifica los hechos ni models/existing.*: `build` escribe su IFC en models/variants/; `scene` le hace su propio modelo para el recorrido.",
+ "id": "patio-social",
+ "name": "Patio: alberca de inmersión, palapa y barra",
+ "kind": "remodelación",
+ "based_on": "existing",
+ "requested": "dueño (2026-10-25): «investigación de normas de albercas, análisis de las medidas del patio, diseños de palapas o patios como área social, y con eso una propuesta para la remodelación del patio»",
+ "author": "Claude",
+ "created_on": "2026-10-26",
+ "description": "El patio (42.6 m², 9.66 × 4.1 m más un entrante de 4.0 × 0.7 m) pasa de tener solo piso de concreto a un área social con tres zonas, de poniente a oriente: la entrada desde el pasillo de servicio (puerta D11) con regadera exterior y caseta de equipo; una alberca de inmersión semienterrada de 3.8 × 1.9 m (agua a 1.22 m, ≈ 8.8 m³) con un andador de deck al norte y jardinera al sur; y, al fondo, una palapa de palma tratada de 3.6 × 3.8 m con comedor exterior para 6 y una barra con asador de cara al muro sur. El rumbo del patio es SSO: la palapa queda en el extremo que recibe el sol de la tarde.",
+ "disclaimer": "Propuesta sin validar: se desconocen la cimentación de la barda y de la casa, el tipo de suelo, las alturas de los muros, el nivel y los desagües del piso, dónde están la cisterna y el albañal, y en qué ciudad está la casa (cambia el reglamento). La alberca excava 1.0 m junto a muros de cimentación desconocida: necesita calas, un estudio de suelos y el proyecto de un ingeniero estructural y de un corresponsable en instalaciones antes de cualquier obra. Los muros de la casa que dan al patio tienen ventanas bajas (V06, V07, V08, antepecho 0.85 m): hay que cerrarlas con seguro o alarma.",
+ "focus": {
+  "at": [
+   0.8,
+   17.6
+  ],
+  "facing": [
+   0.95,
+   0.31
+  ]
+ },
+ "specs": {
+  "extras": "variants/patio-social/piezas.json"
+ }
+}

@@ -1,0 +1,1066 @@
+{
+ "_doc": "Piezas del patio propuesto (variants/patio-social.json): alberca de inmersión semienterrada, decks, palapa, barra con asador, comedor exterior, caseta de equipo, jardinera, regadera y luminarias. Todo en metros del plano. Ver docs/analysis/09-patio-social.md.",
+ "applies_to": {
+  "space": "S09",
+  "source": "propuesta patio-social (Claude, 2026-10-26): piezas nuevas en el patio (S09)"
+ },
+ "boxes": [
+  {
+   "id": "alberca-muro-norte",
+   "x": [
+    1.5,
+    5.7
+   ],
+   "y": [
+    17.85,
+    18.05
+   ],
+   "z": [
+    0,
+    0.5
+   ],
+   "material": "concreto-alberca",
+   "source": "propuesta patio-social (Claude, 2026-10-26): alberca semienterrada: muros de concreto armado de 0.20 m, 0.50 m sobre el piso y 0.80 m bajo él (profundidad interior 1.30 m, agua a 1.22 m); lado norte",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "muro de la alberca"
+  },
+  {
+   "id": "alberca-muro-sur",
+   "x": [
+    1.5,
+    5.7
+   ],
+   "y": [
+    19.95,
+    20.15
+   ],
+   "z": [
+    0,
+    0.5
+   ],
+   "material": "concreto-alberca",
+   "source": "propuesta patio-social (Claude, 2026-10-26): alberca semienterrada: muros de concreto armado de 0.20 m, 0.50 m sobre el piso y 0.80 m bajo él (profundidad interior 1.30 m, agua a 1.22 m); lado sur",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "muro de la alberca"
+  },
+  {
+   "id": "alberca-muro-poniente",
+   "x": [
+    1.5,
+    1.7
+   ],
+   "y": [
+    18.05,
+    19.95
+   ],
+   "z": [
+    0,
+    0.5
+   ],
+   "material": "concreto-alberca",
+   "source": "propuesta patio-social (Claude, 2026-10-26): alberca semienterrada: muros de concreto armado de 0.20 m, 0.50 m sobre el piso y 0.80 m bajo él (profundidad interior 1.30 m, agua a 1.22 m); lado poniente",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "muro de la alberca"
+  },
+  {
+   "id": "alberca-muro-oriente",
+   "x": [
+    5.5,
+    5.7
+   ],
+   "y": [
+    18.05,
+    19.95
+   ],
+   "z": [
+    0,
+    0.5
+   ],
+   "material": "concreto-alberca",
+   "source": "propuesta patio-social (Claude, 2026-10-26): alberca semienterrada: muros de concreto armado de 0.20 m, 0.50 m sobre el piso y 0.80 m bajo él (profundidad interior 1.30 m, agua a 1.22 m); lado oriente",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "muro de la alberca"
+  },
+  {
+   "id": "alberca-coping-norte",
+   "x": [
+    1.46,
+    5.74
+   ],
+   "y": [
+    17.810000000000002,
+    18.05
+   ],
+   "z": [
+    0.5,
+    0.54
+   ],
+   "material": "piedra-coping",
+   "source": "propuesta patio-social (Claude, 2026-10-26): remate (coping) de piedra de 0.04 m que sobresale 0.04 m del muro; norte",
+   "ifc": "IfcPlate",
+   "object_type": "remate de la alberca"
+  },
+  {
+   "id": "alberca-coping-sur",
+   "x": [
+    1.46,
+    5.74
+   ],
+   "y": [
+    19.95,
+    20.189999999999998
+   ],
+   "z": [
+    0.5,
+    0.54
+   ],
+   "material": "piedra-coping",
+   "source": "propuesta patio-social (Claude, 2026-10-26): remate (coping) de piedra de 0.04 m que sobresale 0.04 m del muro; sur",
+   "ifc": "IfcPlate",
+   "object_type": "remate de la alberca"
+  },
+  {
+   "id": "alberca-coping-poniente",
+   "x": [
+    1.46,
+    1.7
+   ],
+   "y": [
+    18.05,
+    19.95
+   ],
+   "z": [
+    0.5,
+    0.54
+   ],
+   "material": "piedra-coping",
+   "source": "propuesta patio-social (Claude, 2026-10-26): remate (coping) de piedra de 0.04 m que sobresale 0.04 m del muro; poniente",
+   "ifc": "IfcPlate",
+   "object_type": "remate de la alberca"
+  },
+  {
+   "id": "alberca-coping-oriente",
+   "x": [
+    5.5,
+    5.74
+   ],
+   "y": [
+    18.05,
+    19.95
+   ],
+   "z": [
+    0.5,
+    0.54
+   ],
+   "material": "piedra-coping",
+   "source": "propuesta patio-social (Claude, 2026-10-26): remate (coping) de piedra de 0.04 m que sobresale 0.04 m del muro; oriente",
+   "ifc": "IfcPlate",
+   "object_type": "remate de la alberca"
+  },
+  {
+   "id": "alberca-fondo",
+   "x": [
+    1.7,
+    5.5
+   ],
+   "y": [
+    18.05,
+    19.95
+   ],
+   "z": [
+    0.0,
+    0.02
+   ],
+   "material": "mosaico-alberca",
+   "source": "propuesta patio-social (Claude, 2026-10-26): el fondo real está a 0.80 m bajo el piso y no se puede modelar sin cortar el piso de los hechos; esta placa a nivel del piso solo da el color del fondo visto desde arriba",
+   "ifc": "IfcPlate",
+   "object_type": "fondo de la alberca"
+  },
+  {
+   "id": "alberca-agua",
+   "x": [
+    1.7,
+    5.5
+   ],
+   "y": [
+    18.05,
+    19.95
+   ],
+   "z": [
+    0.4,
+    0.42
+   ],
+   "material": "agua-alberca",
+   "source": "propuesta patio-social (Claude, 2026-10-26): superficie del agua a 0.42 m sobre el piso (0.08 m bajo el borde); interior de 3.80 × 1.90 m = 7.22 m² y ≈ 8.8 m³",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "agua de la alberca"
+  },
+  {
+   "id": "deck-andador",
+   "x": [
+    0.3,
+    6.0
+   ],
+   "y": [
+    16.95,
+    17.75
+   ],
+   "z": [
+    0,
+    0.05
+   ],
+   "material": "duela-wpc-nogal",
+   "source": "propuesta patio-social (Claude, 2026-10-26): deck de duela WPC nogal (la misma del recorrido de la casa) de 0.05 m sobre el concreto del patio; andador de 0.80 m al norte de la alberca, de la puerta D11 a la palapa",
+   "ifc": "IfcPlate",
+   "object_type": "deck"
+  },
+  {
+   "id": "deck-palapa",
+   "x": [
+    6.0,
+    9.6
+   ],
+   "y": [
+    16.95,
+    20.8
+   ],
+   "z": [
+    0,
+    0.05
+   ],
+   "material": "duela-wpc-nogal",
+   "source": "propuesta patio-social (Claude, 2026-10-26): deck de duela WPC nogal (la misma del recorrido de la casa) de 0.05 m sobre el concreto del patio; piso de la palapa y de la entrada al área social",
+   "ifc": "IfcPlate",
+   "object_type": "deck"
+  },
+  {
+   "id": "palapa-poste-1",
+   "x": [
+    6.325,
+    6.4750000000000005
+   ],
+   "y": [
+    17.325,
+    17.474999999999998
+   ],
+   "z": [
+    0.05,
+    2.3
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): poste de madera de 0.15 × 0.15 m y 2.25 m, apoyado en un dado de concreto (no modelado)",
+   "ifc": "IfcColumn",
+   "object_type": "poste de la palapa"
+  },
+  {
+   "id": "palapa-poste-2",
+   "x": [
+    9.175,
+    9.325
+   ],
+   "y": [
+    17.325,
+    17.474999999999998
+   ],
+   "z": [
+    0.05,
+    2.3
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): poste de madera de 0.15 × 0.15 m y 2.25 m, apoyado en un dado de concreto (no modelado)",
+   "ifc": "IfcColumn",
+   "object_type": "poste de la palapa"
+  },
+  {
+   "id": "palapa-poste-3",
+   "x": [
+    6.325,
+    6.4750000000000005
+   ],
+   "y": [
+    20.225,
+    20.375
+   ],
+   "z": [
+    0.05,
+    2.3
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): poste de madera de 0.15 × 0.15 m y 2.25 m, apoyado en un dado de concreto (no modelado)",
+   "ifc": "IfcColumn",
+   "object_type": "poste de la palapa"
+  },
+  {
+   "id": "palapa-poste-4",
+   "x": [
+    9.175,
+    9.325
+   ],
+   "y": [
+    20.225,
+    20.375
+   ],
+   "z": [
+    0.05,
+    2.3
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): poste de madera de 0.15 × 0.15 m y 2.25 m, apoyado en un dado de concreto (no modelado)",
+   "ifc": "IfcColumn",
+   "object_type": "poste de la palapa"
+  },
+  {
+   "id": "palapa-tirante-1",
+   "x": [
+    6.325,
+    9.325
+   ],
+   "y": [
+    17.325,
+    17.474999999999998
+   ],
+   "z": [
+    2.3,
+    2.45
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): tirante de madera de 0.15 × 0.15 m entre postes, cierra cada marco de la palapa",
+   "ifc": "IfcMember",
+   "object_type": "tirante de la palapa"
+  },
+  {
+   "id": "palapa-tirante-2",
+   "x": [
+    6.325,
+    9.325
+   ],
+   "y": [
+    20.225,
+    20.375
+   ],
+   "z": [
+    2.3,
+    2.45
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): tirante de madera de 0.15 × 0.15 m entre postes, cierra cada marco de la palapa",
+   "ifc": "IfcMember",
+   "object_type": "tirante de la palapa"
+  },
+  {
+   "id": "palapa-viga-1",
+   "x": [
+    6.325,
+    6.4750000000000005
+   ],
+   "y": [
+    17.474999999999998,
+    20.225
+   ],
+   "z": [
+    2.3,
+    2.45
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): viga de madera de 0.15 × 0.15 m entre los dos marcos",
+   "ifc": "IfcBeam",
+   "object_type": "viga de la palapa"
+  },
+  {
+   "id": "palapa-viga-2",
+   "x": [
+    9.175,
+    9.325
+   ],
+   "y": [
+    17.474999999999998,
+    20.225
+   ],
+   "z": [
+    2.3,
+    2.45
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): viga de madera de 0.15 × 0.15 m entre los dos marcos",
+   "ifc": "IfcBeam",
+   "object_type": "viga de la palapa"
+  },
+  {
+   "id": "palapa-cumbrera",
+   "x": [
+    7.6850000000000005,
+    7.965
+   ],
+   "y": [
+    17.0,
+    20.8
+   ],
+   "z": [
+    3.52,
+    3.7
+   ],
+   "material": "palma-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): remate de cumbrera de palma",
+   "ifc": "IfcRoof",
+   "object_type": "cumbrera"
+  },
+  {
+   "id": "barra-cuerpo",
+   "x": [
+    6.55,
+    9.1
+   ],
+   "y": [
+    20.65,
+    21.0
+   ],
+   "z": [
+    0,
+    0.9
+   ],
+   "material": "concreto-alberca",
+   "source": "propuesta patio-social (Claude, 2026-10-26): barra de concreto de 0.35 m de fondo y 0.90 m de alto, pegada al muro sur (0.05 m de separación)",
+   "ifc": "IfcFurniture",
+   "object_type": "barra"
+  },
+  {
+   "id": "barra-cubierta",
+   "x": [
+    6.5,
+    9.15
+   ],
+   "y": [
+    20.45,
+    21.02
+   ],
+   "z": [
+    0.9,
+    0.94
+   ],
+   "material": "granito-negro",
+   "source": "propuesta patio-social (Claude, 2026-10-26): cubierta de granito negro de 4 cm con voladizo de 0.20 m hacia los bancos",
+   "ifc": "IfcFurniture",
+   "object_type": "cubierta de la barra"
+  },
+  {
+   "id": "asador",
+   "x": [
+    7.375,
+    8.275
+   ],
+   "y": [
+    20.7,
+    21.0
+   ],
+   "z": [
+    0.94,
+    1.2
+   ],
+   "material": "acero-inoxidable",
+   "source": "propuesta patio-social (Claude, 2026-10-26): asador de acero inoxidable de 0.90 m, empotrado en la barra, centrado bajo la cumbrera (x = 7.825 m): la zona de fuego queda lejos de los postes y bajo la parte más alta del techo",
+   "ifc": "IfcFurniture",
+   "object_type": "asador"
+  },
+  {
+   "id": "asador-campana",
+   "x": [
+    7.375,
+    8.275
+   ],
+   "y": [
+    20.8,
+    21.03
+   ],
+   "z": [
+    1.9,
+    2.2
+   ],
+   "material": "acero-inoxidable",
+   "source": "propuesta patio-social (Claude, 2026-10-26): campana metálica de extracción a 0.70 m sobre el asador, centrada bajo la cumbrera (arriba del techo de palma quedan ≥ 0.9 m libres, sin tocarlo)",
+   "ifc": "IfcFurniture",
+   "object_type": "campana"
+  },
+  {
+   "id": "mesa-cubierta",
+   "x": [
+    7.0,
+    8.65
+   ],
+   "y": [
+    18.0,
+    18.9
+   ],
+   "z": [
+    0.7,
+    0.75
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): mesa de 1.65 × 0.90 m a 0.75 m (supuesto: medidas comunes), para 6",
+   "ifc": "IfcFurniture",
+   "object_type": "mesa"
+  },
+  {
+   "id": "mesa-pata-1",
+   "x": [
+    7.05,
+    7.12
+   ],
+   "y": [
+    18.05,
+    18.12
+   ],
+   "z": [
+    0.05,
+    0.7
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): pata de la mesa",
+   "ifc": "IfcFurniture",
+   "object_type": "mesa"
+  },
+  {
+   "id": "mesa-pata-2",
+   "x": [
+    8.53,
+    8.6
+   ],
+   "y": [
+    18.05,
+    18.12
+   ],
+   "z": [
+    0.05,
+    0.7
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): pata de la mesa",
+   "ifc": "IfcFurniture",
+   "object_type": "mesa"
+  },
+  {
+   "id": "mesa-pata-3",
+   "x": [
+    7.05,
+    7.12
+   ],
+   "y": [
+    18.78,
+    18.85
+   ],
+   "z": [
+    0.05,
+    0.7
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): pata de la mesa",
+   "ifc": "IfcFurniture",
+   "object_type": "mesa"
+  },
+  {
+   "id": "mesa-pata-4",
+   "x": [
+    8.53,
+    8.6
+   ],
+   "y": [
+    18.78,
+    18.85
+   ],
+   "z": [
+    0.05,
+    0.7
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): pata de la mesa",
+   "ifc": "IfcFurniture",
+   "object_type": "mesa"
+  },
+  {
+   "id": "banca-1",
+   "x": [
+    7.0,
+    8.65
+   ],
+   "y": [
+    17.45,
+    17.85
+   ],
+   "z": [
+    0.42,
+    0.46
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): banca de 1.65 × 0.40 m con asiento a 0.46 m (supuesto: medidas comunes)",
+   "ifc": "IfcFurniture",
+   "object_type": "banca"
+  },
+  {
+   "id": "banca-1-pata-1",
+   "x": [
+    7.1,
+    7.159999999999999
+   ],
+   "y": [
+    17.5,
+    17.8
+   ],
+   "z": [
+    0.05,
+    0.42
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): pata de la banca",
+   "ifc": "IfcFurniture",
+   "object_type": "banca"
+  },
+  {
+   "id": "banca-1-pata-2",
+   "x": [
+    8.5,
+    8.56
+   ],
+   "y": [
+    17.5,
+    17.8
+   ],
+   "z": [
+    0.05,
+    0.42
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): pata de la banca",
+   "ifc": "IfcFurniture",
+   "object_type": "banca"
+  },
+  {
+   "id": "banca-2",
+   "x": [
+    7.0,
+    8.65
+   ],
+   "y": [
+    19.05,
+    19.45
+   ],
+   "z": [
+    0.42,
+    0.46
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): banca de 1.65 × 0.40 m con asiento a 0.46 m (supuesto: medidas comunes)",
+   "ifc": "IfcFurniture",
+   "object_type": "banca"
+  },
+  {
+   "id": "banca-2-pata-1",
+   "x": [
+    7.1,
+    7.159999999999999
+   ],
+   "y": [
+    19.1,
+    19.4
+   ],
+   "z": [
+    0.05,
+    0.42
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): pata de la banca",
+   "ifc": "IfcFurniture",
+   "object_type": "banca"
+  },
+  {
+   "id": "banca-2-pata-2",
+   "x": [
+    8.5,
+    8.56
+   ],
+   "y": [
+    19.1,
+    19.4
+   ],
+   "z": [
+    0.05,
+    0.42
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): pata de la banca",
+   "ifc": "IfcFurniture",
+   "object_type": "banca"
+  },
+  {
+   "id": "caseta-equipo",
+   "x": [
+    0.25,
+    1.25
+   ],
+   "y": [
+    19.7,
+    20.95
+   ],
+   "z": [
+    0,
+    1.1
+   ],
+   "material": "esmalte-negro",
+   "source": "propuesta patio-social (Claude, 2026-10-26): caseta de 1.00 × 1.25 × 1.10 m para bomba, filtro y clorador (supuesto: tamaño de un equipo residencial para ≈ 9 m³); a 0.25 m de la alberca por el lado poniente, con tapa abatible y registro hacia el norte",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "caseta de equipo"
+  },
+  {
+   "id": "jardinera-sur",
+   "x": [
+    1.5,
+    5.7
+   ],
+   "y": [
+    20.5,
+    21.0
+   ],
+   "z": [
+    0,
+    0.45
+   ],
+   "material": "concreto-alberca",
+   "source": "propuesta patio-social (Claude, 2026-10-26): jardinera de concreto de 0.50 × 0.45 m a lo largo de la alberca, sin tocar el muro de la barda (0.05 m)",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "jardinera"
+  },
+  {
+   "id": "planta-1",
+   "x": [
+    1.77,
+    2.03
+   ],
+   "y": [
+    20.62,
+    20.88
+   ],
+   "z": [
+    0.45,
+    1.5699999999999998
+   ],
+   "material": "planta-verde",
+   "source": "propuesta patio-social (Claude, 2026-10-26): pasto ornamental de crecimiento controlado, ≈ 1.0–1.3 m (sin raíces agresivas junto a la alberca)",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "planta"
+  },
+  {
+   "id": "planta-2",
+   "x": [
+    2.42,
+    2.6799999999999997
+   ],
+   "y": [
+    20.62,
+    20.88
+   ],
+   "z": [
+    0.45,
+    1.69
+   ],
+   "material": "planta-verde",
+   "source": "propuesta patio-social (Claude, 2026-10-26): pasto ornamental de crecimiento controlado, ≈ 1.0–1.3 m (sin raíces agresivas junto a la alberca)",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "planta"
+  },
+  {
+   "id": "planta-3",
+   "x": [
+    3.0700000000000003,
+    3.33
+   ],
+   "y": [
+    20.62,
+    20.88
+   ],
+   "z": [
+    0.45,
+    1.45
+   ],
+   "material": "planta-verde",
+   "source": "propuesta patio-social (Claude, 2026-10-26): pasto ornamental de crecimiento controlado, ≈ 1.0–1.3 m (sin raíces agresivas junto a la alberca)",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "planta"
+  },
+  {
+   "id": "planta-4",
+   "x": [
+    3.72,
+    3.98
+   ],
+   "y": [
+    20.62,
+    20.88
+   ],
+   "z": [
+    0.45,
+    1.5699999999999998
+   ],
+   "material": "planta-verde",
+   "source": "propuesta patio-social (Claude, 2026-10-26): pasto ornamental de crecimiento controlado, ≈ 1.0–1.3 m (sin raíces agresivas junto a la alberca)",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "planta"
+  },
+  {
+   "id": "planta-5",
+   "x": [
+    4.37,
+    4.63
+   ],
+   "y": [
+    20.62,
+    20.88
+   ],
+   "z": [
+    0.45,
+    1.69
+   ],
+   "material": "planta-verde",
+   "source": "propuesta patio-social (Claude, 2026-10-26): pasto ornamental de crecimiento controlado, ≈ 1.0–1.3 m (sin raíces agresivas junto a la alberca)",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "planta"
+  },
+  {
+   "id": "planta-6",
+   "x": [
+    5.0200000000000005,
+    5.28
+   ],
+   "y": [
+    20.62,
+    20.88
+   ],
+   "z": [
+    0.45,
+    1.45
+   ],
+   "material": "planta-verde",
+   "source": "propuesta patio-social (Claude, 2026-10-26): pasto ornamental de crecimiento controlado, ≈ 1.0–1.3 m (sin raíces agresivas junto a la alberca)",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "planta"
+  }
+ ],
+ "cylinders": [
+  {
+   "id": "banco-1",
+   "x": 7.0,
+   "y": 20.15,
+   "radius_m": 0.18,
+   "z": [
+    0.05,
+    0.62
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): banco alto de 0.36 m de diámetro y 0.62 m, de cara a la barra",
+   "object_type": "banco"
+  },
+  {
+   "id": "banco-2",
+   "x": 7.9,
+   "y": 20.15,
+   "radius_m": 0.18,
+   "z": [
+    0.05,
+    0.62
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): banco alto de 0.36 m de diámetro y 0.62 m, de cara a la barra",
+   "object_type": "banco"
+  },
+  {
+   "id": "banco-3",
+   "x": 8.8,
+   "y": 20.15,
+   "radius_m": 0.18,
+   "z": [
+    0.05,
+    0.62
+   ],
+   "material": "madera-tratada",
+   "source": "propuesta patio-social (Claude, 2026-10-26): banco alto de 0.36 m de diámetro y 0.62 m, de cara a la barra",
+   "object_type": "banco"
+  },
+  {
+   "id": "regadera-tubo",
+   "x": 1.45,
+   "y": 17.2,
+   "radius_m": 0.025,
+   "z": [
+    0,
+    2.15
+   ],
+   "material": "acero-inoxidable",
+   "source": "propuesta patio-social (Claude, 2026-10-26): regadera exterior junto a la entrada: tubo de acero inoxidable de 0.05 m y 2.15 m",
+   "object_type": "regadera"
+  },
+  {
+   "id": "regadera-rosa",
+   "x": 1.45,
+   "y": 17.2,
+   "radius_m": 0.1,
+   "z": [
+    2.15,
+    2.18
+   ],
+   "material": "acero-inoxidable",
+   "source": "propuesta patio-social (Claude, 2026-10-26): regadera exterior: rosa de 0.20 m de diámetro",
+   "object_type": "regadera"
+  }
+ ],
+ "slabs": [
+  {
+   "id": "palapa-techo-poniente",
+   "x": [
+    6.05,
+    7.825
+   ],
+   "y": [
+    17.0,
+    20.8
+   ],
+   "z_top": [
+    2.35,
+    3.6
+   ],
+   "thickness_m": 0.12,
+   "material": "palma-tratada",
+   "ifc": "IfcRoof",
+   "object_type": "techo de palma",
+   "source": "propuesta patio-social (Claude, 2026-10-26): techo de palma tratada de 12 cm a dos aguas (≈ 35°), cumbrera a 3.60 m a lo largo de y; alero a 2.35 m"
+  },
+  {
+   "id": "palapa-techo-oriente",
+   "x": [
+    7.825,
+    9.6
+   ],
+   "y": [
+    17.0,
+    20.8
+   ],
+   "z_top": [
+    3.6,
+    2.35
+   ],
+   "thickness_m": 0.12,
+   "material": "palma-tratada",
+   "ifc": "IfcRoof",
+   "object_type": "techo de palma",
+   "source": "propuesta patio-social (Claude, 2026-10-26): segunda agua del techo de palma; el alero queda a 0.26 m del muro de la colindancia (x = 9.86 m) para no gotear en el vecino"
+  }
+ ],
+ "lights": [
+  {
+   "id": "patio-arbotante-1",
+   "kind": "updown",
+   "position": [
+    4.65,
+    16.945
+   ],
+   "wall_normal": [
+    0.0,
+    1.0
+   ],
+   "z": 2.0,
+   "radius_m": 0.04,
+   "height_m": 0.22,
+   "offset_m": 0.1,
+   "lumens": 800,
+   "color_temperature_k": 3000,
+   "power_w": 10,
+   "body_material": "lamina-negra-mate",
+   "led_material": "led-calido",
+   "source": "propuesta patio-social (Claude, 2026-10-26): iluminación exterior cálida (3000 K), arbotante cilíndrico de 10 W a 2.0 m en el muro norte, junto a la ventana V08: luz hacia arriba y hacia abajo, sin deslumbrar a los vecinos"
+  },
+  {
+   "id": "patio-arbotante-2",
+   "kind": "updown",
+   "position": [
+    0.2,
+    18.8
+   ],
+   "wall_normal": [
+    1.0,
+    0.0
+   ],
+   "z": 2.0,
+   "radius_m": 0.04,
+   "height_m": 0.22,
+   "offset_m": 0.1,
+   "lumens": 800,
+   "color_temperature_k": 3000,
+   "power_w": 10,
+   "body_material": "lamina-negra-mate",
+   "led_material": "led-calido",
+   "source": "propuesta patio-social (Claude, 2026-10-26): iluminación exterior cálida (3000 K), arbotante cilíndrico de 10 W a 2.0 m en el muro poniente: luz hacia arriba y hacia abajo, sin deslumbrar a los vecinos"
+  },
+  {
+   "id": "patio-arbotante-3",
+   "kind": "updown",
+   "position": [
+    9.86,
+    19.0
+   ],
+   "wall_normal": [
+    -1.0,
+    0.0
+   ],
+   "z": 2.0,
+   "radius_m": 0.04,
+   "height_m": 0.22,
+   "offset_m": 0.1,
+   "lumens": 800,
+   "color_temperature_k": 3000,
+   "power_w": 10,
+   "body_material": "lamina-negra-mate",
+   "led_material": "led-calido",
+   "source": "propuesta patio-social (Claude, 2026-10-26): iluminación exterior cálida (3000 K), arbotante cilíndrico de 10 W a 2.0 m en el muro oriente, junto a la palapa: luz hacia arriba y hacia abajo, sin deslumbrar a los vecinos"
+  },
+  {
+   "id": "patio-arbotante-4",
+   "kind": "updown",
+   "position": [
+    3.6,
+    21.05
+   ],
+   "wall_normal": [
+    0.0,
+    -1.0
+   ],
+   "z": 2.0,
+   "radius_m": 0.04,
+   "height_m": 0.22,
+   "offset_m": 0.1,
+   "lumens": 800,
+   "color_temperature_k": 3000,
+   "power_w": 10,
+   "body_material": "lamina-negra-mate",
+   "led_material": "led-calido",
+   "source": "propuesta patio-social (Claude, 2026-10-26): iluminación exterior cálida (3000 K), arbotante cilíndrico de 10 W a 2.0 m en el muro sur, sobre la jardinera: luz hacia arriba y hacia abajo, sin deslumbrar a los vecinos"
+  },
+  {
+   "id": "patio-arbotante-5",
+   "kind": "updown",
+   "position": [
+    8.2,
+    16.22
+   ],
+   "wall_normal": [
+    0.0,
+    1.0
+   ],
+   "z": 2.0,
+   "radius_m": 0.04,
+   "height_m": 0.22,
+   "offset_m": 0.1,
+   "lumens": 800,
+   "color_temperature_k": 3000,
+   "power_w": 10,
+   "body_material": "lamina-negra-mate",
+   "led_material": "led-calido",
+   "source": "propuesta patio-social (Claude, 2026-10-26): iluminación exterior cálida (3000 K), arbotante cilíndrico de 10 W a 2.0 m en el muro entre las ventanas V06 y V07: luz hacia arriba y hacia abajo, sin deslumbrar a los vecinos"
+  }
+ ]
+}

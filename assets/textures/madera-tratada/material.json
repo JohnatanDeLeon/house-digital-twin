@@ -1,0 +1,29 @@
+{
+ "name": "madera-tratada",
+ "applies_to": {
+  "variant": "patio-social",
+  "source": "propuesta patio-social (Claude, 2026-10-26): madera dura tratada para exterior (postes y vigas de la palapa)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   96,
+   62,
+   40
+  ],
+  "metallic": 0.0,
+  "roughness": 0.6,
+  "note": "madera dura tratada para exterior (postes y vigas de la palapa)"
+ },
+ "source": {
+  "photo": null,
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}

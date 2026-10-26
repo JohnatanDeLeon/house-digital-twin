@@ -1,0 +1,24 @@
+{
+ "_doc": "agua de la alberca, azul turquesa claro (translúcida). Material propuesto: no hay foto; color y parámetros comunes, sin medir. Regenerar con: python -m house_twin.cli texture sources/texturas/agua-alberca.json",
+ "name": "agua-alberca",
+ "kind": "constant",
+ "applies_to": {
+  "variant": "patio-social",
+  "source": "propuesta patio-social (Claude, 2026-10-26): agua de la alberca, azul turquesa claro (translúcida)"
+ },
+ "pbr": {
+  "basecolor_srgb": [
+   70,
+   165,
+   190
+  ],
+  "metallic": 0.0,
+  "roughness": 0.04,
+  "transmission": 0.55,
+  "ior": 1.33,
+  "note": "agua de la alberca, azul turquesa claro (translúcida)"
+ },
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}

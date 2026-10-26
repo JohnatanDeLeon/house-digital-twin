@@ -397,3 +397,91 @@ def test_two_windows_move_the_mirror_off_the_new_window(dxf_facts):
     assert y1 < nightstand_y0 - 0.1  # no se cruza con el buro (y ≥ 16.375 m)
     assert not (1.95 <= m['wall']['origin'][0] + m['lean_m'] <= 2.27 and y1 > 16.4)
     assert {k: v for k, v in mine.items() if k not in ('mirror', '_doc')} == {k: v for k, v in old.items() if k not in ('mirror', '_doc')}
+
+
+def _patio():
+    return next(v for v in load_variants() if v['id'] == 'patio-social')
+
+
+def _patio_parts():
+    import json
+    from house_twin.extras import extras_parts
+    spec = json.loads((ROOT / _patio()['specs']['extras']).read_text())
+    return spec, {p['id']: p for p in extras_parts(spec)}
+
+
+def _bbox(part):
+    pts = part['mesh'][0]
+    return [(min(p[i] for p in pts), max(p[i] for p in pts)) for i in range(3)]
+
+
+def _apart(a, b, gap=0.0):
+    return any(a[i][1] + gap <= b[i][0] or b[i][1] + gap <= a[i][0] for i in range(3))
+
+
+def test_patio_parts_stay_inside_the_patio(dxf_facts):
+    """Todo lo que propone el patio (menos los arbotantes, pegados al muro a propósito) cae dentro del polígono de S09."""
+    from house_twin.finishes import _inside
+    spec, parts = _patio_parts()
+    patio = next(s for s in dxf_facts['spaces'] if s['id'] == 'S09')['polygon']
+    lights = {lum['id'] for lum in spec['lights']}
+    for pid, part in parts.items():
+        if pid.split('-foco')[0] in lights:
+            continue
+        (x0, x1), (y0, y1), _ = _bbox(part)
+        assert all(_inside(p, patio) for p in ((x0, y0), (x1, y0), (x1, y1), (x0, y1))), pid
+
+
+def test_patio_pool_keeps_clear_of_walls_windows_and_equipment(dxf_facts):
+    """La alberca queda a ≥ 0.85 m de todos los muros, a ≥ 0.90 m de las ventanas bajas de la casa (V06–V08) y sin
+    chocar con la caseta, la palapa, la jardinera ni los muebles; tiene 3.8 × 1.9 m de agua a 1.22 m (≈ 8.8 m³)."""
+    _, parts = _patio_parts()
+    walls = [parts[f'alberca-muro-{k}'] for k in ('norte', 'sur', 'poniente', 'oriente')]
+    x0 = min(_bbox(w)[0][0] for w in walls); x1 = max(_bbox(w)[0][1] for w in walls)
+    y0 = min(_bbox(w)[1][0] for w in walls); y1 = max(_bbox(w)[1][1] for w in walls)
+    patio = next(s for s in dxf_facts['spaces'] if s['id'] == 'S09')['polygon']
+    assert y0 - 16.945 >= 0.85 and 21.05 - y1 >= 0.85 and x0 - 0.2 >= 0.85  # a los muros del patio (caras interiores)
+    for oid in ('V06', 'V07', 'V08'):
+        window = next(o for o in dxf_facts['openings'] if o['id'] == oid)
+        wx0, wx1 = min(p[0] for p in window['footprint']), max(p[0] for p in window['footprint'])
+        dx = max(wx0 - x1, x0 - wx1, 0.0)
+        dy = min(abs(p[1] - y0) for p in window['footprint'])
+        assert (dx * dx + dy * dy) ** 0.5 >= 0.90, oid
+    water = _bbox(parts['alberca-agua'])
+    inner_x, inner_y = water[0][1] - water[0][0], water[1][1] - water[1][0]
+    assert abs(water[2][1] + 0.80 - 1.22) < 1e-6  # agua a 0.42 m sobre el piso + 0.80 m bajo él = 1.22 m de profundidad
+    assert abs(inner_x - 3.8) < 1e-6 and abs(inner_y - 1.9) < 1e-6
+    assert 8.5 <= inner_x * inner_y * 1.22 <= 9.0  # volumen de agua (m³)
+    pool = [(x0, x1), (y0, y1), (0.0, 0.54)]
+    for pid, part in parts.items():
+        if pid.startswith(('caseta', 'jardinera', 'palapa-poste', 'barra', 'banco', 'mesa', 'banca', 'planta', 'regadera')):
+            assert _apart(pool, _bbox(part), 0.20), pid  # 0.20 m para pasar y rematar
+
+
+def test_patio_palapa_roof_clears_the_neighbour_the_windows_and_the_grill(dxf_facts):
+    """El alero de la palapa queda a ≥ 0.25 m del muro de la colindancia y a ≥ 0.7 m de las ventanas de la recámara mayor;
+    la campana del asador queda a ≥ 0.9 m por debajo del techo de palma."""
+    _, parts = _patio_parts()
+    roofs = [parts['palapa-techo-poniente'], parts['palapa-techo-oriente']]
+    rx0, rx1 = min(_bbox(r)[0][0] for r in roofs), max(_bbox(r)[0][1] for r in roofs)
+    ry0 = min(_bbox(r)[1][0] for r in roofs)
+    assert 9.86 - rx1 >= 0.25 - 1e-9
+    assert ry0 - 16.22 >= 0.70  # ventanas V06 y V07, en el muro y = 16.22 m
+    hood_top = _bbox(parts['asador-campana'])[2][1]
+    hood_x0, hood_x1 = _bbox(parts['asador-campana'])[0]
+    # el techo sobre la campana: sube de 2.35 m (alero, x = 6.05 m) a 3.60 m (cumbrera, x = 7.825 m) y baja del otro lado
+    z_roof = lambda x: 2.35 + (min(x, 15.65 - x) - 6.05) * (3.60 - 2.35) / (7.825 - 6.05) - 0.12  # cara de abajo
+    assert min(z_roof(x) for x in (hood_x0, hood_x1)) - hood_top >= 0.9
+
+
+def test_patio_proposal_uses_only_known_materials():
+    """Los materiales de las piezas existen (casa o propuesta) y los nuevos solo los toma esta variante."""
+    import json
+    from house_twin.finishes import load_materials
+    from house_twin.variants import validate
+    mats = load_materials(ROOT / 'assets' / 'textures')
+    spec, parts = _patio_parts()
+    for pid, part in parts.items():
+        assert part['material'] in mats, (pid, part['material'])
+    for name in ('agua-alberca', 'concreto-alberca', 'piedra-coping', 'palma-tratada', 'madera-tratada', 'planta-verde', 'mosaico-alberca'):
+        assert mats[name]['applies_to']['variant'] == 'patio-social' and 'openings' not in mats[name]['applies_to']

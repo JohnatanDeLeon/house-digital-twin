@@ -1,0 +1,22 @@
+{
+ "_doc": "remate (coping) de piedra o porcelanato claro antiderrapante. Material propuesto: no hay foto; color y parámetros comunes, sin medir. Regenerar con: python -m house_twin.cli texture sources/texturas/piedra-coping.json",
+ "name": "piedra-coping",
+ "kind": "constant",
+ "applies_to": {
+  "variant": "patio-social",
+  "source": "propuesta patio-social (Claude, 2026-10-26): remate (coping) de piedra o porcelanato claro antiderrapante"
+ },
+ "pbr": {
+  "basecolor_srgb": [
+   228,
+   224,
+   214
+  ],
+  "metallic": 0.0,
+  "roughness": 0.7,
+  "note": "remate (coping) de piedra o porcelanato claro antiderrapante"
+ },
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}
