@@ -1,0 +1,29 @@
+{
+ "name": "escalera-madera",
+ "applies_to": {
+  "variant": "escalera-recta",
+  "source": "propuesta escalera-recta (Claude, 2026-10-26): huellas de madera barnizada"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   140,
+   98,
+   64
+  ],
+  "metallic": 0.0,
+  "roughness": 0.55,
+  "note": "huellas de madera barnizada"
+ },
+ "source": {
+  "photo": null,
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}

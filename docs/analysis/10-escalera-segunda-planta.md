@@ -112,6 +112,29 @@ Puntajes de 1 a 5 **a mi juicio** (no son medidas), con los pesos que me parecie
 - **Qué habrá arriba:** el análisis supone una planta alta sobre toda la huella techada; la cochera y el patio no se tocaron.
 - **El comedor:** si el dueño prefiere no correrlo, la opción A es la segunda.
 
-## 7. Siguiente paso posible
+## 7. La propuesta en el modelo: `escalera-recta`
 
-Modelar la escalera B como variante (`variants/escalera-recta.json`, con `specs.extras`: escalones y hueco) para verla en el recorrido.
+Para poder verla, la escalera quedó como variante (`variants/escalera-recta.json`; piezas en `variants/escalera-recta/piezas.json`,
+comedor corrido en `variants/escalera-recta/sala.json`) y se elige en el selector «Versión» del recorrido (`#escalera-recta`).
+No cambia los hechos ni `models/existing.*`.
+
+- **Altura:** el modelo supone muro de 2.40 m y losa de 0.10 m (`ASSUMED_DEFAULTS`), es decir **2.50 m entre pisos**; la variante usa esa
+  altura, no los 2.75 m del estudio: salen **15 peraltes de 16.7 cm** (14 escalones y el piso de arriba), huella 30 cm, 2P+H = 63.3 cm y un tramo de 4.2 m
+  (y 3.53–7.73 m). Con 2.75 m serían 16 peraltes y 4.5 m; la ubicación no cambia.
+- **Ancho:** 1.00 m (x 3.30–4.30 m), de concreto con huella de madera de 4 cm; balaustres y pasamanos de acero del lado abierto (este).
+  Junto a la cocina en U hay que acortar 0.1 m la cubierta de la cocina o correr la escalera a x 3.40 m.
+- **Hueco:** 1.12 × 3.70 m (x 3.24–4.36, y 4.03–7.73) en la losa y en el plafón de S01, con guarda de 1.0 m a su alrededor. Es la nueva clave
+  `add_slab_openings` de la geometría de una variante. La losa de la casa hace de piso de la planta alta; la planta alta como tal no está modelada,
+  por eso por el hueco se ve el cielo.
+- **Comedor:** corrido 1.1 m al este (centro x 5.3 m). Queda a ≈ 0.1 m del sofá: conviene girar la mesa o correr el sofá 0.3 m.
+
+| | |
+|---|---|
+| ![entrada](10-recorrido-entrada.png) | ![frente](10-recorrido-frente.png) |
+| ![sala](10-recorrido-sala.png) | ![hueco](10-recorrido-hueco.png) |
+
+*Capturas del recorrido: desde la puerta D03, desde la sala, desde el comedor y mirando hacia el hueco.*
+
+## 8. Siguiente paso posible
+
+Modelar la planta alta (muros, recámaras y el pasillo sobre el de abajo) y revisar la escalera con la altura y la losa reales cuando se midan.

@@ -1,0 +1,29 @@
+{
+ "name": "escalera-concreto",
+ "applies_to": {
+  "variant": "escalera-recta",
+  "source": "propuesta escalera-recta (Claude, 2026-10-26): concreto aparente de la escalera"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   165,
+   163,
+   158
+  ],
+  "metallic": 0.0,
+  "roughness": 0.9,
+  "note": "concreto aparente de la escalera"
+ },
+ "source": {
+  "photo": null,
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}

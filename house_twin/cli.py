@@ -76,7 +76,7 @@ def build(source: Path):
         if problems:
             raise SystemExit('\n'.join(problems))
         proposed = variant_facts(facts, variant)
-        specs = variant_specs(variant, {'kitchen': kitchen, 'laundry': laundry, 'extras': None})
+        specs = variant_specs(variant, {'kitchen': kitchen, 'laundry': laundry, 'extras': None, 'living': living})
         if has_geometry(variant):  # remodelación: sus hechos propuestos quedan escritos (los usa `scene`)
             VARIANT_FACTS_DIR.mkdir(parents=True, exist_ok=True)
             variant_facts_path(variant).write_text(json.dumps(proposed, ensure_ascii=False, indent=1))
@@ -84,7 +84,7 @@ def build(source: Path):
         path = VARIANTS_IFC_DIR / f"{variant['id']}.ifc"
         path.parent.mkdir(parents=True, exist_ok=True)
         build_ifc(proposed, apply_variant(Finishes(proposed, variant_materials(materials, variant)), variant, materials), hardware, furniture,
-                  luminaires, devices, shower, sanitary, specs['kitchen'], living, variant_bedrooms(variant, bedrooms),
+                  luminaires, devices, shower, sanitary, specs['kitchen'], specs['living'], variant_bedrooms(variant, bedrooms),
                   specs['laundry'], specs['extras']).write(str(path))
         outputs.append(path)
     for path in outputs:

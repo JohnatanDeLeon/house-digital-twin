@@ -485,3 +485,61 @@ def test_patio_proposal_uses_only_known_materials():
         assert part['material'] in mats, (pid, part['material'])
     for name in ('agua-alberca', 'concreto-alberca', 'piedra-coping', 'palma-tratada', 'madera-tratada', 'planta-verde', 'mosaico-alberca'):
         assert mats[name]['applies_to']['variant'] == 'patio-social' and 'openings' not in mats[name]['applies_to']
+
+
+# --- escalera recta (docs/analysis/10-escalera-segunda-planta.md) ---
+
+def _stair_parts():
+    import json
+    pieces = json.loads((ROOT / 'variants/escalera-recta/piezas.json').read_text())
+    return [b for b in pieces['boxes'] if b['id'].startswith('escalon-')], pieces
+
+
+def test_stair_has_comfortable_risers_and_treads():
+    steps, _ = _stair_parts()
+    assert len(steps) == 14  # 15 peraltes: el piso de arriba es el último
+    tops = [s['z'][1] + 0.04 for s in steps]
+    risers = [b - a for a, b in zip([0] + tops, tops)]
+    assert all(abs(r - 2.50 / 15) < 2e-3 for r in risers) and max(risers) <= 0.18
+    treads = [s['y'][1] - s['y'][0] for s in steps]
+    assert all(abs(t - 0.30) < 2e-3 for t in treads)
+    assert 0.63 <= 2 * max(risers) + 0.30 <= 0.65  # Blondel
+    assert abs(tops[-1] + 2.50 / 15 - 2.50) < 5e-3 and abs(steps[-1]['y'][1] + 0.0 - 7.73) < 1e-6  # el último peralte llega al piso de arriba
+
+
+def test_stair_fits_the_dining_strip_without_touching_walls_doors_or_fixed_furniture(dxf_facts):
+    from shapely.geometry import Polygon, box
+    from shapely.ops import unary_union
+    steps, _ = _stair_parts()
+    xs = [s['x'] for s in steps]
+    footprint = box(min(x[0] for x in xs), steps[0]['y'][0], max(x[1] for x in xs), steps[-1]['y'][1])
+    assert footprint.bounds[2] - footprint.bounds[0] >= 0.90
+    s01 = Polygon(next(s['polygon'] for s in dxf_facts['spaces'] if s['id'] == 'S01'))
+    assert s01.buffer(0.02).contains(footprint)
+    walls = unary_union([Polygon(w['footprint']) for w in dxf_facts['walls']])
+    assert footprint.intersection(walls.buffer(-0.01)).area < 1e-6
+    for o in dxf_facts['openings']:
+        if o['kind'] == 'door':
+            door = Polygon(o['footprint']).buffer(0.9, cap_style=3)
+            assert footprint.intersection(door).area < 1e-6, o['id']
+
+
+def test_stair_opening_is_cut_in_the_slab_and_ceiling_only_in_its_variant(dxf_facts):
+    import json
+    from house_twin.variants import variant_facts
+    variant = json.loads((ROOT / 'variants/escalera-recta.json').read_text())
+    proposed = variant_facts(dxf_facts, variant)
+    assert 'slab_openings' not in dxf_facts and len(proposed['slab_openings']) == 1  # la casa actual no se toca
+    hole = proposed['slab_openings'][0]['polygon']
+    xs, ys = [p[0] for p in hole], [p[1] for p in hole]
+    steps, _ = _stair_parts()
+    assert min(xs) <= min(s['x'][0] for s in steps) and max(xs) >= max(s['x'][1] for s in steps)
+    # (0.10 + 2.10) * 4.2 / 2.50 = 3.70 m de hueco, termina donde el último peralte
+    assert abs((max(ys) - min(ys)) - 3.70) < 0.02 and abs(max(ys) - steps[-1]['y'][1]) < 0.02
+
+
+def test_stair_materials_are_only_used_by_its_variant():
+    import json
+    for name in ('escalera-concreto', 'escalera-madera', 'escalera-acero'):
+        spec = json.loads((ROOT / f'sources/texturas/{name}.json').read_text())
+        assert spec['applies_to'] == {'variant': 'escalera-recta', 'source': spec['applies_to']['source']}

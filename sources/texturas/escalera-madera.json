@@ -1,0 +1,22 @@
+{
+ "_doc": "huellas de madera barnizada. Material propuesto: no hay foto; color y parámetros comunes, sin medir. Regenerar con: python -m house_twin.cli texture sources/texturas/escalera-madera.json",
+ "name": "escalera-madera",
+ "kind": "constant",
+ "applies_to": {
+  "variant": "escalera-recta",
+  "source": "propuesta escalera-recta (Claude, 2026-10-26): huellas de madera barnizada"
+ },
+ "pbr": {
+  "basecolor_srgb": [
+   140,
+   98,
+   64
+  ],
+  "metallic": 0.0,
+  "roughness": 0.55,
+  "note": "huellas de madera barnizada"
+ },
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}
