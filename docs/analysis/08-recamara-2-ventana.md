@@ -57,8 +57,19 @@ Reubicar la ventana que queda detrás del respaldo de la cama, después de inves
 
 ## Renders (hoy contra propuesta)
 
-Salen de la geometría de `models/existing.ifc` y de `models/variants/recamara-2-ventana.ifc`, sin techo y en colores planos (no son los
-renders con texturas de `scene`, que necesita Blender).
+### Recorrido con texturas
+
+La propuesta ya está en el recorrido («Versión» → «Propuesta: Recámara 2: ventana al muro del pasillo», `docs/viewer/recorrido/casa-recamara-2-ventana.js`).
+Se generó con la misma `house_twin/blender_scene.py` (texturas, UV y exportación a GLB) corrida con `bpy` en lugar de Blender de escritorio,
+y con un cargador mínimo del IFC en lugar de Bonsai, que no se pudo instalar en el entorno de trabajo. El resto del recorrido (casa
+actual y las otras propuestas) no cambió. Conviene volver a correr `python -m house_twin.cli scene` en un equipo con Blender y Bonsai.
+
+![Hacia la cabecera, con texturas](08-recorrido-cabecera.png)
+![Hacia el muro poniente, con texturas](08-recorrido-ventana.png)
+
+### Vistas esquemáticas del IFC
+
+Salen de la geometría de `models/existing.ifc` y de `models/variants/recamara-2-ventana.ifc`, sin techo y en colores planos.
 
 ![Vista aérea](08-render-aerea.png)
 ![Hacia la cabecera](08-render-cabecera.png)
@@ -108,6 +119,5 @@ otro que se rellena con casi el mismo número de blocks) y la implementada.
 - **Estructura (U03 sigue sin respuesta):** se desconoce si W09 y W12 cargan. El vano nuevo y el tapiado necesitan dintel, castillos y
   repisón diseñados por un profesional; esta propuesta no los define.
 - **Sin modelar:** persiana, cortina, apliques, el acabado del muro tapiado y el panel de cabecera. Los muebles se quedan donde están.
-- **Recorrido 3D:** `build` ya genera los hechos propuestos y el IFC (`models/variants/recamara-2-ventana.ifc`); falta correr
-  `python -m house_twin.cli scene` con Blender para su modelo en el selector «Versión» (aquí no hay Blender).
+- **Recorrido 3D:** generado sin Bonsai (ver arriba); sin la luz ni los renders de Cycles (`scene --render`).
 - **La planta de este informe** se dibujó a partir de los hechos y de `recamara-s03.json`; no sale de `build`.
