@@ -19,7 +19,7 @@ Gemelo digital de una casa (Casa Jonhy). Código en inglés, comentarios y docum
   (`casa-<id>.js`) y el recorrido lo carga al elegirla en el selector «Versión» (`#<id>` en la página).
   Acabados propios de una propuesta: material con `applies_to.variant` y `variant_applies_to` (espacios o `calle`,
   `up_to_m`, `region_m`, `replaces`); la casa no los toma. `own_model` da modelo propio a una variante que solo cambia
-  acabados; `specs.extras` agrega piezas sueltas (`house_twin/extras.py`). Puertas corredizas: `slide` en el vano
+  acabados; `specs.extras` agrega piezas sueltas (cajas, cilindros, techos inclinados, luminarias; `house_twin/extras.py`; su clase IFC decide cómo las pinta `blender_scene.py`: usar `IfcFurniture`, `IfcPlate`, `IfcMember`, `IfcColumn`, `IfcBeam`, `IfcRoof` o `IfcBuildingElementProxy`, nunca `IfcWall`/`IfcCovering`, que Blender trata como muros y pisos de la casa). Puertas corredizas: `slide` en el vano
   (`house_twin/sliding.py`) en vez de `swing`.
 - Las propuestas no sustituyen la validación estructural ni normativa de un profesional.
 

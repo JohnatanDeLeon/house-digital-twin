@@ -451,7 +451,8 @@ def apply_finishes(ifc_path, facts, variant=None):
             scene.opening(obj, name)
         elif ifc_class in ('IfcDiscreteAccessory', 'IfcFurniture', 'IfcOutlet', 'IfcSwitchingDevice', 'IfcValve',
                            'IfcSanitaryTerminal', 'IfcElectricAppliance', 'IfcAudioVisualAppliance',
-                           'IfcUnitaryEquipment', 'IfcFlowStorageDevice', 'IfcPlate', 'IfcMember'):
+                           'IfcUnitaryEquipment', 'IfcFlowStorageDevice', 'IfcPlate', 'IfcMember', 'IfcColumn', 'IfcBeam',
+                           'IfcRoof', 'IfcBuildingElementProxy'):
             scene.accessory(obj)
         elif ifc_class in ('IfcSpace', 'IfcOpeningElement'):
             obj.hide_render = obj.hide_viewport = True

@@ -1,0 +1,22 @@
+{
+ "_doc": "follaje de pastos ornamentales y plantas de maceta. Material propuesto: no hay foto; color y parámetros comunes, sin medir. Regenerar con: python -m house_twin.cli texture sources/texturas/planta-verde.json",
+ "name": "planta-verde",
+ "kind": "constant",
+ "applies_to": {
+  "variant": "patio-social",
+  "source": "propuesta patio-social (Claude, 2026-10-26): follaje de pastos ornamentales y plantas de maceta"
+ },
+ "pbr": {
+  "basecolor_srgb": [
+   60,
+   100,
+   54
+  ],
+  "metallic": 0.0,
+  "roughness": 0.9,
+  "note": "follaje de pastos ornamentales y plantas de maceta"
+ },
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}

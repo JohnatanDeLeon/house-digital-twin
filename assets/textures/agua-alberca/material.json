@@ -1,0 +1,31 @@
+{
+ "name": "agua-alberca",
+ "applies_to": {
+  "variant": "patio-social",
+  "source": "propuesta patio-social (Claude, 2026-10-26): agua de la alberca, azul turquesa claro (translúcida)"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   70,
+   165,
+   190
+  ],
+  "metallic": 0.0,
+  "roughness": 0.04,
+  "transmission": 0.55,
+  "ior": 1.33,
+  "note": "agua de la alberca, azul turquesa claro (translúcida)"
+ },
+ "source": {
+  "photo": null,
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}

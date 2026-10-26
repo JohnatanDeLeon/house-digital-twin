@@ -1,0 +1,22 @@
+{
+ "_doc": "mosaico azul del fondo de la alberca. Material propuesto: sin foto; color común, sin medir. Regenerar con: python -m house_twin.cli texture sources/texturas/mosaico-alberca.json",
+ "name": "mosaico-alberca",
+ "kind": "constant",
+ "applies_to": {
+  "variant": "patio-social",
+  "source": "propuesta patio-social (Claude, 2026-10-26): mosaico azul del fondo de la alberca"
+ },
+ "pbr": {
+  "basecolor_srgb": [
+   52,
+   128,
+   168
+  ],
+  "metallic": 0.0,
+  "roughness": 0.2,
+  "note": "mosaico vítreo azul del fondo de la alberca"
+ },
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}

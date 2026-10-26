@@ -1,0 +1,29 @@
+{
+ "name": "piedra-coping",
+ "applies_to": {
+  "variant": "patio-social",
+  "source": "propuesta patio-social (Claude, 2026-10-26): remate (coping) de piedra o porcelanato claro antiderrapante"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   228,
+   224,
+   214
+  ],
+  "metallic": 0.0,
+  "roughness": 0.7,
+  "note": "remate (coping) de piedra o porcelanato claro antiderrapante"
+ },
+ "source": {
+  "photo": null,
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}

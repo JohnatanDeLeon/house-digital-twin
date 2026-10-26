@@ -1,0 +1,22 @@
+{
+ "_doc": "techo de palma tratada contra fuego e insectos (palapa). Material propuesto: no hay foto; color y parámetros comunes, sin medir. Regenerar con: python -m house_twin.cli texture sources/texturas/palma-tratada.json",
+ "name": "palma-tratada",
+ "kind": "constant",
+ "applies_to": {
+  "variant": "patio-social",
+  "source": "propuesta patio-social (Claude, 2026-10-26): techo de palma tratada contra fuego e insectos (palapa)"
+ },
+ "pbr": {
+  "basecolor_srgb": [
+   178,
+   150,
+   98
+  ],
+  "metallic": 0.0,
+  "roughness": 0.95,
+  "note": "techo de palma tratada contra fuego e insectos (palapa)"
+ },
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}

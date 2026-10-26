@@ -1,0 +1,22 @@
+{
+ "_doc": "concreto armado aparente claro de los muros de la alberca y de las jardineras. Material propuesto: no hay foto; color y parámetros comunes, sin medir. Regenerar con: python -m house_twin.cli texture sources/texturas/concreto-alberca.json",
+ "name": "concreto-alberca",
+ "kind": "constant",
+ "applies_to": {
+  "variant": "patio-social",
+  "source": "propuesta patio-social (Claude, 2026-10-26): concreto armado aparente claro de los muros de la alberca y de las jardineras"
+ },
+ "pbr": {
+  "basecolor_srgb": [
+   198,
+   197,
+   192
+  ],
+  "metallic": 0.0,
+  "roughness": 0.85,
+  "note": "concreto armado aparente claro de los muros de la alberca y de las jardineras"
+ },
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}

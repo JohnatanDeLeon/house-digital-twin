@@ -1,0 +1,29 @@
+{
+ "name": "concreto-alberca",
+ "applies_to": {
+  "variant": "patio-social",
+  "source": "propuesta patio-social (Claude, 2026-10-26): concreto armado aparente claro de los muros de la alberca y de las jardineras"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   198,
+   197,
+   192
+  ],
+  "metallic": 0.0,
+  "roughness": 0.85,
+  "note": "concreto armado aparente claro de los muros de la alberca y de las jardineras"
+ },
+ "source": {
+  "photo": null,
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}

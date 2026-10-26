@@ -1,5 +1,6 @@
 """Piezas sueltas de una propuesta, en coordenadas del mundo (metros): cajas (`boxes`: el remate del pretil, el costado
-de un nicho), cubiertas inclinadas (`slabs`: el techo de la cochera), luminarias (`lights`) y tiras de LED (`strips`).
+de un nicho), cilindros verticales (`cylinders`: un banco, la regadera), cubiertas inclinadas (`slabs`: el techo de la
+cochera, el de una palapa; la pendiente va en x o, con `slope_axis: "y"`, en y), luminarias (`lights`) y tiras de LED (`strips`).
 `ifc_export` las guarda con su clase; una luminaria es un IfcLightFixture con su luz (Pset HDT_Light) y un
 IfcDiscreteAccessory `<id>-foco`, que el recorrido enciende de noche. Solo biblioteca estándar.
 """
@@ -13,12 +14,25 @@ def box_part(b: dict, ifc: str = 'IfcMember') -> dict:
             'source': b['source']}
 
 
+def cylinder_part(c: dict, ifc: str = 'IfcBuildingElementProxy') -> dict:
+    """Cilindro vertical de radio `radius_m` centrado en (`x`, `y`), de `z[0]` a `z[1]`."""
+    x, y = c['x'], c['y']
+    return {'id': c['id'], 'ifc': c.get('ifc', ifc), 'type': 'USERDEFINED', 'object_type': c.get('object_type', 'pieza'),
+            'material': c['material'], 'mesh': cylinder((x, y, c['z'][0]), (x, y, c['z'][1]), c['radius_m'], 24),
+            'source': c['source']}
+
+
 def slab_part(s: dict) -> dict:
-    """Tablero inclinado: la cara de arriba va de `z_top[0]` (en x[0]) a `z_top[1]` (en x[1]), con su espesor."""
+    """Tablero inclinado: la cara de arriba va de `z_top[0]` (en x[0], o en y[0] con `slope_axis: "y"`) a `z_top[1]`
+    (en x[1] o y[1]), con su espesor."""
     (x0, x1), (y0, y1), (za, zb), t = s['x'], s['y'], s['z_top'], s['thickness_m']
     points, faces = _box(((x0 + x1) / 2, (y0 + y1) / 2, 0.0), (x1 - x0, y1 - y0, t))
-    slope = (zb - za) / (x1 - x0)
-    points = [(x, y, z + za - t / 2 + (x - x0) * slope) for x, y, z in points]
+    if s.get('slope_axis') == 'y':
+        slope = (zb - za) / (y1 - y0)
+        points = [(x, y, z + za - t / 2 + (y - y0) * slope) for x, y, z in points]
+    else:
+        slope = (zb - za) / (x1 - x0)
+        points = [(x, y, z + za - t / 2 + (x - x0) * slope) for x, y, z in points]
     return {'id': s['id'], 'ifc': s.get('ifc', 'IfcPlate'), 'type': 'USERDEFINED', 'object_type': s.get('object_type', 'tablero'),
             'material': s['material'], 'mesh': (points, faces), 'source': s['source']}
 
@@ -60,6 +74,7 @@ def strip_part(s: dict) -> dict:
 def extras_parts(spec: dict) -> list[dict]:
     """Todas las piezas de la especificación, cada una en el espacio que declara (o el de la especificación)."""
     parts = [box_part(b) for b in spec.get('boxes', [])]
+    parts += [cylinder_part(c) for c in spec.get('cylinders', [])]
     parts += [slab_part(s) for s in spec.get('slabs', [])]
     parts += [p for lum in spec.get('lights', []) for p in light_parts(lum)]
     parts += [strip_part(s) for s in spec.get('strips', [])]

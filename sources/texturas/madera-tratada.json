@@ -1,0 +1,22 @@
+{
+ "_doc": "madera dura tratada para exterior (postes y vigas de la palapa). Material propuesto: no hay foto; color y parámetros comunes, sin medir. Regenerar con: python -m house_twin.cli texture sources/texturas/madera-tratada.json",
+ "name": "madera-tratada",
+ "kind": "constant",
+ "applies_to": {
+  "variant": "patio-social",
+  "source": "propuesta patio-social (Claude, 2026-10-26): madera dura tratada para exterior (postes y vigas de la palapa)"
+ },
+ "pbr": {
+  "basecolor_srgb": [
+   96,
+   62,
+   40
+  ],
+  "metallic": 0.0,
+  "roughness": 0.6,
+  "note": "madera dura tratada para exterior (postes y vigas de la palapa)"
+ },
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}

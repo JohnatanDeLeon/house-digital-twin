@@ -1,0 +1,29 @@
+{
+ "name": "planta-verde",
+ "applies_to": {
+  "variant": "patio-social",
+  "source": "propuesta patio-social (Claude, 2026-10-26): follaje de pastos ornamentales y plantas de maceta"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   60,
+   100,
+   54
+  ],
+  "metallic": 0.0,
+  "roughness": 0.9,
+  "note": "follaje de pastos ornamentales y plantas de maceta"
+ },
+ "source": {
+  "photo": null,
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}
