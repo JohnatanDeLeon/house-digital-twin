@@ -26,7 +26,7 @@ from house_twin.finishes import Finishes
 ROOT = Path(__file__).resolve().parent.parent
 VARIANTS_DIR = ROOT / 'variants'
 PARTS = ('leaf', 'frame', 'glass')
-SPEC_KINDS = ('kitchen', 'laundry', 'extras', 'bedroom')
+SPEC_KINDS = ('kitchen', 'laundry', 'extras', 'bedroom', 'living')
 
 
 def load_variants(folder: Path = VARIANTS_DIR) -> list[dict]:
@@ -60,6 +60,8 @@ def _apply_geometry(facts: dict, geometry: dict) -> list[str]:
     facts['openings'] = [o for o in facts['openings'] if o['id'] not in closed]
     facts['walls'] = facts.get('walls', []) + copy.deepcopy(geometry.get('add_walls', []))
     facts['openings'] += copy.deepcopy(geometry.get('add_openings', []))
+    if geometry.get('add_slab_openings'):  # huecos en la losa y el plafón (una escalera)
+        facts['slab_openings'] = facts.get('slab_openings', []) + copy.deepcopy(geometry['add_slab_openings'])
     walls = {w['id'] for w in facts['walls']}
     problems += [f"el vano {o['id']} va en un muro que no existe ({o['host_wall']})"
                  for o in geometry.get('add_openings', []) if o.get('host_wall') not in walls]

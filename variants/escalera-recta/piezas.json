@@ -1,0 +1,1191 @@
+{
+ "_doc": "Piezas de la escalera recta (variants/escalera-recta.json): 14 escalones de concreto (el peralte 15 es el piso de arriba) con huella de madera, balaustres y pasamanos de acero y la guarda del hueco en el piso de arriba. Peralte 2.50/15 = 0.1667 m (altura entre pisos del modelo: muro 2.40 + losa 0.10). Todo en metros del plano. Ver docs/analysis/10-escalera-segunda-planta.md.",
+ "applies_to": {
+  "space": "S01",
+  "source": "propuesta escalera-recta (Claude, 2026-10-26): piezas nuevas en la sala-comedor (S01)"
+ },
+ "boxes": [
+  {
+   "id": "escalon-01",
+   "x": [
+    3.3,
+    4.3
+   ],
+   "y": [
+    3.53,
+    3.83
+   ],
+   "z": [
+    0,
+    0.1267
+   ],
+   "material": "escalera-concreto",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "escalón de concreto",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): escalón 1 de 14 (peralte 0.1667 m, huella 0.30 m): bloque de concreto bajo la huella"
+  },
+  {
+   "id": "huella-01",
+   "x": [
+    3.3,
+    4.319999999999999
+   ],
+   "y": [
+    3.53,
+    3.83
+   ],
+   "z": [
+    0.1267,
+    0.1667
+   ],
+   "material": "escalera-madera",
+   "ifc": "IfcPlate",
+   "object_type": "huella de madera",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): huella de madera de 4 cm del escalón 1, con 2 cm de nariz"
+  },
+  {
+   "id": "escalon-02",
+   "x": [
+    3.3,
+    4.3
+   ],
+   "y": [
+    3.83,
+    4.13
+   ],
+   "z": [
+    0,
+    0.2933
+   ],
+   "material": "escalera-concreto",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "escalón de concreto",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): escalón 2 de 14 (peralte 0.1667 m, huella 0.30 m): bloque de concreto bajo la huella"
+  },
+  {
+   "id": "huella-02",
+   "x": [
+    3.3,
+    4.319999999999999
+   ],
+   "y": [
+    3.81,
+    4.13
+   ],
+   "z": [
+    0.2933,
+    0.3333
+   ],
+   "material": "escalera-madera",
+   "ifc": "IfcPlate",
+   "object_type": "huella de madera",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): huella de madera de 4 cm del escalón 2, con 2 cm de nariz"
+  },
+  {
+   "id": "escalon-03",
+   "x": [
+    3.3,
+    4.3
+   ],
+   "y": [
+    4.13,
+    4.43
+   ],
+   "z": [
+    0,
+    0.46
+   ],
+   "material": "escalera-concreto",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "escalón de concreto",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): escalón 3 de 14 (peralte 0.1667 m, huella 0.30 m): bloque de concreto bajo la huella"
+  },
+  {
+   "id": "huella-03",
+   "x": [
+    3.3,
+    4.319999999999999
+   ],
+   "y": [
+    4.11,
+    4.43
+   ],
+   "z": [
+    0.46,
+    0.5
+   ],
+   "material": "escalera-madera",
+   "ifc": "IfcPlate",
+   "object_type": "huella de madera",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): huella de madera de 4 cm del escalón 3, con 2 cm de nariz"
+  },
+  {
+   "id": "escalon-04",
+   "x": [
+    3.3,
+    4.3
+   ],
+   "y": [
+    4.43,
+    4.73
+   ],
+   "z": [
+    0,
+    0.6267
+   ],
+   "material": "escalera-concreto",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "escalón de concreto",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): escalón 4 de 14 (peralte 0.1667 m, huella 0.30 m): bloque de concreto bajo la huella"
+  },
+  {
+   "id": "huella-04",
+   "x": [
+    3.3,
+    4.319999999999999
+   ],
+   "y": [
+    4.41,
+    4.73
+   ],
+   "z": [
+    0.6267,
+    0.6667
+   ],
+   "material": "escalera-madera",
+   "ifc": "IfcPlate",
+   "object_type": "huella de madera",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): huella de madera de 4 cm del escalón 4, con 2 cm de nariz"
+  },
+  {
+   "id": "escalon-05",
+   "x": [
+    3.3,
+    4.3
+   ],
+   "y": [
+    4.73,
+    5.03
+   ],
+   "z": [
+    0,
+    0.7933
+   ],
+   "material": "escalera-concreto",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "escalón de concreto",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): escalón 5 de 14 (peralte 0.1667 m, huella 0.30 m): bloque de concreto bajo la huella"
+  },
+  {
+   "id": "huella-05",
+   "x": [
+    3.3,
+    4.319999999999999
+   ],
+   "y": [
+    4.71,
+    5.03
+   ],
+   "z": [
+    0.7933,
+    0.8333
+   ],
+   "material": "escalera-madera",
+   "ifc": "IfcPlate",
+   "object_type": "huella de madera",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): huella de madera de 4 cm del escalón 5, con 2 cm de nariz"
+  },
+  {
+   "id": "escalon-06",
+   "x": [
+    3.3,
+    4.3
+   ],
+   "y": [
+    5.03,
+    5.33
+   ],
+   "z": [
+    0,
+    0.96
+   ],
+   "material": "escalera-concreto",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "escalón de concreto",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): escalón 6 de 14 (peralte 0.1667 m, huella 0.30 m): bloque de concreto bajo la huella"
+  },
+  {
+   "id": "huella-06",
+   "x": [
+    3.3,
+    4.319999999999999
+   ],
+   "y": [
+    5.01,
+    5.33
+   ],
+   "z": [
+    0.96,
+    1.0
+   ],
+   "material": "escalera-madera",
+   "ifc": "IfcPlate",
+   "object_type": "huella de madera",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): huella de madera de 4 cm del escalón 6, con 2 cm de nariz"
+  },
+  {
+   "id": "escalon-07",
+   "x": [
+    3.3,
+    4.3
+   ],
+   "y": [
+    5.33,
+    5.63
+   ],
+   "z": [
+    0,
+    1.1267
+   ],
+   "material": "escalera-concreto",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "escalón de concreto",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): escalón 7 de 14 (peralte 0.1667 m, huella 0.30 m): bloque de concreto bajo la huella"
+  },
+  {
+   "id": "huella-07",
+   "x": [
+    3.3,
+    4.319999999999999
+   ],
+   "y": [
+    5.31,
+    5.63
+   ],
+   "z": [
+    1.1267,
+    1.1667
+   ],
+   "material": "escalera-madera",
+   "ifc": "IfcPlate",
+   "object_type": "huella de madera",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): huella de madera de 4 cm del escalón 7, con 2 cm de nariz"
+  },
+  {
+   "id": "escalon-08",
+   "x": [
+    3.3,
+    4.3
+   ],
+   "y": [
+    5.63,
+    5.93
+   ],
+   "z": [
+    0,
+    1.2933
+   ],
+   "material": "escalera-concreto",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "escalón de concreto",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): escalón 8 de 14 (peralte 0.1667 m, huella 0.30 m): bloque de concreto bajo la huella"
+  },
+  {
+   "id": "huella-08",
+   "x": [
+    3.3,
+    4.319999999999999
+   ],
+   "y": [
+    5.61,
+    5.93
+   ],
+   "z": [
+    1.2933,
+    1.3333
+   ],
+   "material": "escalera-madera",
+   "ifc": "IfcPlate",
+   "object_type": "huella de madera",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): huella de madera de 4 cm del escalón 8, con 2 cm de nariz"
+  },
+  {
+   "id": "escalon-09",
+   "x": [
+    3.3,
+    4.3
+   ],
+   "y": [
+    5.93,
+    6.23
+   ],
+   "z": [
+    0,
+    1.46
+   ],
+   "material": "escalera-concreto",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "escalón de concreto",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): escalón 9 de 14 (peralte 0.1667 m, huella 0.30 m): bloque de concreto bajo la huella"
+  },
+  {
+   "id": "huella-09",
+   "x": [
+    3.3,
+    4.319999999999999
+   ],
+   "y": [
+    5.91,
+    6.23
+   ],
+   "z": [
+    1.46,
+    1.5
+   ],
+   "material": "escalera-madera",
+   "ifc": "IfcPlate",
+   "object_type": "huella de madera",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): huella de madera de 4 cm del escalón 9, con 2 cm de nariz"
+  },
+  {
+   "id": "escalon-10",
+   "x": [
+    3.3,
+    4.3
+   ],
+   "y": [
+    6.23,
+    6.53
+   ],
+   "z": [
+    0,
+    1.6267
+   ],
+   "material": "escalera-concreto",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "escalón de concreto",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): escalón 10 de 14 (peralte 0.1667 m, huella 0.30 m): bloque de concreto bajo la huella"
+  },
+  {
+   "id": "huella-10",
+   "x": [
+    3.3,
+    4.319999999999999
+   ],
+   "y": [
+    6.21,
+    6.53
+   ],
+   "z": [
+    1.6267,
+    1.6667
+   ],
+   "material": "escalera-madera",
+   "ifc": "IfcPlate",
+   "object_type": "huella de madera",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): huella de madera de 4 cm del escalón 10, con 2 cm de nariz"
+  },
+  {
+   "id": "escalon-11",
+   "x": [
+    3.3,
+    4.3
+   ],
+   "y": [
+    6.53,
+    6.83
+   ],
+   "z": [
+    0,
+    1.7933
+   ],
+   "material": "escalera-concreto",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "escalón de concreto",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): escalón 11 de 14 (peralte 0.1667 m, huella 0.30 m): bloque de concreto bajo la huella"
+  },
+  {
+   "id": "huella-11",
+   "x": [
+    3.3,
+    4.319999999999999
+   ],
+   "y": [
+    6.51,
+    6.83
+   ],
+   "z": [
+    1.7933,
+    1.8333
+   ],
+   "material": "escalera-madera",
+   "ifc": "IfcPlate",
+   "object_type": "huella de madera",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): huella de madera de 4 cm del escalón 11, con 2 cm de nariz"
+  },
+  {
+   "id": "escalon-12",
+   "x": [
+    3.3,
+    4.3
+   ],
+   "y": [
+    6.83,
+    7.13
+   ],
+   "z": [
+    0,
+    1.96
+   ],
+   "material": "escalera-concreto",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "escalón de concreto",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): escalón 12 de 14 (peralte 0.1667 m, huella 0.30 m): bloque de concreto bajo la huella"
+  },
+  {
+   "id": "huella-12",
+   "x": [
+    3.3,
+    4.319999999999999
+   ],
+   "y": [
+    6.81,
+    7.13
+   ],
+   "z": [
+    1.96,
+    2.0
+   ],
+   "material": "escalera-madera",
+   "ifc": "IfcPlate",
+   "object_type": "huella de madera",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): huella de madera de 4 cm del escalón 12, con 2 cm de nariz"
+  },
+  {
+   "id": "escalon-13",
+   "x": [
+    3.3,
+    4.3
+   ],
+   "y": [
+    7.13,
+    7.43
+   ],
+   "z": [
+    0,
+    2.1267
+   ],
+   "material": "escalera-concreto",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "escalón de concreto",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): escalón 13 de 14 (peralte 0.1667 m, huella 0.30 m): bloque de concreto bajo la huella"
+  },
+  {
+   "id": "huella-13",
+   "x": [
+    3.3,
+    4.319999999999999
+   ],
+   "y": [
+    7.11,
+    7.43
+   ],
+   "z": [
+    2.1267,
+    2.1667
+   ],
+   "material": "escalera-madera",
+   "ifc": "IfcPlate",
+   "object_type": "huella de madera",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): huella de madera de 4 cm del escalón 13, con 2 cm de nariz"
+  },
+  {
+   "id": "escalon-14",
+   "x": [
+    3.3,
+    4.3
+   ],
+   "y": [
+    7.43,
+    7.73
+   ],
+   "z": [
+    0,
+    2.2933
+   ],
+   "material": "escalera-concreto",
+   "ifc": "IfcBuildingElementProxy",
+   "object_type": "escalón de concreto",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): escalón 14 de 14 (peralte 0.1667 m, huella 0.30 m): bloque de concreto bajo la huella"
+  },
+  {
+   "id": "huella-14",
+   "x": [
+    3.3,
+    4.319999999999999
+   ],
+   "y": [
+    7.41,
+    7.73
+   ],
+   "z": [
+    2.2933,
+    2.3333
+   ],
+   "material": "escalera-madera",
+   "ifc": "IfcPlate",
+   "object_type": "huella de madera",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): huella de madera de 4 cm del escalón 14, con 2 cm de nariz"
+  },
+  {
+   "id": "balaustre-01",
+   "x": [
+    4.285,
+    4.3149999999999995
+   ],
+   "y": [
+    3.665,
+    3.695
+   ],
+   "z": [
+    0.1667,
+    1.0667
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "balaustre",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): balaustre de acero de 3 × 3 cm a cada escalón; el pasamanos va a 0.90 m sobre la nariz"
+  },
+  {
+   "id": "balaustre-02",
+   "x": [
+    4.285,
+    4.3149999999999995
+   ],
+   "y": [
+    3.965,
+    3.995
+   ],
+   "z": [
+    0.3333,
+    1.2333
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "balaustre",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): balaustre de acero de 3 × 3 cm a cada escalón; el pasamanos va a 0.90 m sobre la nariz"
+  },
+  {
+   "id": "balaustre-03",
+   "x": [
+    4.285,
+    4.3149999999999995
+   ],
+   "y": [
+    4.265,
+    4.295
+   ],
+   "z": [
+    0.5,
+    1.4
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "balaustre",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): balaustre de acero de 3 × 3 cm a cada escalón; el pasamanos va a 0.90 m sobre la nariz"
+  },
+  {
+   "id": "balaustre-04",
+   "x": [
+    4.285,
+    4.3149999999999995
+   ],
+   "y": [
+    4.565,
+    4.595
+   ],
+   "z": [
+    0.6667,
+    1.5667
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "balaustre",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): balaustre de acero de 3 × 3 cm a cada escalón; el pasamanos va a 0.90 m sobre la nariz"
+  },
+  {
+   "id": "balaustre-05",
+   "x": [
+    4.285,
+    4.3149999999999995
+   ],
+   "y": [
+    4.865,
+    4.895
+   ],
+   "z": [
+    0.8333,
+    1.7333
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "balaustre",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): balaustre de acero de 3 × 3 cm a cada escalón; el pasamanos va a 0.90 m sobre la nariz"
+  },
+  {
+   "id": "balaustre-06",
+   "x": [
+    4.285,
+    4.3149999999999995
+   ],
+   "y": [
+    5.165,
+    5.195
+   ],
+   "z": [
+    1.0,
+    1.9
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "balaustre",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): balaustre de acero de 3 × 3 cm a cada escalón; el pasamanos va a 0.90 m sobre la nariz"
+  },
+  {
+   "id": "balaustre-07",
+   "x": [
+    4.285,
+    4.3149999999999995
+   ],
+   "y": [
+    5.465,
+    5.495
+   ],
+   "z": [
+    1.1667,
+    2.0667
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "balaustre",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): balaustre de acero de 3 × 3 cm a cada escalón; el pasamanos va a 0.90 m sobre la nariz"
+  },
+  {
+   "id": "balaustre-08",
+   "x": [
+    4.285,
+    4.3149999999999995
+   ],
+   "y": [
+    5.765,
+    5.795
+   ],
+   "z": [
+    1.3333,
+    2.2333
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "balaustre",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): balaustre de acero de 3 × 3 cm a cada escalón; el pasamanos va a 0.90 m sobre la nariz"
+  },
+  {
+   "id": "balaustre-09",
+   "x": [
+    4.285,
+    4.3149999999999995
+   ],
+   "y": [
+    6.065,
+    6.095
+   ],
+   "z": [
+    1.5,
+    2.4
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "balaustre",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): balaustre de acero de 3 × 3 cm a cada escalón; el pasamanos va a 0.90 m sobre la nariz"
+  },
+  {
+   "id": "balaustre-10",
+   "x": [
+    4.285,
+    4.3149999999999995
+   ],
+   "y": [
+    6.365,
+    6.395
+   ],
+   "z": [
+    1.6667,
+    2.5667
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "balaustre",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): balaustre de acero de 3 × 3 cm a cada escalón; el pasamanos va a 0.90 m sobre la nariz"
+  },
+  {
+   "id": "balaustre-11",
+   "x": [
+    4.285,
+    4.3149999999999995
+   ],
+   "y": [
+    6.665,
+    6.695
+   ],
+   "z": [
+    1.8333,
+    2.7333
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "balaustre",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): balaustre de acero de 3 × 3 cm a cada escalón; el pasamanos va a 0.90 m sobre la nariz"
+  },
+  {
+   "id": "balaustre-12",
+   "x": [
+    4.285,
+    4.3149999999999995
+   ],
+   "y": [
+    6.965,
+    6.995
+   ],
+   "z": [
+    2.0,
+    2.9
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "balaustre",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): balaustre de acero de 3 × 3 cm a cada escalón; el pasamanos va a 0.90 m sobre la nariz"
+  },
+  {
+   "id": "balaustre-13",
+   "x": [
+    4.285,
+    4.3149999999999995
+   ],
+   "y": [
+    7.265,
+    7.295
+   ],
+   "z": [
+    2.1667,
+    3.0667
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "balaustre",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): balaustre de acero de 3 × 3 cm a cada escalón; el pasamanos va a 0.90 m sobre la nariz"
+  },
+  {
+   "id": "balaustre-14",
+   "x": [
+    4.285,
+    4.3149999999999995
+   ],
+   "y": [
+    7.565,
+    7.595
+   ],
+   "z": [
+    2.3333,
+    3.2333
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "balaustre",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): balaustre de acero de 3 × 3 cm a cada escalón; el pasamanos va a 0.90 m sobre la nariz"
+  },
+  {
+   "id": "guarda-pasamanos-este",
+   "x": [
+    4.335,
+    4.385
+   ],
+   "y": [
+    4.03,
+    7.73
+   ],
+   "z": [
+    3.46,
+    3.5
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "pasamanos de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): guarda del hueco de la losa, lado este: pasamanos a 1.0 m del piso de arriba"
+  },
+  {
+   "id": "guarda-pasamanos-sur",
+   "x": [
+    3.24,
+    4.385
+   ],
+   "y": [
+    4.005,
+    4.055000000000001
+   ],
+   "z": [
+    3.46,
+    3.5
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "pasamanos de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): guarda del hueco de la losa, lado del frente"
+  },
+  {
+   "id": "guarda-poste-e00",
+   "x": [
+    4.345,
+    4.375
+   ],
+   "y": [
+    4.045,
+    4.075
+   ],
+   "z": [
+    2.5,
+    3.46
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "poste de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): poste de 3 × 3 cm cada 0.30 m"
+  },
+  {
+   "id": "guarda-poste-e01",
+   "x": [
+    4.345,
+    4.375
+   ],
+   "y": [
+    4.348,
+    4.378
+   ],
+   "z": [
+    2.5,
+    3.46
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "poste de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): poste de 3 × 3 cm cada 0.30 m"
+  },
+  {
+   "id": "guarda-poste-e02",
+   "x": [
+    4.345,
+    4.375
+   ],
+   "y": [
+    4.652,
+    4.682
+   ],
+   "z": [
+    2.5,
+    3.46
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "poste de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): poste de 3 × 3 cm cada 0.30 m"
+  },
+  {
+   "id": "guarda-poste-e03",
+   "x": [
+    4.345,
+    4.375
+   ],
+   "y": [
+    4.955,
+    4.985
+   ],
+   "z": [
+    2.5,
+    3.46
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "poste de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): poste de 3 × 3 cm cada 0.30 m"
+  },
+  {
+   "id": "guarda-poste-e04",
+   "x": [
+    4.345,
+    4.375
+   ],
+   "y": [
+    5.258,
+    5.288
+   ],
+   "z": [
+    2.5,
+    3.46
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "poste de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): poste de 3 × 3 cm cada 0.30 m"
+  },
+  {
+   "id": "guarda-poste-e05",
+   "x": [
+    4.345,
+    4.375
+   ],
+   "y": [
+    5.562,
+    5.592
+   ],
+   "z": [
+    2.5,
+    3.46
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "poste de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): poste de 3 × 3 cm cada 0.30 m"
+  },
+  {
+   "id": "guarda-poste-e06",
+   "x": [
+    4.345,
+    4.375
+   ],
+   "y": [
+    5.865,
+    5.895
+   ],
+   "z": [
+    2.5,
+    3.46
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "poste de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): poste de 3 × 3 cm cada 0.30 m"
+  },
+  {
+   "id": "guarda-poste-e07",
+   "x": [
+    4.345,
+    4.375
+   ],
+   "y": [
+    6.168,
+    6.198
+   ],
+   "z": [
+    2.5,
+    3.46
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "poste de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): poste de 3 × 3 cm cada 0.30 m"
+  },
+  {
+   "id": "guarda-poste-e08",
+   "x": [
+    4.345,
+    4.375
+   ],
+   "y": [
+    6.472,
+    6.502
+   ],
+   "z": [
+    2.5,
+    3.46
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "poste de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): poste de 3 × 3 cm cada 0.30 m"
+  },
+  {
+   "id": "guarda-poste-e09",
+   "x": [
+    4.345,
+    4.375
+   ],
+   "y": [
+    6.775,
+    6.805
+   ],
+   "z": [
+    2.5,
+    3.46
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "poste de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): poste de 3 × 3 cm cada 0.30 m"
+  },
+  {
+   "id": "guarda-poste-e10",
+   "x": [
+    4.345,
+    4.375
+   ],
+   "y": [
+    7.078,
+    7.108
+   ],
+   "z": [
+    2.5,
+    3.46
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "poste de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): poste de 3 × 3 cm cada 0.30 m"
+  },
+  {
+   "id": "guarda-poste-e11",
+   "x": [
+    4.345,
+    4.375
+   ],
+   "y": [
+    7.382,
+    7.412
+   ],
+   "z": [
+    2.5,
+    3.46
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "poste de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): poste de 3 × 3 cm cada 0.30 m"
+  },
+  {
+   "id": "guarda-poste-e12",
+   "x": [
+    4.345,
+    4.375
+   ],
+   "y": [
+    7.685,
+    7.715
+   ],
+   "z": [
+    2.5,
+    3.46
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "poste de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): poste de 3 × 3 cm cada 0.30 m"
+  },
+  {
+   "id": "guarda-poste-s00",
+   "x": [
+    3.285,
+    3.315
+   ],
+   "y": [
+    4.015000000000001,
+    4.045
+   ],
+   "z": [
+    2.5,
+    3.46
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "poste de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): poste de 3 × 3 cm"
+  },
+  {
+   "id": "guarda-poste-s01",
+   "x": [
+    3.605,
+    3.635
+   ],
+   "y": [
+    4.015000000000001,
+    4.045
+   ],
+   "z": [
+    2.5,
+    3.46
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "poste de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): poste de 3 × 3 cm"
+  },
+  {
+   "id": "guarda-poste-s02",
+   "x": [
+    3.925,
+    3.955
+   ],
+   "y": [
+    4.015000000000001,
+    4.045
+   ],
+   "z": [
+    2.5,
+    3.46
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "poste de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): poste de 3 × 3 cm"
+  },
+  {
+   "id": "guarda-poste-s03",
+   "x": [
+    4.245,
+    4.275
+   ],
+   "y": [
+    4.015000000000001,
+    4.045
+   ],
+   "z": [
+    2.5,
+    3.46
+   ],
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "poste de la guarda",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): poste de 3 × 3 cm"
+  }
+ ],
+ "slabs": [
+  {
+   "id": "pasamanos",
+   "x": [
+    4.27,
+    4.33
+   ],
+   "y": [
+    3.6799999999999997,
+    7.58
+   ],
+   "z_top": [
+    1.0967,
+    3.2633
+   ],
+   "thickness_m": 0.06,
+   "slope_axis": "y",
+   "material": "escalera-acero",
+   "ifc": "IfcMember",
+   "object_type": "pasamanos",
+   "source": "propuesta escalera-recta (Claude, 2026-10-26): pasamanos de acero inclinado, 0.90 m sobre la nariz de los escalones"
+  }
+ ]
+}

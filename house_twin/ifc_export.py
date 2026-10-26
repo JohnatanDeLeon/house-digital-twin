@@ -76,6 +76,17 @@ class _IfcContext:
         rep = self.builder.get_representation(self.body, [solid])
         ifcopenshell.api.geometry.assign_representation(self.model, product=product, representation=rep)
 
+    def extrude_shape(self, product, shape, height, base_z=0.0):
+        """Extruye una figura de shapely (puede traer huecos o ser varias piezas)."""
+        solids = []
+        for poly in getattr(shape, 'geoms', [shape]):
+            outer = self.builder.polyline([tuple(p) for p in poly.exterior.coords[:-1]], closed=True)
+            inner = [self.builder.polyline([tuple(p) for p in ring.coords[:-1]], closed=True) for ring in poly.interiors]
+            solids.append(self.builder.extrude(self.builder.profile(outer, inner_curves=inner), magnitude=height,
+                                               position=(0.0, 0.0, base_z)))
+        ifcopenshell.api.geometry.assign_representation(self.model, product=product,
+                                                        representation=self.builder.get_representation(self.body, solids))
+
     def material(self, name):
         """Un IfcMaterial por textura, compartido: su nombre es el de `assets/textures/<nombre>/`."""
         found = next((m for m in self.model.by_type('IfcMaterial') if m.Name == name), None)
@@ -270,6 +281,11 @@ def _roofed(facts):
     return [s for s in facts['spaces'] if (s.get('roofed') or {}).get('value') is True]
 
 
+def _slab_openings(facts):
+    """Huecos que una propuesta abre en la losa y el plafón (`geometry.add_slab_openings`); vacío en la casa existente."""
+    return unary_union([Polygon(o['polygon']) for o in facts.get('slab_openings', [])])
+
+
 def _add_roof(ctx: _IfcContext, facts, storey, height):
     """Losa sobre los espacios techados y los muros que los rodean; deja abierto lo que no está techado (tragaluz).
 
@@ -282,6 +298,7 @@ def _add_roof(ctx: _IfcContext, facts, storey, height):
     walls = unary_union([Polygon(w['footprint']) for w in facts['walls']])
     reach = max(w['thickness'] for w in facts['walls']) + 0.02
     footprint = rooms.union(rooms.buffer(reach, join_style='mitre').intersection(walls)).buffer(0.005).buffer(-0.005)
+    footprint = footprint.difference(_slab_openings(facts))  # huecos de losa de una propuesta (escalera)
     thickness = ASSUMED_DEFAULTS['slab_thickness']
     solids = []
     for poly in getattr(footprint, 'geoms', [footprint]):
@@ -298,9 +315,14 @@ def _add_roof(ctx: _IfcContext, facts, storey, height):
 
 def _add_ceilings(ctx: _IfcContext, facts, storey, height, finishes: Finishes | None):
     """Plafón (capa de tirol) de cada espacio techado, justo bajo la losa."""
+    holes = _slab_openings(facts)
     for s in _roofed(facts):
         ceiling = ctx.element('IfcCovering', f"{s['id']}-techo", 'CEILING')
-        ctx.extrude_polygon(ceiling, s['polygon'], CEILING_FINISH_M, height - CEILING_FINISH_M)
+        shape = Polygon(s['polygon']).difference(holes) if holes.intersects(Polygon(s['polygon'])) else None
+        if shape is not None:
+            ctx.extrude_shape(ceiling, shape, CEILING_FINISH_M, height - CEILING_FINISH_M)
+        else:
+            ctx.extrude_polygon(ceiling, s['polygon'], CEILING_FINISH_M, height - CEILING_FINISH_M)
         ifcopenshell.api.spatial.assign_container(ctx.model, products=[ceiling], relating_structure=storey)
         finish = finishes.ceiling(s['id']) if finishes else None
         if finish:

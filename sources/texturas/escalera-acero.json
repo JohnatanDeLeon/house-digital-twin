@@ -1,0 +1,22 @@
+{
+ "_doc": "balaustres y pasamanos de acero negro. Material propuesto: no hay foto; color y parámetros comunes, sin medir. Regenerar con: python -m house_twin.cli texture sources/texturas/escalera-acero.json",
+ "name": "escalera-acero",
+ "kind": "constant",
+ "applies_to": {
+  "variant": "escalera-recta",
+  "source": "propuesta escalera-recta (Claude, 2026-10-26): balaustres y pasamanos de acero negro"
+ },
+ "pbr": {
+  "basecolor_srgb": [
+   40,
+   40,
+   44
+  ],
+  "metallic": 0.6,
+  "roughness": 0.45,
+  "note": "balaustres y pasamanos de acero negro"
+ },
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}

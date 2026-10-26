@@ -1,0 +1,22 @@
+{
+ "_doc": "concreto aparente de la escalera. Material propuesto: no hay foto; color y parámetros comunes, sin medir. Regenerar con: python -m house_twin.cli texture sources/texturas/escalera-concreto.json",
+ "name": "escalera-concreto",
+ "kind": "constant",
+ "applies_to": {
+  "variant": "escalera-recta",
+  "source": "propuesta escalera-recta (Claude, 2026-10-26): concreto aparente de la escalera"
+ },
+ "pbr": {
+  "basecolor_srgb": [
+   165,
+   163,
+   158
+  ],
+  "metallic": 0.0,
+  "roughness": 0.9,
+  "note": "concreto aparente de la escalera"
+ },
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}

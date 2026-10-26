@@ -1,0 +1,29 @@
+{
+ "name": "escalera-acero",
+ "applies_to": {
+  "variant": "escalera-recta",
+  "source": "propuesta escalera-recta (Claude, 2026-10-26): balaustres y pasamanos de acero negro"
+ },
+ "kind": "constant",
+ "pbr": {
+  "basecolor_srgb": [
+   40,
+   40,
+   44
+  ],
+  "metallic": 0.6,
+  "roughness": 0.45,
+  "note": "balaustres y pasamanos de acero negro"
+ },
+ "source": {
+  "photo": null,
+  "photo_meta": {},
+  "color": null,
+  "white_balance_gain": null,
+  "sample": null
+ },
+ "observed": {},
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}
