@@ -80,11 +80,11 @@ Salen de la geometría de `models/existing.ifc` y de `models/variants/recamara-2
 | | Qué es | A favor | En contra |
 |---|---|---|---|
 | **A (propuesta)** | V08 se tapia; la misma ventana pasa a W12, al lado de la cama | Cabecera y muro liso, mismo vano, **no cabe otra pared** sin tocar el closet ni la lavandería | Pierde la vista al patio; da a un pasillo de 1.08 m; ESE en vez de SSO |
-| B | V08 se tapia y se abren 2 ventanas de ≈ 0.75–0.80 m a los lados de la cabecera, en W09 (x = 1.55–2.30 y 4.05–4.85) | Conserva patio y luz SSO; es el «ventanas a ambos lados» de las referencias | Dos vanos nuevos, quedan sobre los buros, el espejo se muda y la de la derecha casi toca el closet (5.02 m) |
+| B (implementada también, ver abajo) | V08 se tapia y se abren 2 ventanas de 0.70 × 1.22 m a los lados de la cabecera, en W09 (x = 1.60–2.30 y 4.00–4.70) | Conserva patio y luz SSO; es el «ventanas a ambos lados» de las referencias | Dos vanos nuevos, quedan sobre los buros, el espejo se muda y la de la izquierda queda a 0.15 m de la esquina |
 | C | Subir el antepecho de V08 a ≈ 1.55 m, sobre la cabecera (1.25 m) | Sin tapiar ni abrir muros nuevos | No «reubica» nada: sigue detrás de la cabecera |
 
 W12 es la única pared libre donde cabe una ventana igual a V08; la A es la más sencilla de obra (un vano que se corta y
-otro que se rellena con casi el mismo número de blocks) y la implementada.
+otro que se rellena con casi el mismo número de blocks) y es la propuesta principal. A petición del dueño (2026-10-25) también se desarrolló la B.
 
 ## La propuesta (A)
 
@@ -121,3 +121,37 @@ otro que se rellena con casi el mismo número de blocks) y la implementada.
 - **Sin modelar:** persiana, cortina, apliques, el acabado del muro tapiado y el panel de cabecera. Los muebles se quedan donde están.
 - **Recorrido 3D:** generado sin Bonsai (ver arriba); sin la luz ni los renders de Cycles (`scene --render`).
 - **La planta de este informe** se dibujó a partir de los hechos y de `recamara-s03.json`; no sale de `build`.
+
+## Propuesta B: dos ventanas a los lados de la cabecera (`variants/recamara-2-dos-ventanas.json`)
+
+Pedida por el dueño después de ver la A. Sigue siendo una **propuesta**: la casa existente y la propuesta A no cambian. En el recorrido:
+«Versión» → «Propuesta: Recámara 2: dos ventanas a los lados de la cabecera».
+
+- **V08 se tapia** (igual que en la A) y la cabecera queda sobre un muro liso de 4.17 m.
+- **V13 y V14** en W09 (el muro del patio, rumbo 207°): corredizas de aluminio negro con vidrio claro, de **0.70 × 1.22 m**,
+  antepecho 0.86 m (el mismo de V08). V13 en x = 1.60–2.30 m y V14 en x = 4.00–4.70 m: **simétricas** respecto del eje de la cama
+  (x = 3.15 m) y a **0.10 m** de la cabecera (1.50 m de ancho, x = 2.40–3.90 m), con la misma separación para una cortina o un riel.
+- **Espejo de cuerpo entero:** hoy se apoya en el muro del patio sobre el buro izquierdo (x = 1.95–2.27 m), justo donde queda V13.
+  La propuesta lo para en el piso contra el muro poniente (y = 15.87–16.19 m, mismo tamaño en ancho, 1.65 m de alto). Es una
+  **sugerencia de posición, no una medida**; vive en `variants/recamara-2-dos-ventanas/recamara-s03.json` (la recámara de la casa
+  existente no cambia). Para eso se agregó el tipo de especificación `bedroom` a las variantes.
+
+| Revisión | Resultado |
+|---|---|
+| Luz | 2 × 0.70 × 1.22 = 1.71 m² contra 1.83 m² de V08: **11.2 %** del piso (12 % hoy); ventilado ≈ 5.6 % (corredizas de 2 hojas) |
+| Cabecera | Quedan a 0.10 m de ella por cada lado; el vidrio no se tapa (cabecera de 1.25 m contra antepecho de 0.86 m, pero fuera del ancho de la ventana) |
+| Buros | Las ventanas quedan sobre los buros (0.60 m de alto): 0.26 m libres hasta el antepecho; una lámpara de buro alta taparía el vidrio: mejor apliques |
+| Esquina poniente | V13 queda a 0.15 m del muro poniente: **no cabe un castillo ancho sin revisarlo** (lo decide el ingeniero; si no, hay que reducir V13 a 0.60 m) |
+| Closet (F02, x ≥ 5.02 m) | V14 termina a 0.32 m del closet |
+| Sol | SSO (207°) como hoy: sol de la tarde; sin la barda de por medio, a diferencia de la A |
+
+Frente a la A: conserva la vista al patio y la orientación, pero abre **dos** vanos nuevos en el mismo muro (más obra y más castillos) y
+la ventana de la izquierda queda apretada contra la esquina.
+
+![Hoy, hacia la cabecera](08b-recorrido-hoy.png)
+![Propuesta B, hacia la cabecera](08b-recorrido-cabecera.png)
+![Propuesta B, vista lateral](08b-recorrido-lateral.png)
+![Propuesta B, el espejo en el muro poniente](08b-recorrido-espejo.png)
+
+Estas capturas salen del recorrido con texturas, generado igual que el de la A (`bpy` y un cargador mínimo del IFC en lugar de Bonsai).
+Pendientes: los de la A (estructura U03, persiana, apliques) y, para B, medir la distancia real de la esquina y la altura del buro.

@@ -1,0 +1,123 @@
+{
+ "_doc": "Remodelación (propuesta B): ver docs/analysis/08-recamara-2-ventana.md. Nunca modifica los hechos ni models/existing.*: `build` escribe los hechos propuestos en data/facts/variants/ y su IFC en models/variants/; `scene` le hace su propio modelo para el recorrido.",
+ "id": "recamara-2-dos-ventanas",
+ "name": "Recámara 2: dos ventanas a los lados de la cabecera",
+ "kind": "remodelación",
+ "based_on": "existing",
+ "requested": "dueño (2026-10-25): «genera una propuesta con dos ventanas» (la opción B del informe 08: tapiar V08 y abrir dos ventanas a los lados de la cabecera)",
+ "author": "Claude",
+ "created_on": "2026-10-25",
+ "description": "La ventana V08 (1.50 × 1.22 m), que hoy queda justo detrás de la cabecera, se tapia con block. En el mismo muro del patio se abren dos ventanas de 0.70 × 1.22 m, una a cada lado de la cabecera y a 0.10 m de ella (V13 en x = 1.60–2.30 m, V14 en x = 4.00–4.70 m), con el mismo antepecho, altura y corrediza de aluminio negro. Conserva la vista al patio y el sol SSO, la cabecera queda sobre un muro liso y la luz baja de 12 % a 11 % del piso. El espejo de cuerpo entero, que estaba sobre el buro izquierdo (donde ahora va V13), pasa al piso, contra el muro poniente.",
+ "disclaimer": "Propuesta: los dos vanos nuevos y el tapiado de V08 necesitan que un profesional revise el muro (U03: se desconoce cuáles son de carga) y diseñe castillos, dinteles y repisones. V13 queda a 0.15 m de la esquina con el muro poniente: ahí no cabe un castillo ancho sin revisarlo. La posición del espejo es una sugerencia.",
+ "focus_opening": "V13",
+ "geometry": {
+  "close_openings": [
+   "V08"
+  ],
+  "add_openings": [
+   {
+    "kind": "window",
+    "id": "V13",
+    "footprint": [
+     [
+      1.6,
+      16.775
+     ],
+     [
+      2.3,
+      16.775
+     ],
+     [
+      2.3,
+      16.945
+     ],
+     [
+      1.6,
+      16.945
+     ]
+    ],
+    "width": 0.7,
+    "wall_thickness": 0.17,
+    "detected_by": "propuesta",
+    "sill_height": {
+     "value": 0.86,
+     "source": "propuesta recamara-2-dos-ventanas (Claude, 2026-10-25): el mismo antepecho que V08 (0.86 + 1.22 = 2.08 m, a la altura del cerramiento de las puertas)"
+    },
+    "height": {
+     "value": 1.22,
+     "source": "propuesta recamara-2-dos-ventanas (Claude, 2026-10-25): la misma altura que V08"
+    },
+    "host_wall": "W09",
+    "connects": [
+     "S03",
+     "S09"
+    ],
+    "owner_note": "la ventana de la izquierda de la cabecera, sobre el buro izquierdo"
+   },
+   {
+    "kind": "window",
+    "id": "V14",
+    "footprint": [
+     [
+      4.0,
+      16.775
+     ],
+     [
+      4.7,
+      16.775
+     ],
+     [
+      4.7,
+      16.945
+     ],
+     [
+      4.0,
+      16.945
+     ]
+    ],
+    "width": 0.7,
+    "wall_thickness": 0.17,
+    "detected_by": "propuesta",
+    "sill_height": {
+     "value": 0.86,
+     "source": "propuesta recamara-2-dos-ventanas (Claude, 2026-10-25): el mismo antepecho que V08 (0.86 + 1.22 = 2.08 m, a la altura del cerramiento de las puertas)"
+    },
+    "height": {
+     "value": 1.22,
+     "source": "propuesta recamara-2-dos-ventanas (Claude, 2026-10-25): la misma altura que V08"
+    },
+    "host_wall": "W09",
+    "connects": [
+     "S03",
+     "S09"
+    ],
+    "owner_note": "la ventana de la derecha de la cabecera, sobre el buro derecho"
+   }
+  ]
+ },
+ "specs": {
+  "bedroom": "variants/recamara-2-dos-ventanas/recamara-s03.json"
+ },
+ "changes": [
+  {
+   "opening": "V13",
+   "part": "frame",
+   "material": "aluminio-negro"
+  },
+  {
+   "opening": "V13",
+   "part": "glass",
+   "material": "vidrio-claro"
+  },
+  {
+   "opening": "V14",
+   "part": "frame",
+   "material": "aluminio-negro"
+  },
+  {
+   "opening": "V14",
+   "part": "glass",
+   "material": "vidrio-claro"
+  }
+ ]
+}

@@ -8,7 +8,7 @@ Una variante nunca toca los hechos ni `models/existing.*`: describe cambios por 
   `update_devices`, que se mezclan sobre el dato por su `id`) y zonas de acabado que se mueven con la obra
   (`update_materials`: `name` y su nueva `region_m`, p. ej. el azulejo de una cocina reubicada). `variant_facts` aplica todo sobre una copia de los
   hechos: esos son los hechos *propuestos*, con los que se arma el IFC de la variante.
-- `specs`: especificaciones propias de la variante (`kitchen`, `laundry`), en `variants/<id>/`, que reemplazan a las
+- `specs`: especificaciones propias de la variante (`kitchen`, `laundry`, `bedroom`: la recámara que reemplaza a la de su mismo espacio), en `variants/<id>/`, que reemplazan a las
   de `sources/` solo en la propuesta; `extras` agrega piezas sueltas (cajas, `house_twin/extras.py`).
 - Acabados propios: un material con `applies_to.variant` y `variant_applies_to` (espacios, `calle`, franjas, zonas)
   solo cubre muros o pisos en esa propuesta; con `replaces` le quita esos espacios a los acabados de la casa. Una
@@ -26,7 +26,7 @@ from house_twin.finishes import Finishes
 ROOT = Path(__file__).resolve().parent.parent
 VARIANTS_DIR = ROOT / 'variants'
 PARTS = ('leaf', 'frame', 'glass')
-SPEC_KINDS = ('kitchen', 'laundry', 'extras')
+SPEC_KINDS = ('kitchen', 'laundry', 'extras', 'bedroom')
 
 
 def load_variants(folder: Path = VARIANTS_DIR) -> list[dict]:
@@ -109,6 +109,15 @@ def variant_specs(variant: dict, defaults: dict, root: Path = ROOT) -> dict:
     for kind, path in variant.get('specs', {}).items():
         specs[kind] = json.loads((root / path).read_text())
     return specs
+
+
+def variant_bedrooms(variant: dict, bedrooms: list[dict], root: Path = ROOT) -> list[dict]:
+    """Las recámaras de la casa; la que la variante declara en `specs.bedroom` reemplaza a la de su mismo espacio."""
+    path = variant.get('specs', {}).get('bedroom')
+    if not path:
+        return bedrooms
+    new = json.loads((root / path).read_text())
+    return [new if b['applies_to']['space'] == new['applies_to']['space'] else b for b in bedrooms]
 
 
 def validate(variant: dict, facts: dict, materials: dict[str, dict]) -> list[str]:
