@@ -1,0 +1,5358 @@
+{
+ "schema_version": 1,
+ "name": "Casa Jonhy — planta existente — propuesta: Recámara 2: dos ventanas a los lados de la cabecera",
+ "units": "m",
+ "frame": "origen en la esquina del terreno a la izquierda de la calle; X a lo ancho, Y hacia el fondo",
+ "provenance": {
+  "source": "dxf:data/raw/plano.dxf",
+  "built_on": "2026-10-25",
+  "precision_m": 0.0,
+  "calibration": {},
+  "owner_annotations": "2026-10-08",
+  "variant": "recamara-2-dos-ventanas",
+  "variant_kind": "remodelación"
+ },
+ "site": {
+  "polygon": [
+   [
+    0.0,
+    0.0
+   ],
+   [
+    0.0,
+    21.25
+   ],
+   [
+    10.03,
+    21.25
+   ],
+   [
+    10.03,
+    0.0
+   ]
+  ],
+  "width": 10.03,
+  "depth": 21.25,
+  "area": 213.14,
+  "labeled_dimensions": [
+   10.0,
+   21.25
+  ]
+ },
+ "source_warnings": [
+  "$INSUNITS=4 no cuadra con la geometría (21.25 unidades de lado); se usó 6",
+  "M01: el dueño mide 1.1 m (ancho libre del pasillo de recámaras, de muro a muro) y el plano da 1.21 m entre W18 y W16"
+ ],
+ "levels": [
+  {
+   "id": "L0",
+   "name": "Planta baja",
+   "elevation": 0.0,
+   "storey_height": {
+    "value": 2.6,
+    "source": "dueño (2026-10-07): U01"
+   }
+  }
+ ],
+ "spaces": [
+  {
+   "id": "S01",
+   "name": "Cocina + Sala + Comedor",
+   "labels": [
+    "COCINA",
+    "SALA",
+    "COMEDOR"
+   ],
+   "contains": [],
+   "drawn_contents": [
+    "vegetación",
+    "muebles"
+   ],
+   "is_exterior": false,
+   "polygon": [
+    [
+     4.6,
+     12.625
+    ],
+    [
+     4.6,
+     12.815
+    ],
+    [
+     4.6,
+     13.695
+    ],
+    [
+     5.62,
+     13.695
+    ],
+    [
+     5.62,
+     12.935
+    ],
+    [
+     5.62,
+     12.04
+    ],
+    [
+     5.62,
+     11.86
+    ],
+    [
+     5.62,
+     11.0
+    ],
+    [
+     5.62,
+     7.93
+    ],
+    [
+     8.45,
+     7.93
+    ],
+    [
+     8.45,
+     7.425
+    ],
+    [
+     9.268,
+     6.635
+    ],
+    [
+     9.763,
+     6.635
+    ],
+    [
+     9.763,
+     3.425
+    ],
+    [
+     8.983,
+     3.425
+    ],
+    [
+     7.743,
+     3.425
+    ],
+    [
+     6.743,
+     3.425
+    ],
+    [
+     6.323,
+     3.425
+    ],
+    [
+     5.573,
+     3.425
+    ],
+    [
+     4.473,
+     3.425
+    ],
+    [
+     3.728,
+     3.425
+    ],
+    [
+     3.285,
+     3.425
+    ],
+    [
+     3.285,
+     6.875
+    ],
+    [
+     2.805,
+     6.875
+    ],
+    [
+     2.295,
+     6.875
+    ],
+    [
+     1.875,
+     6.875
+    ],
+    [
+     1.375,
+     6.875
+    ],
+    [
+     1.375,
+     8.395
+    ],
+    [
+     1.375,
+     9.225
+    ],
+    [
+     1.375,
+     10.055
+    ],
+    [
+     4.225,
+     10.055
+    ],
+    [
+     4.225,
+     9.225
+    ],
+    [
+     4.41,
+     9.225
+    ],
+    [
+     4.41,
+     11.825
+    ],
+    [
+     4.41,
+     12.625
+    ]
+   ],
+   "area": 42.89,
+   "perimeter": 38.51,
+   "bbox": [
+    1.375,
+    3.425,
+    9.763,
+    13.695
+   ],
+   "floor_level": {
+    "value": 0.15,
+    "source": "rótulo \"NPT+0.15\""
+   },
+   "roofed": {
+    "value": true,
+    "source": "dueño (2026-10-09)"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: caras de MUROS + vanos"
+  },
+  {
+   "id": "S02",
+   "name": "Recámara 1",
+   "labels": [
+    "RECAMARA 1",
+    "CLOSET"
+   ],
+   "contains": [
+    "Closet"
+   ],
+   "drawn_contents": [
+    "muebles"
+   ],
+   "is_exterior": false,
+   "polygon": [
+    [
+     5.79,
+     12.935
+    ],
+    [
+     6.42,
+     12.935
+    ],
+    [
+     6.42,
+     13.105
+    ],
+    [
+     5.82,
+     13.105
+    ],
+    [
+     5.82,
+     16.055
+    ],
+    [
+     7.085,
+     16.055
+    ],
+    [
+     7.82,
+     16.055
+    ],
+    [
+     8.57,
+     16.055
+    ],
+    [
+     9.32,
+     16.055
+    ],
+    [
+     9.86,
+     16.055
+    ],
+    [
+     9.86,
+     12.04
+    ],
+    [
+     5.79,
+     12.04
+    ]
+   ],
+   "area": 16.15,
+   "perimeter": 17.37,
+   "bbox": [
+    5.79,
+    12.04,
+    9.86,
+    16.055
+   ],
+   "floor_level": {
+    "value": 0.15,
+    "source": "rótulo \"NPT+0.15\""
+   },
+   "roofed": {
+    "value": true,
+    "source": "dueño (2026-10-09)"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: caras de MUROS + vanos"
+  },
+  {
+   "id": "S03",
+   "name": "Recámara 2",
+   "labels": [
+    "RECAMARA 2",
+    "CLOSET"
+   ],
+   "contains": [
+    "Closet"
+   ],
+   "drawn_contents": [
+    "muebles"
+   ],
+   "is_exterior": false,
+   "polygon": [
+    [
+     1.45,
+     16.775
+    ],
+    [
+     2.4,
+     16.775
+    ],
+    [
+     3.9,
+     16.775
+    ],
+    [
+     5.62,
+     16.775
+    ],
+    [
+     5.62,
+     13.865
+    ],
+    [
+     4.43,
+     13.865
+    ],
+    [
+     4.43,
+     13.695
+    ],
+    [
+     4.43,
+     12.815
+    ],
+    [
+     1.45,
+     12.815
+    ]
+   ],
+   "area": 15.26,
+   "perimeter": 16.26,
+   "bbox": [
+    1.45,
+    12.815,
+    5.62,
+    16.775
+   ],
+   "floor_level": {
+    "value": 0.15,
+    "source": "rótulo \"NPT+0.15\""
+   },
+   "roofed": {
+    "value": true,
+    "source": "dueño (2026-10-09)"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: caras de MUROS + vanos"
+  },
+  {
+   "id": "S04",
+   "name": "Recámara 3",
+   "labels": [
+    "RECAMARA 3",
+    "CLOSET"
+   ],
+   "contains": [
+    "Closet"
+   ],
+   "drawn_contents": [
+    "muebles"
+   ],
+   "is_exterior": false,
+   "polygon": [
+    [
+     6.41,
+     10.82
+    ],
+    [
+     6.41,
+     11.0
+    ],
+    [
+     5.79,
+     11.0
+    ],
+    [
+     5.79,
+     11.86
+    ],
+    [
+     9.86,
+     11.86
+    ],
+    [
+     9.86,
+     8.14
+    ],
+    [
+     8.62,
+     8.14
+    ],
+    [
+     5.79,
+     8.14
+    ],
+    [
+     5.79,
+     10.82
+    ]
+   ],
+   "area": 15.03,
+   "perimeter": 16.82,
+   "bbox": [
+    5.79,
+    8.14,
+    9.86,
+    11.86
+   ],
+   "floor_level": {
+    "value": 0.15,
+    "source": "rótulo \"NPT+0.15\""
+   },
+   "roofed": {
+    "value": true,
+    "source": "dueño (2026-10-09)"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: caras de MUROS + vanos"
+  },
+  {
+   "id": "S05",
+   "name": "Baño",
+   "labels": [
+    "BAÑO"
+   ],
+   "contains": [],
+   "drawn_contents": [
+    "muebles fijos"
+   ],
+   "is_exterior": false,
+   "polygon": [
+    [
+     2.99,
+     12.625
+    ],
+    [
+     4.24,
+     12.625
+    ],
+    [
+     4.24,
+     10.225
+    ],
+    [
+     2.99,
+     10.225
+    ]
+   ],
+   "area": 2.94,
+   "perimeter": 7.3,
+   "bbox": [
+    2.99,
+    10.225,
+    4.24,
+    12.625
+   ],
+   "floor_level": {
+    "value": 0.15,
+    "source": "rótulo \"NPT+0.15\""
+   },
+   "roofed": {
+    "value": true,
+    "source": "dueño (2026-10-09)"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: caras de MUROS + vanos",
+   "name_source": "dueño (2026-10-08)",
+   "owner_note": "El baño es un solo espacio; el murete de 5 cm divide la regadera dentro del baño.",
+   "inner_partitions": [
+    "W26"
+   ]
+  },
+  {
+   "id": "S06",
+   "name": "Bodega",
+   "labels": [
+    "BODEGA"
+   ],
+   "contains": [],
+   "drawn_contents": [],
+   "is_exterior": false,
+   "polygon": [
+    [
+     8.563,
+     0.2
+    ],
+    [
+     8.563,
+     1.02
+    ],
+    [
+     8.563,
+     1.855
+    ],
+    [
+     9.763,
+     1.855
+    ],
+    [
+     9.763,
+     0.2
+    ]
+   ],
+   "area": 1.99,
+   "perimeter": 5.71,
+   "bbox": [
+    8.563,
+    0.2,
+    9.763,
+    1.855
+   ],
+   "floor_level": {
+    "value": 0.0,
+    "source": "rótulo \"NPT+0.00\""
+   },
+   "roofed": {
+    "value": true,
+    "source": "dueño (2026-10-09)"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: caras de MUROS + vanos"
+  },
+  {
+   "id": "S07",
+   "name": "1/2 Baño",
+   "labels": [
+    "1/2\nBAÑO"
+   ],
+   "contains": [],
+   "drawn_contents": [
+    "muebles fijos"
+   ],
+   "is_exterior": false,
+   "polygon": [
+    [
+     8.563,
+     3.245
+    ],
+    [
+     8.983,
+     3.245
+    ],
+    [
+     9.763,
+     3.245
+    ],
+    [
+     9.763,
+     2.025
+    ],
+    [
+     8.563,
+     2.025
+    ],
+    [
+     8.563,
+     2.055
+    ]
+   ],
+   "area": 1.46,
+   "perimeter": 4.84,
+   "bbox": [
+    8.563,
+    2.025,
+    9.763,
+    3.245
+   ],
+   "floor_level": {
+    "value": 0.0,
+    "source": "rótulo \"NPT+0.00\""
+   },
+   "roofed": {
+    "value": true,
+    "source": "dueño (2026-10-09)"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: caras de MUROS + vanos"
+  },
+  {
+   "id": "S08",
+   "name": "Tragaluz",
+   "labels": [],
+   "contains": [],
+   "drawn_contents": [
+    "árbol"
+   ],
+   "is_exterior": false,
+   "polygon": [
+    [
+     9.86,
+     7.93
+    ],
+    [
+     9.86,
+     6.805
+    ],
+    [
+     9.337,
+     6.805
+    ],
+    [
+     8.62,
+     7.497
+    ],
+    [
+     8.62,
+     7.93
+    ]
+   ],
+   "area": 1.15,
+   "perimeter": 4.32,
+   "bbox": [
+    8.62,
+    6.805,
+    9.86,
+    7.93
+   ],
+   "floor_level": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "roofed": {
+    "value": false,
+    "source": "dueño (2026-10-08)"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: caras de MUROS + vanos",
+   "name_source": "dueño (2026-10-08)",
+   "owner_note": "Tragaluz que ilumina y ventila la Recámara 3. Lo forman el muro central (diagonal, hacia la sala) y dos muros laterales. Está abierto al cielo (dato del dueño, 2026-10-08)."
+  },
+  {
+   "id": "S09",
+   "name": "Patio",
+   "labels": [],
+   "contains": [],
+   "drawn_contents": [],
+   "is_exterior": true,
+   "polygon": [
+    [
+     9.86,
+     21.05
+    ],
+    [
+     9.86,
+     16.22
+    ],
+    [
+     9.32,
+     16.22
+    ],
+    [
+     8.57,
+     16.22
+    ],
+    [
+     7.82,
+     16.22
+    ],
+    [
+     7.085,
+     16.22
+    ],
+    [
+     5.82,
+     16.22
+    ],
+    [
+     5.82,
+     16.945
+    ],
+    [
+     3.9,
+     16.945
+    ],
+    [
+     2.4,
+     16.945
+    ],
+    [
+     1.28,
+     16.945
+    ],
+    [
+     0.2,
+     16.945
+    ],
+    [
+     0.2,
+     21.05
+    ]
+   ],
+   "area": 42.58,
+   "perimeter": 28.98,
+   "bbox": [
+    0.2,
+    16.22,
+    9.86,
+    21.05
+   ],
+   "floor_level": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "roofed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: caras de MUROS + vanos",
+   "name_source": "dueño (2026-10-08)",
+   "owner_note": "Área exterior detrás de las recámaras. La franja junto a la recámara 2 (x < 1.28 m) queda del lado del pasillo: la puerta de herrería está al final de ese muro (dueño, 2026-10-08)."
+  },
+  {
+   "id": "S10",
+   "name": "Cochera",
+   "labels": [
+    "COCHERA"
+   ],
+   "contains": [],
+   "drawn_contents": [
+    "auto"
+   ],
+   "is_exterior": true,
+   "polygon": [
+    [
+     1.375,
+     6.705
+    ],
+    [
+     1.875,
+     6.705
+    ],
+    [
+     2.295,
+     6.705
+    ],
+    [
+     2.805,
+     6.705
+    ],
+    [
+     3.115,
+     6.705
+    ],
+    [
+     3.115,
+     3.255
+    ],
+    [
+     3.115,
+     0.0
+    ],
+    [
+     0.2,
+     0.0
+    ],
+    [
+     0.2,
+     6.705
+    ],
+    [
+     1.205,
+     6.705
+    ]
+   ],
+   "area": 19.55,
+   "perimeter": 19.24,
+   "bbox": [
+    0.2,
+    0.0,
+    3.115,
+    6.705
+   ],
+   "floor_level": {
+    "value": 0.0,
+    "source": "rótulo \"NPT+0.00\""
+   },
+   "roofed": {
+    "value": false,
+    "source": "dueño (2026-10-08)"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: caras de MUROS + vanos",
+   "name_source": "dueño (2026-10-08)",
+   "owner_note": "Área exterior frente a la cocina, hasta donde empieza el muro lateral de la cocina. No tiene techo."
+  },
+  {
+   "id": "S11",
+   "name": "Pórtico",
+   "labels": [],
+   "contains": [],
+   "drawn_contents": [],
+   "is_exterior": true,
+   "polygon": [
+    [
+     5.573,
+     3.255
+    ],
+    [
+     6.323,
+     3.255
+    ],
+    [
+     6.743,
+     3.255
+    ],
+    [
+     7.743,
+     3.255
+    ],
+    [
+     8.393,
+     3.247
+    ],
+    [
+     8.393,
+     2.055
+    ],
+    [
+     8.393,
+     1.855
+    ],
+    [
+     8.393,
+     1.02
+    ],
+    [
+     8.393,
+     0.2
+    ],
+    [
+     7.153,
+     0.2
+    ],
+    [
+     6.173,
+     0.2
+    ],
+    [
+     3.24,
+     0.2
+    ],
+    [
+     3.24,
+     0.0
+    ],
+    [
+     3.115,
+     0.0
+    ],
+    [
+     3.115,
+     3.255
+    ],
+    [
+     3.728,
+     3.255
+    ],
+    [
+     4.473,
+     3.255
+    ]
+   ],
+   "area": 16.15,
+   "perimeter": 17.06,
+   "bbox": [
+    3.115,
+    0.0,
+    8.393,
+    3.255
+   ],
+   "floor_level": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "roofed": {
+    "value": true,
+    "source": "dueño (2026-10-08)"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: caras de MUROS + vanos",
+   "name_source": "dueño (2026-10-08)",
+   "owner_note": "Pórtico techado frente a la sala: acceso principal, puerta peatonal y puerta de la bodega."
+  },
+  {
+   "id": "S12",
+   "name": "Pasillo de servicio",
+   "labels": [
+    "LAVANDERIA"
+   ],
+   "contains": [],
+   "drawn_contents": [],
+   "is_exterior": true,
+   "polygon": [
+    [
+     1.205,
+     10.225
+    ],
+    [
+     1.205,
+     9.225
+    ],
+    [
+     1.205,
+     8.395
+    ],
+    [
+     1.205,
+     6.705
+    ],
+    [
+     0.2,
+     6.705
+    ],
+    [
+     0.2,
+     16.945
+    ],
+    [
+     1.28,
+     16.945
+    ],
+    [
+     1.28,
+     12.625
+    ],
+    [
+     1.205,
+     12.625
+    ]
+   ],
+   "area": 10.62,
+   "perimeter": 22.64,
+   "bbox": [
+    0.2,
+    6.705,
+    1.28,
+    16.945
+   ],
+   "floor_level": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "roofed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "enclosed": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: caras de MUROS + vanos",
+   "name_source": "dueño (2026-10-08)",
+   "owner_note": "Pasillo lateral junto a la barda que conecta la cochera con el patio, pasando por la puerta de la cocina y la lavandería. Su borde sigue la cara exterior del muro de la cocina (x = 1.205 m); límites trazados por Claude a partir de la descripción del dueño. Se extiende junto a la recámara 2 hasta la puerta de herrería del patio, al final de ese muro (dueño, 2026-10-08)."
+  },
+  {
+   "id": "S13",
+   "name": "Lavandería",
+   "labels": [],
+   "contains": [],
+   "drawn_contents": [
+    "muebles"
+   ],
+   "is_exterior": true,
+   "polygon": [
+    [
+     2.82,
+     12.625
+    ],
+    [
+     2.82,
+     11.005
+    ],
+    [
+     2.82,
+     10.225
+    ],
+    [
+     1.205,
+     10.225
+    ],
+    [
+     1.205,
+     12.625
+    ],
+    [
+     1.28,
+     12.625
+    ]
+   ],
+   "area": 3.88,
+   "perimeter": 8.03,
+   "bbox": [
+    1.205,
+    10.225,
+    2.82,
+    12.625
+   ],
+   "floor_level": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "roofed": {
+    "value": false,
+    "source": "dueño (2026-10-08)"
+   },
+   "enclosed": {
+    "value": false,
+    "source": "dueño (2026-10-08)"
+   },
+   "source": "plano: caras de MUROS + vanos",
+   "name_source": "dueño (2026-10-08)",
+   "owner_note": "Fuera de la casa, detrás del baño; la ventana del baño da hacia ella. No está techada ni cerrada. Ocupa el recuadro entre el pasillo de servicio y el baño."
+  }
+ ],
+ "walls": [
+  {
+   "id": "W01",
+   "footprint": [
+    [
+     0.2,
+     0.0
+    ],
+    [
+     0.0,
+     0.0
+    ],
+    [
+     0.0,
+     21.25
+    ],
+    [
+     0.2,
+     21.25
+    ]
+   ],
+   "axis": [
+    [
+     0.1,
+     0.0
+    ],
+    [
+     0.1,
+     21.25
+    ]
+   ],
+   "length": 21.25,
+   "thickness": 0.2,
+   "on_property_line": true,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W02",
+   "footprint": [
+    [
+     0.2,
+     21.05
+    ],
+    [
+     0.2,
+     21.25
+    ],
+    [
+     10.03,
+     21.25
+    ],
+    [
+     10.03,
+     21.05
+    ]
+   ],
+   "axis": [
+    [
+     0.2,
+     21.15
+    ],
+    [
+     10.03,
+     21.15
+    ]
+   ],
+   "length": 9.83,
+   "thickness": 0.2,
+   "on_property_line": true,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W03",
+   "footprint": [
+    [
+     3.24,
+     0.2
+    ],
+    [
+     8.563,
+     0.2
+    ],
+    [
+     8.563,
+     0.0
+    ],
+    [
+     3.24,
+     0.0
+    ]
+   ],
+   "axis": [
+    [
+     3.24,
+     0.1
+    ],
+    [
+     8.563,
+     0.1
+    ]
+   ],
+   "length": 5.323,
+   "thickness": 0.2,
+   "on_property_line": true,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W04",
+   "footprint": [
+    [
+     9.86,
+     11.86
+    ],
+    [
+     10.03,
+     11.86
+    ],
+    [
+     10.03,
+     6.805
+    ],
+    [
+     9.86,
+     6.805
+    ]
+   ],
+   "axis": [
+    [
+     9.945,
+     6.805
+    ],
+    [
+     9.945,
+     11.86
+    ]
+   ],
+   "length": 5.055,
+   "thickness": 0.17,
+   "on_property_line": true,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W05",
+   "footprint": [
+    [
+     9.86,
+     21.05
+    ],
+    [
+     10.03,
+     21.05
+    ],
+    [
+     10.03,
+     16.055
+    ],
+    [
+     9.86,
+     16.055
+    ]
+   ],
+   "axis": [
+    [
+     9.945,
+     16.055
+    ],
+    [
+     9.945,
+     21.05
+    ]
+   ],
+   "length": 4.995,
+   "thickness": 0.17,
+   "on_property_line": true,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W06",
+   "footprint": [
+    [
+     9.763,
+     6.805
+    ],
+    [
+     10.03,
+     6.805
+    ],
+    [
+     10.03,
+     1.855
+    ],
+    [
+     9.763,
+     1.855
+    ]
+   ],
+   "axis": [
+    [
+     9.896,
+     1.855
+    ],
+    [
+     9.896,
+     6.805
+    ]
+   ],
+   "length": 4.95,
+   "thickness": 0.267,
+   "on_property_line": true,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W07",
+   "footprint": [
+    [
+     3.115,
+     3.425
+    ],
+    [
+     7.743,
+     3.425
+    ],
+    [
+     7.743,
+     3.255
+    ],
+    [
+     3.115,
+     3.255
+    ]
+   ],
+   "axis": [
+    [
+     3.115,
+     3.34
+    ],
+    [
+     7.743,
+     3.34
+    ]
+   ],
+   "length": 4.628,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W08",
+   "footprint": [
+    [
+     5.62,
+     11.86
+    ],
+    [
+     5.62,
+     12.04
+    ],
+    [
+     10.03,
+     12.04
+    ],
+    [
+     10.03,
+     11.86
+    ]
+   ],
+   "axis": [
+    [
+     5.62,
+     11.95
+    ],
+    [
+     10.03,
+     11.95
+    ]
+   ],
+   "length": 4.41,
+   "thickness": 0.18,
+   "on_property_line": false,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W09",
+   "footprint": [
+    [
+     1.28,
+     16.775
+    ],
+    [
+     1.28,
+     16.945
+    ],
+    [
+     5.62,
+     16.945
+    ],
+    [
+     5.62,
+     16.775
+    ]
+   ],
+   "axis": [
+    [
+     1.28,
+     16.86
+    ],
+    [
+     5.62,
+     16.86
+    ]
+   ],
+   "length": 4.34,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W10",
+   "footprint": [
+    [
+     5.82,
+     16.055
+    ],
+    [
+     5.82,
+     16.22
+    ],
+    [
+     9.86,
+     16.22
+    ],
+    [
+     9.86,
+     16.055
+    ]
+   ],
+   "axis": [
+    [
+     5.82,
+     16.137
+    ],
+    [
+     9.86,
+     16.137
+    ]
+   ],
+   "length": 4.04,
+   "thickness": 0.165,
+   "on_property_line": false,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W11",
+   "footprint": [
+    [
+     9.86,
+     12.04
+    ],
+    [
+     9.86,
+     16.055
+    ],
+    [
+     10.03,
+     16.055
+    ],
+    [
+     10.03,
+     12.04
+    ]
+   ],
+   "axis": [
+    [
+     9.945,
+     12.04
+    ],
+    [
+     9.945,
+     16.055
+    ]
+   ],
+   "length": 4.015,
+   "thickness": 0.17,
+   "on_property_line": true,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W12",
+   "footprint": [
+    [
+     1.28,
+     16.775
+    ],
+    [
+     1.45,
+     16.775
+    ],
+    [
+     1.45,
+     12.815
+    ],
+    [
+     1.28,
+     12.815
+    ]
+   ],
+   "axis": [
+    [
+     1.365,
+     12.815
+    ],
+    [
+     1.365,
+     16.775
+    ]
+   ],
+   "length": 3.96,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W13",
+   "footprint": [
+    [
+     1.375,
+     6.705
+    ],
+    [
+     1.205,
+     6.705
+    ],
+    [
+     1.205,
+     10.225
+    ],
+    [
+     1.375,
+     10.225
+    ]
+   ],
+   "axis": [
+    [
+     1.29,
+     6.705
+    ],
+    [
+     1.29,
+     10.225
+    ]
+   ],
+   "length": 3.52,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W14",
+   "footprint": [
+    [
+     3.285,
+     3.425
+    ],
+    [
+     3.115,
+     3.425
+    ],
+    [
+     3.115,
+     6.875
+    ],
+    [
+     3.285,
+     6.875
+    ]
+   ],
+   "axis": [
+    [
+     3.2,
+     3.425
+    ],
+    [
+     3.2,
+     6.875
+    ]
+   ],
+   "length": 3.45,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W15",
+   "footprint": [
+    [
+     4.225,
+     10.225
+    ],
+    [
+     4.225,
+     10.055
+    ],
+    [
+     1.375,
+     10.055
+    ],
+    [
+     1.375,
+     10.225
+    ]
+   ],
+   "axis": [
+    [
+     1.375,
+     10.14
+    ],
+    [
+     4.225,
+     10.14
+    ]
+   ],
+   "length": 2.85,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W16",
+   "footprint": [
+    [
+     5.79,
+     8.14
+    ],
+    [
+     5.62,
+     8.14
+    ],
+    [
+     5.62,
+     11.86
+    ],
+    [
+     5.79,
+     11.86
+    ]
+   ],
+   "axis": [
+    [
+     5.705,
+     8.14
+    ],
+    [
+     5.705,
+     11.86
+    ]
+   ],
+   "length": 3.72,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W17",
+   "footprint": [
+    [
+     5.62,
+     7.93
+    ],
+    [
+     5.62,
+     8.14
+    ],
+    [
+     9.86,
+     8.14
+    ],
+    [
+     9.86,
+     7.93
+    ]
+   ],
+   "axis": [
+    [
+     5.62,
+     8.035
+    ],
+    [
+     9.86,
+     8.035
+    ]
+   ],
+   "length": 4.24,
+   "thickness": 0.21,
+   "on_property_line": false,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W18",
+   "footprint": [
+    [
+     4.41,
+     10.225
+    ],
+    [
+     4.24,
+     10.225
+    ],
+    [
+     4.24,
+     12.625
+    ],
+    [
+     4.41,
+     12.625
+    ]
+   ],
+   "axis": [
+    [
+     4.325,
+     10.225
+    ],
+    [
+     4.325,
+     12.625
+    ]
+   ],
+   "length": 2.4,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W19",
+   "footprint": [
+    [
+     2.99,
+     10.225
+    ],
+    [
+     2.82,
+     10.225
+    ],
+    [
+     2.82,
+     12.625
+    ],
+    [
+     2.99,
+     12.625
+    ]
+   ],
+   "axis": [
+    [
+     2.905,
+     10.225
+    ],
+    [
+     2.905,
+     12.625
+    ]
+   ],
+   "length": 2.4,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W20",
+   "footprint": [
+    [
+     5.62,
+     16.22
+    ],
+    [
+     5.82,
+     16.22
+    ],
+    [
+     5.82,
+     13.695
+    ],
+    [
+     5.62,
+     13.695
+    ]
+   ],
+   "axis": [
+    [
+     5.72,
+     13.695
+    ],
+    [
+     5.72,
+     16.22
+    ]
+   ],
+   "length": 2.525,
+   "thickness": 0.2,
+   "on_property_line": false,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W21",
+   "footprint": [
+    [
+     1.375,
+     6.705
+    ],
+    [
+     1.375,
+     6.875
+    ],
+    [
+     3.115,
+     6.875
+    ],
+    [
+     3.115,
+     6.705
+    ]
+   ],
+   "axis": [
+    [
+     1.375,
+     6.79
+    ],
+    [
+     3.115,
+     6.79
+    ]
+   ],
+   "length": 1.74,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W22",
+   "footprint": [
+    [
+     9.763,
+     0.0
+    ],
+    [
+     9.763,
+     1.855
+    ],
+    [
+     10.03,
+     1.855
+    ],
+    [
+     10.03,
+     0.0
+    ]
+   ],
+   "axis": [
+    [
+     9.896,
+     0.0
+    ],
+    [
+     9.896,
+     1.855
+    ]
+   ],
+   "length": 1.855,
+   "thickness": 0.267,
+   "on_property_line": true,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W23",
+   "footprint": [
+    [
+     8.393,
+     0.2
+    ],
+    [
+     8.393,
+     1.855
+    ],
+    [
+     8.563,
+     1.855
+    ],
+    [
+     8.563,
+     0.2
+    ]
+   ],
+   "axis": [
+    [
+     8.478,
+     0.2
+    ],
+    [
+     8.478,
+     1.855
+    ]
+   ],
+   "length": 1.655,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W24",
+   "footprint": [
+    [
+     2.82,
+     12.815
+    ],
+    [
+     4.43,
+     12.815
+    ],
+    [
+     4.43,
+     13.695
+    ],
+    [
+     4.6,
+     13.695
+    ],
+    [
+     4.6,
+     12.625
+    ],
+    [
+     2.82,
+     12.625
+    ]
+   ],
+   "axis": [
+    [
+     2.82,
+     13.16
+    ],
+    [
+     4.6,
+     13.16
+    ]
+   ],
+   "length": 1.78,
+   "thickness": 0.19,
+   "on_property_line": false,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W25",
+   "footprint": [
+    [
+     2.82,
+     12.815
+    ],
+    [
+     2.82,
+     12.625
+    ],
+    [
+     1.28,
+     12.625
+    ],
+    [
+     1.28,
+     12.815
+    ]
+   ],
+   "axis": [
+    [
+     1.28,
+     12.72
+    ],
+    [
+     2.82,
+     12.72
+    ]
+   ],
+   "length": 1.54,
+   "thickness": 0.19,
+   "on_property_line": false,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W26",
+   "footprint": [
+    [
+     4.24,
+     11.205
+    ],
+    [
+     4.24,
+     11.155
+    ],
+    [
+     2.99,
+     11.155
+    ],
+    [
+     2.99,
+     11.205
+    ]
+   ],
+   "axis": [
+    [
+     2.99,
+     11.18
+    ],
+    [
+     4.24,
+     11.18
+    ]
+   ],
+   "length": 1.25,
+   "thickness": 0.05,
+   "on_property_line": false,
+   "faces_exterior": false,
+   "height": {
+    "value": 0.05,
+    "source": "dueño (2026-10-09): un escalón de 5 cm separa el baño de la regadera"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS",
+   "role": "sardinel de la regadera"
+  },
+  {
+   "id": "W27",
+   "footprint": [
+    [
+     8.563,
+     2.025
+    ],
+    [
+     8.393,
+     2.025
+    ],
+    [
+     8.393,
+     3.245
+    ],
+    [
+     8.563,
+     3.245
+    ]
+   ],
+   "axis": [
+    [
+     8.478,
+     2.025
+    ],
+    [
+     8.478,
+     3.245
+    ]
+   ],
+   "length": 1.22,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W28",
+   "footprint": [
+    [
+     8.393,
+     3.245
+    ],
+    [
+     8.393,
+     3.247
+    ],
+    [
+     7.743,
+     3.255
+    ],
+    [
+     7.743,
+     3.425
+    ],
+    [
+     9.763,
+     3.425
+    ],
+    [
+     9.763,
+     3.245
+    ]
+   ],
+   "axis": [
+    [
+     7.743,
+     3.335
+    ],
+    [
+     9.763,
+     3.335
+    ]
+   ],
+   "length": 2.02,
+   "thickness": 0.18,
+   "on_property_line": false,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W29",
+   "footprint": [
+    [
+     9.763,
+     1.855
+    ],
+    [
+     8.563,
+     1.855
+    ],
+    [
+     8.563,
+     2.025
+    ],
+    [
+     9.763,
+     2.025
+    ]
+   ],
+   "axis": [
+    [
+     8.563,
+     1.94
+    ],
+    [
+     9.763,
+     1.94
+    ]
+   ],
+   "length": 1.2,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W30",
+   "footprint": [
+    [
+     8.563,
+     0.2
+    ],
+    [
+     9.763,
+     0.2
+    ],
+    [
+     9.763,
+     0.0
+    ],
+    [
+     8.563,
+     0.0
+    ]
+   ],
+   "axis": [
+    [
+     8.563,
+     0.1
+    ],
+    [
+     9.763,
+     0.1
+    ]
+   ],
+   "length": 1.2,
+   "thickness": 0.2,
+   "on_property_line": true,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W31",
+   "footprint": [
+    [
+     5.62,
+     13.695
+    ],
+    [
+     4.43,
+     13.695
+    ],
+    [
+     4.43,
+     13.865
+    ],
+    [
+     5.62,
+     13.865
+    ]
+   ],
+   "axis": [
+    [
+     4.43,
+     13.78
+    ],
+    [
+     5.62,
+     13.78
+    ]
+   ],
+   "length": 1.19,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W32",
+   "footprint": [
+    [
+     8.62,
+     7.497
+    ],
+    [
+     9.337,
+     6.805
+    ],
+    [
+     9.219,
+     6.683
+    ],
+    [
+     8.45,
+     7.425
+    ],
+    [
+     8.45,
+     7.497
+    ]
+   ],
+   "axis": [
+    [
+     8.473,
+     7.521
+    ],
+    [
+     9.278,
+     6.744
+    ]
+   ],
+   "length": 1.119,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W33",
+   "footprint": [
+    [
+     4.41,
+     9.225
+    ],
+    [
+     4.225,
+     9.225
+    ],
+    [
+     4.225,
+     10.225
+    ],
+    [
+     4.41,
+     10.225
+    ]
+   ],
+   "axis": [
+    [
+     4.317,
+     9.225
+    ],
+    [
+     4.317,
+     10.225
+    ]
+   ],
+   "length": 1.0,
+   "thickness": 0.185,
+   "on_property_line": false,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W34",
+   "footprint": [
+    [
+     6.41,
+     11.0
+    ],
+    [
+     6.41,
+     10.82
+    ],
+    [
+     5.79,
+     10.82
+    ],
+    [
+     5.79,
+     11.0
+    ]
+   ],
+   "axis": [
+    [
+     5.79,
+     10.91
+    ],
+    [
+     6.41,
+     10.91
+    ]
+   ],
+   "length": 0.62,
+   "thickness": 0.18,
+   "on_property_line": false,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W35",
+   "footprint": [
+    [
+     6.42,
+     13.105
+    ],
+    [
+     6.42,
+     12.935
+    ],
+    [
+     5.82,
+     12.935
+    ],
+    [
+     5.82,
+     13.105
+    ]
+   ],
+   "axis": [
+    [
+     5.82,
+     13.02
+    ],
+    [
+     6.42,
+     13.02
+    ]
+   ],
+   "length": 0.6,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W36",
+   "footprint": [
+    [
+     5.82,
+     12.935
+    ],
+    [
+     5.79,
+     12.935
+    ],
+    [
+     5.79,
+     12.04
+    ],
+    [
+     5.62,
+     12.04
+    ],
+    [
+     5.62,
+     13.695
+    ],
+    [
+     5.82,
+     13.695
+    ]
+   ],
+   "axis": [
+    [
+     5.72,
+     12.04
+    ],
+    [
+     5.72,
+     13.695
+    ]
+   ],
+   "length": 1.655,
+   "thickness": 0.2,
+   "on_property_line": false,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W37",
+   "footprint": [
+    [
+     5.62,
+     16.945
+    ],
+    [
+     5.82,
+     16.945
+    ],
+    [
+     5.82,
+     16.22
+    ],
+    [
+     5.62,
+     16.22
+    ]
+   ],
+   "axis": [
+    [
+     5.72,
+     16.22
+    ],
+    [
+     5.72,
+     16.945
+    ]
+   ],
+   "length": 0.725,
+   "thickness": 0.2,
+   "on_property_line": false,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W38",
+   "footprint": [
+    [
+     8.62,
+     7.93
+    ],
+    [
+     8.62,
+     7.497
+    ],
+    [
+     8.45,
+     7.497
+    ],
+    [
+     8.45,
+     7.93
+    ]
+   ],
+   "axis": [
+    [
+     8.535,
+     7.497
+    ],
+    [
+     8.535,
+     7.93
+    ]
+   ],
+   "length": 0.433,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W39",
+   "footprint": [
+    [
+     9.337,
+     6.805
+    ],
+    [
+     9.763,
+     6.805
+    ],
+    [
+     9.763,
+     6.635
+    ],
+    [
+     9.268,
+     6.635
+    ],
+    [
+     9.219,
+     6.683
+    ]
+   ],
+   "axis": [
+    [
+     9.219,
+     6.72
+    ],
+    [
+     9.763,
+     6.72
+    ]
+   ],
+   "length": 0.544,
+   "thickness": 0.17,
+   "on_property_line": false,
+   "faces_exterior": false,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  },
+  {
+   "id": "W40",
+   "footprint": [
+    [
+     8.563,
+     1.855
+    ],
+    [
+     8.393,
+     1.855
+    ],
+    [
+     8.393,
+     2.025
+    ],
+    [
+     8.563,
+     2.025
+    ]
+   ],
+   "axis": [
+    [
+     8.393,
+     1.94
+    ],
+    [
+     8.563,
+     1.94
+    ]
+   ],
+   "length": 0.17,
+   "thickness": 0.2,
+   "on_property_line": false,
+   "faces_exterior": true,
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "load_bearing": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "material": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "source": "plano: pares de caras de MUROS"
+  }
+ ],
+ "openings": [
+  {
+   "kind": "door",
+   "footprint": [
+    [
+     5.123,
+     0.0
+    ],
+    [
+     6.103,
+     0.0
+    ],
+    [
+     6.103,
+     0.2
+    ],
+    [
+     5.123,
+     0.2
+    ]
+   ],
+   "width": 0.98,
+   "wall_thickness": 0.2,
+   "detected_by": "vanos",
+   "sill_height": {
+    "value": 0.0,
+    "source": "definición de puerta"
+   },
+   "height": {
+    "value": 2.3,
+    "source": "estimación con las mismas fotos: la reja llega a la misma altura que las ventanas (antepecho ≈ 1.00 m + 1.30 m medido = 2.30 m); la foto da 2.29 m"
+   },
+   "id": "D01",
+   "host_wall": "W03",
+   "connects": [
+    "S11"
+   ],
+   "swing": {
+    "hinge_end": [
+     6.103,
+     0.1
+    ],
+    "latch_end": [
+     5.123,
+     0.1
+    ],
+    "opens_into": "S11",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra); desplazado con el vano"
+   },
+   "plan_footprint": [
+    [
+     6.173,
+     0.0
+    ],
+    [
+     7.153,
+     0.0
+    ],
+    [
+     7.153,
+     0.2
+    ],
+    [
+     6.173,
+     0.2
+    ]
+   ],
+   "position_source": "posición: medidas del dueño (2026-10-09; ventana grande de 2.00 m desde el muro de la bodega) más la pilastra de 0.29 m entre esa ventana y la reja, medida en las 2 fotos desde el pórtico (2026-10-09 08:46–08:47, gran angular de 13 mm): homografía de la reja peatonal (0.98 m de ancho del plano); el largo total del muro sale con 1 cm de diferencia",
+   "owner_note": "Reja peatonal del pórtico (D01). El plano la pone en x = 6.17–7.15 m; en las fotos y con las medidas del dueño queda en x = 5.12–6.10 m (≈ 1.05 m hacia la cochera); el camino curvo del piso va de ella a la puerta de entrada (D03). El candado se ve del lado este (hacia la bodega), al revés que la bisagra del plano: sin confirmar."
+  },
+  {
+   "kind": "door",
+   "footprint": [
+    [
+     8.983,
+     3.245
+    ],
+    [
+     9.763,
+     3.245
+    ],
+    [
+     9.763,
+     3.425
+    ],
+    [
+     8.983,
+     3.425
+    ]
+   ],
+   "width": 0.78,
+   "wall_thickness": 0.18,
+   "detected_by": "vanos",
+   "sill_height": {
+    "value": 0.0,
+    "source": "definición de puerta"
+   },
+   "height": {
+    "value": 2.1,
+    "source": "dueño (2026-10-07): U04"
+   },
+   "id": "D02",
+   "host_wall": "W28",
+   "connects": [
+    "S01",
+    "S07"
+   ],
+   "swing": {
+    "hinge_end": [
+     9.763,
+     3.335
+    ],
+    "latch_end": [
+     8.983,
+     3.335
+    ],
+    "opens_into": "S07",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra)"
+   }
+  },
+  {
+   "kind": "door",
+   "footprint": [
+    [
+     6.743,
+     3.255
+    ],
+    [
+     7.743,
+     3.255
+    ],
+    [
+     7.743,
+     3.425
+    ],
+    [
+     6.743,
+     3.425
+    ]
+   ],
+   "width": 1.0,
+   "wall_thickness": 0.17,
+   "detected_by": "vanos",
+   "sill_height": {
+    "value": 0.0,
+    "source": "definición de puerta"
+   },
+   "height": {
+    "value": 2.1,
+    "source": "dueño (2026-10-07): U04"
+   },
+   "id": "D03",
+   "host_wall": "W07",
+   "connects": [
+    "S01",
+    "S11"
+   ],
+   "swing": {
+    "hinge_end": [
+     7.743,
+     3.34
+    ],
+    "latch_end": [
+     6.743,
+     3.34
+    ],
+    "opens_into": "S01",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra)"
+   }
+  },
+  {
+   "kind": "door",
+   "footprint": [
+    [
+     1.205,
+     8.395
+    ],
+    [
+     1.205,
+     9.225
+    ],
+    [
+     1.375,
+     9.225
+    ],
+    [
+     1.375,
+     8.395
+    ]
+   ],
+   "width": 0.83,
+   "wall_thickness": 0.17,
+   "detected_by": "vanos",
+   "sill_height": {
+    "value": 0.0,
+    "source": "definición de puerta"
+   },
+   "height": {
+    "value": 2.1,
+    "source": "dueño (2026-10-07): U04"
+   },
+   "id": "D04",
+   "host_wall": "W13",
+   "connects": [
+    "S01",
+    "S12"
+   ],
+   "swing": {
+    "hinge_end": [
+     1.29,
+     9.225
+    ],
+    "latch_end": [
+     1.29,
+     8.395
+    ],
+    "opens_into": "S12",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra)"
+   }
+  },
+  {
+   "kind": "door",
+   "footprint": [
+    [
+     4.24,
+     11.825
+    ],
+    [
+     4.24,
+     12.625
+    ],
+    [
+     4.41,
+     12.625
+    ],
+    [
+     4.41,
+     11.825
+    ]
+   ],
+   "width": 0.8,
+   "wall_thickness": 0.17,
+   "detected_by": "vanos",
+   "sill_height": {
+    "value": 0.0,
+    "source": "definición de puerta"
+   },
+   "height": {
+    "value": 2.1,
+    "source": "dueño (2026-10-07): U04"
+   },
+   "id": "D05",
+   "host_wall": "W18",
+   "connects": [
+    "S01",
+    "S05"
+   ],
+   "swing": {
+    "hinge_end": [
+     4.325,
+     12.625
+    ],
+    "latch_end": [
+     4.325,
+     11.825
+    ],
+    "opens_into": "S05",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra)"
+   }
+  },
+  {
+   "kind": "door",
+   "footprint": [
+    [
+     4.43,
+     12.815
+    ],
+    [
+     4.43,
+     13.695
+    ],
+    [
+     4.6,
+     13.695
+    ],
+    [
+     4.6,
+     12.815
+    ]
+   ],
+   "width": 0.88,
+   "wall_thickness": 0.17,
+   "detected_by": "vanos",
+   "sill_height": {
+    "value": 0.0,
+    "source": "definición de puerta"
+   },
+   "height": {
+    "value": 2.1,
+    "source": "dueño (2026-10-07): U04"
+   },
+   "id": "D06",
+   "host_wall": "W24",
+   "connects": [
+    "S01",
+    "S03"
+   ],
+   "swing": {
+    "hinge_end": [
+     4.515,
+     12.815
+    ],
+    "latch_end": [
+     4.515,
+     13.695
+    ],
+    "opens_into": "S03",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra)"
+   }
+  },
+  {
+   "kind": "door",
+   "footprint": [
+    [
+     5.62,
+     11.0
+    ],
+    [
+     5.62,
+     11.86
+    ],
+    [
+     5.79,
+     11.86
+    ],
+    [
+     5.79,
+     11.0
+    ]
+   ],
+   "width": 0.86,
+   "wall_thickness": 0.17,
+   "detected_by": "vanos",
+   "sill_height": {
+    "value": 0.0,
+    "source": "definición de puerta"
+   },
+   "height": {
+    "value": 2.1,
+    "source": "dueño (2026-10-07): U04"
+   },
+   "id": "D07",
+   "host_wall": "W16",
+   "connects": [
+    "S01",
+    "S04"
+   ],
+   "swing": {
+    "hinge_end": [
+     5.705,
+     11.86
+    ],
+    "latch_end": [
+     5.705,
+     11.0
+    ],
+    "opens_into": "S04",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra)"
+   }
+  },
+  {
+   "kind": "door",
+   "footprint": [
+    [
+     5.62,
+     12.04
+    ],
+    [
+     5.62,
+     12.935
+    ],
+    [
+     5.79,
+     12.935
+    ],
+    [
+     5.79,
+     12.04
+    ]
+   ],
+   "width": 0.895,
+   "wall_thickness": 0.17,
+   "detected_by": "vanos",
+   "sill_height": {
+    "value": 0.0,
+    "source": "definición de puerta"
+   },
+   "height": {
+    "value": 2.1,
+    "source": "dueño (2026-10-07): U04"
+   },
+   "id": "D08",
+   "host_wall": "W36",
+   "connects": [
+    "S01",
+    "S02"
+   ],
+   "swing": {
+    "hinge_end": [
+     5.705,
+     12.04
+    ],
+    "latch_end": [
+     5.705,
+     12.935
+    ],
+    "opens_into": "S02",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra)"
+   }
+  },
+  {
+   "kind": "door",
+   "footprint": [
+    [
+     8.393,
+     1.02
+    ],
+    [
+     8.393,
+     1.855
+    ],
+    [
+     8.563,
+     1.855
+    ],
+    [
+     8.563,
+     1.02
+    ]
+   ],
+   "width": 0.835,
+   "wall_thickness": 0.17,
+   "detected_by": "jambs",
+   "sill_height": {
+    "value": 0.0,
+    "source": "definición de puerta"
+   },
+   "height": {
+    "value": 2.1,
+    "source": "dueño (2026-10-07): U04"
+   },
+   "id": "D09",
+   "host_wall": "W23",
+   "connects": [
+    "S06",
+    "S11"
+   ],
+   "swing": {
+    "hinge_end": [
+     8.478,
+     1.855
+    ],
+    "latch_end": [
+     8.478,
+     1.02
+    ],
+    "opens_into": "S06",
+    "source": "plano: bloque PUERTA (centro del arco = bisagra)"
+   }
+  },
+  {
+   "kind": "door",
+   "footprint": [
+    [
+     0.2,
+     6.705
+    ],
+    [
+     1.205,
+     6.705
+    ],
+    [
+     1.205,
+     6.755
+    ],
+    [
+     0.2,
+     6.755
+    ]
+   ],
+   "width": 1.005,
+   "wall_thickness": null,
+   "detected_by": "dueño (2026-10-08)",
+   "sill_height": {
+    "value": 0.0,
+    "source": "definición de puerta"
+   },
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "host_wall": null,
+   "connects": [
+    "S12",
+    "S10"
+   ],
+   "owner_note": "Puerta de herrería entre la cochera y el pasillo de servicio (dueño, 2026-10-08). Posición: en la foto, el poste izquierdo queda al final del muro de la cocina (y = 6.705 m); cubre de la barda (x = 0.20 m) a la cara del muro de la cocina (x = 1.205 m). Altura pendiente de medir.",
+   "leaves": [
+    {
+     "hinge_end": [
+      1.205,
+      6.73
+     ],
+     "latch_end": [
+      0.2,
+      6.73
+     ],
+     "opens_into": "S12",
+     "source": "bisagra: foto desde el pasillo (bisagras del lado izquierdo, ancladas al muro de la cocina); hacia dónde abre: supuesto (hacia el pasillo)"
+    }
+   ],
+   "id": "D10"
+  },
+  {
+   "kind": "door",
+   "footprint": [
+    [
+     0.2,
+     16.895
+    ],
+    [
+     1.28,
+     16.895
+    ],
+    [
+     1.28,
+     16.945
+    ],
+    [
+     0.2,
+     16.945
+    ]
+   ],
+   "width": 1.08,
+   "wall_thickness": null,
+   "detected_by": "dueño (2026-10-08)",
+   "sill_height": {
+    "value": 0.0,
+    "source": "definición de puerta"
+   },
+   "height": {
+    "value": null,
+    "source": "no está en el plano"
+   },
+   "host_wall": null,
+   "connects": [
+    "S12",
+    "S09"
+   ],
+   "owner_note": "Puerta de herrería entre el pasillo de servicio y el patio, igual a la de la cochera, al final del muro de la recámara 2 (dueño, 2026-10-08). Cubre de la barda (x = 0.20 m) al muro de la recámara 2 (x = 1.28 m); no hay foto. Altura pendiente de medir.",
+   "leaves": [
+    {
+     "hinge_end": [
+      1.28,
+      16.92
+     ],
+     "latch_end": [
+      0.2,
+      16.92
+     ],
+     "opens_into": "S12",
+     "source": "supuesto: igual que la de la cochera (bisagras en el muro de la casa, el de la recámara 2) y abre hacia el pasillo; no hay foto"
+    }
+   ],
+   "id": "D11"
+  },
+  {
+   "kind": "door",
+   "footprint": [
+    [
+     0.2,
+     0.0
+    ],
+    [
+     3.24,
+     0.0
+    ],
+    [
+     3.24,
+     0.05
+    ],
+    [
+     0.2,
+     0.05
+    ]
+   ],
+   "width": 3.04,
+   "wall_thickness": null,
+   "detected_by": "plano: capa PUERTAS al frente de la cochera (2 hojas de 1.52 m con sus arcos, dibujadas con líneas sueltas, sin bloque PUERTA)",
+   "sill_height": {
+    "value": 0.0,
+    "source": "definición de puerta"
+   },
+   "height": {
+    "value": 2.23,
+    "source": "estimación con 1 foto desde la cochera (2026-10-09 08:47, gran angular de 13 mm): proporción 1.365 por homografía y focal, sobre el ancho del plano (3.04 m); ±5 cm"
+   },
+   "host_wall": null,
+   "connects": [
+    "S10"
+   ],
+   "owner_note": "Portón de herrería de la cochera hacia la calle. El plano lo dibuja entre la barda (bisagra en x = 0.20 m) y el muro del pórtico (bisagra en x = 3.24 m), con las 2 hojas abriendo hacia la cochera; no tiene muro anfitrión. Altura estimada con la foto del dueño.",
+   "leaves": [
+    {
+     "hinge_end": [
+      0.2,
+      0.025
+     ],
+     "latch_end": [
+      1.72,
+      0.025
+     ],
+     "opens_into": "S10",
+     "source": "plano: arco de la hoja con centro en la barda (x = 0.20 m), hacia la cochera"
+    },
+    {
+     "hinge_end": [
+      3.24,
+      0.025
+     ],
+     "latch_end": [
+      1.72,
+      0.025
+     ],
+     "opens_into": "S10",
+     "source": "plano: arco de la hoja con centro en el muro del pórtico (x = 3.24 m), hacia la cochera"
+    }
+   ],
+   "id": "D12"
+  },
+  {
+   "kind": "window",
+   "footprint": [
+    [
+     3.728,
+     3.255
+    ],
+    [
+     4.473,
+     3.255
+    ],
+    [
+     4.473,
+     3.425
+    ],
+    [
+     3.728,
+     3.425
+    ]
+   ],
+   "width": 0.745,
+   "wall_thickness": 0.17,
+   "detected_by": "vanos",
+   "sill_height": {
+    "value": 0.865,
+    "source": "label \"a=\" (interpretación: antepecho)"
+   },
+   "height": {
+    "value": 1.27,
+    "source": "label \"h=\""
+   },
+   "id": "V01",
+   "host_wall": "W07",
+   "connects": [
+    "S01",
+    "S11"
+   ]
+  },
+  {
+   "kind": "window",
+   "footprint": [
+    [
+     5.573,
+     3.255
+    ],
+    [
+     6.323,
+     3.255
+    ],
+    [
+     6.323,
+     3.425
+    ],
+    [
+     5.573,
+     3.425
+    ]
+   ],
+   "width": 0.75,
+   "wall_thickness": 0.17,
+   "detected_by": "vanos",
+   "sill_height": {
+    "value": 0.85,
+    "source": "label \"a=\" (interpretación: antepecho)"
+   },
+   "height": {
+    "value": 1.26,
+    "source": "label \"h=\""
+   },
+   "id": "V02",
+   "host_wall": "W07",
+   "connects": [
+    "S01",
+    "S11"
+   ]
+  },
+  {
+   "kind": "window",
+   "footprint": [
+    [
+     1.375,
+     6.705
+    ],
+    [
+     1.875,
+     6.705
+    ],
+    [
+     1.875,
+     6.875
+    ],
+    [
+     1.375,
+     6.875
+    ]
+   ],
+   "width": 0.5,
+   "wall_thickness": 0.17,
+   "detected_by": "vanos",
+   "sill_height": {
+    "value": 0.86,
+    "source": "label \"a=\" (interpretación: antepecho)"
+   },
+   "height": {
+    "value": 1.27,
+    "source": "label \"h=\""
+   },
+   "id": "V03",
+   "host_wall": "W21",
+   "connects": [
+    "S01",
+    "S10"
+   ]
+  },
+  {
+   "kind": "window",
+   "footprint": [
+    [
+     2.295,
+     6.705
+    ],
+    [
+     2.805,
+     6.705
+    ],
+    [
+     2.805,
+     6.875
+    ],
+    [
+     2.295,
+     6.875
+    ]
+   ],
+   "width": 0.51,
+   "wall_thickness": 0.17,
+   "detected_by": "vanos",
+   "sill_height": {
+    "value": 0.87,
+    "source": "label \"a=\" (interpretación: antepecho)"
+   },
+   "height": {
+    "value": 1.27,
+    "source": "label \"h=\""
+   },
+   "id": "V04",
+   "host_wall": "W21",
+   "connects": [
+    "S01",
+    "S10"
+   ]
+  },
+  {
+   "kind": "window",
+   "footprint": [
+    [
+     8.62,
+     7.93
+    ],
+    [
+     9.86,
+     7.93
+    ],
+    [
+     9.86,
+     8.14
+    ],
+    [
+     8.62,
+     8.14
+    ]
+   ],
+   "width": 1.24,
+   "wall_thickness": 0.21,
+   "detected_by": "vanos",
+   "sill_height": {
+    "value": 0.86,
+    "source": "label \"a=\" (interpretación: antepecho)"
+   },
+   "height": {
+    "value": 1.26,
+    "source": "label \"h=\""
+   },
+   "id": "V05",
+   "host_wall": "W17",
+   "connects": [
+    "S04",
+    "S08"
+   ]
+  },
+  {
+   "kind": "window",
+   "footprint": [
+    [
+     7.085,
+     16.055
+    ],
+    [
+     7.82,
+     16.055
+    ],
+    [
+     7.82,
+     16.22
+    ],
+    [
+     7.085,
+     16.22
+    ]
+   ],
+   "width": 0.735,
+   "wall_thickness": 0.165,
+   "detected_by": "vanos",
+   "sill_height": {
+    "value": 0.85,
+    "source": "label \"a=\" (interpretación: antepecho)"
+   },
+   "height": {
+    "value": 1.22,
+    "source": "label \"h=\""
+   },
+   "id": "V06",
+   "host_wall": "W10",
+   "connects": [
+    "S02",
+    "S09"
+   ]
+  },
+  {
+   "kind": "window",
+   "footprint": [
+    [
+     8.57,
+     16.055
+    ],
+    [
+     9.32,
+     16.055
+    ],
+    [
+     9.32,
+     16.22
+    ],
+    [
+     8.57,
+     16.22
+    ]
+   ],
+   "width": 0.75,
+   "wall_thickness": 0.165,
+   "detected_by": "vanos",
+   "sill_height": {
+    "value": 0.855,
+    "source": "label \"a=\" (interpretación: antepecho)"
+   },
+   "height": {
+    "value": 1.23,
+    "source": "label \"h=\""
+   },
+   "id": "V07",
+   "host_wall": "W10",
+   "connects": [
+    "S02",
+    "S09"
+   ]
+  },
+  {
+   "kind": "window",
+   "footprint": [
+    [
+     2.82,
+     10.225
+    ],
+    [
+     2.82,
+     11.005
+    ],
+    [
+     2.99,
+     11.005
+    ],
+    [
+     2.99,
+     10.225
+    ]
+   ],
+   "width": 0.78,
+   "wall_thickness": 0.17,
+   "detected_by": "vanos",
+   "sill_height": {
+    "value": 1.28,
+    "source": "label \"a=\" (interpretación: antepecho)"
+   },
+   "height": {
+    "value": 0.6,
+    "source": "label \"h=\""
+   },
+   "id": "V09",
+   "host_wall": "W19",
+   "connects": [
+    "S05",
+    "S13"
+   ]
+  },
+  {
+   "kind": "window",
+   "footprint": [
+    [
+     8.464,
+     7.412
+    ],
+    [
+     9.205,
+     6.696
+    ],
+    [
+     9.323,
+     6.819
+    ],
+    [
+     8.582,
+     7.534
+    ]
+   ],
+   "width": 1.03,
+   "wall_thickness": null,
+   "detected_by": "dueño (2026-10-08)",
+   "sill_height": {
+    "value": 0.52,
+    "source": "estimación con 2 fotos desde la sala (2026-10-08 22:37, gran angular de 13 mm) y la altura de piso a techo (2.60 m); el dueño la aceptó (2026-10-08) hasta medirla"
+   },
+   "height": {
+    "value": 1.62,
+    "source": "estimación con 2 fotos desde la sala (2026-10-08 22:37, gran angular de 13 mm) y la altura de piso a techo (2.60 m); el dueño la aceptó (2026-10-08) hasta medirla"
+   },
+   "host_wall": "W32",
+   "connects": [
+    "S08",
+    "S01"
+   ],
+   "owner_note": "Ventana del tragaluz hacia la sala, en el muro central (diagonal). Los muros laterales no tienen ventana. El plano no la dibuja. Corrediza de 2 hojas con retícula, centrada en el muro diagonal W32 (en la foto queda ≈ 3 cm más hacia el sureste, dentro del error); ancho ≈ 1.03 m, alto ≈ 1.62 m, antepecho ≈ 0.52 m (estimación con fotos, ±5 cm).",
+   "grid": {
+    "cols": 4,
+    "rows": 5,
+    "bar_m": 0.03,
+    "note": "2 hojas corredizas de 2 × 5 vidrios cada una; perfil de la retícula ≈ 3 cm (estimado)",
+    "source": "dueño (2026-10-08)"
+   },
+   "id": "V10"
+  },
+  {
+   "kind": "window",
+   "footprint": [
+    [
+     6.393,
+     0.0
+    ],
+    [
+     8.393,
+     0.0
+    ],
+    [
+     8.393,
+     0.2
+    ],
+    [
+     6.393,
+     0.2
+    ]
+   ],
+   "width": 2.0,
+   "wall_thickness": null,
+   "detected_by": "dueño (2026-10-08)",
+   "sill_height": {
+    "value": 1.0,
+    "source": "estimación con 2 fotos desde el pórtico (2026-10-09 08:46–08:47, gran angular de 13 mm): homografía de la reja peatonal (0.98 m de ancho del plano); el largo total del muro sale con 1 cm de diferencia; ±5 cm. Cuadra con el alto medido: arriba queda a 2.30 m, como en las fotos"
+   },
+   "height": {
+    "value": 1.3,
+    "source": "dueño (2026-10-09): 200 × 130 cm, medida con cinta"
+   },
+   "host_wall": "W03",
+   "connects": [
+    "S11"
+   ],
+   "owner_note": "Abertura grande del frente del pórtico, cerrada con herrería y sin vidrio (el plano no la dibuja). Arranca en la cara del muro de la bodega (x = 8.393 m), como se ve en las fotos.",
+   "id": "V11"
+  },
+  {
+   "kind": "window",
+   "footprint": [
+    [
+     3.423,
+     0.0
+    ],
+    [
+     4.923,
+     0.0
+    ],
+    [
+     4.923,
+     0.2
+    ],
+    [
+     3.423,
+     0.2
+    ]
+   ],
+   "width": 1.5,
+   "wall_thickness": null,
+   "detected_by": "dueño (2026-10-08)",
+   "sill_height": {
+    "value": 1.0,
+    "source": "estimación con 2 fotos desde el pórtico (2026-10-09 08:46–08:47, gran angular de 13 mm): homografía de la reja peatonal (0.98 m de ancho del plano); el largo total del muro sale con 1 cm de diferencia; ±5 cm. Cuadra con el alto medido: arriba queda a 2.30 m, como en las fotos"
+   },
+   "height": {
+    "value": 1.3,
+    "source": "dueño (2026-10-09): 150 × 130 cm, medida con cinta"
+   },
+   "host_wall": "W03",
+   "connects": [
+    "S11"
+   ],
+   "owner_note": "Abertura chica del frente del pórtico, cerrada con herrería y sin vidrio (el plano no la dibuja). Queda a 0.20 m de la reja (pilastra medida en las fotos); entre ella y el portón queda una pilastra de ≈ 0.18 m.",
+   "id": "V12"
+  },
+  {
+   "kind": "window",
+   "id": "V13",
+   "footprint": [
+    [
+     1.6,
+     16.775
+    ],
+    [
+     2.3,
+     16.775
+    ],
+    [
+     2.3,
+     16.945
+    ],
+    [
+     1.6,
+     16.945
+    ]
+   ],
+   "width": 0.7,
+   "wall_thickness": 0.17,
+   "detected_by": "propuesta",
+   "sill_height": {
+    "value": 0.86,
+    "source": "propuesta recamara-2-dos-ventanas (Claude, 2026-10-25): el mismo antepecho que V08 (0.86 + 1.22 = 2.08 m, a la altura del cerramiento de las puertas)"
+   },
+   "height": {
+    "value": 1.22,
+    "source": "propuesta recamara-2-dos-ventanas (Claude, 2026-10-25): la misma altura que V08"
+   },
+   "host_wall": "W09",
+   "connects": [
+    "S03",
+    "S09"
+   ],
+   "owner_note": "la ventana de la izquierda de la cabecera, sobre el buro izquierdo"
+  },
+  {
+   "kind": "window",
+   "id": "V14",
+   "footprint": [
+    [
+     4.0,
+     16.775
+    ],
+    [
+     4.7,
+     16.775
+    ],
+    [
+     4.7,
+     16.945
+    ],
+    [
+     4.0,
+     16.945
+    ]
+   ],
+   "width": 0.7,
+   "wall_thickness": 0.17,
+   "detected_by": "propuesta",
+   "sill_height": {
+    "value": 0.86,
+    "source": "propuesta recamara-2-dos-ventanas (Claude, 2026-10-25): el mismo antepecho que V08 (0.86 + 1.22 = 2.08 m, a la altura del cerramiento de las puertas)"
+   },
+   "height": {
+    "value": 1.22,
+    "source": "propuesta recamara-2-dos-ventanas (Claude, 2026-10-25): la misma altura que V08"
+   },
+   "host_wall": "W09",
+   "connects": [
+    "S03",
+    "S09"
+   ],
+   "owner_note": "la ventana de la derecha de la cabecera, sobre el buro derecho"
+  }
+ ],
+ "fixtures": [
+  {
+   "id": "F01",
+   "kind": "closet",
+   "space": "S02",
+   "front": [
+    [
+     6.42,
+     13.105
+    ],
+    [
+     6.42,
+     16.055
+    ]
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "width": 2.95,
+   "depth": 0.6,
+   "footprint": [
+    [
+     6.42,
+     13.105
+    ],
+    [
+     6.42,
+     16.055
+    ],
+    [
+     5.82,
+     16.055
+    ],
+    [
+     5.82,
+     13.105
+    ]
+   ],
+   "source": "plano: rótulo CLOSET y frente en la capa de muebles fijos; fondo hasta el muro"
+  },
+  {
+   "id": "F02",
+   "kind": "closet",
+   "space": "S03",
+   "front": [
+    [
+     5.02,
+     16.775
+    ],
+    [
+     5.02,
+     13.865
+    ]
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "width": 2.91,
+   "depth": 0.6,
+   "footprint": [
+    [
+     5.02,
+     16.775
+    ],
+    [
+     5.02,
+     13.865
+    ],
+    [
+     5.62,
+     13.865
+    ],
+    [
+     5.62,
+     16.775
+    ]
+   ],
+   "source": "plano: rótulo CLOSET y frente en la capa de muebles fijos; fondo hasta el muro"
+  },
+  {
+   "id": "F03",
+   "kind": "closet",
+   "space": "S04",
+   "front": [
+    [
+     6.39,
+     8.14
+    ],
+    [
+     6.39,
+     10.82
+    ]
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "width": 2.68,
+   "depth": 0.6,
+   "footprint": [
+    [
+     6.39,
+     8.14
+    ],
+    [
+     6.39,
+     10.82
+    ],
+    [
+     5.79,
+     10.82
+    ],
+    [
+     5.79,
+     8.14
+    ]
+   ],
+   "source": "plano: rótulo CLOSET y frente en la capa de muebles fijos; fondo hasta el muro"
+  },
+  {
+   "id": "F04",
+   "kind": "shower",
+   "space": "S05",
+   "polygon": [
+    [
+     4.24,
+     10.225
+    ],
+    [
+     2.99,
+     10.225
+    ],
+    [
+     2.99,
+     11.155
+    ],
+    [
+     4.24,
+     11.155
+    ]
+   ],
+   "area": 1.16,
+   "curb_wall": "W26",
+   "source": "plano: sardinel W26; lado de la regadera: fotos del baño (2026-10-07): la regadera queda del lado de la ventana alta (V09), frente a la puerta",
+   "owner_note": "Regadera: piso antiderrapante de losetas de 20 × 20 cm (dueño, 2026-10-09), separado del resto del baño por un sardinel de 5 cm (el murete de 5 cm del plano)."
+  },
+  {
+   "id": "WC01",
+   "kind": "toilet",
+   "space": "S07",
+   "back_centre": [
+    8.563,
+    2.325
+   ],
+   "facing": [
+    1,
+    0
+   ],
+   "width": 0.5,
+   "depth": 0.751,
+   "source": "plano: bloque WC (capa 9-MUEBLES FIJOS)"
+  },
+  {
+   "id": "WC02",
+   "kind": "toilet",
+   "space": "S05",
+   "back_centre": [
+    2.99,
+    11.667
+   ],
+   "facing": [
+    1,
+    0
+   ],
+   "width": 0.5,
+   "depth": 0.751,
+   "source": "plano: bloque WC (capa 9-MUEBLES FIJOS)"
+  },
+  {
+   "id": "LV01",
+   "kind": "basin",
+   "space": "S07",
+   "back_centre": [
+    8.563,
+    2.995
+   ],
+   "facing": [
+    1,
+    0
+   ],
+   "width": 0.5,
+   "depth": 0.393,
+   "source": "plano: bloque LAVABO (capa 9-MUEBLES FIJOS)"
+  },
+  {
+   "id": "LV02",
+   "kind": "basin",
+   "space": "S05",
+   "back_centre": [
+    2.99,
+    12.375
+   ],
+   "facing": [
+    1,
+    0
+   ],
+   "width": 0.5,
+   "depth": 0.393,
+   "source": "plano: bloque LAVABO (capa 9-MUEBLES FIJOS)"
+  }
+ ],
+ "lights": [
+  {
+   "id": "L01",
+   "position": [
+    7.913,
+    5.15
+   ],
+   "space": "S01",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
+  },
+  {
+   "id": "L02",
+   "position": [
+    4.722,
+    5.15
+   ],
+   "space": "S01",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
+  },
+  {
+   "id": "L03",
+   "position": [
+    9.162,
+    2.576
+   ],
+   "space": "S07",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
+  },
+  {
+   "id": "L04",
+   "position": [
+    2.86,
+    8.312
+   ],
+   "space": "S01",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
+  },
+  {
+   "id": "L05",
+   "position": [
+    5.07,
+    12.123
+   ],
+   "space": "S01",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
+  },
+  {
+   "id": "L06",
+   "position": [
+    7.999,
+    9.701
+   ],
+   "space": "S04",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
+  },
+  {
+   "id": "L07",
+   "position": [
+    3.558,
+    11.642
+   ],
+   "space": "S05",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
+  },
+  {
+   "id": "L08",
+   "position": [
+    8.188,
+    14.359
+   ],
+   "space": "S02",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
+  },
+  {
+   "id": "L09",
+   "position": [
+    3.47,
+    14.697
+   ],
+   "space": "S03",
+   "source": "plano: salida de foco en la capa 23- ILUMINACION"
+  }
+ ],
+ "devices": [
+  {
+   "id": "C01",
+   "kind": "outlet",
+   "space": "S01",
+   "position": [
+    3.285,
+    5.278
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.096,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C02",
+   "kind": "outlet",
+   "space": "S01",
+   "position": [
+    9.763,
+    4.989
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.097,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C03",
+   "kind": "outlet",
+   "space": "S07",
+   "position": [
+    8.563,
+    3.139
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.1,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO",
+   "exists": {
+    "value": false,
+    "source": "dueño (2026-10-09): el medio baño no tiene contacto bajo el lavabo"
+   }
+  },
+  {
+   "id": "C04",
+   "kind": "outlet",
+   "space": "S01",
+   "position": [
+    7.07,
+    7.93
+   ],
+   "faces_toward": [
+    0.0,
+    -1.0
+   ],
+   "from_plan_m": 0.112,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C05",
+   "kind": "outlet",
+   "space": "S01",
+   "position": [
+    1.375,
+    7.572
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.093,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C06",
+   "kind": "outlet",
+   "space": "S01",
+   "position": [
+    2.978,
+    10.055
+   ],
+   "faces_toward": [
+    0.0,
+    -1.0
+   ],
+   "from_plan_m": 0.102,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C07",
+   "kind": "outlet",
+   "space": "S01",
+   "position": [
+    3.493,
+    10.055
+   ],
+   "faces_toward": [
+    0.0,
+    -1.0
+   ],
+   "from_plan_m": 0.102,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C08",
+   "kind": "outlet",
+   "space": "S01",
+   "position": [
+    5.62,
+    8.391
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.074,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C09",
+   "kind": "outlet",
+   "space": "S04",
+   "position": [
+    9.86,
+    10.668
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.087,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C10",
+   "kind": "outlet",
+   "space": "S05",
+   "position": [
+    4.24,
+    11.693
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.092,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO",
+   "plan_position": [
+    4.24,
+    11.459
+   ],
+   "plate": {
+    "id": "P01",
+    "with": [
+     "A05"
+    ],
+    "material": "placa-beige",
+    "source": "dueño (2026-10-09): el baño no tiene apagador ni contacto abajo; foto del baño (2026-10-07): apagador arriba y contacto abajo en una sola placa beige"
+   }
+  },
+  {
+   "id": "C11",
+   "kind": "outlet",
+   "space": "S02",
+   "position": [
+    9.86,
+    14.731
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.1,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "C12",
+   "kind": "outlet",
+   "space": "S03",
+   "position": [
+    1.45,
+    14.569
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.093,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque CONTACTO"
+  },
+  {
+   "id": "A01",
+   "kind": "switch",
+   "space": "S07",
+   "position": [
+    8.861,
+    3.245
+   ],
+   "faces_toward": [
+    0.0,
+    -1.0
+   ],
+   "from_plan_m": 0.088,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque APAGADOR SIMPLE"
+  },
+  {
+   "id": "A02",
+   "kind": "switch",
+   "space": "S01",
+   "position": [
+    1.375,
+    7.985
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.098,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque APAGADOR SIMPLE"
+  },
+  {
+   "id": "A03",
+   "kind": "switch",
+   "space": "S01",
+   "position": [
+    5.62,
+    9.068
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.092,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque APAGADOR SIMPLE"
+  },
+  {
+   "id": "A04",
+   "kind": "switch",
+   "space": "S04",
+   "position": [
+    6.41,
+    10.902
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.099,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque APAGADOR SIMPLE"
+  },
+  {
+   "id": "A05",
+   "kind": "switch",
+   "space": "S05",
+   "position": [
+    4.24,
+    11.693
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.089,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque APAGADOR SIMPLE",
+   "plate": {
+    "id": "P01",
+    "with": [
+     "C10"
+    ],
+    "material": "placa-beige",
+    "source": "dueño (2026-10-09): el baño no tiene apagador ni contacto abajo; foto del baño (2026-10-07): apagador arriba y contacto abajo en una sola placa beige"
+   }
+  },
+  {
+   "id": "A06",
+   "kind": "switch",
+   "space": "S01",
+   "position": [
+    6.561,
+    3.425
+   ],
+   "faces_toward": [
+    0.0,
+    1.0
+   ],
+   "from_plan_m": 0.121,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque APAGADOR SIMPLE"
+  },
+  {
+   "id": "A07",
+   "kind": "switch",
+   "space": "S02",
+   "position": [
+    6.42,
+    13.02
+   ],
+   "faces_toward": [
+    1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.089,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque APAGADOR SIMPLE"
+  },
+  {
+   "id": "A08",
+   "kind": "switch",
+   "space": "S03",
+   "position": [
+    4.43,
+    13.78
+   ],
+   "faces_toward": [
+    -1.0,
+    -0.0
+   ],
+   "from_plan_m": 0.1,
+   "height": {
+    "value": null,
+    "source": "no está en el plano (vista en planta)"
+   },
+   "source": "plano: bloque APAGADOR SIMPLE"
+  }
+ ],
+ "adjacency": [
+  {
+   "spaces": [
+    "S01",
+    "S02"
+   ],
+   "walls": [
+    "W08",
+    "W20",
+    "W36"
+   ],
+   "doors": [
+    "D08"
+   ],
+   "windows": []
+  },
+  {
+   "spaces": [
+    "S01",
+    "S03"
+   ],
+   "walls": [
+    "W20",
+    "W24",
+    "W31"
+   ],
+   "doors": [
+    "D06"
+   ],
+   "windows": []
+  },
+  {
+   "spaces": [
+    "S01",
+    "S04"
+   ],
+   "walls": [
+    "W08",
+    "W16",
+    "W17"
+   ],
+   "doors": [
+    "D07"
+   ],
+   "windows": []
+  },
+  {
+   "spaces": [
+    "S01",
+    "S05"
+   ],
+   "walls": [
+    "W15",
+    "W18",
+    "W24",
+    "W33"
+   ],
+   "doors": [
+    "D05"
+   ],
+   "windows": []
+  },
+  {
+   "spaces": [
+    "S01",
+    "S07"
+   ],
+   "walls": [
+    "W06",
+    "W28"
+   ],
+   "doors": [
+    "D02"
+   ],
+   "windows": []
+  },
+  {
+   "spaces": [
+    "S01",
+    "S08"
+   ],
+   "walls": [
+    "W06",
+    "W17",
+    "W32",
+    "W38",
+    "W39"
+   ],
+   "doors": [],
+   "windows": [
+    "V10"
+   ]
+  },
+  {
+   "spaces": [
+    "S01",
+    "S10"
+   ],
+   "walls": [
+    "W07",
+    "W13",
+    "W14",
+    "W21"
+   ],
+   "doors": [],
+   "windows": [
+    "V03",
+    "V04"
+   ]
+  },
+  {
+   "spaces": [
+    "S01",
+    "S11"
+   ],
+   "walls": [
+    "W07",
+    "W28"
+   ],
+   "doors": [
+    "D03"
+   ],
+   "windows": [
+    "V01",
+    "V02"
+   ]
+  },
+  {
+   "spaces": [
+    "S01",
+    "S12"
+   ],
+   "walls": [
+    "W13"
+   ],
+   "doors": [
+    "D04"
+   ],
+   "windows": []
+  },
+  {
+   "spaces": [
+    "S01",
+    "S13"
+   ],
+   "walls": [
+    "W13",
+    "W15"
+   ],
+   "doors": [],
+   "windows": []
+  },
+  {
+   "spaces": [
+    "S02",
+    "S03"
+   ],
+   "walls": [
+    "W20"
+   ],
+   "doors": [],
+   "windows": []
+  },
+  {
+   "spaces": [
+    "S02",
+    "S04"
+   ],
+   "walls": [
+    "W08"
+   ],
+   "doors": [],
+   "windows": []
+  },
+  {
+   "spaces": [
+    "S02",
+    "S09"
+   ],
+   "walls": [
+    "W05",
+    "W10",
+    "W20"
+   ],
+   "doors": [],
+   "windows": [
+    "V06",
+    "V07"
+   ]
+  },
+  {
+   "spaces": [
+    "S03",
+    "S05"
+   ],
+   "walls": [
+    "W24"
+   ],
+   "doors": [],
+   "windows": []
+  },
+  {
+   "spaces": [
+    "S03",
+    "S09"
+   ],
+   "walls": [
+    "W09",
+    "W20",
+    "W37"
+   ],
+   "doors": [],
+   "windows": [
+    "V08"
+   ]
+  },
+  {
+   "spaces": [
+    "S03",
+    "S12"
+   ],
+   "walls": [
+    "W09",
+    "W12",
+    "W25"
+   ],
+   "doors": [],
+   "windows": []
+  },
+  {
+   "spaces": [
+    "S03",
+    "S13"
+   ],
+   "walls": [
+    "W24",
+    "W25"
+   ],
+   "doors": [],
+   "windows": []
+  },
+  {
+   "spaces": [
+    "S04",
+    "S08"
+   ],
+   "walls": [
+    "W04",
+    "W17"
+   ],
+   "doors": [],
+   "windows": [
+    "V05"
+   ]
+  },
+  {
+   "spaces": [
+    "S05",
+    "S13"
+   ],
+   "walls": [
+    "W15",
+    "W19",
+    "W24"
+   ],
+   "doors": [],
+   "windows": [
+    "V09"
+   ]
+  },
+  {
+   "spaces": [
+    "S06",
+    "S07"
+   ],
+   "walls": [
+    "W06",
+    "W29"
+   ],
+   "doors": [],
+   "windows": []
+  },
+  {
+   "spaces": [
+    "S06",
+    "S11"
+   ],
+   "walls": [
+    "W03",
+    "W23"
+   ],
+   "doors": [
+    "D09"
+   ],
+   "windows": []
+  },
+  {
+   "spaces": [
+    "S07",
+    "S11"
+   ],
+   "walls": [
+    "W27",
+    "W28"
+   ],
+   "doors": [],
+   "windows": []
+  },
+  {
+   "spaces": [
+    "S09",
+    "S12"
+   ],
+   "walls": [],
+   "doors": [
+    "D11"
+   ],
+   "windows": [],
+   "open": false
+  },
+  {
+   "spaces": [
+    "S10",
+    "S11"
+   ],
+   "walls": [],
+   "doors": [],
+   "windows": [],
+   "open": true
+  },
+  {
+   "spaces": [
+    "S10",
+    "S12"
+   ],
+   "walls": [],
+   "doors": [
+    "D10"
+   ],
+   "windows": [],
+   "open": false
+  },
+  {
+   "spaces": [
+    "S12",
+    "S13"
+   ],
+   "walls": [],
+   "doors": [],
+   "windows": [],
+   "open": true
+  }
+ ],
+ "measurements": [
+  {
+   "id": "M01",
+   "what": "ancho libre del pasillo de recámaras, de muro a muro",
+   "walls": [
+    "W18",
+    "W16"
+   ],
+   "value": 1.1,
+   "source": "dueño (2026-10-08)",
+   "plan_value": 1.21,
+   "difference": -0.11,
+   "matches_plan": false,
+   "note": "en el pasillo caben 3 losetas enteras de 30 cm; en la foto, el corte queda del lado de la recámara 3"
+  }
+ ],
+ "unknowns": [
+  {
+   "id": "U02",
+   "topic": "losa",
+   "question": "¿Tipo y espesor de losa (concreto, vigueta y bovedilla, lámina)?",
+   "blocks": [
+    "segunda planta"
+   ]
+  },
+  {
+   "id": "U03",
+   "topic": "estructura",
+   "question": "¿Dónde hay castillos, columnas, trabes y cuáles muros son de carga?",
+   "blocks": [
+    "segunda planta",
+    "remoción de muros"
+   ]
+  },
+  {
+   "id": "U05",
+   "topic": "materiales",
+   "question": "¿Material de los muros (block, tabique)?",
+   "blocks": [
+    "estructura"
+   ]
+  },
+  {
+   "id": "U07",
+   "topic": "cotas generales",
+   "question": "En el DXF el frente mide 10.03 m, pero el texto de la cota se forzó a mano a \"10.00\" (el fondo sí mide 21.25). ¿Cuál es el frente real según escrituras?",
+   "blocks": []
+  },
+  {
+   "id": "U08",
+   "topic": "ventanas",
+   "question": "Confirmar que en los rótulos de ventana \"a=\" es antepecho y \"h=\" altura de ventana.",
+   "blocks": []
+  }
+ ],
+ "answered": [
+  {
+   "id": "U01",
+   "topic": "altura de entrepiso",
+   "question": "¿Altura de piso terminado a lecho bajo de losa?",
+   "blocks": [
+    "3D",
+    "segunda planta"
+   ],
+   "answer": "Del piso al techo hay 2.60 m.",
+   "source": "dueño (2026-10-07)"
+  },
+  {
+   "id": "U04",
+   "topic": "puertas",
+   "question": "¿Altura de las puertas?",
+   "blocks": [
+    "3D"
+   ],
+   "answer": "Las puertas miden 2.10 m del piso al vano (al cerramiento de concreto).",
+   "source": "dueño (2026-10-07)"
+  },
+  {
+   "id": "U06",
+   "topic": "cochera",
+   "question": "¿La cochera está techada? ¿Con qué?",
+   "blocks": [
+    "segunda planta"
+   ],
+   "answer": "La cochera no tiene techo.",
+   "source": "dueño (2026-10-08)"
+  },
+  {
+   "id": "U09",
+   "topic": "frente",
+   "question": "La franja exterior frente a la sala (entre la cochera y la bodega, con la puerta principal y la peatonal), ¿es parte de la cochera, un acceso/jardín, u otra cosa?",
+   "blocks": [],
+   "answer": "La franja frente a la sala es un pórtico techado.",
+   "source": "dueño (2026-10-08)"
+  },
+  {
+   "id": "U10",
+   "topic": "tragaluz",
+   "question": "¿El tragaluz está abierto al cielo o cubierto (domo, vidrio)? Define si cuenta como área interior.",
+   "blocks": [
+    "segunda planta"
+   ],
+   "answer": "El tragaluz está abierto al cielo, sin domo ni vidrio.",
+   "source": "dueño (2026-10-08)"
+  },
+  {
+   "id": "U11",
+   "topic": "ventana del tragaluz",
+   "question": "¿Ancho, altura de antepecho y altura de la ventana del tragaluz hacia la sala (muro diagonal de 1.11 m)?",
+   "blocks": [
+    "3D"
+   ],
+   "answer": "Estimación con fotos que el dueño aceptó: 1.03 m de ancho, 1.62 m de alto y antepecho de 0.52 m (±5 cm). Falta medirla con cinta; los valores están en add_openings.",
+   "source": "dueño (2026-10-08)"
+  }
+ ]
+}

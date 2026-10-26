@@ -54,7 +54,7 @@ def build(source: Path):
     from house_twin.plumbing import load_sanitary_specs, load_shower_spec
     from house_twin.render import render_facts
     from house_twin.variants import (apply_variant, has_geometry, load_variants, validate, variant_facts,
-                                     variant_materials, variant_specs)
+                                     variant_bedrooms, variant_materials, variant_specs)
     from house_twin.viewer import render_viewer
     facts = build_facts(_load_drawing(source), load_annotations(OWNER_ANNOTATIONS))
     FACTS_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -84,8 +84,8 @@ def build(source: Path):
         path = VARIANTS_IFC_DIR / f"{variant['id']}.ifc"
         path.parent.mkdir(parents=True, exist_ok=True)
         build_ifc(proposed, apply_variant(Finishes(proposed, variant_materials(materials, variant)), variant, materials), hardware, furniture,
-                  luminaires, devices, shower, sanitary, specs['kitchen'], living, bedrooms, specs['laundry'],
-                  specs['extras']).write(str(path))
+                  luminaires, devices, shower, sanitary, specs['kitchen'], living, variant_bedrooms(variant, bedrooms),
+                  specs['laundry'], specs['extras']).write(str(path))
         outputs.append(path)
     for path in outputs:
         print(f'→ {path.relative_to(ROOT)}')

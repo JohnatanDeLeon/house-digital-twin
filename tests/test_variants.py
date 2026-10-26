@@ -310,3 +310,90 @@ def test_facade_lighting_is_warm_and_lights_up_at_night():
         assert parts[lum['id']]['psets']['HDT_Light']['Lumens'] == lum['lumens']
         assert lum['id'].startswith(('fachada-', 'cochera-'))  # luminarias exteriores para el recorrido
     assert all(lum['position'][1] == 0.0 and lum['z'] == 1.95 for lum in lights if lum['kind'] == 'updown')
+
+
+def _window_remodel():
+    return next(v for v in load_variants() if v['id'] == 'recamara-2-ventana')
+
+
+def test_bedroom_window_moves_to_the_side_wall_with_the_same_size(dxf_facts):
+    """V08 (detrás de la cabecera) se tapia y V13 la sustituye en W12 con el mismo vano: la luz y la ventilación no bajan."""
+    from house_twin.variants import variant_facts
+    proposed = {o['id']: o for o in variant_facts(dxf_facts, _window_remodel())['openings']}
+    old = next(o for o in dxf_facts['openings'] if o['id'] == 'V08')
+    assert 'V08' not in proposed and 'V08' in {o['id'] for o in dxf_facts['openings']}  # la casa existente no cambia
+    new = proposed['V13']
+    assert (new['width'], new['sill_height']['value'], new['height']['value']) == \
+           (old['width'], old['sill_height']['value'], old['height']['value'])
+    assert new['host_wall'] == 'W12' and new['connects'] == ['S03', 'S12']
+
+
+def test_bedroom_window_clears_the_bed_the_closet_and_the_minisplit(dxf_facts):
+    """V13 cabe en W12 (con ≥ 0.40 m a la esquina), queda fuera de la cabecera y de la unidad del minisplit."""
+    import json
+    from house_twin.variants import variant_facts
+    proposed = variant_facts(dxf_facts, _window_remodel())
+    window = next(o for o in proposed['openings'] if o['id'] == 'V13')
+    ys = [p[1] for p in window['footprint']]
+    wall = next(w for w in proposed['walls'] if w['id'] == 'W12')
+    room = next(s for s in proposed['spaces'] if s['id'] == 'S03')
+    y_min, y_max = min(ys), max(ys)
+    assert room['bbox'][3] - y_max >= 0.40  # a la esquina con el muro del patio
+    assert min(p[1] for p in wall['footprint']) < y_min and max(p[1] for p in wall['footprint']) > y_max
+    spec = json.loads((ROOT / 'sources' / 'recamaras' / 'recamara-s03.json').read_text())
+    mini_y = (12.815 + spec['minisplit']['u'][0], 12.815 + spec['minisplit']['u'][1])
+    top = window['sill_height']['value'] + window['height']['value']
+    assert y_min >= mini_y[1] or top <= spec['minisplit']['z'][0]
+    # la cabecera (la cama) queda contra el muro del patio, donde V08 ya no está
+    assert spec['bed']['headboard_wall']['origin'][1] == 16.775
+
+
+def _two_windows():
+    return next(v for v in load_variants() if v['id'] == 'recamara-2-dos-ventanas')
+
+
+def test_two_windows_flank_the_headboard_without_touching_it_or_the_closet(dxf_facts):
+    """V08 se tapia y V13/V14 flanquean la cabecera en W09: quedan a ≥ 0.10 m de ella, simétricas, a ≥ 0.15 m de la esquina
+    y del closet, y suman casi lo que daba V08 (la luz no baja de 10 % del piso)."""
+    import json
+    from house_twin.variants import variant_facts
+    proposed = variant_facts(dxf_facts, _two_windows())
+    ids = {o['id']: o for o in proposed['openings']}
+    assert 'V08' not in ids and 'V08' in {o['id'] for o in dxf_facts['openings']}
+    spec = json.loads((ROOT / 'sources' / 'recamaras' / 'recamara-s03.json').read_text())
+    centre, half = spec['bed']['headboard_wall']['origin'][0], spec['bed']['headboard']['width_m'] / 2
+    room = next(s for s in proposed['spaces'] if s['id'] == 'S03')
+    closet = next(f for f in proposed['fixtures'] if f['kind'] == 'closet' and f['space'] == 'S03')
+    spans = {}
+    for oid in ('V13', 'V14'):
+        w = ids[oid]
+        xs = [p[0] for p in w['footprint']]
+        spans[oid] = (min(xs), max(xs))
+        assert w['host_wall'] == 'W09' and w['connects'] == ['S03', 'S09']
+        assert (w['sill_height']['value'], w['height']['value']) == (0.86, 1.22)
+    (l0, l1), (r0, r1) = spans['V13'], spans['V14']
+    assert centre - half - l1 >= 0.10 - 1e-9 and r0 - (centre + half) >= 0.10 - 1e-9
+    assert abs((centre - l1) - (r0 - centre)) < 1e-9  # simétricas respecto del eje de la cama
+    assert l0 - room['bbox'][0] >= 0.15 - 1e-9
+    assert min(p[0] for p in closet['footprint']) - r1 >= 0.15
+    area = sum((s[1] - s[0]) * 1.22 for s in spans.values())
+    floor = (room['bbox'][2] - room['bbox'][0]) * (room['bbox'][3] - room['bbox'][1])
+    assert area / floor >= 0.10
+
+
+def test_two_windows_move_the_mirror_off_the_new_window(dxf_facts):
+    """El espejo de la casa existente (sobre el buro izquierdo, x = 1.95–2.27 m) quedaría delante de V13: la propuesta lo
+    pasa al muro poniente, sin cruzar la cama ni los buros, y la casa existente conserva el suyo."""
+    from house_twin.bedroom import load_bedrooms
+    from house_twin.variants import variant_bedrooms
+    base = load_bedrooms()
+    mine = {b['applies_to']['space']: b for b in variant_bedrooms(_two_windows(), base)}['S03']
+    old = {b['applies_to']['space']: b for b in base}['S03']
+    assert old['mirror']['wall']['origin'] == [1.45, 16.775]  # no se toca el original
+    m = mine['mirror']
+    assert m['wall']['origin'] == [1.45, 12.815] and m['wall']['into_room'] == [1, 0]
+    y0, y1 = (12.815 + u for u in m['u'])
+    nightstand_y0 = 16.775 - mine['nightstands']['size_m'][1] - 0.0
+    assert y1 < nightstand_y0 - 0.1  # no se cruza con el buro (y ≥ 16.375 m)
+    assert not (1.95 <= m['wall']['origin'][0] + m['lean_m'] <= 2.27 and y1 > 16.4)
+    assert {k: v for k, v in mine.items() if k not in ('mirror', '_doc')} == {k: v for k, v in old.items() if k not in ('mirror', '_doc')}

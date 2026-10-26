@@ -14,7 +14,7 @@ Gemelo digital de una casa (Casa Jonhy). Código en inglés, comentarios y docum
   propuesta no lista `openings` en su `applies_to` (usa `variant`), así la casa existente no lo toma. Una
   remodelación agrega `geometry` (`close_openings`, `add_walls`, `add_openings`, `update_openings`/`_spaces`/
   `_devices` por `id`), `update_materials` (zonas de acabado que se mueven) y `specs` propias en `variants/<id>/`
-  (`kitchen`, `laundry`). `variants.variant_facts` arma los hechos propuestos sobre una copia: `build` los escribe
+  (`kitchen`, `laundry`, `bedroom`: la recámara que reemplaza a la de su mismo espacio, p. ej. para mover un mueble). `variants.variant_facts` arma los hechos propuestos sobre una copia: `build` los escribe
   en `data/facts/variants/<id>.facts.json` y el IFC en `models/variants/<id>.ifc`; `scene` le hace su propio modelo
   (`casa-<id>.js`) y el recorrido lo carga al elegirla en el selector «Versión» (`#<id>` en la página).
   Acabados propios de una propuesta: material con `applies_to.variant` y `variant_applies_to` (espacios o `calle`,
