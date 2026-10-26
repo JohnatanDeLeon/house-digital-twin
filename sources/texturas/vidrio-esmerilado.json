@@ -1,0 +1,20 @@
+{
+ "_doc": "Cristal templado esmerilado (satinado) de 10 mm para la puerta corrediza de la lavandería (propuesta cocina-en-u). Material propuesto: no hay foto; color y translucidez comunes. Regenerar con: python -m house_twin.cli texture sources/texturas/vidrio-esmerilado.json",
+ "name": "vidrio-esmerilado",
+ "kind": "constant",
+ "applies_to": {
+  "variant": "cocina-en-u",
+  "source": "propuesta cocina-en-u (Claude, 2026-10-17): hoja de la puerta corrediza D14"
+ },
+ "pbr": {
+  "basecolor_srgb": [228, 236, 236],
+  "metallic": 0.0,
+  "roughness": 0.55,
+  "transmission": 0.85,
+  "ior": 1.52,
+  "thickness_mm": 10,
+  "viewer_opacity": 0.82,
+  "note": "cristal templado de 10 mm esmerilado al ácido: deja pasar la luz pero no se ve a través; viewer_opacity es la opacidad en el recorrido web"
+ },
+ "assumptions": ["material propuesto: color y translucidez comunes, sin medir"]
+}

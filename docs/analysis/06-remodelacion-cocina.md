@@ -77,7 +77,12 @@ unos 9 cm de vidrio. Si las ventanas abren hacia adentro chocarían con la llave
 
 - **Muro nuevo W41:** 2.40 m de largo y 0.17 m de espesor, alineado con W13, así que el pasillo de servicio conserva su metro de ancho. Por dentro, la lavandería queda de 1.45 × 2.40 m.
 - **D13 (cocina–lavandería):** de 0.80 m. Es la puerta de vidrio que era D04: da luz a la esquina más oscura de la cocina. Abre hacia la lavandería, lejos de la estufa.
-- **D14 (lavandería–pasillo):** de 0.75 m, de lámina como la de la bodega. Abre hacia la lavandería porque el pasillo mide 1.0 m. Va en el extremo del boiler (y = 11.80–12.55 m), con la bisagra junto al muro de la recámara 2: su barrido libra la lavasecadora y el cilindro de gas.
+- **D14 (lavandería–pasillo):** vano de 0.75 × 2.10 m en el extremo del boiler (y = 11.80–12.55 m), con una **puerta corrediza de cristal templado esmerilado** (dueño, 2026-10-17).
+  - **La hoja:** cristal de 10 mm de 85 × 214 cm, que traslapa 5 cm por lado sobre el vano, como piden los fabricantes de puertas tipo granero.
+  - **El riel:** aparente, de acero negro mate, del lado del pasillo de servicio y a 4.5 cm del muro, con carretillas y jaladera tubular. Por dentro, la hoja lleva una cazoleta plana.
+  - **Hacia dónde corre:** hacia la cocina, sobre el tramo libre de W41 (y = 10.90–11.75 m).
+  - **Por qué del lado del pasillo:** del lado de la lavandería, la hoja le quitaría 5 cm al paso de 0.60 m frente a la lavasecadora. Por fuera, la lavandería ya no pierde el barrido de una hoja abatible y el pasillo conserva 0.90 m libres. El cristal esmerilado deja pasar luz sin que se vea hacia dentro.
+  - **Ojo:** queda a la intemperie. Herrajes para exterior o inoxidables, y un tope de piso para que el viento no la mueva.
 - **Lavasecadora (dueño, 2026-10-11):** una Samsung de carga frontal de 686 × 984 × 796 mm sustituye a la lavadora de 2 tinas y a la secadora. Va contra el muro del fondo (y = 10.85–11.54 m), donde ya están el agua, el desagüe y los contactos, a 5 cm del muro por las mangueras. Es el único tramo que libran las dos puertas: la hoja de D13 barre el muro del fondo hasta y ≈ 10.79 m, y D14 se movió al extremo del boiler porque en su lugar anterior golpeaba la puerta redonda de la máquina.
 
 #### Reorganización de la lavandería
@@ -98,7 +103,7 @@ unos 9 cm de vidrio. Si las ventanas abren hacia adentro chocarían con la llave
 |---|---|---|
 | 10.23–10.79 | **Lavadero** de 55 × 55 cm bajo V09 | Remojar y tallar con luz natural; comparte el desagüe de la lavasecadora y queda fuera del barrido de D13. |
 | 10.85–11.54 | **Lavasecadora** con **cubierta** a 1.0 m | Lavar y secar en una sola máquina; la cubierta es la altura cómoda para doblar ropa de pie. |
-| 11.56–12.00 | **Gabinete alto** de PVC (44 × 45 × 200 cm) | Escoba, trapeador, cubetas y detergentes; su frente libra el barrido de D14. |
+| 11.56–12.00 | **Gabinete alto** de PVC (44 × 45 × 200 cm) | Escoba, trapeador, cubetas y detergentes. |
 | 12.15–12.50 | **Calentador de paso** colgado a 1.40–2.00 m | Va donde estaban las tuberías del boiler, junto al baño, y libera el piso del rincón. Su chimenea sale arriba del techo. |
 
 - **Cilindro de gas:** sale al pasillo de servicio, a la intemperie, contra el muro de la recámara 2, que no tiene ventanas (y ≈ 12.95 m). Al frente quedan 0.75 m hasta la barda (6.1.2.4 pide 0.60 m) y se cambia sin pasar por la cocina (6.1.2.9).
@@ -132,7 +137,7 @@ unos 9 cm de vidrio. Si las ventanas abren hacia adentro chocarían con la llave
 - **Estructura:** no se sabe si W15 es de carga (U03). El hueco de D13 necesita dintel y revisión de un profesional. W41 necesita su cimiento.
 - **Medidas:** la lavasecadora usa las de la ficha que dio el dueño; su color, su puerta y su tablero son supuestos. Las de la estufa, el refrigerador y los muebles son las del modelo (medidas comunes o estimadas de fotos): conviene medirlos antes de la obra.
 - **Sin modelar:**
-  - las chapas de D13 y D14;
+  - la chapa de D13 y el tope de piso de D14;
   - el canalón del techo de la lavandería;
   - los contactos nuevos;
   - la luz bajo las alacenas;

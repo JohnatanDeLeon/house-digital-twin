@@ -75,10 +75,16 @@ def doors(facts: dict) -> list[dict]:
     """Puertas que se abren en el recorrido: por hoja, la bisagra, el canto de la chapa y hacia dónde gira.
 
     Salen del abatimiento de los hechos (bloque PUERTA del plano) o de las hojas que declara el dueño (`leaves`).
-    Una puerta sin ese dato no se abre: queda cerrada, como un muro."""
+    Una corrediza (`slide`) no gira: lleva su hoja cerrada como única «hoja» (para saber qué tan cerca está el
+    jugador) y cuánto se desliza (`slide`). Una puerta sin ese dato no se abre: queda cerrada, como un muro."""
     spaces = {s['id']: s for s in facts['spaces']}
     result = []
     for o in facts['openings']:
+        if o['kind'] == 'door' and o.get('slide'):
+            (ax, ay), (bx, by) = o['slide']['line']
+            result.append({'id': o['id'], 'slide': o['slide']['travel'],
+                           'leaves': [{'hinge': [ax, ay], 'latch': [bx, by], 'opens_toward': [0.0, 0.0], 'assumed': False}]})
+            continue
         leaves = o.get('leaves') or ([o['swing']] if o.get('swing') else [])
         if o['kind'] != 'door' or not o['footprint'] or not leaves:
             continue

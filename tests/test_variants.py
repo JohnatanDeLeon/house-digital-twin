@@ -111,7 +111,7 @@ def test_walk_offers_a_remodel_with_its_own_model(dxf_facts):
 
 
 def test_remodel_laundry_combo_clears_both_doors(dxf_facts):
-    """La lavasecadora (686 × 796 mm, dueño) y lo demás de la lavandería quedan fuera del barrido de D13 y D14."""
+    """La lavasecadora (686 × 796 mm, dueño) y lo demás de la lavandería quedan fuera del barrido de D13."""
     import json
     import math
     from shapely.geometry import LineString, box
@@ -122,7 +122,7 @@ def test_remodel_laundry_combo_clears_both_doors(dxf_facts):
     parts = {p['id']: p['mesh'][0] for p in laundry_parts(spec)}
     xs, ys, _ = zip(*parts['lavanderia-lavasecadora'])
     assert (round(max(ys) - min(ys), 3), round(max(xs) - min(xs), 3)) == (0.686, 0.796)
-    for door in ('D13', 'D14'):
+    for door in ('D13',):  # D14 es corrediza: ver test_remodel_laundry_sliding_door
         hinge, latch = proposed[door]['swing']['hinge_end'], proposed[door]['swing']['latch_end']
         length = math.dist(hinge, latch)
         closed = math.atan2(latch[1] - hinge[1], latch[0] - hinge[0])
@@ -145,3 +145,33 @@ def test_remodel_takes_the_gas_cylinder_out_of_the_closed_laundry():
     xs = [p[0] for p in gas['mesh'][0]]
     assert gas['space'] == 'S12' and max(xs) <= 1.28 and min(xs) - 0.20 >= 0.60  # pasillo; libre hasta la barda
     assert 'boiler' not in spec and spec['heater']['flue']['top_m'] > spec['roof']['z'][1]  # chimenea arriba del techo
+
+
+def test_remodel_laundry_sliding_door(dxf_facts):
+    """D14 es una corrediza de cristal colgada por el lado del pasillo: cubre el vano con traslape, abierta lo deja
+    libre, no entra a la lavandería, el pasillo conserva al menos 0.85 m y no choca con el cilindro de gas."""
+    import json
+    from house_twin.laundry import laundry_parts
+    from house_twin.sliding import panel_polygon, sliding_parts
+    from house_twin.variants import variant_facts
+    from house_twin.walk import doors
+    proposed = variant_facts(dxf_facts, _remodel())
+    d14 = next(o for o in proposed['openings'] if o['id'] == 'D14')
+    slide = d14['slide']
+    assert 'swing' not in d14
+    ys = [p[1] for p in d14['footprint']]
+    (_, a), (_, b) = slide['line']
+    assert min(a, b) <= min(ys) - 0.04 and max(a, b) >= max(ys) + 0.04  # traslape sobre el vano
+    assert max(a, b) + slide['travel'][1] <= min(ys)  # abierta, el vano queda libre
+    spec = json.loads((ROOT / _remodel()['specs']['laundry']).read_text())
+    gas = next(p for p in laundry_parts(spec) if p['id'] == 'lavanderia-gas')
+    gas_y0 = min(p[1] for p in gas['mesh'][0])
+    corridor_x0 = 0.20  # cara de la barda
+    meshes = [part['mesh'][0] for part in sliding_parts('D14', slide)] + [[(x, y, 0) for x, y in panel_polygon(slide)]]
+    for points in meshes:
+        xs, ys_ = [p[0] for p in points], [p[1] for p in points]
+        assert max(xs) <= 1.205 + 1e-6  # todo del lado del pasillo (cara de W41)
+        assert min(xs) - corridor_x0 >= 0.85  # paso libre en el pasillo
+        assert max(ys_) < gas_y0  # no llega al cilindro de gas
+    entry = next(d for d in doors(proposed) if d['id'] == 'D14')
+    assert entry['slide'] == slide['travel'] and len(entry['leaves']) == 1
