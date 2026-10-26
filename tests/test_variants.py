@@ -204,3 +204,109 @@ def test_remodel_laundry_layout_is_workable(dxf_facts):
     counter_top = box['lavanderia-barra-cubierta-1'][1][2]
     uppers_bottom = min(box[k][0][2] for k in run if '-alto-' in k)
     assert all(counter_top < d['z'] < uppers_bottom for d in spec['devices'])
+
+
+def _facade():
+    return next(v for v in load_variants() if v['id'] == 'fachada-moderna')
+
+
+def test_facade_remodel_zones_without_touching_the_house(dxf_facts):
+    """La fachada moderna reparte la cara de la calle en zonas (zócalo, marco de duela en la entrada, volumen de
+    microcemento, aplanado fino) y cambia el pórtico; la casa actual conserva su estuco y su piso."""
+    from house_twin.finishes import Finishes, load_materials
+    from house_twin.variants import has_geometry, variant_materials
+    materials = load_materials(ROOT / 'assets' / 'textures')
+    variant = _facade()
+    proposed, today = Finishes(dxf_facts, variant_materials(materials, variant)), Finishes(dxf_facts, materials)
+    expect = {(0.3, 4.0): 'zoclo-porcelanato-grafito', (1.5, 5.5): 'duela-wpc-nogal', (1.5, 9.0): 'microcemento-grafito',
+              (1.5, 4.0): 'aplanado-fino-blanco'}
+    for (z, x), name in expect.items():
+        assert proposed.wall_finish('calle', z, (x, -0.05)) == name
+        assert today.wall_finish('calle', z, (x, -0.05)) == 'estuco-fachada'
+    assert proposed.floor('S11') == 'porcelanato-portico' and today.floor('S11') == 'piso-exterior'
+    assert has_geometry(variant) and not validate(variant, dxf_facts, materials)
+
+
+def test_facade_remodel_uses_only_new_textures():
+    """Ninguna textura de la propuesta es de la casa: todas son materiales propios de la variante."""
+    from house_twin.finishes import load_materials
+    materials = load_materials(ROOT / 'assets' / 'textures')
+    variant = _facade()
+    own = {n for n, m in materials.items() if m['applies_to'].get('variant') == variant['id']}
+    assert {c['material'] for c in variant['changes']} <= own and len(own) >= 9
+
+
+def test_facade_coping_covers_the_slab_edge():
+    """El remate tapa el canto de la losa (2.60–2.70 m) y sale a lo más 2 cm sobre la línea de la calle (y = 0)."""
+    import json
+    from house_twin.extras import extras_parts
+    spec = json.loads((ROOT / _facade()['specs']['extras']).read_text())
+    (cap,) = [p for p in extras_parts(spec) if p['id'] == 'fachada-remate']
+    xs, ys, zs = zip(*cap['mesh'][0])
+    assert min(zs) <= 2.6 and max(zs) >= 2.7 and min(ys) >= -0.02 - 1e-9 and min(xs) <= 3.24 and max(xs) >= 10.03
+
+
+def _facade_proposed(dxf_facts):
+    from house_twin.variants import variant_facts
+    return {o['id']: o for o in variant_facts(dxf_facts, _facade())['openings']}
+
+
+def test_facade_sectional_door_closes_the_opening_and_parks_under_the_roof(dxf_facts):
+    """El portón seccional tapa el vano cerrado y, abierto, sus paneles quedan acostados bajo el techo: dejan libre la
+    altura del vano, no bajan de las vigas y no salen de la cochera (ni a la banqueta)."""
+    import json
+    import math
+    from house_twin.lift import lift_parts, panel_box, path_point
+    from house_twin.walk import doors
+    d12 = _facade_proposed(dxf_facts)['D12']
+    lift, height = d12['lift'], d12['height']['value']
+    assert not d12.get('leaves') and lift['panels'] * lift['panel_m'] >= height  # cerrado: tapa el vano
+    xs = [p[0] for k in range(lift['panels']) for p in panel_box(lift, k)[0]]
+    assert min(xs) - 0.2 <= 0.1 and 3.24 - max(xs) <= 0.1  # casi todo el ancho entre la barda y el pórtico
+    spec = json.loads((ROOT / _facade()['specs']['extras']).read_text())
+    beams_bottom = min(b['z'][0] for b in spec['boxes'] if b['id'].startswith('cochera-viga'))
+    travel = lift['panels'] * lift['panel_m']
+    for k in range(lift['panels']):  # abierto
+        for s in (k * lift['panel_m'] + travel, (k + 1) * lift['panel_m'] + travel):
+            y, z = path_point(lift, s)
+            assert height <= z <= beams_bottom and 0 < y < 6.71
+    rail_top = lift['track']['z_curve'] + lift['track']['radius_m'] + lift['track']['profile_m']
+    assert rail_top <= beams_bottom
+    assert all(min(p[1] for p in part['mesh'][0]) >= 0 for part in lift_parts('D12', lift))  # nada sale a la banqueta
+    entry = next(d for d in doors(variant_facts_for(dxf_facts)) if d['id'] == 'D12')
+    assert entry['lift']['panels'] == lift['panels']
+    assert math.isclose(path_point(lift, 0)[0], lift['y'])
+
+
+def variant_facts_for(dxf_facts):
+    from house_twin.variants import variant_facts
+    return variant_facts(dxf_facts, _facade())
+
+
+def test_facade_garage_roof_keeps_light_for_the_kitchen_windows(dxf_facts):
+    """El techo cubre la cochera; frente a las ventanas de la cocina (V03, V04) la franja es translúcida."""
+    import json
+    spec = json.loads((ROOT / _facade()['specs']['extras']).read_text())
+    slabs = {s['id']: s for s in spec['slabs']}
+    solid, clear = slabs['cochera-techo'], slabs['cochera-techo-translucido']
+    assert solid['x'] == [0.2, 3.12] and solid['y'][0] == 0.0 and clear['y'][1] == 6.71 and solid['y'][1] == clear['y'][0]
+    assert 6.71 - clear['y'][0] >= 1.5 and clear['material'] == 'policarbonato-satinado'
+    windows = [o for o in dxf_facts['openings'] if o['id'] in ('V03', 'V04')]
+    assert all(clear['x'][0] <= min(p[0] for p in o['footprint']) and max(p[0] for p in o['footprint']) <= clear['x'][1]
+               for o in windows)
+
+
+def test_facade_lighting_is_warm_and_lights_up_at_night():
+    """Arbotantes en la cara de la calle a 1.95 m y empotrados en el techo de la cochera, todos de 3000 K; cada uno
+    tiene su `-foco` (el recorrido lo enciende de noche) y su luz para el IFC."""
+    import json
+    from house_twin.extras import extras_parts
+    spec = json.loads((ROOT / _facade()['specs']['extras']).read_text())
+    parts = {p['id']: p for p in extras_parts(spec)}
+    lights = spec['lights']
+    assert sum(lum['kind'] == 'updown' for lum in lights) == 3 and sum(lum['kind'] == 'downlight' for lum in lights) == 2
+    for lum in lights:
+        assert lum['color_temperature_k'] == 3000 and f"{lum['id']}-foco" in parts
+        assert parts[lum['id']]['psets']['HDT_Light']['Lumens'] == lum['lumens']
+        assert lum['id'].startswith(('fachada-', 'cochera-'))  # luminarias exteriores para el recorrido
+    assert all(lum['position'][1] == 0.0 and lum['z'] == 1.95 for lum in lights if lum['kind'] == 'updown')

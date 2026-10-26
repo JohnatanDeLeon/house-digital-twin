@@ -1,0 +1,93 @@
+{
+ "name": "microcemento-grafito",
+ "applies_to": {
+  "variant": "fachada-moderna",
+  "source": "propuesta fachada-moderna (Claude, 2026-10-17): volumen de la bodega, de x = 8.39 a 10.03 m, sobre el zócalo"
+ },
+ "kind": "procedural",
+ "tileable": true,
+ "variant_applies_to": {
+  "spaces": [
+   "calle"
+  ],
+  "surface": "muros exteriores",
+  "up_to_m": {
+   "calle": [
+    0.6,
+    3.0
+   ]
+  },
+  "region_m": {
+   "calle": [
+    [
+     8.39,
+     -0.6
+    ],
+    [
+     10.03,
+     -0.6
+    ],
+    [
+     10.03,
+     0.05
+    ],
+    [
+     8.39,
+     0.05
+    ]
+   ]
+  }
+ },
+ "size_m": {
+  "width": 0.6,
+  "height": 0.6,
+  "source": "repetición sin costura"
+ },
+ "px_per_m": 1500,
+ "size_px": [
+  900,
+  900
+ ],
+ "maps": {
+  "basecolor": "basecolor.jpg",
+  "roughness": "roughness.png",
+  "normal": "normal.png (OpenGL)"
+ },
+ "glass_material": null,
+ "source": {
+  "method": "procedural",
+  "seed": 43,
+  "references": []
+ },
+ "parameters": {
+  "plates": {
+   "size_m": 0.12,
+   "coverage": 0.5,
+   "edge_softness": 0.8,
+   "height_mm": 0.2,
+   "note": "nubes de la llana, sin relieve marcado"
+  },
+  "grain": {
+   "size_m": 0.0008,
+   "height_mm": 0.03,
+   "note": "poro fino"
+  },
+  "color": {
+   "albedo_srgb": [
+    82,
+    84,
+    86
+   ],
+   "crevice_darkening": 0.1,
+   "note": "gris grafito, propuesto"
+  },
+  "roughness": {
+   "base": 0.62,
+   "note": "microcemento sellado, satinado"
+  }
+ },
+ "observed": {},
+ "assumptions": [
+  "material propuesto: color y acabado comunes, sin medir"
+ ]
+}

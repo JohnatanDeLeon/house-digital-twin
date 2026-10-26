@@ -80,6 +80,12 @@ def doors(facts: dict) -> list[dict]:
     spaces = {s['id']: s for s in facts['spaces']}
     result = []
     for o in facts['openings']:
+        if o['kind'] == 'door' and o.get('lift'):  # seccional: los paneles suben por su trayectoria (house_twin/lift.py)
+            lift = o['lift']
+            (x0, x1), y0 = lift['x'], lift['y']
+            result.append({'id': o['id'], 'lift': {k: lift[k] for k in ('y', 'panels', 'panel_m', 'track')},
+                           'leaves': [{'hinge': [x0, y0], 'latch': [x1, y0], 'opens_toward': [0.0, 0.0], 'assumed': False}]})
+            continue
         if o['kind'] == 'door' and o.get('slide'):
             (ax, ay), (bx, by) = o['slide']['line']
             result.append({'id': o['id'], 'slide': o['slide']['travel'],
@@ -174,7 +180,7 @@ def _variant_entry(variant: dict, facts: dict, model: dict | None) -> dict:
     target = variant.get('focus_opening') or next((c['opening'] for c in variant.get('changes', [])), None)
     entry = {'id': variant['id'], 'name': variant['name'], 'description': variant['description'],
              'disclaimer': variant.get('disclaimer'), 'overrides': opening_overrides(variant),
-             'focus': focus(house, target) if target else None}
+             'focus': variant.get('focus') or (focus(house, target) if target else None)}  # `focus`: punto de vista declarado
     if model is not None:
         entry.update(model=f"casa-{variant['id']}.js", house=house_data(house, model['doors'], model['items']))
     return entry

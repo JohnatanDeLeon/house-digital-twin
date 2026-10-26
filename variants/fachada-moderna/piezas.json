@@ -1,0 +1,258 @@
+{
+ "_doc": "Piezas sueltas de la fachada moderna: remate de lámina sobre el borde de la azotea, techo de la cochera (estructura, multipanel y franja de policarbonato), dintel sobre el portón e iluminación exterior. Coordenadas del mundo (m).",
+ "applies_to": {
+  "space": "S11",
+  "source": "propuesta fachada-moderna (Claude, 2026-10-17)"
+ },
+ "boxes": [
+  {
+   "id": "fachada-remate",
+   "x": [
+    0.0,
+    10.03
+   ],
+   "y": [
+    -0.02,
+    0.24
+   ],
+   "z": [
+    2.58,
+    2.78
+   ],
+   "material": "lamina-negra-mate",
+   "object_type": "remate del pretil",
+   "source": "propuesta fachada-moderna (Claude, 2026-10-17): remate de lámina negra de 20 cm de la barda al lindero derecho, sobre el canto de la losa (2.60–2.70 m) y del techo nuevo de la cochera, con 2 cm de gotero; no sale más de 2 cm de la línea de la calle"
+  },
+  {
+   "id": "cochera-dintel",
+   "x": [
+    0.2,
+    3.24
+   ],
+   "y": [
+    -0.02,
+    0.12
+   ],
+   "z": [
+    2.23,
+    2.58
+   ],
+   "material": "aplanado-fino-blanco",
+   "object_type": "dintel del portón",
+   "source": "propuesta fachada-moderna (Claude, 2026-10-17): dintel sobre el portón (de 2.23 a 2.58 m), aplanado como la fachada; cierra el frente del techo nuevo"
+  },
+  {
+   "id": "cochera-viga-1",
+   "x": [
+    0.2,
+    3.12
+   ],
+   "y": [
+    0.3,
+    0.39999999999999997
+   ],
+   "z": [
+    2.44,
+    2.59
+   ],
+   "material": "lamina-negra-mate",
+   "object_type": "viga",
+   "source": "propuesta fachada-moderna (Claude, 2026-10-17): techo ligero de la cochera (x = 0.20–3.12, y = 0–6.71): multipanel aislado de 5 cm sobre 3 vigas de acero, con 2 % de pendiente hacia la barda (canalón ahí); la franja del fondo es de policarbonato para que las ventanas de la cocina (V03, V04) sigan recibiendo luz; viga de acero de 10 × 15 cm (supuesto), apoyada en la barda y en el muro de la casa (W14)"
+  },
+  {
+   "id": "cochera-viga-2",
+   "x": [
+    0.2,
+    3.12
+   ],
+   "y": [
+    3.35,
+    3.4499999999999997
+   ],
+   "z": [
+    2.44,
+    2.59
+   ],
+   "material": "lamina-negra-mate",
+   "object_type": "viga",
+   "source": "propuesta fachada-moderna (Claude, 2026-10-17): techo ligero de la cochera (x = 0.20–3.12, y = 0–6.71): multipanel aislado de 5 cm sobre 3 vigas de acero, con 2 % de pendiente hacia la barda (canalón ahí); la franja del fondo es de policarbonato para que las ventanas de la cocina (V03, V04) sigan recibiendo luz; viga de acero de 10 × 15 cm (supuesto), apoyada en la barda y en el muro de la casa (W14)"
+  },
+  {
+   "id": "cochera-viga-3",
+   "x": [
+    0.2,
+    3.12
+   ],
+   "y": [
+    6.5,
+    6.6
+   ],
+   "z": [
+    2.44,
+    2.59
+   ],
+   "material": "lamina-negra-mate",
+   "object_type": "viga",
+   "source": "propuesta fachada-moderna (Claude, 2026-10-17): techo ligero de la cochera (x = 0.20–3.12, y = 0–6.71): multipanel aislado de 5 cm sobre 3 vigas de acero, con 2 % de pendiente hacia la barda (canalón ahí); la franja del fondo es de policarbonato para que las ventanas de la cocina (V03, V04) sigan recibiendo luz; viga de acero de 10 × 15 cm (supuesto), apoyada en la barda y en el muro de la casa (W14)"
+  }
+ ],
+ "slabs": [
+  {
+   "id": "cochera-techo",
+   "x": [
+    0.2,
+    3.12
+   ],
+   "y": [
+    0.0,
+    5.1
+   ],
+   "z_top": [
+    2.64,
+    2.7
+   ],
+   "thickness_m": 0.05,
+   "material": "multipanel-gris",
+   "object_type": "techo de multipanel",
+   "source": "propuesta fachada-moderna (Claude, 2026-10-17): techo ligero de la cochera (x = 0.20–3.12, y = 0–6.71): multipanel aislado de 5 cm sobre 3 vigas de acero, con 2 % de pendiente hacia la barda (canalón ahí); la franja del fondo es de policarbonato para que las ventanas de la cocina (V03, V04) sigan recibiendo luz"
+  },
+  {
+   "id": "cochera-techo-translucido",
+   "x": [
+    0.2,
+    3.12
+   ],
+   "y": [
+    5.1,
+    6.71
+   ],
+   "z_top": [
+    2.64,
+    2.7
+   ],
+   "thickness_m": 0.012,
+   "material": "policarbonato-satinado",
+   "object_type": "techo de policarbonato",
+   "source": "propuesta fachada-moderna (Claude, 2026-10-17): techo ligero de la cochera (x = 0.20–3.12, y = 0–6.71): multipanel aislado de 5 cm sobre 3 vigas de acero, con 2 % de pendiente hacia la barda (canalón ahí); la franja del fondo es de policarbonato para que las ventanas de la cocina (V03, V04) sigan recibiendo luz"
+  }
+ ],
+ "lights": [
+  {
+   "id": "fachada-arbotante-1",
+   "kind": "updown",
+   "position": [
+    5.0,
+    0.0
+   ],
+   "wall_normal": [
+    0.0,
+    -1.0
+   ],
+   "z": 1.95,
+   "radius_m": 0.04,
+   "height_m": 0.22,
+   "offset_m": 0.1,
+   "lumens": 800,
+   "color_temperature_k": 3000,
+   "power_w": 10,
+   "body_material": "lamina-negra-mate",
+   "led_material": "led-calido",
+   "source": "propuesta fachada-moderna (Claude, 2026-10-17): iluminación exterior de luz cálida (3000 K); arbotante cilíndrico de luz hacia arriba y hacia abajo (2 × 400 lm, 10 W) a 1.95 m: baña la duela y el volumen grafito sin deslumbrar"
+  },
+  {
+   "id": "fachada-arbotante-2",
+   "kind": "updown",
+   "position": [
+    6.31,
+    0.0
+   ],
+   "wall_normal": [
+    0.0,
+    -1.0
+   ],
+   "z": 1.95,
+   "radius_m": 0.04,
+   "height_m": 0.22,
+   "offset_m": 0.1,
+   "lumens": 800,
+   "color_temperature_k": 3000,
+   "power_w": 10,
+   "body_material": "lamina-negra-mate",
+   "led_material": "led-calido",
+   "source": "propuesta fachada-moderna (Claude, 2026-10-17): iluminación exterior de luz cálida (3000 K); arbotante cilíndrico de luz hacia arriba y hacia abajo (2 × 400 lm, 10 W) a 1.95 m: baña la duela y el volumen grafito sin deslumbrar"
+  },
+  {
+   "id": "fachada-arbotante-3",
+   "kind": "updown",
+   "position": [
+    9.21,
+    0.0
+   ],
+   "wall_normal": [
+    0.0,
+    -1.0
+   ],
+   "z": 1.95,
+   "radius_m": 0.04,
+   "height_m": 0.22,
+   "offset_m": 0.1,
+   "lumens": 800,
+   "color_temperature_k": 3000,
+   "power_w": 10,
+   "body_material": "lamina-negra-mate",
+   "led_material": "led-calido",
+   "source": "propuesta fachada-moderna (Claude, 2026-10-17): iluminación exterior de luz cálida (3000 K); arbotante cilíndrico de luz hacia arriba y hacia abajo (2 × 400 lm, 10 W) a 1.95 m: baña la duela y el volumen grafito sin deslumbrar"
+  },
+  {
+   "id": "cochera-empotrado-1",
+   "kind": "downlight",
+   "position": [
+    1.66,
+    1.9
+   ],
+   "z": 2.62,
+   "radius_m": 0.06,
+   "lumens": 600,
+   "color_temperature_k": 3000,
+   "power_w": 7,
+   "body_material": "lamina-negra-mate",
+   "led_material": "led-calido",
+   "source": "propuesta fachada-moderna (Claude, 2026-10-17): iluminación exterior de luz cálida (3000 K); empotrado de LED de 7 W en el techo de la cochera"
+  },
+  {
+   "id": "cochera-empotrado-2",
+   "kind": "downlight",
+   "position": [
+    1.66,
+    4.7
+   ],
+   "z": 2.62,
+   "radius_m": 0.06,
+   "lumens": 600,
+   "color_temperature_k": 3000,
+   "power_w": 7,
+   "body_material": "lamina-negra-mate",
+   "led_material": "led-calido",
+   "source": "propuesta fachada-moderna (Claude, 2026-10-17): iluminación exterior de luz cálida (3000 K); empotrado de LED de 7 W en el techo de la cochera"
+  }
+ ],
+ "strips": [
+  {
+   "id": "fachada-led-remate",
+   "x": [
+    0.2,
+    10.03
+   ],
+   "y": [
+    -0.03,
+    -0.015
+   ],
+   "z": [
+    2.555,
+    2.575
+   ],
+   "material": "led-calido",
+   "source": "propuesta fachada-moderna (Claude, 2026-10-17): iluminación exterior de luz cálida (3000 K); tira de LED bajo el remate, en perfil de aluminio: dibuja la línea de la azotea de noche"
+  }
+ ]
+}

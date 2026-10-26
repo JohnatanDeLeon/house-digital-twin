@@ -9,6 +9,7 @@ from pathlib import Path
 
 from house_twin.electrical import device_mesh
 from house_twin.hardware import _box, cylinder, merge
+from house_twin.extras import box_part
 from house_twin.kitchen import kitchen_parts
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -172,11 +173,7 @@ def laundry_parts(spec: dict, plate: dict | None = None) -> list[dict]:
         for part in kitchen_parts(spec['cabinetry'], prefix='lavanderia'):
             part.setdefault('source', spec['cabinetry']['measure_source'])
             parts.append(part)
-    for b in spec.get('boxes', []):  # tablero suelto: costado de un nicho, etc.
-        (x0, x1), (y0, y1), (z0, z1) = b['x'], b['y'], b['z']
-        parts.append({'id': b['id'], 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': b.get('object_type', 'tablero'),
-                      'material': b['material'], 'mesh': _box(((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2), (x1 - x0, y1 - y0, z1 - z0)),
-                      'source': b['source']})
+    parts += [box_part(b, 'IfcFurniture') for b in spec.get('boxes', [])]  # tablero suelto: costado de un nicho, etc.
     if 'counter' in spec:
         c = spec['counter']
         parts.append({'id': c['id'], 'ifc': 'IfcFurniture', 'type': 'USERDEFINED', 'object_type': 'cubierta', 'material': c['material'],

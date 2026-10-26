@@ -97,14 +97,12 @@ class Finishes:
 
     def wall_finish(self, where, z: float | None = None, point=None):
         """Acabado de muro del lugar; con `z` respeta los lambrines y franjas, y con `point` (en planta) las zonas."""
-        if where == STREET:
-            return self.street
-        for name, bottom, top, region in self.wall_layers.get(where, []):
+        for name, bottom, top, region in self.wall_layers.get(where, []):  # la calle también puede tener zonas
             if region is not None and (point is None or not _inside(point, region)):
                 continue
             if z is None or ((top is None or z < top) and z >= bottom):
                 return name
-        return None
+        return self.street if where == STREET else None
 
     def wall_split_heights(self) -> list[float]:
         """Alturas en las que cambia el acabado de algún muro: ahí se cortan las caras."""

@@ -1,0 +1,22 @@
+{
+ "_doc": "Lámina de acero pintada negro mate (pintura electrostática), para el remate del pretil de la fachada (propuesta). Material propuesto, sin foto. Regenerar con: python -m house_twin.cli texture sources/texturas/lamina-negra-mate.json",
+ "name": "lamina-negra-mate",
+ "kind": "constant",
+ "applies_to": {
+  "variant": "fachada-moderna",
+  "source": "propuesta fachada-moderna (Claude, 2026-10-17): remate del pretil"
+ },
+ "pbr": {
+  "basecolor_srgb": [
+   30,
+   31,
+   33
+  ],
+  "metallic": 0.0,
+  "roughness": 0.45,
+  "note": "pintura electrostática negro mate"
+ },
+ "assumptions": [
+  "material propuesto: color común, sin medir"
+ ]
+}

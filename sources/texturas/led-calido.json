@@ -1,0 +1,28 @@
+{
+ "_doc": "LED blanco cálido (3000 K) de las luminarias exteriores de la propuesta: brilla de noche; la luz de la escena la dan luces puntuales. Material propuesto, sin foto. Regenerar con: python -m house_twin.cli texture sources/texturas/led-calido.json",
+ "name": "led-calido",
+ "kind": "constant",
+ "applies_to": {
+  "variant": "fachada-moderna",
+  "source": "propuesta fachada-moderna (Claude, 2026-10-17): arbotantes, empotrados y tira de LED"
+ },
+ "pbr": {
+  "basecolor_srgb": [
+   250,
+   240,
+   226
+  ],
+  "metallic": 0.0,
+  "roughness": 0.5,
+  "emission_srgb": [
+   255,
+   206,
+   150
+  ],
+  "emission_strength": 25,
+  "note": "difusor opalino con LED de 3000 K"
+ },
+ "assumptions": [
+  "material propuesto"
+ ]
+}

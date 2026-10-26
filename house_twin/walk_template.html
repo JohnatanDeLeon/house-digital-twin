@@ -376,7 +376,8 @@ async function loadHouse() {
     const closetLeaf = /^(F\d+-m\d+)-hoja-(\d)/.exec(tag.hdt_id || '');  // hoja de closet (y su jaladera)
     const doorId = closetLeaf ? closetLeaf[1] : tag.hdt_kind === 'IfcDoor' ? tag.hdt_id
       : (tag.hdt_kind === 'IfcDiscreteAccessory' && /^D\d+-/.test(tag.hdt_id || '') ? tag.hdt_id.split('-')[0] : null);
-    const leafIndex = closetLeaf ? Number(closetLeaf[2]) : (tag.hdt_leaf || 0);
+    const panel = /^D\d+-panel-(\d+)$/.exec(tag.hdt_id || '');  // panel de un portón seccional (el 1 es el IfcDoor)
+    const leafIndex = closetLeaf ? Number(closetLeaf[2]) : panel ? Number(panel[1]) - 1 : (tag.hdt_leaf || 0);
     if (doorId) (doorMeshes[doorId] = doorMeshes[doorId] || []).push({ mesh: obj, leaf: leafIndex });
   });
   scene.add(gltf.scene);
@@ -465,6 +466,21 @@ function setupDoors() {
   for (const d of DATA.doors || []) {
     const meshes = doorMeshes[d.id] || [];
     if (!meshes.length) continue;
+    if (d.lift) {  // seccional: cada panel sigue la trayectoria de las guías (vertical, curva, horizontal)
+      const groups = [];
+      for (let k = 0; k < d.lift.panels; k++) {
+        const g = new THREE.Group();
+        g.matrixAutoUpdate = false;
+        scene.add(g);
+        g.updateMatrixWorld(true);
+        for (const m of meshes) if (m.leaf === k) g.attach(m.mesh);
+        groups.push(g);
+      }
+      const [l] = d.leaves;
+      doors.push({ id: d.id, label: d.label, lift: d.lift, groups, leaves: [{ hinge: l.hinge, latch: l.latch }],
+                   centre: [(l.hinge[0] + l.latch[0]) / 2, (l.hinge[1] + l.latch[1]) / 2], open: false, angle: 0 });
+      continue;
+    }
     if (d.slide) {  // corrediza: la hoja y su herraje se deslizan juntos; el riel (`riel-<id>`) se queda
       const group = new THREE.Group();
       scene.add(group);
@@ -498,6 +514,7 @@ function segmentDistance([px, py], [ax, ay], [bx, by]) {
 // ¿la hoja barrería al jugador? Al abrir, el cuarto de círculo del lado al que abre; al cerrar, la hoja cerrada.
 function inTheWay(door) {
   const p = modelXY();
+  if (door.lift) return false;  // seccional: sube por su trayectoria, no barre el piso
   if (door.slide) {  // corrediza: estorba si el jugador está pegado a la hoja, cerrada o abierta
     const [dx, dy] = door.slide, [l] = door.leaves;
     const shifted = [[l.hinge[0] + dx, l.hinge[1] + dy], [l.latch[0] + dx, l.latch[1] + dy]];
@@ -520,6 +537,13 @@ function nearestDoor() {
   }
   return best;
 }
+// (y, z) de la trayectoria de un portón seccional a `s` m del piso: vertical, cuarto de círculo y horizontal (lift.py)
+function liftPoint(L, s) {
+  const t = L.track, zc = t.z_curve, r = t.radius_m, sign = t.direction, arc = Math.PI * r / 2;
+  if (s <= zc) return [L.y, s];
+  if (s <= zc + arc) { const a = (s - zc) / r; return [L.y + sign * r * (1 - Math.cos(a)), zc + r * Math.sin(a)]; }
+  return [L.y + sign * (r + s - zc - arc), zc + r];
+}
 function toggleDoor(door) {
   if (!door || inTheWay(door)) return;
   door.open = !door.open;
@@ -531,6 +555,21 @@ function animateDoors(dt) {
     const step = DOOR_SPEED * dt;
     d.angle = Math.abs(target - d.angle) <= step ? target : d.angle + Math.sign(target - d.angle) * step;
     const eased = DOOR_OPEN * (1 - Math.cos(Math.PI * d.angle / DOOR_OPEN)) / 2;
+    if (d.lift) {  // misma curva que el giro: fracción del recorrido de los paneles
+      const f = eased / DOOR_OPEN, L = d.lift, travel = f * L.panels * L.panel_m;
+      d.groups.forEach((g, k) => {
+        const [yb, zb] = liftPoint(L, k * L.panel_m + travel), [yt, zt] = liftPoint(L, (k + 1) * L.panel_m + travel);
+        const tilt = Math.atan2(yt - yb, zt - zb);  // de la vertical hacia dentro
+        // cerrado, el canto de abajo del panel está en (y, k·alto); se gira sobre ese canto y se lleva a su punto
+        const pivot = toThree(0, L.y, k * L.panel_m), to = toThree(0, yb, zb);
+        g.matrix.makeTranslation(to.x, to.y, to.z)
+          .multiply(new THREE.Matrix4().makeRotationX(-tilt))
+          .multiply(new THREE.Matrix4().makeTranslation(-pivot.x, -pivot.y, -pivot.z));
+        g.matrixWorldNeedsUpdate = true;
+        g.updateMatrixWorld(true);
+      });
+      continue;
+    }
     if (d.slide) {  // misma curva que el giro, como fracción del recorrido
       const f = eased / DOOR_OPEN;
       d.group.position.set(d.slide[0] * f, 0, -d.slide[1] * f);
@@ -819,9 +858,12 @@ let night = false;
 function setupBulbs() {
   for (const bulb of bulbs) {
     const box = new THREE.Box3().setFromObject(bulb), centre = box.getCenter(new THREE.Vector3());
-    const light = new THREE.PointLight(BULB_COLOR, 1.6, 9, 2);
+    const glow = bulb.material.emissive;  // el color de la luz es el de su foco (blanco frío, LED cálido…)
+    const color = glow && glow.r + glow.g + glow.b > 0 ? glow.clone() : BULB_COLOR;
+    const outdoor = /^(fachada|cochera)-/.test(tagOf(bulb).hdt_id || '');  // luminarias de una propuesta exterior
+    const light = new THREE.PointLight(color, outdoor ? 1.2 : 1.6, outdoor ? 7 : 9, 2);
     light.position.copy(centre);
-    if (!isTouch) {  // en la PC, sombras para que la luz no pase los muros; en el celular pesan demasiado
+    if (!isTouch && !outdoor) {  // en la PC, sombras para que la luz no pase los muros; en el celular pesan demasiado
       light.castShadow = true;
       light.shadow.mapSize.set(512, 512);
       light.shadow.camera.near = 0.08;
@@ -830,6 +872,18 @@ function setupBulbs() {
     light.visible = false;
     scene.add(light);
     bulb.userData.light = light;
+    if (/-arbotante-/.test(tagOf(bulb).hdt_id || '')) {  // arbotante «up & down»: 2 haces que bañan el muro
+      light.intensity = 0.35;  // la puntual solo da el resplandor cercano
+      const cones = [1, -1].map(dir => {
+        const cone = new THREE.SpotLight(color, 3.2, 4.5, 0.42, 0.7, 2);
+        cone.position.copy(centre);
+        cone.target.position.copy(centre).add(new THREE.Vector3(0, dir * 2, 0));
+        cone.visible = false;
+        scene.add(cone, cone.target);
+        return cone;
+      });
+      bulb.userData.extra = cones;
+    }
   }
 }
 function setNight(on) {
@@ -837,7 +891,10 @@ function setNight(on) {
   sun.visible = !on;
   hemisphere.intensity = on ? 0.04 : dayHemisphere;
   scene.background = on ? NIGHT_SKY : DAY_SKY;
-  for (const bulb of bulbs) bulb.userData.light.visible = on;
+  for (const bulb of bulbs) {
+    bulb.userData.light.visible = on;
+    for (const extra of bulb.userData.extra || []) extra.visible = on;
+  }
   for (const m of glowing) m.emissiveIntensity = on ? 1 : 0;
   const button = $('daynight');
   button.textContent = on ? 'Día' : 'Noche';

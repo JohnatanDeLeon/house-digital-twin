@@ -1,0 +1,45 @@
+{
+ "_doc": "Panel de portón seccional de acero relleno de poliuretano, negro mate, con ranuras horizontales cada 10 cm (acabado tipo «lama»). SINTÉTICO (material propuesto). Regenerar con: python -m house_twin.cli texture sources/texturas/porton-seccional-negro.json",
+ "name": "porton-seccional-negro",
+ "kind": "procedural",
+ "generator": "slats",
+ "tileable": true,
+ "applies_to": {
+  "variant": "fachada-moderna",
+  "source": "propuesta fachada-moderna (Claude, 2026-10-17): paneles del portón seccional eléctrico de la cochera (D12)"
+ },
+ "seed": 67,
+ "size_m": {
+  "width": 0.6,
+  "height": 0.6,
+  "source": "6 lamas de 10 cm: se repite sin costura"
+ },
+ "px_per_m": 1000,
+ "slats": {
+  "orientation": "horizontal",
+  "pitch_m": 0.1,
+  "gap_m": 0.005,
+  "relief_mm": 2,
+  "round_m": 0.003,
+  "see_through": false,
+  "gap_shade": 0.45,
+  "note": "ranura prensada en la lámina, no hueco: el panel es cerrado y aislado"
+ },
+ "color": {
+  "srgb": [
+   40,
+   41,
+   43
+  ],
+  "tone_variation": 0.0,
+  "note": "negro mate, el mismo de la herrería de la fachada"
+ },
+ "roughness": {
+  "base": 0.5,
+  "gap": 0.7,
+  "note": "pintura electrostática mate"
+ },
+ "assumptions": [
+  "material propuesto: panel y color comerciales, sin medir"
+ ]
+}

@@ -1,0 +1,82 @@
+{
+ "_doc": "Zócalo de porcelanato tipo piedra gris oscuro, piezas de 60 × 30 cm a hueso: protege la base de la fachada de salpicaduras y golpes (propuesta). SINTÉTICO. Regenerar con: python -m house_twin.cli texture sources/texturas/zoclo-porcelanato-grafito.json",
+ "name": "zoclo-porcelanato-grafito",
+ "kind": "procedural",
+ "generator": "subway_tile",
+ "tileable": true,
+ "applies_to": {
+  "variant": "fachada-moderna",
+  "source": "propuesta fachada-moderna (Claude, 2026-10-17): zócalo de 0.60 m (2 hiladas) en toda la fachada"
+ },
+ "variant_applies_to": {
+  "spaces": [
+   "calle"
+  ],
+  "surface": "muros exteriores",
+  "up_to_m": {
+   "calle": [
+    0.0,
+    0.6
+   ]
+  },
+  "region_m": {
+   "calle": [
+    [
+     0.0,
+     -0.6
+    ],
+    [
+     10.03,
+     -0.6
+    ],
+    [
+     10.03,
+     0.05
+    ],
+    [
+     0.0,
+     0.05
+    ]
+   ]
+  }
+ },
+ "seed": 53,
+ "size_m": {
+  "width": 1.206,
+  "height": 0.606,
+  "source": "2 piezas de 60 cm a lo ancho y 2 hiladas de 30 cm, con su junta"
+ },
+ "px_per_m": 800,
+ "tile": {
+  "length_m": 0.6,
+  "height_m": 0.3,
+  "joint_m": 0.003,
+  "bevel_m": 0.002,
+  "relief_mm": 0.3,
+  "joint_depth_mm": 1.0,
+  "bond": "stack",
+  "note": "porcelanato de 60 × 30 cm"
+ },
+ "color": {
+  "tile_srgb": [
+   64,
+   66,
+   68
+  ],
+  "joint_srgb": [
+   40,
+   40,
+   42
+  ],
+  "tile_variation": 0.04,
+  "note": "gris piedra oscuro, propuesto"
+ },
+ "roughness": {
+  "tile": 0.7,
+  "joint": 0.9,
+  "note": "acabado mate antiderrapante"
+ },
+ "assumptions": [
+  "material propuesto: pieza y color comerciales, sin medir"
+ ]
+}

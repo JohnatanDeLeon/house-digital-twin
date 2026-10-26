@@ -1,0 +1,45 @@
+{
+ "_doc": "Panel aislado tipo sándwich (lámina–poliuretano–lámina) de 5 cm para el techo de la cochera, gris claro, con nervaduras cada 25 cm. SINTÉTICO (material propuesto). Regenerar con: python -m house_twin.cli texture sources/texturas/multipanel-gris.json",
+ "name": "multipanel-gris",
+ "kind": "procedural",
+ "generator": "slats",
+ "tileable": true,
+ "applies_to": {
+  "variant": "fachada-moderna",
+  "source": "propuesta fachada-moderna (Claude, 2026-10-17): techo de la cochera"
+ },
+ "seed": 71,
+ "size_m": {
+  "width": 1.0,
+  "height": 1.0,
+  "source": "4 nervaduras de 25 cm: se repite sin costura"
+ },
+ "px_per_m": 400,
+ "slats": {
+  "orientation": "vertical",
+  "pitch_m": 0.25,
+  "gap_m": 0.03,
+  "relief_mm": 6,
+  "round_m": 0.01,
+  "see_through": false,
+  "gap_shade": 0.85,
+  "note": "nervadura trapezoidal de la lámina"
+ },
+ "color": {
+  "srgb": [
+   208,
+   210,
+   211
+  ],
+  "tone_variation": 0.0,
+  "note": "gris claro de fábrica, propuesto"
+ },
+ "roughness": {
+  "base": 0.55,
+  "gap": 0.6,
+  "note": "lámina prepintada"
+ },
+ "assumptions": [
+  "material propuesto: panel comercial, sin medir"
+ ]
+}
