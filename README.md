@@ -9,7 +9,7 @@ Digital twin of a residential property, combining BIM/IFC, 3D modeling, spatial 
 | 2. Modelo de hechos → IFC → House MCP (solo lectura) | ✅ [informe](docs/analysis/02-modelo-de-hechos.md) |
 | 3. Validación contra el DXF original; el DXF pasa a ser la fuente | ✅ [informe](docs/analysis/03-validacion-dxf.md) |
 | 4. Fidelidad visual: Blender + Bonsai, materiales, texturas e iluminación | en curso: [acabados](docs/analysis/04-acabados.md) |
-| Variantes y propuestas de remodelación | primera remodelación: [cocina en U y lavandería cerrada](docs/analysis/06-remodelacion-cocina.md) (`variants/cocina-en-u.json`), con cambios de geometría (muros, vanos, muebles) y su propio modelo en el recorrido; y [fachada moderna](docs/analysis/07-fachada-moderna.md) (`variants/fachada-moderna.json`), solo con acabados y herrería nuevos; falta `create_variant` en el MCP |
+| Variantes y propuestas de remodelación | primera remodelación: [cocina en U y lavandería cerrada](docs/analysis/06-remodelacion-cocina.md) (`variants/cocina-en-u.json`), con cambios de geometría (muros, vanos, muebles) y su propio modelo en el recorrido; y [fachada moderna](docs/analysis/07-fachada-moderna.md) (`variants/fachada-moderna.json`), solo con acabados y herrería nuevos; falta `create_variant` en el MCP; y [cámaras de seguridad exteriores](docs/analysis/08-camaras-exterior.md) (`variants/camaras-exterior/plan.json`), sin puntos ciegos |
 
 ## Cómo funciona
 

@@ -174,6 +174,39 @@ def scene(render: bool):
         print(f'→ {path.relative_to(ROOT)}')
 
 
+def cameras(plan_path: Path, out_dir: Path, search: bool):
+    """Evalúa el plan de cámaras exteriores en la casa actual y con las remodelaciones, y dibuja el plano de cobertura."""
+    from house_twin.security import PLAN_PATH, Scene, cameras_in, entry_report, evaluate, load_plan, scenarios, suggest
+    from house_twin.security_render import render_plan
+    from house_twin.variants import load_variants
+    plan = load_plan(plan_path)
+    facts = json.loads(FACTS_PATH.read_text())
+    variants = {v['id']: v for v in load_variants()}
+    for sc, scene in scenarios(plan, facts, variants):
+        used = cameras_in(scene, plan)
+        result = evaluate(scene, used)
+        entries = entry_report(scene, result)
+        print(f"\n{sc['name']}: {len(used)} cámaras, {len(result['blind_points'])} celdas ciegas de {len(scene.cells['x'])}")
+        for zone, z in result['zones'].items():
+            print(f"  {zone:6s} {z['area_m2']:5.1f} m²  vista {z['covered_pct']:5.1f} %  por 2 o más {z['redundant_pct']:5.1f} %")
+        worst = min(entries, key=lambda e: e['worst_ppm'])
+        print(f"  peor acceso: {worst['id']} con {worst['worst_ppm']} px/m en su peor punto (se exige 125)")
+        more = cameras_in(scene, plan, optional=True)
+        if len(more) > len(used):
+            full = evaluate(scene, more)
+            front = [i for i, z in enumerate(scene.cells['zone']) if z in ('S10', 'S11')]
+            double = lambda r: 100 * float((r['count'][front] >= 2).mean())
+            print(f"  con las opcionales ({', '.join(c['id'] for c in more if c.get('optional'))}): lo que ven 2 cámaras en cochera y pórtico "
+                  f"pasa de {double(result):.0f} % a {double(full):.0f} %")
+        if search:
+            found = suggest(scene, min_separation_m=1.0)
+            print(f"  la búsqueda automática cubre lo mismo con {len(found['cameras'])} cámaras")
+        if sc['id'] in ('hoy', 'ambas'):
+            image = out_dir / f"08-camaras-{'actual' if sc['id'] == 'hoy' else 'remodelada'}.png"
+            render_plan(scene, used, image, f" · {sc['name']}", optional=[c for c in more if c.get('optional')])
+            print(f'  → {image.relative_to(ROOT) if image.is_relative_to(ROOT) else image}')
+
+
 def main():
     parser = argparse.ArgumentParser(prog='house_twin')
     sub = parser.add_subparsers(dest='command', required=True)
@@ -188,6 +221,10 @@ def main():
     t.add_argument('spec', type=Path)
     h = sub.add_parser('hang', help='prenda colgada a partir de sus mapas extendidos (no necesita la foto)')
     h.add_argument('spec', type=Path)
+    cam = sub.add_parser('cameras', help='plan de cámaras exteriores: cobertura, puntos ciegos y plano (docs/analysis/08-*.png)')
+    cam.add_argument('--plan', type=Path, default=None)
+    cam.add_argument('--out', type=Path, default=ROOT / 'docs' / 'analysis')
+    cam.add_argument('--search', action='store_true', help='también busca el mínimo de cámaras que logra lo mismo')
     sc = sub.add_parser('scene', help='IFC + texturas → escena de Blender y recorrido web (docs/viewer/recorrido/)')
     sc.add_argument('--render', action='store_true', help='también renderiza las vistas previas (Cycles, CPU: ~5 min)')
     args = parser.parse_args()
@@ -203,6 +240,9 @@ def main():
         hang(args.spec)
     elif args.command == 'scene':
         scene(args.render)
+    elif args.command == 'cameras':
+        from house_twin.security import PLAN_PATH
+        cameras(args.plan or PLAN_PATH, args.out, args.search)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,166 @@
+{
+ "_doc": "Plan de cámaras de seguridad en el exterior (propuesta de Claude, 2026-10-30): no es un hecho de la casa. Lo evalúa `python -m house_twin.cli cameras` (house_twin/security.py) contra los hechos de la casa y de las remodelaciones; el análisis está en docs/analysis/08-camaras-exterior.md. Posiciones en metros del plano (x a la derecha vista desde la calle, y hacia el fondo); `mount` es el punto de la pared a 10 cm de su cara, a `mount_height_m` del piso; `yaw_deg` es hacia dónde mira, con 0° hacia +x y 90° hacia +y.",
+ "sensor": {
+  "width_px": 2688,
+  "height_px": 1520,
+  "note": "4 MP, la resolución común de una cámara IP de exterior (supuesto)"
+ },
+ "lenses_mm": {
+  "2.8": {
+   "hfov_deg": 100
+  },
+  "4": {
+   "hfov_deg": 85
+  },
+  "6": {
+   "hfov_deg": 55
+  }
+ },
+ "mount_height_m": 2.4,
+ "target_height_m": 1.6,
+ "min_ground_distance_m": 1.5,
+ "street_strip_m": 3.0,
+ "cameras": [
+  {
+   "id": "C1",
+   "name": "Fachada, extremo derecho",
+   "mount": [
+    9.56,
+    -0.1
+   ],
+   "yaw_deg": 210,
+   "lens_mm": 4,
+   "mounted_on": "cara de la fachada que da a la calle, en la esquina de la bodega",
+   "why": "Banqueta, fachada y reja peatonal de lado; ve el portón desde 9 m."
+  },
+  {
+   "id": "C2",
+   "name": "Fachada, pórtico",
+   "mount": [
+    3.42,
+    -0.1
+   ],
+   "yaw_deg": 15,
+   "lens_mm": 2.8,
+   "mounted_on": "cara de la fachada que da a la calle, en el extremo izquierdo del muro del pórtico",
+   "why": "Mira a lo largo de la fachada hacia la derecha; cubre el pie de C1 y la banqueta frente al pórtico."
+  },
+  {
+   "id": "C3",
+   "name": "Portón, lado interior",
+   "mount": [
+    0.3,
+    0.3
+   ],
+   "yaw_deg": 60,
+   "lens_mm": 4,
+   "mounted_on": "cara interior de la barda, justo detrás del portón (a 2.4 m queda sobre el barrido de la hoja, de 2.23 m)",
+   "why": "Ve la cochera y el pórtico desde el portón hacia adentro; con el portón de lámina es la única que ve el interior de la entrada."
+  },
+  {
+   "id": "C4",
+   "name": "Cochera",
+   "mount": [
+    0.3,
+    3.52
+   ],
+   "yaw_deg": 315,
+   "lens_mm": 2.8,
+   "mounted_on": "cara interior de la barda, a media cochera",
+   "why": "Mira de frente la cara interior del portón y el frente del pórtico; cubre el pie de C3."
+  },
+  {
+   "id": "C5",
+   "name": "Pasillo de servicio",
+   "mount": [
+    0.3,
+    12.56
+   ],
+   "yaw_deg": 300,
+   "lens_mm": 4,
+   "mounted_on": "cara interior de la barda, a la altura del fondo de la lavandería",
+   "why": "Recorre el pasillo hacia la cochera: puerta de la cocina, boca de la lavandería y reja de la cochera."
+  },
+  {
+   "id": "C6",
+   "name": "Lavandería",
+   "mount": [
+    1.205,
+    10.325
+   ],
+   "yaw_deg": 60,
+   "lens_mm": 2.8,
+   "mounted_on": "esquina de la lavandería, en la cara interior del muro de la cocina (W15)",
+   "why": "Ve toda la lavandería y la ventana del baño (V09), que el muro de la recámara 2 esconde del pasillo.",
+   "requires_exterior_space": "S13"
+  },
+  {
+   "id": "C7",
+   "name": "Patio, esquina izquierda",
+   "mount": [
+    0.3,
+    20.95
+   ],
+   "yaw_deg": 315,
+   "lens_mm": 2.8,
+   "mounted_on": "esquina del fondo, en la cara interior de la barda y del muro trasero",
+   "why": "Patio completo en diagonal, ventanas de las recámaras 1 y 2 y, por la reja, el final del pasillo."
+  },
+  {
+   "id": "C8",
+   "name": "Patio, esquina derecha",
+   "mount": [
+    9.76,
+    20.63
+   ],
+   "yaw_deg": 225,
+   "lens_mm": 2.8,
+   "mounted_on": "cara interior del muro de la colindancia, en el fondo",
+   "why": "Mira el patio desde el lado opuesto a C7: cada una cubre el punto ciego al pie de la otra."
+  },
+  {
+   "id": "C9",
+   "name": "Pórtico, lado derecho",
+   "mount": [
+    8.26,
+    3.15
+   ],
+   "yaw_deg": 225,
+   "lens_mm": 2.8,
+   "mounted_on": "cara del muro de la entrada que da al pórtico, entre la puerta principal y la del medio baño",
+   "why": "Segunda vista de la entrada desde el extremo opuesto a C3: sin ella, con el portón y las rejas cerrados, la puerta principal y la de la bodega las ve una sola cámara, desde 8 m.",
+   "optional": true
+  }
+ ],
+ "scenarios": [
+  {
+   "id": "hoy",
+   "name": "Casa actual",
+   "variants": []
+  },
+  {
+   "id": "cocina-en-u",
+   "name": "Con la cocina en U (lavandería cerrada)",
+   "variants": [
+    "cocina-en-u"
+   ]
+  },
+  {
+   "id": "fachada-moderna",
+   "name": "Con la fachada moderna (portón y rejas cerrados a la vista)",
+   "variants": [
+    "fachada-moderna"
+   ],
+   "see_through": []
+  },
+  {
+   "id": "ambas",
+   "name": "Con las dos remodelaciones",
+   "variants": [
+    "cocina-en-u",
+    "fachada-moderna"
+   ],
+   "see_through": []
+  }
+ ]
+}

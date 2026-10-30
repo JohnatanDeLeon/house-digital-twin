@@ -74,6 +74,7 @@ Gemelo digital de una casa (Casa Jonhy). Código en inglés, comentarios y docum
 .venv/bin/python -m house_twin.cli texture sources/texturas/puerta-recamaras.json
 .venv/bin/python -m house_twin.cli hang sources/texturas/playera-venom.json   # solo la prenda colgada, desde sus mapas extendidos
 .venv/bin/python -m house_twin.cli scene [--render]   # necesita `blender` con Bonsai en el PATH
+.venv/bin/python -m house_twin.cli cameras [--search]   # plan de cámaras exteriores: cobertura, puntos ciegos y las figuras 08-*
 .venv/bin/python -m pytest
 ```
 
